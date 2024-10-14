@@ -1,0 +1,140 @@
+﻿@using NatalCare.Models.DTOs
+@model UserDTO
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="row vh-100 g-0">
+    <!--Right-->
+    <div class="col-lg-6">
+        <div class="row align-items-center justify-content-center h-100 g-0 px-4 px-sm-0">
+            <div class="col col-sm-6 col-lg-7 col-xl-6">
+                <a asp-controller="Account" asp-action="Index" class="d-flex justify-content-center mb-4">
+                    <img src="~/img/logo.png" alt="Logo"/>
+                </a>
+                <div class="text-center mb-5">
+                    <h3 class="fw-bold">Regsiter Now!</h3>
+                    <p class="text-secondary">Create your account.</p>
+                </div>
+
+                <form asp-controller="Account" asp-action="Register" method="POST">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                    <div class="mb-3">
+                        <div class="input-group ">
+                            <label asp-for="FirstName" class="input-group-text" style="cursor:pointer">
+                                <i class="bi bi-person"></i>
+                            </label>
+                            <input asp-for="FirstName" class="form-control form-control-lg fs-6" placeholder="FirstName" />
+                        </div>
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="input-group ">
+                            <label asp-for="MiddleName" class="input-group-text" style="cursor:pointer">
+                                <i class="bi bi-person"></i>
+                            </label>
+                            <input asp-for="MiddleName" class="form-control form-control-lg fs-6" placeholder="MiddleName" />
+                        </div>
+                        <span asp-validation-for="MiddleName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="input-group ">
+                            <label asp-for="LastName" class="input-group-text" style="cursor:pointer">
+                                <i class="bi bi-person"></i>
+                            </label>
+                            <input asp-for="LastName" class="form-control form-control-lg fs-6" placeholder="LastName" />
+                        </div>
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="input-group ">
+                            <label asp-for="Email" class="input-group-text" style="cursor:pointer">
+                                <i class="bi bi-person"></i>
+                            </label>
+                            <input asp-for="Email" class="form-control form-control-lg fs-6" placeholder="Email" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="input-group ">
+                            <label asp-for="Gender" class="input-group-text" style="cursor:pointer">
+                                <i class="bi bi-person"></i>
+                            </label>
+                            <input asp-for="Gender" class="form-control form-control-lg fs-6" placeholder="Gender" />
+                        </div>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="input-group ">
+                            <label asp-for="Address" class="input-group-text" style="cursor:pointer">
+                                <i class="bi bi-person"></i>
+                            </label>
+                            <input asp-for="Address" class="form-control form-control-lg fs-6" placeholder="Address" />
+                        </div>
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="input-group ">
+                            <label asp-for="Birthdate" class="input-group-text" style="cursor:pointer">
+                                <i class="bi bi-person"></i>
+                            </label>
+                            <input asp-for="Birthdate" class="form-control form-control-lg fs-6" placeholder="Birthdate" />
+                        </div>
+                        <span asp-validation-for="Birthdate" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <label asp-for="Password" class="input-group-text" style="cursor:pointer">
+                                <i class="bi bi-lock"></i>
+                            </label>
+                            <input asp-for="Password" class="form-control form-control-lg fs-6" placeholder="Password" />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <label asp-for="ConfirmPassword" class="input-group-text" style="cursor:pointer">
+                                <i class="bi bi-lock"></i>
+                            </label>
+                            <input asp-for="ConfirmPassword" class="form-control form-control-lg fs-6" placeholder="ConfirmPassword" />
+                        </div>
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <select asp-for="Role" asp-items="@Model.RoleList" class="form-select p-3">
+                            <option disabled selected>-Select Role</option>
+                        </select>
+                        <span asp-validation-for="Role" class="text-danger"></span>
+                    </div>
+
+                  
+
+                    <button class="btn btn-primary btn-lg w-100">REgister</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <!-- Left -->
+    <div class="col-lg-6 d-none d-lg-block position-relative p-0">
+        <div class="bg-holder" style="background-image: url('img/login-img.png');"></div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

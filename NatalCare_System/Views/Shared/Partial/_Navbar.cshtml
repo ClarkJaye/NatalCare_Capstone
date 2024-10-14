@@ -1,0 +1,342 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using NatalCare.Models.Entities
+@inject UserManager<User> UserManager
+@inject SignInManager<User> SignInManager
+
+<!-- NAVBAR -->
+<nav class="mb-4">
+	<div class="d-flex align-items-center">
+		<button class="btn" id="menuBar">
+			<i class="fa-solid fa-bars" style="font-size: 20px;"></i>
+		</button>
+
+		<div aria-label="breadcrumb" class="px-4" style="margin-top: 14px;">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a asp-controller="Home" asp-action="Dashboard">Home</a></li>
+				<li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+			</ol>
+		</div>
+	</div>
+
+	<div class="d-flex align-items-center gap-3">
+		<a href="#" class="notification">
+			<i class="fa-solid fa-bell"></i> <!-- FontAwesome Bell Icon -->
+			<span class="num">8</span>
+		</a>
+
+		<ul class="navbar-nav">
+			<li class="nav-item dropdown">
+				<a href="#" class="d-flex align-items-center gap-2 profile nav-link dropdown-toggle item-name" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+					<img src="~/profile/defaultProfile.png">
+					<span>@User?.Identity?.Name</span>
+				</a>
+				<ul class="dropdown-menu" aria-labelledby="navbarDrop">
+					<li>
+						<a class="dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#myProfileModal" id="myProfileBtn">
+							<i class="fa-solid fa-user"></i>
+							<span> My Profile</span>
+						</a>
+					</li>
+					<li>
+						<a class="dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#manageProfileModal" id="manageProfileBtn">
+							<i class="fa-solid fa-cog"></i> 
+							<span>Manage Account </span>
+						</a>
+					</li>
+					<li>
+						<a class="dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#changePasswordModal" id="changePasswordBtn">
+							<i class="fa-solid fa-lock"></i>
+							<span> Change Password </span>
+						</a>
+					</li>
+					<hr />
+					<li>
+						<a class="dropdown-item d-flex align-items-center gap-2" asp-controller="account" asp-action="logout">
+							<i class="fa-solid fa-right-from-bracket"></i>
+							<span>Logout</span>
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</nav>
+
+
+<!-- My Profile Modal -->
+<div class="modal fade" id="myProfileModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header no-border">
+				<h5 class="modal-title">My Profile</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body px-4 pt-0">
+				<div class="row">
+					<div class="d-flex justify-content-center mb-3">
+						<a href="#" class="d-flex flex-column align-items-center justify-content-center profile">
+							<img src="~/profile/defaultProfile.png">
+						</a>
+					</div>
+
+					<div class="form-group col-6 mb-2">
+						<label class="form-label">Lastname</label>
+						<input id="profileLname" class="form-control" placeholder="" disabled />
+					</div>
+
+					<div class="form-group col-6 mb-2">
+						<label class="form-label">Firstname</label>
+						<input id="profileFname" class="form-control" placeholder="" disabled />
+					</div>
+
+					<div class="form-group col-12 mb-2">
+						<label class="form-label">Address</label>
+						<input id="profileAddress" class="form-control" placeholder="" disabled />
+					</div>
+
+
+					<div class="form-group col-12 mb-2">
+						<label class="form-label">Role</label>
+						<input id="profileRole" class="form-control" placeholder="" disabled />
+					</div>
+
+					<div class="form-group col-12 mb-2">
+						<label class="form-label">Email</label>
+						<input id="profileEmail" class="form-control" placeholder="" disabled />
+					</div>
+
+					<div class="form-group col-12 mb-3">
+						<label class="form-label">Phone number</label>
+						<input id="profilePNumber" class="form-control" placeholder="" disabled />
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<!-- Manage Profile Modal -->
+<div class="modal fade" id="manageProfileModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header no-border">
+				<h5 class="modal-title">Manage Profile</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body px-4 pt-0">
+				<form id="UserForm" method="POST">
+					<div class="row">
+						<div class="d-flex justify-content-center mb-3">
+							<div class="d-flex flex-column align-items-center justify-content-center profile position-relative">
+								<img src="~/profile/defaultProfile.png">
+
+								<div class="profile position-absolute" style="bottom: 0px; cursor:pointer;">
+									<i class='bx bxs-camera' style="color: var(--pink); font-size: 24px;"></i>
+								</div>
+							</div>
+						</div>
+
+
+						<input id="manageId" name="Id" class="form-control" placeholder="Last name" hidden/>
+
+						<div class="form-group col-6 mb-2">
+							<label for="manageLname" class="form-label">Lastname</label>
+							<input id="manageLname" name="LastName" class="form-control" placeholder="Last name" required />
+						</div>
+
+						<div class="form-group col-6 mb-2">
+							<label for="manageFname" class="form-label">Firstname</label>
+							<input id="manageFname" name="FirstName" class="form-control" placeholder="First name" required />
+						</div>
+
+						<div class="form-group col-12 mb-2">
+							<label for="manageAddress" class="form-label">Address</label>
+							<input id="manageAddress" name="Address" class="form-control" placeholder="Address" required />
+						</div>
+
+						<div class="form-group col-12 mb-2">
+							<label for="manageEmail" class="form-label">Email</label>
+							<input id="manageEmail" name="Email" class="form-control" placeholder="Email" required />
+						</div>
+
+						<div class="form-group col-12 mb-3">
+							<label for="managePNumber" class="form-label">Phone number</label>
+							<input id="managePNumber" name="PhoneNumber" class="form-control" placeholder="Phone number" required />
+						</div>
+
+						<div class="mt-3 mb-3 text-end">
+							<button type="submit" class="btn btn-sm btn-pink">Save Profile</button>
+							<button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+						</div>
+
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Change Password</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body px-4">
+				<form id="UserChangePwdForm" method="POST">
+					<div class="row">
+						<div class="form-group col-12 mb-3">
+							<label for="oldPassword" class="form-label">Old Password</label>
+							<input id="oldPassword" name="OldPassword" class="form-control" placeholder="Old Password" type="password" required />
+						</div>
+
+						<div class="form-group col-12 mb-3">
+							<label for="newPassword" class="form-label">New Password</label>
+							<input id="newPassword" name="NewPassword" class="form-control" placeholder="New Password" type="password" required/>
+						</div>
+
+						<div class="form-group col-12 mb-3">
+							<label for="confirmPassword" class="form-label">Confirm New Password</label>
+							<input id="confirmPassword" name="ConfirmPassword" class="form-control" placeholder="Confirm New Password" type="password" required />
+						</div>
+
+						<div class="mt-3 mb-3 text-end">
+							<button type="submit" class="btn btn-sm btn-pink">Save Changes</button>
+							<button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+	$(document).ready(function () {
+
+		$("#myProfileBtn").on("click", function () {
+			GetMyProfile("profile");
+		});
+
+		$("#manageProfileBtn").on("click", function () {
+			GetMyProfile("manage");
+		});
+
+
+		// For updating profile
+		$("#UserForm").on("submit", function (e) {
+			e.preventDefault();
+			updateProfile();
+		});
+
+		// For changing password
+		$("#UserChangePwdForm").on("submit", function (e) {
+			e.preventDefault();
+			changePassword();
+		});
+
+	});
+
+	// Function to get profile
+	function GetMyProfile(type) {
+		$.ajax({
+			url: '/Account/GetMyProfile',
+			type: 'GET',
+			dataType: 'json',
+			success: function (response) {
+				var user = response.data;
+
+				if (type === "profile") {
+					// Load for Profile modal
+					$("#profileLname").val(user.lastName);
+					$("#profileFname").val(user.firstName);
+					$("#profileAddress").val(user.address);
+					$("#profileRole").val(user.roles);
+					$("#profileEmail").val(user.email);
+					$("#profilePNumber").val(user.phoneNumber);
+				} else if (type === "manage") {
+					// Load for Manage Profile modal
+					$("#manageId").val(user.id);
+					$("#manageLname").val(user.lastName);
+					$("#manageFname").val(user.firstName);
+					$("#manageAddress").val(user.address);
+					$("#manageEmail").val(user.email);
+					$("#managePNumber").val(user.phoneNumber);
+				}
+			},
+			error: function (err) {
+				console.log('Error:', err);
+			}
+		});
+	}
+
+	// Function to update profile
+	function updateProfile() {
+		var formData = $("#UserForm").serialize();
+		console.log(formData);
+
+		$.ajax({
+			url: '/Account/UpdateProfile',
+			type: 'POST',
+			data: formData,
+			success: function (response) {
+				if (response.success) {
+					showSwalAlert('success', 'Success', response.message, 'OK', function () {
+						$("#manageProfileModal").modal('hide');
+					});
+				} else {
+					let errors = response.errors ? response.errors.join("\n") : response.message;
+					showSwalAlert('error', 'Error', errors);
+				}
+			},
+			error: function (err) {
+				console.log('Error:', err);
+			}
+		});
+	}
+
+	// Function to change the password
+	function changePassword() {
+		var formData = $("#UserChangePwdForm").serialize();  
+
+		$.ajax({
+			url: '/Account/ChangePassword',
+			type: 'POST',
+			data: formData,
+			success: function (response) {
+				if (response.success) {
+					showSwalAlert('success', 'Success', response.message, 'OK', function () {
+						$("#changePasswordModal").modal('hide'); 
+						window.location.href = "/Account/Logout";
+					});
+				} else {
+					// Show error alert using SwalAlert
+					let errors = response.errors ? response.errors.join("\n") : response.message;
+					showSwalAlert('error', 'Error', errors);
+				}
+			},
+			error: function (err) {
+				console.log('Error:', err);
+			}
+		});
+	}
+
+
+	
+
+
+</script>

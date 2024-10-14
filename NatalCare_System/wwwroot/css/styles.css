@@ -1,0 +1,371 @@
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Lato:wght@400;700&family=Poppins:ital,wght@0,100;0,400;0,700;1,400;1,500;1,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --poppins: 'Poppins', sans-serif;
+    --lato: 'Lato', sans-serif;
+    --kaushan: 'Kaushan Script', cursive;
+    --light: #F9F9F9;
+    --grey: #eee;
+    --dark1: #342E37;
+    --dark: #342e37c4;
+    --dark-grey: #AAAAAA;
+    --red: #F0142F;
+    --pink: #FC7995;
+    --btn-color: #FF456E;
+}
+
+.btn-link.nav-link:focus, .form-select:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--pink);
+    border-color: var(--pink);
+}
+
+/*.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-select:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--pink);
+    border-color: var(--pink);
+}*/
+
+html {
+    font-size: 14px;
+    overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+ul {
+    padding-left: 0;
+}
+
+.btnIcon:hover {
+    color: var(--pink) !important;
+    cursor: pointer;
+}
+
+body {
+    background: var(--grey);
+    overflow-x: hidden;
+}
+
+.modal, .modal-open {
+    padding: 0 !important;
+}
+
+
+
+.btn-pink {
+    color: #fff;
+    background-color: #FC7995;
+    border-color: #FC7995;
+}
+
+    .btn-pink:hover {
+        background-color: #FF8EA6;
+        border-color: #FF8EA6;
+        color: #fff;
+    }
+
+#menuBar:hover {
+    color: var(--pink);
+}
+
+#sidebar:state(webkit-scrollbar) {
+    display: none;
+}
+
+
+
+
+#sidebar .sidebar-link[data-bs-toggle="collapse"]::after {
+    border: solid;
+    border-width: 0 .075rem .075rem 0;
+    content: "";
+    display: inline-block;
+    padding: 3px;
+    position: absolute;
+    right: 1.2rem;
+    top: 22px;
+    transform: rotate(45deg);
+    transition: all .2s ease-out;
+}
+
+#sidebar .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
+    transform: rotate(-45deg);
+    transition: all .2s ease-out;
+    top: 26px;
+}
+
+
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100%;
+    background: var(--light);
+    color: var(--light);
+    z-index: 99;
+    font-family: var(--lato);
+    transition: width 0.3s ease;
+    overflow: hidden;
+}
+
+ul#patientManagementMenu {
+    padding-left: 1rem;
+}
+
+/*Border Right*/
+#sidebar .logo:after {
+    content: '';
+    position: absolute;
+    height: 80px;
+    width: 1px;
+    background: var(--grey);
+    right: 0;
+    top: 0;
+}
+
+#sidebar .side-menu {
+    width: 100%;
+    padding-top: 42px;
+    /*padding-left: 1rem;*/
+    max-height: calc(100% - 80px);
+    overflow-y: auto;
+}
+
+#sidebar.hide .side-menu {
+    max-height: calc(100% - 60px);
+    padding-left: 0;
+    overflow-y: auto;
+}
+
+#sidebar .side-menu::-webkit-scrollbar {
+    display: none;
+}
+
+#sidebar .side-menu {
+    scroll-behavior: smooth;
+}
+
+    #sidebar .side-menu li {
+        height: fit-content;
+        background: transparent;
+        border-radius: 48px 0 0 48px;
+        padding: 6px;
+        position: relative;
+        margin-left: 6px;
+        /*margin-bottom: 2px;
+        margin-top: 2px;*/
+    }
+
+        #sidebar .side-menu li.active {
+            background: var(--grey);
+            position: relative;
+        }
+
+        #sidebar .side-menu li.active {
+            background: var(--grey);
+            position: relative;
+        }
+
+
+.no-border {
+    border-bottom: none;
+}
+
+
+#sidebar .side-menu li.active::before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    top: -40px;
+    right: 0;
+    box-shadow: 20px 20px 0 var(--grey);
+    z-index: -1;
+}
+
+#sidebar .side-menu li.active::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    bottom: -40px;
+    right: 0;
+    box-shadow: 20px -20px 0 var(--grey);
+    z-index: -1;
+}
+
+#sidebar .side-menu li a {
+    width: 100%;
+    height: 100%;
+    background: var(--light);
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    border-radius: 48px;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow-x: hidden;
+    padding: 10px 0;
+}
+
+#sidebar .side-menu li.active a {
+    color: var(--pink);
+}
+
+#sidebar .side-menu li a:hover {
+    color: var(--pink);
+}
+
+#sidebar .side-menu li a i {
+    min-width: calc(80px - ((4px + 6px) * 2));
+    display: flex;
+    font-size: 18px;
+    justify-content: center;
+}
+
+
+#sidebar.hide {
+    width: 80px;
+}
+
+    #sidebar.hide .logo .logo-h1 {
+        display: none;
+    }
+
+    #sidebar.hide .logo .logo-h2 {
+        display: block !important;
+        border: 1px solid red;
+        border-radius: 50%;
+        padding: 5px;
+    }
+
+    #sidebar.hide .side-menu,
+    #sidebar.hide ul#patientManagementMenu {
+        padding-left: 0;
+    }
+
+    #sidebar.hide .sidebar-link[data-bs-toggle="collapse"]::after {
+        right: 0.6rem;
+    }
+
+    /* Non-active items hover effect when sidebar is hidden */
+    /*#sidebar.hide .side-menu li:not(.active):hover {
+        border-bottom: 3px solid rgb(239, 237, 237);
+        border-top: 3px solid rgb(239, 237, 237);
+        border-left: 3px solid rgb(239, 237, 237);
+    }*/
+
+    /* Ensure the hover effect doesn't apply to active items */
+    /*#sidebar.hide .side-menu li.active:hover {
+        border: none; 
+    }*/
+
+
+    #sidebar.hide .side-menu li a {
+        width: calc(60px - (4px * 2));
+        transition: width .3s ease;
+    }
+
+
+        #sidebar.hide .side-menu li a i {
+            font-size: 20px;
+            margin-left: -3px;
+        }
+
+
+
+/*CONTENT*/
+#content {
+    position: relative;
+    width: calc(100% - 280px);
+    left: 280px;
+    transition: .3s ease;
+    height: 100%;
+}
+
+#sidebar.hide ~ #content {
+    width: calc(100% - 80px);
+    left: 80px;
+}
+
+
+
+/*DATATABLES*/
+.table-datatable{
+    color: var(--dark)!important;
+}
+.table th {
+    color: var(--dark) !important;
+}
+.dt-search {
+    margin-bottom: 1rem;
+}
+
+    .dt-search input {
+        width: 450px !important;
+        border-radius: 10px;
+        line-height: 30px;
+    }
+
+.b-left {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: var(--pink);
+}
+
+.c-details .h5 {
+    color: var(--dark)!important;
+}
+
+
+
+/* Custom Checkbox Style */
+.custom-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--dark-grey);
+    border-radius: 3px;
+    outline: none;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+    .custom-checkbox:checked {
+        background-color: var(--pink);
+        border-color: var(--pink);
+    }
+        .custom-checkbox:checked::before {
+            font-family: "Font Awesome 5 Free";
+            content: "\f00c";
+            font-weight: 900;
+            color: white;
+            position: absolute;
+            top: 4px;
+            left: 4.5px;
+            font-size: 14px;
+        }

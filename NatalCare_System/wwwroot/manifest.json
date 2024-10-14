@@ -1,0 +1,20 @@
+{
+  "short_name": "NatalCare",
+  "name": "NatalCare - Paanakan Sa Mandaue",
+  "icons": [
+    {
+      "src": "/img/icon.jpg",
+      "type": "image/jpg",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/img/logo-icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "theme_color": "#FC7995"
+}

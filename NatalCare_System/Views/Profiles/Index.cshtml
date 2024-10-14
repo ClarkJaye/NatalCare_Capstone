@@ -1,0 +1,122 @@
+﻿@model List<NatalCare.Models.Entities.Role>
+
+@{
+    ViewData["Title"] = "Profiles";
+    Layout = "_UserLayout";
+}
+
+<!-- NAVBAR -->
+<partial name="Partial/_Navbar" />
+
+<div class="mx-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title m-0">Profile List</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-4 mt-2 d-flex align-items-center justify-content-start" style="padding: 0 12px;">
+                <a class="btn btn-sm btn-pink d-flex align-items-center gap-2" asp-controller="Profiles" asp-action="Create">
+                    <i class='fas fa-user-plus' style="font-size: 18px;"></i>
+                    <strong>Add New Profile</strong>
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-datatable">
+                    <thead>
+                        <tr>
+                            <th>Profile Name</th>
+                            <th>Description</th>
+                            <th>Created At</th>
+                            <th>Created By</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var role in Model)
+                        {
+                            <tr>
+                                <td>@role.Name</td>
+                                <td>@role.Description</td>
+                                <td>@role.Created_At</td>
+                                <td>@role.CreatedBy?.UserName</td>
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center gap-4">
+                                        <a class="btn btn-sm btn-outline-success d-flex align-items-center gap-2" asp-controller="ProfileAccess" asp-action="Index" asp-route-id="@role.Id">
+                                            <i class="fa-solid fa-cogs"></i>
+                                            <span>Access</span>
+                                        </a>
+
+                                        <a class="btn btn-sm btn-outline-primary d-flex align-items-center gap-2" asp-controller="Profiles" asp-action="Edit" asp-route-id="@role.Id">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            <span>Edit</span>
+                                        </a>
+
+                                        <a class="btn btn-sm btn-outline-danger d-flex align-items-center gap-2" data-profileId="@role.Id" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                            <span>Delete</span>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <h6>Are you sure you want to delete this?</h6>
+                <p id="modal-item-description"></p>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <form id="deleteForm" method="post" asp-controller="Profiles" asp-action="Delete">
+                    <input type="hidden" id="deleteRoleId" name="id" /> 
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        //DELETE
+        $('#deleteModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); 
+            var id = button.attr('data-profileId'); 
+            console.log(id);
+
+            $('#deleteRoleId').val(id);
+
+            var form = $('#deleteForm');
+            form.attr('action', '/Profiles/Delete/' + id);
+        });
+    });
+
+</script>
+
+
+
+
+

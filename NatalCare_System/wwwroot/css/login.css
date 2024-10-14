@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    font-family: 'Nunito Sans', sans-serif;
+    background-color: #fff;
+}
+
+a {
+    text-decoration: none;
+    color: #FC7995;
+}
+
+    a:hover {
+        text-decoration: underline;
+        color: #FC7995;
+    }
+
+.bg-holder {
+    position: absolute;
+    width: 100%;
+    min-height: 100%;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+.btn-pink {
+    color: #fff;
+    background-color: #FC7995;
+    border-color: #FC7995;
+}
+
+    .btn-pink:hover {
+        background-color: #FF8EA6;
+        border-color: #FF8EA6;
+        color: #fff;
+    }
+
+
+.form-control:focus,
+.form-check-input:focus {
+    border-color: #FC7995;
+    box-shadow: 0 0 0 0.2rem rgba(240, 20, 47, 0.25);
+}
+
+.form-check input, .form-check label {
+    cursor: pointer;
+}
+.form-check-input:checked {
+    background-color: #FC7995;
+    border-color: #FC7995;
+    position: relative;
+}

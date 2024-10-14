@@ -1,0 +1,325 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_UserLayout";
+}
+
+<!-- NAVBAR -->
+<partial name="Partial/_Navbar" />
+
+<div class="px-4">
+    <div class="row">
+        <!-- Graphs Section -->
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-6 mb-4">
+                    <!-- Patients Statistics (Line Graph) -->
+                    <div class="card h-100 p-3">
+                        <h6 class="card-title">Patients Statistics</h6>
+                        <canvas id="lineGraph"></canvas>
+                    </div>
+                </div>
+                <div class="col-6 mb-4">
+                    <!-- Services Statistics (Bar Graph) -->
+                    <div class="card h-100 p-3">
+                        <h6 class="card-title">Services Statistics</h6>
+                        <canvas id="barGraph"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Totals Section -->
+        <div class="col-md-3">
+            <div class="mb-4">
+                <div class="card shadow py-2" style=" border-color: var(--pink); color: var(--pink);">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col mr-2">
+                                <div class="fw-bold text-uppercase mb-1" style="font-size: .8em;">
+                                    Total Delivery
+                                </div>
+                                <div class="h4 fw-bold mb-0" id="countAllUsers">
+                                    1500
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user" style="font-size: 2em; font-weight: 800; color: var(--pink)"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-4">
+                <div class="card shadow py-2" style=" border-color: var(--pink); color: var(--pink);">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col mr-2">
+                                <div class="fw-bold text-uppercase mb-1" style="font-size: .8em;">
+                                    Total Delivery
+                                </div>
+                                <div class="h4 fw-bold mb-0" id="countTotalDelivery">
+                                    1500
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user" style="font-size: 2em; font-weight: 800; color: var(--pink)"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @* Recent Patient *@
+    <div class="bg-white rounded border shadow p-4">
+        <h6>Recent Patient</h6>
+        <div class="p-2">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Address</th>
+                        <th>Age</th>
+                        <th>Date</th>
+                        <th>Services</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Jen</td>
+                        <td>Pepito</td>
+                        <td>Mabolo Cebu City</td>
+                        <td>21</td>
+                        <td>05/04/2024</td>
+                        <td>Delivery</td>
+                    </tr>
+                    <tr>
+                        <td>Jen</td>
+                        <td>Pepito</td>
+                        <td>Mabolo Cebu City</td>
+                        <td>21</td>
+                        <td>05/04/2024</td>
+                        <td>Prenatal</td>
+                    </tr>
+                    <tr>
+                        <td>Jen</td>
+                        <td>Pepito</td>
+                        <td>Mabolo Cebu City</td>
+                        <td>21</td>
+                        <td>05/04/2024</td>
+                        <td>Delivery</td>
+                    </tr>
+                    <tr>
+                        <td>Jen</td>
+                        <td>Pepito</td>
+                        <td>Mabolo Cebu City</td>
+                        <td>21</td>
+                        <td>05/04/2024</td>
+                        <td>Family Planning</td>
+                    </tr>
+                    <tr>
+                        <td>Jen</td>
+                        <td>Pepito</td>
+                        <td>Mabolo Cebu City</td>
+                        <td>21</td>
+                        <td>05/04/2024</td>
+                        <td>Prenatal</td>
+                    </tr>
+                    <tr>
+                        <td>Jen</td>
+                        <td>Pepito</td>
+                        <td>Mabolo Cebu City</td>
+                        <td>21</td>
+                        <td>05/04/2024</td>
+                        <td>Delivery</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+
+
+
+</div>
+
+
+
+<!-- Chart.js and jQuery -->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Line Graph for Patients Statistics
+    const lineCtx = document.getElementById('lineGraph').getContext('2d');
+    const lineChart = new Chart(lineCtx, {
+        type: 'line',
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'], // Sample months
+            datasets: [{
+                label: 'Patients',
+                data: [120, 150, 180, 220, 170, 210, 260], // Sample data
+                borderColor: '#ff6384',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                fill: true,
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    enabled: true,
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Month'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Number of Patients'
+                    }
+                }
+            }
+        }
+    });
+
+    // Bar Graph for Services Statistics
+    const barCtx = document.getElementById('barGraph').getContext('2d');
+    const barChart = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Delivery', 'Prenatal', 'Family Planning', 'Newborn Screening', 'Newborn Hearing'], // Sample services
+            datasets: [{
+                label: 'Number of Services',
+                data: [300, 200, 150, 100, 50], // Sample data
+                backgroundColor: [
+                    '#36a2eb',
+                    '#ffcd56',
+                    '#4bc0c0',
+                    '#ff9f40',
+                    '#9966ff'
+                ],
+                borderColor: [
+                    '#36a2eb',
+                    '#ffcd56',
+                    '#4bc0c0',
+                    '#ff9f40',
+                    '#9966ff'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: true,
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Services'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Number of Services'
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+@* <div class="row pt-4">
+    <div class="col-xl-4 col-md-6 col-sm-6 mb-4">
+        <div class="card shadow h-100 py-2" style="border-left: .25rem solid var(--pink) !important;">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col mr-2">
+                        <div class="fw-bold text-uppercase mb-1" style="font-size: .8em;">
+                            Total Users
+                        </div>
+                        <div class="h5 fw-bold text-secondary mb-0" id="countAllUsers">
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="lni lni-user" style="font-size: 2em; font-weight: 800; color: #dddfeb"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4 col-md-6 col-sm-6 mb-4">
+        <div class="card shadow h-100 py-2" style="border-left: .25rem solid var(--pink) !important;">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col mr-2">
+                        <div class="fw-bold text-uppercase mb-1" style="font-size: .8em;">
+                            Total Users
+                        </div>
+                        <div class="h5 fw-bold text-secondary mb-0" id="countAllUsers">
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="lni lni-user" style="font-size: 2em; font-weight: 800; color: #dddfeb"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4 col-md-6 col-sm-6 mb-4">
+        <div class="card shadow h-100 py-2" style="border-left: .25rem solid var(--pink) !important;">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col mr-2">
+                        <div class="fw-bold text-uppercase mb-1" style="font-size: .8em;">
+                            Total Users
+                        </div>
+                        <div class="h5 fw-bold text-secondary mb-0" id="countAllUsers">
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="lni lni-user" style="font-size: 2em; font-weight: 800; color: #dddfeb"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> *@
+

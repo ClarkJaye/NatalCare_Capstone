@@ -1,0 +1,89 @@
+﻿@model List<NatalCare.Models.Entities.Role_Access>
+
+@{
+    ViewData["Title"] = "Profile Access";
+
+
+
+    Layout = "_UserLayout";
+}
+
+<!-- NAVBAR -->
+<partial name="Partial/_Navbar" />
+
+<div class="mx-4">
+    <div class="mb-3">
+        <a class="btn btn-sm btn-outline-secondary" asp-controller="Profiles" asp-action="Index">
+            <span class="fas fa-undo"></span> Back to List
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title m-0">Profile Access for Role: <span class="text-primary">@ViewData["RoleName"]</span></h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-datatable">
+                    <thead>
+                        <tr>
+                            <th>Module Title</th>
+                            <th>Category</th>
+                            <th>Open Access</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Module?.ModuleTitle</td>
+                                <td>@item.Module?.Category?.CategoryName</td>
+                                <td>@item.OpenAccess</td>
+                                <td>
+                                    <input type="checkbox" class="update-checkbox custom-checkbox"
+                                           data-role-id="@item.RoleId"
+                                           data-module-id="@item.Module?.ModuleId"
+                                           value="Y" @(item.OpenAccess == "Y" ? "checked" : "") />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/toastr/toastr.js"></script>
+<script>
+    $(".update-checkbox").change(function () {
+        const isChecked = $(this).is(':checked');
+        const roleId = $(this).data("role-id");
+        const moduleId = $(this).data("module-id");
+
+        $.ajax({
+            url: "@Url.Action("UpdateAccess", "ProfileAccess")",
+            type: "POST",
+            data: {
+                profileAccessList: [{
+                    RoleId: roleId,
+                    ModuleId: moduleId,
+                    OpenAccess: isChecked ? "Y" : "N" // Send "Y" or "N"
+                }]
+            },
+            success: function (response) {
+                if (response.success) {
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (error) {
+                console.error("Error updating access:", error);
+            }
+        });
+    });
+</script>

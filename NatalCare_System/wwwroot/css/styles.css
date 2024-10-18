@@ -43,6 +43,7 @@ html {
 
 a {
     text-decoration: none;
+    color: var(--dark);
 }
 
 li {
@@ -68,6 +69,9 @@ body {
 }
 
 
+.text-pink{
+    color: var(--pink);
+}
 
 .btn-pink {
     color: #fff;
@@ -80,6 +84,30 @@ body {
         border-color: #FF8EA6;
         color: #fff;
     }
+
+.btn-outline-pink {
+    color: var(--pink);
+    border-color: var(--pink);
+}
+    .btn-outline-pink:hover {
+        color: var(--light);
+        background-color: var(--pink);
+    }
+    .btn-outline-pink.active {
+        color: var(--light);
+        background-color: var(--pink);
+    }
+
+.btn-lightgrey {
+    color: var(--dark);
+    background-color: var(--grey);
+}
+
+    .btn-lightgrey:hover {
+        color: var(--dark);
+        background-color: #d9d7d7;
+    } 
+
 
 #menuBar:hover {
     color: var(--pink);
@@ -369,3 +397,31 @@ ul#patientManagementMenu {
             left: 4.5px;
             font-size: 14px;
         }
+
+
+
+
+/* For Card or Table*/
+.table-hover tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+.table th, .table td {
+    border-top: none !important;
+    padding: 16px;
+    vertical-align: middle;
+}
+
+.card-selected {
+    border-radius: 12px !important;
+    background: var(--light) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header-selected {
+    font-weight: 500;
+    border-bottom: 2px solid #e0e0e0;
+    background: var(--light) !important;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+}

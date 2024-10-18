@@ -1,0 +1,288 @@
+﻿<div class="col-md-9">
+    <div class="card card-selected mb-5">
+        <div class="card-body">
+            <h5 class="card-title mb-4">Medical Records</h5>
+
+            <!-- Tabs for Services -->
+            <ul class="nav nav-tabs" id="patientTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="prenatal-tab" data-bs-toggle="tab" href="#prenatal" role="tab">Prenatal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="delivery-tab" data-bs-toggle="tab" href="#delivery" role="tab">Delivery</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="family-planning-tab" data-bs-toggle="tab" href="#family-planning" role="tab">Family Planning</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="screening-tab" data-bs-toggle="tab" href="#screening" role="tab">Newborn Screening</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="hearing-tab" data-bs-toggle="tab" href="#hearing" role="tab">Newborn Hearing</a>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content mt-4">
+                <!-- Prenatal Tab -->
+                <div class="tab-pane fade show active" id="prenatal" role="tabpanel">
+                    <h6 class="px-2">Prenatal Records</h6>
+                    <div class="d-flex justify-content-end my-3">
+                        <a asp-controller="" asp-action="" class="btn btn-sm btn-pink">
+                            <i class="fas fa-plus"></i>
+                            <span>Add New</span>
+                        </a>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Notes</th>
+                                    <th>Weight</th>
+                                    <th>Blood Pressure</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data -->
+                                <tr>
+                                    <td>01</td>
+                                    <td>Aug 20 2024 10 AM</td>
+                                    <td>1kg</td>
+                                    <td>150/50</td>
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-center gap-2">
+                                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1">
+                                                <i class="fa-solid fa-list"></i>
+                                                <span>Details</span>
+                                            </a>
+                                            <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                <span>Edit</span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Delivery Tab -->
+                <div class="tab-pane fade" id="delivery" role="tabpanel">
+                    <h6 class="px-2">Delivery Records</h6>
+                    <div class="d-flex justify-content-end my-3">
+                        <a asp-controller="" asp-action="" class="btn btn-sm btn-pink">
+                            <i class="fas fa-plus"></i>
+                            <span>Add New</span>
+                        </a>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No#</th>
+                                    <th>Date Admitted</th>
+                                    <th>Date Discharged</th>
+                                    <th>Ward No#</th>
+                                    <th>Notes</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data -->
+                                <tr>
+                                    <td>01</td>
+                                    <td>Aug 20 2024 10 AM</td>
+                                    <td>Aug 20 2024 10 AM</td>
+                                    <td>Ward 1</td>
+                                    <td>Sample Sample</td>
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-center gap-2">
+                                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1">
+                                                <i class="fa-solid fa-list"></i>
+                                                <span>Details</span>
+                                            </a>
+                                            <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                <span>Edit</span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Family Planning Tab -->
+                <div class="tab-pane fade" id="family-planning" role="tabpanel">
+                    <h6 class="px-2">Family Planning Records</h6>
+                    <div class="d-flex justify-content-end my-3">
+                        <a asp-controller="Patient" asp-action="AddFamilyPlanning" class="btn btn-sm btn-pink">
+                            <i class="fas fa-plus"></i>
+                            <span>Add New</span>
+                        </a>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No#</th>
+                                    <th>Method Type</th>
+                                    <th>No of Children</th>
+                                    <th>Name of Spouse</th>
+                                    <th>Date Visit</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data -->
+                                <tr>
+                                    <td>01</td>
+                                    <td>Pills</td>
+                                    <td>4</td>
+                                    <td>clerk</td>
+                                    <td>Aug 20 2024 10 AM</td>
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-center gap-2">
+                                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1">
+                                                <i class="fa-solid fa-list"></i>
+                                                <span>Details</span>
+                                            </a>
+                                            <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                <span>Edit</span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>02</td>
+                                    <td>Inject</td>
+                                    <td>3</td>
+                                    <td>Reymondo</td>
+                                    <td>Aug 20 2024 10 AM</td>
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-center gap-2">
+                                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1">
+                                                <i class="fa-solid fa-list"></i>
+                                                <span>Details</span>
+                                            </a>
+                                            <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                <span>Edit</span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- "No record found" message row -->
+                                <tr class="no-record-found" style="display: none;">
+                                    <td colspan="6" class="text-center">No record found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Form/Table -->
+                </div>
+
+                <!-- Screening Tab -->
+                <div class="tab-pane fade" id="screening" role="tabpanel">
+                    <h6 class="px-2">Screening Records</h6>
+                    <div class="d-flex justify-content-end my-3">
+                        <a asp-controller="" asp-action="" class="btn btn-sm btn-pink">
+                            <i class="fas fa-plus"></i>
+                            <span>Add New</span>
+                        </a>
+                    </div>
+                    <!-- Form/Table -->
+                </div>
+
+                <!-- Hearing Tab -->
+                <div class="tab-pane fade" id="hearing" role="tabpanel">
+                    <h6 class="px-2">Hearing Test Records</h6>
+                    <div class="d-flex justify-content-end my-3">
+                        <a asp-controller="" asp-action="" class="btn btn-sm btn-pink">
+                            <i class="fas fa-plus"></i>
+                            <span>Add New</span>
+                        </a>
+                    </div>
+                    <!-- Form/Table -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the current patient ID
+        var currentPatientID = document.getElementById('patient-id').value;
+
+        // Get the stored patient ID and active tab from localStorage
+        var storedPatientID = localStorage.getItem('currentPatientID');
+        var activeTab = localStorage.getItem('activeTab');
+
+        // Check if the patient has changed
+        if (currentPatientID !== storedPatientID) {
+            // Reset the tab to Prenatal if the patient is different
+            localStorage.removeItem('activeTab');
+            localStorage.setItem('currentPatientID', currentPatientID);
+            activeTab = '#prenatal'; // Default tab
+        }
+
+        // Show the active tab
+        if (activeTab) {
+            var tab = new bootstrap.Tab(document.querySelector(`a[href="${activeTab}"]`));
+            tab.show();
+        }
+
+        // Save the active tab and patient ID to localStorage when a tab is clicked
+        var tabLinks = document.querySelectorAll('.nav-tabs .nav-link');
+        tabLinks.forEach(function (tabLink) {
+            tabLink.addEventListener('shown.bs.tab', function (event) {
+                var activeTab = event.target.getAttribute('href');
+                localStorage.setItem('activeTab', activeTab);
+                localStorage.setItem('currentPatientID', currentPatientID);
+            });
+        });
+
+        // FILTERING
+        $('.filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            var rows = $('tbody tr:not(.no-record-found)');
+            var noRecordRow = $('.no-record-found');
+
+            // Filter rows
+            var visibleRows = rows.filter(function () {
+                return $(this).text().toLowerCase().indexOf(value) > -1;
+            }).toggle(true);
+
+            // Hide rows that do not match
+            rows.not(visibleRows).toggle(false);
+
+            // If no rows are visible, show the "No record found" message
+            if (visibleRows.length === 0) {
+                noRecordRow.show();
+            } else {
+                noRecordRow.hide();
+            }
+        });
+    });
+</script>

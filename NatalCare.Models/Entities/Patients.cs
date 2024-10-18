@@ -8,7 +8,6 @@ namespace NatalCare.Models.Entities
     public class Patients : BaseEntity
     {
         [Key]
-        [Required]
         public string? PatientID { get; set; }
 
         //[Required]
@@ -34,8 +33,9 @@ namespace NatalCare.Models.Entities
         public string? Occupation { get; set; }
 
         [StringLength(50)]
-        [RegularExpression(@"^\d{10}$", ErrorMessage = "Invalid phone number.")]
+        [RegularExpression(@"^\d{11}$", ErrorMessage = "Invalid phone number.")]
         public string? ContactNumber { get; set; }
+        public string? Email { get; set; }
         //[Required]
         public string? PlaceOfBirth { get; set; }
         public string? Emergency_Name { get; set; }
@@ -59,6 +59,13 @@ namespace NatalCare.Models.Entities
         public User? CreatedBy { get; set; }
 
         public DateTime? Updated_At { get; set; }
+
+        [Column("Updated_By")]
+        public string? PatientUpdatedBy { get; set; }
+
+        [ForeignKey("PatientUpdatedBy")]
+        [ValidateNever]
+        public User? UpdatedBy { get; set; }
 
         // Foreign Key to Status table
         public string? StatusCode { get; set; }

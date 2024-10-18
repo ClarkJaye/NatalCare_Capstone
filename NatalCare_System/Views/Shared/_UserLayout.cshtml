@@ -78,7 +78,7 @@
                             </a>
                         </li>
 
-                        <div id="patientManagementMenu" class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" || ViewContext.RouteData.Values["controller"]?.ToString() == "Newborn" || ViewContext.RouteData.Values["controller"]?.ToString() == "Admission" || ViewContext.RouteData.Values["controller"]?.ToString() == "OPD" ? "show" : "")">
+                        <div id="patientManagementMenu" class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" || ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" || ViewContext.RouteData.Values["controller"]?.ToString() == "Newborn" || ViewContext.RouteData.Values["controller"]?.ToString() == "Admission" || ViewContext.RouteData.Values["controller"]?.ToString() == "OPD" ? "show" : "")">
                             <ul>
                                 @if (accessibleModules.Any(m => m.ModuleId == 2 && m.OpenAccess == "Y"))
                                 {
@@ -230,14 +230,12 @@
                 lengthChange: true,
                 searching: true,
                 ordering: true,
-                lengthMenu: [5, 10, 25, 50],
+                lengthMenu: [10, 25, 50, 100],
                 language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search patients..."
-                },
-                paginate: {
-                    previous: "Previous",
-                    next: "Next"
+                    paginate: {
+                        previous: "Previous",
+                        next: "Next"
+                    }
                 },
                 info: true,
                 autoWidth: false,

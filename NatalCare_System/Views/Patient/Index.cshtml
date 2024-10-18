@@ -4,32 +4,6 @@
     ViewData["Title"] = "Patients Records";
     Layout = "_UserLayout";
 }
-<style>
-    .table-hover tbody tr:hover {
-        background-color: #f5f5f5; 
-    }
-
-    .table th, .table td {
-        border-top: none !important;
-        padding: 16px;
-        vertical-align: middle; 
-    }
-
-    .card {
-        border-radius: 12px!important; 
-        background: var(--light)!important;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .card-header {
-        font-weight: 500;
-        border-bottom: 2px solid #e0e0e0;
-        background: var(--light) !important;
-        border-top-left-radius: 12px !important;
-        border-top-right-radius: 12px !important;
-    }
-</style>
-
 
 <!-- NAVBAR -->
 <partial name="Partial/_Navbar" />
@@ -38,7 +12,7 @@
     <div class="row">
         <!-- Totals Section -->
         <div class="col-md-4 mb-4">
-            <div class="card shadow py-2">
+            <div class="card shadow py-2 card-selected">
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col mr-2">
@@ -46,10 +20,10 @@
                                 Today Patients
                             </div>
                             <div class="h4 fw-bold my-3">
-                                10
+                                @(ViewBag.TodayPatient ?? 0)
                             </div>
                             <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
-                                Total Patients 10 today
+                                Total Patients <span class="h6">@(ViewBag.TodayPatient ?? 0)</span> today
                             </div>
                         </div>
                         <div class="col-auto">
@@ -61,8 +35,9 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-4 mb-4">
-            <div class="card shadow py-2">
+            <div class="card shadow py-2 card-selected">
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col mr-2">
@@ -70,10 +45,10 @@
                                 Monthly Patients
                             </div>
                             <div class="h4 fw-bold my-3">
-                                150
+                                @(ViewBag.MonthlyPatient ?? 0)
                             </div>
                             <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
-                                Total Patients 10 this month
+                                Total Patients <span class="h6">@(ViewBag.MonthlyPatient ?? 0)</span> this month
                             </div>
                         </div>
                         <div class="col-auto">
@@ -85,8 +60,9 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-4 mb-4">
-            <div class="card shadow py-2">
+            <div class="card shadow py-2 card-selected">
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col mr-2">
@@ -94,10 +70,10 @@
                                 Yearly Patients
                             </div>
                             <div class="h4 fw-bold my-3">
-                                251
+                                @(ViewBag.YearlyPatient ?? 0)
                             </div>
                             <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
-                                Total Patients 10 this year
+                                Total Patients <span class="h6">@(ViewBag.YearlyPatient ?? 0)</span> this year
                             </div>
                         </div>
                         <div class="col-auto">
@@ -111,14 +87,14 @@
         </div>
     </div>
    
-    <div class="mb-4 mt-2 d-flex align-items-center justify-content-start">
+    <div class="mb-4 mt-2 d-flex align-items-center justify-content-end">
         <a class="btn btn-pink d-flex align-items-center gap-2" asp-controller="Patient" asp-action="Create">
             <i class='fas fa-user-plus' style="font-size: 18px;"></i>
-            <strong>Add New Users</strong>
+            <strong>Add New</strong>
         </a>
     </div>
 
-    <div class="card shadow-sm">
+    <div class="card shadow-sm card-selected">
        @*  <div class="card-header d-flex justify-content-between align-items-center bg-white">
             <h5 class="card-title m-0">Patients</h5>
             <div>
@@ -129,22 +105,16 @@
             </div>
         </div> *@
         <div class="card-body">
-          @*   <div class="mb-4 mt-2 d-flex align-items-center justify-content-start" style="padding: 0 12px;">
-                <a class="btn btn-sm btn-pink d-flex align-items-center gap-2" asp-controller="Patient" asp-action="Create">
-                    <i class='fas fa-user-plus' style="font-size: 18px;"></i>
-                    <strong>Add New Users</strong>
-                </a>
-            </div> *@
-
             <div class="table-responsive">
                 <table id="patientsTable" class="table table-hover table-striped">
                     <thead class="border-bottom-2">
                         <tr>
-                            <th>Case No</th>
-                            <th>Lastname</th>
+                            <th>Patient No</th>
                             <th>Firstname</th>
                             <th>Middlename</th>
+                            <th>Lastname</th>
                             <th>Age</th>
+                            <th>Gender</th>
                             <th>Address</th>
                             <th>Date of Birth</th>
                             <th>Date Added</th>
@@ -156,9 +126,9 @@
                         {
                             <tr class="align-middle">
                                 <td>@patient.PatientID</td>
-                                <td>@patient.LastName</td>
                                 <td>@patient.FirstName</td>
                                 <td>@patient.MiddleName</td>
+                                <td>@patient.LastName</td>
                                 <td>
                                     @{
                                         if (patient.Birthdate.HasValue)
@@ -174,18 +144,29 @@
                                         }
                                     }
                                 </td>
+                                <td>@patient.Gender</td>
                                 <td>@patient.Address</td>
-                                <td>@patient.Birthdate?.ToString("MM/dd/yyyy")</td>
-                                <td>@patient.Created_At?.ToString("MM/dd/yyyy")</td>
+                                <td>@patient.Birthdate?.ToString("MMM dd yyyy")</td>
+                                <td>@patient.Created_At?.ToString("MMM dd yyyy h:mm tt")</td>
                                 <td class="text-center">
                                     <div class="d-flex align-items-center justify-content-center gap-4">
-                                        <a class="text-dark" asp-controller="Patient" asp-action="Information" asp-route-id="@patient.PatientID">
-                                            <i class="fa-solid fa-list" style="font-size: 24px;"></i>
+                                        <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Patient" asp-action="Information" asp-route-id="@patient.PatientID">
+                                            <i class="fa-solid fa-list"></i>
+                                            <span>Details</span>
+                                        </a>
+
+                                        <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1" asp-controller="Patient" asp-action="Edit" asp-route-id="@patient.PatientID">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            <span>Edit</span>
+                                        </a>
+                                        
+                                        @*  <a class="text-dark" asp-controller="Patient" asp-action="Information" asp-route-id="@patient.PatientID">
+                                            <i class="fa-solid fa-list btnIcon" style="font-size: 24px;"></i>
                                         </a>
 
                                         <a class="text-success" asp-controller="Patient" asp-action="Edit" asp-route-id="@patient.PatientID">
-                                            <i class="fa-solid fa-pen-to-square" style="font-size: 24px;"></i>
-                                        </a>
+                                            <i class="fa-solid fa-pen-to-square btnIcon" style="font-size: 24px;"></i>
+                                        </a> *@
                                     </div>
                                 </td>
                             </tr>

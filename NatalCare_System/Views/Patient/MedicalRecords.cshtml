@@ -5,6 +5,19 @@
     Layout = "_UserLayout";
 }
 
+<!-- Custom CSS -->
+<style>
+    .nav-tabs .nav-link {
+        color: var(--dark); /* Default inactive color */
+    }
+
+        .nav-tabs .nav-link.active {
+            color: var(--pink); /* Active tab color */
+            font-weight: bold; /* Make the active tab text bold if needed */
+        }
+</style>
+
+
 <!-- NAVBAR -->
 <partial name="Partial/_Navbar" />
 
@@ -24,9 +37,10 @@
                     <div class="d-flex justify-content-center align-items-center flex-column mb-3 mx-lg-5">
                         <!-- Patient Profile Info -->
                         <div class="d-flex flex-column align-items-center justify-content-center gap-2 text-center">
+                            <input id="patient-id" value="@Model.PatientID" hidden />
                             <img src="~/profile/defaultProfile.png" alt="Profile" class="img-fluid rounded-circle mb-3" />
-                            <h5 class="fw-bold m-0">@Model.FirstName @Model.LastName</h5> 
-                            <h6 class="text-muted m-0">@Model.Email</h6> 
+                            <h5 class="fw-bold m-0">@Model.FirstName @Model.LastName</h5>
+                            <h6 class="text-muted m-0">@Model.Email</h6>
                             <h6 class="m-0">@Model.ContactNumber</h6>
                         </div>
 
@@ -52,7 +66,7 @@
             </div>
         </div>
 
-        <!-- Right Content: Patient Information Partial -->
-        <partial name="Partial/Patient/_PatientInformation" />
+        <!-- Right Content: Patient Medical Records Partial -->
+        <partial name="Partial/Patient/_MedicalRecords" />
     </div>
 </div>

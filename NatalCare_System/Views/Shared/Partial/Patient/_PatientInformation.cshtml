@@ -1,0 +1,122 @@
+﻿<div class="col-md-9">
+    <div class="card card-selected mb-5">
+        <div class="card-body c-details">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title m-0">Patient Information</h5>
+                <div>
+                    <a class="btn btn-sm btn-outline-pink" href="#">
+                        <i class="fas fa-save"></i>
+                        <span>Print</span>
+                    </a>
+                </div>
+            </div>
+
+
+            <hr />
+
+            <div class="row mx-4">
+                <!-- Firstname -->
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Firstname</label>
+                    <input class="form-control" value="@Model.FirstName" disabled />
+                </div>
+
+                <!-- Middlename -->
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Middlename</label>
+                    <input class="form-control" value="@Model.MiddleName" disabled />
+                </div>
+
+                <!-- Lastname -->
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Lastname</label>
+                    <input class="form-control" value="@Model.LastName" disabled />
+                </div>
+
+                <!-- Age Calculation -->
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Age</label>
+                    @{
+                        var birthdate = Model.Birthdate;
+                        var age = DateTime.Now.Year - birthdate.Year;
+                    }
+                    <input class="form-control" value="@age" disabled />
+                </div>
+
+                <!-- Gender -->
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Gender</label>
+                    <input class="form-control" value="@Model.Gender" disabled />
+                </div>
+
+                <!-- Birthdate -->
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Birthdate</label>
+                    <input class="form-control" value="@Model.Birthdate.ToString("MM/dd/yyyy")" disabled /> <!-- Adjusted to display formatted date -->
+                </div>
+
+                <!-- Birth Place -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Birth Place</label>
+                    <input class="form-control" value="@Model.PlaceOfBirth" disabled />
+                </div>
+
+                <!-- Address -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Address</label>
+                    <input class="form-control" value="@Model.Address" disabled />
+                </div>
+
+                <!-- Occupation -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Occupation</label>
+                    <input class="form-control" value="@Model.Occupation" disabled />
+                </div>
+
+                <!-- Phone Number -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Phonenumber</label>
+                    <input class="form-control" value="@Model.ContactNumber" disabled />
+                </div>
+
+                <!-- Email -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Email</label>
+                    <input class="form-control" value="@Model.Email" disabled />
+                </div>
+            </div>
+
+
+
+            <!-- Emergency Contact Section -->
+            <h5 class="card-title mt-4 mb-3">Emergency Contact</h5>
+            <hr />
+            <div class="row mx-4">
+                <!-- Emergency Contact Name -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Emergency Contact Name</label>
+                    <input class="form-control" value="@Model.Emergency_Name" disabled />
+                </div>
+
+                <!-- Emergency Contact Number -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Emergency Contact Phonenumber</label>
+                    <input class="form-control" value="@Model.Emergency_Contact" disabled />
+                </div>
+            </div>
+
+         
+
+            <!-- Insurance Section -->
+            <h5 class="card-title mt-4 mb-3">Insurance Details</h5>
+            <hr />
+            <div class="row mx-4">
+                <!-- PhilHealth Number -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">PhilHealth Number</label>
+                    <input class="form-control" value="@Model.PHIC_NO" disabled />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

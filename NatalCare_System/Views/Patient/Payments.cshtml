@@ -1,6 +1,4 @@
-﻿@model NatalCare.Models.Entities.Patients
-
-@{
+﻿@{
     ViewData["Title"] = "Patient / Patient Information";
     Layout = "_UserLayout";
 }
@@ -21,23 +19,23 @@
         <div class="col-md-3 mb-4">
             <div class="card card-selected">
                 <div class="card-body c-details">
-                    <div class="d-flex justify-content-center align-items-center flex-column mb-3 mx-lg-5">
+                    <div class="d-flex justify-content-center align-items-center flex-column mb-3 mx-md-5">
                         <!-- Patient Profile Info -->
-                        <div class="d-flex flex-column align-items-center justify-content-center gap-2 text-center">
+                        <div class="d-flex flex-column align-items-center justify-content-center gap-2">
                             <img src="~/profile/defaultProfile.png" alt="Profile" class="img-fluid rounded-circle mb-3" />
-                            <h5 class="fw-bold m-0">@Model.FirstName @Model.LastName</h5> 
-                            <h6 class="text-muted m-0">@Model.Email</h6> 
-                            <h6 class="m-0">@Model.ContactNumber</h6>
+                            <h5 class="fw-bold m-0">Jennelyn Pepito</h5>
+                            <h6 class="text-muted m-0">Jennelyn@gmail.com</h6>
+                            <h6 class="m-0">09123456789</h6>
                         </div>
 
                         <!-- Sidebar Links -->
                         <div class="d-flex flex-column gap-4 mt-5 w-100">
-                            <a asp-action="Information" asp-route-id="@Model.PatientID" class="btn btn-outline-pink py-2 @(ViewContext.RouteData.Values["action"]?.ToString() == "Information" ? "active" : "")">
+                            <a asp-action="Information"  class="btn btn-outline-pink py-2 @(ViewContext.RouteData.Values["action"]?.ToString() == "Information" ? "active" : "")">
                                 <i class="fas fa-user"></i>
                                 <span style="font-weight: 600;">Patient Information</span>
                             </a>
 
-                            <a asp-action="MedicalRecords" asp-route-id="@Model.PatientID" class="btn btn-outline-pink py-2 @(ViewContext.RouteData.Values["action"]?.ToString() == "MedicalRecords" ? "active" : "")">
+                            <a asp-action="MedicalRecords" class="btn btn-outline-pink py-2 @(ViewContext.RouteData.Values["action"]?.ToString() == "MedicalRecords" ? "active" : "")">
                                 <i class="fas fa-file-medical"></i>
                                 <span style="font-weight: 600;">Medical Records</span>
                             </a>
@@ -53,6 +51,6 @@
         </div>
 
         <!-- Right Content: Patient Information Partial -->
-        <partial name="Partial/Patient/_PatientInformation" />
+        <partial name="Partial/Patient/_Payments" />
     </div>
 </div>

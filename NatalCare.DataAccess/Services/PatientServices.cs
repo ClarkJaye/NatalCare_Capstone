@@ -90,8 +90,10 @@ namespace NatalCare.DataAccess.Services
             existingPatient.Address = patient.Address;
             existingPatient.CivilStatus = patient.CivilStatus;
             existingPatient.Occupation = patient.Occupation;
-            existingPatient.ContactNumber = patient.ContactNumber;
-            existingPatient.Email = patient.Email;
+            existingPatient.MobileNumber = patient.MobileNumber;
+            existingPatient.TeleNumber = patient.TeleNumber;
+            existingPatient.Religion = patient.Religion;
+            existingPatient.BloodType = patient.BloodType;
             existingPatient.PlaceOfBirth = patient.PlaceOfBirth;
             existingPatient.Emergency_Name = patient.Emergency_Name;
             existingPatient.Emergency_Contact = patient.Emergency_Contact;

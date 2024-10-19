@@ -23,11 +23,12 @@
 
 <div class="mx-4">
     <div class="row">
-        <div class="d-flex justify-content-start mb-3">
+        <div class="d-flex align-items-center justify-content-start gap-3 mb-3">
             <a asp-action="Index" class="btn btn-outline-pink">
                 <i class="fas fa-arrow-left"></i>
                 <span>Back</span>
             </a>
+            <h5 class="fw-bold m-0 text-capitalize">@Model.FirstName @Model.LastName</h5>
         </div>
 
         <!-- Left Sidebar: Patient Information -->
@@ -36,12 +37,12 @@
                 <div class="card-body c-details">
                     <div class="d-flex justify-content-center align-items-center flex-column mb-3 mx-lg-5">
                         <!-- Patient Profile Info -->
-                        <div class="d-flex flex-column align-items-center justify-content-center gap-2 text-center">
-                            <input id="patient-id" value="@Model.PatientID" hidden />
+                        <div class="d-flex flex-column align-items-center justify-content-center gap-2 text-center mt-3">
                             <img src="~/profile/defaultProfile.png" alt="Profile" class="img-fluid rounded-circle mb-3" />
-                            <h5 class="fw-bold m-0">@Model.FirstName @Model.LastName</h5>
-                            <h6 class="text-muted m-0">@Model.Email</h6>
-                            <h6 class="m-0">@Model.ContactNumber</h6>
+                            <input id="patient-id" value="@Model.PatientID" hidden/>
+                            <h4 class="fw-bold text-pink">@Model.PatientID</h4>
+                            <h5 class="fw-bold m-0 text-capitalize">@Model.FirstName @Model.LastName</h5>
+                            <h6 class="m-0">@Model.MobileNumber</h6>
                         </div>
 
                         <!-- Sidebar Links -->

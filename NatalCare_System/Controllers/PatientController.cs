@@ -75,6 +75,11 @@ namespace NatalCare_System.Controllers
             return View();
         }
 
+        public IActionResult PrenatalRecord()
+        {
+            return View();
+        }
+
         public IActionResult AddFamilyPlanning()
         {
             return View();

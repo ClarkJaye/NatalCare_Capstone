@@ -1,24 +1,36 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using NatalCare.DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using NatalCare.DataAccess.Entities;
 
 namespace NatalCare.Models.Entities
 {
-    public class Prenatal : BaseEntity
+    public class PrenatalVisit : BaseEntity
     {
         [Key]
         [Required]
-        public string? CaseNo { get; set; }
-        public string? Gravida { get; set; }
-        public string? Para { get; set; }
-        public string? Abortion { get; set; }
-        public string? StillBirth { get; set; }
-        public DateOnly? LMP { get; set; }
-        public DateOnly? EDC { get; set; }
-        public string? HRCODE { get; set; }
+        public int PrenatalVisitID { get; set; }
+        public string? AOGWeek { get; set; }
+        public string? Weight { get; set; }
+        public string? BP { get; set; }
+        public string? FH { get; set; }
+        public string? FHT { get; set; }
+        public string? Temp { get; set; }
+        public string? CR { get; set; }
+        public string? RR { get; set; }
+        public string? PhysicalAssessment { get; set; }
         public string? Notes { get; set; }
+        public string? RX { get; set; }
         public DateTime? DateVisit { get; set; }
+        public DateTime? NextVisit { get; set; }
+        public int? NumberOfVisit { get; set; }
+
+
+        // Foreign Key
+        [Required]
+        public string? CaseNo { get; set; }
+        [ForeignKey("CaseNo")]
+        public Prenatal? PrenatalCase { get; set; }
 
         // Foreign Key
         [Required]
@@ -45,5 +57,6 @@ namespace NatalCare.Models.Entities
         [ForeignKey("StatusCode")]
         [ValidateNever]
         public Status? Status { get; set; }
+
     }
 }

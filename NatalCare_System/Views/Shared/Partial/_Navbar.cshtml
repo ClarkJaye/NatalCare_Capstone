@@ -336,7 +336,20 @@
 	}
 
 
-	
 
 
+	//Sweetalert
+	function showSwalAlert(type, title, text, confirmButtonText = 'OK', callback = null) {
+		Swal.fire({
+			icon: type,
+			title: title,
+			text: text,
+			confirmButtonColor: type === 'success' ? '#FC7995' : '#d33',
+			confirmButtonText: confirmButtonText
+		}).then((result) => {
+			if (result.isConfirmed && callback) {
+				callback();
+			}
+		});
+	}
 </script>

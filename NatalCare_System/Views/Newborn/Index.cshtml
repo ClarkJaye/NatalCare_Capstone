@@ -1,4 +1,7 @@
-﻿@{
+﻿@* @model List<NatalCare.Models.Entities.Newborn> *@
+
+
+@{
     ViewData["Title"] = "Newborn Records";
     Layout = "_UserLayout";
 }
@@ -9,20 +12,20 @@
 <div class="mx-4">
     <!-- Total Section -->
     <div class="row">
-
+        <!-- Totals Section -->
         <div class="col-md-4 mb-4">
             <div class="card shadow py-2 card-selected">
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col mr-2">
                             <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
-                                Today Patients
+                                Today New Born
                             </div>
                             <div class="h4 fw-bold my-3">
-                                10
+                                @(ViewBag.TodayPatient ?? 0)
                             </div>
                             <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
-                                Total Patients 10 today
+                                Total Newborn <span class="h6">@(ViewBag.TodayPatient ?? 0)</span> today
                             </div>
                         </div>
                         <div class="col-auto">
@@ -34,19 +37,20 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-4 mb-4">
             <div class="card shadow py-2 card-selected">
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col mr-2">
                             <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
-                                Monthly Patients
+                                Monthly New Born
                             </div>
                             <div class="h4 fw-bold my-3">
-                                150
+                                @(ViewBag.MonthlyPatient ?? 0)
                             </div>
                             <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
-                                Total Patients 10 this month
+                                Total Newborn <span class="h6">@(ViewBag.MonthlyPatient ?? 0)</span> this month
                             </div>
                         </div>
                         <div class="col-auto">
@@ -58,19 +62,20 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-4 mb-4">
             <div class="card shadow py-2 card-selected">
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col mr-2">
                             <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
-                                Yearly Patients
+                                Yearly New Born
                             </div>
                             <div class="h4 fw-bold my-3">
-                                251
+                                @(ViewBag.YearlyPatient ?? 0)
                             </div>
                             <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
-                                Total Patients 10 this year
+                                Total Newborn <span class="h6">@(ViewBag.YearlyPatient ?? 0)</span> this year
                             </div>
                         </div>
                         <div class="col-auto">
@@ -84,36 +89,28 @@
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title m-0">Newborn List</h5>
-            <div>
-                <a class="btn btn-sm btn-secondary d-flex align-items-center gap-2" asp-controller="Newborn" asp-action="Inactive">
-                    <i class='bx bxs-trash'></i>
-                    <span>Show Temporary Deleted</span>
-                </a>
-            </div>
-        </div>
+    <div class="mb-4 mt-2 d-flex align-items-center justify-content-end">
+        <a class="btn btn-pink d-flex align-items-center gap-2" asp-controller="Newborn" asp-action="Create">
+            <i class="fas fa-baby" style="font-size: 18px;"></i>
+            <strong>Add New Newborn</strong>
+        </a>
 
+
+    </div>
+
+    <div class="card shadow-sm card-selected">
         <div class="card-body">
-            <div class="mb-4 mt-2 d-flex align-items-center justify-content-start" style="padding: 0 12px;">
-                <a class="btn btn-sm btn-pink d-flex align-items-center gap-2" asp-controller="Newborn" asp-action="Create">
-                    <i class='fas fa-user-plus' style="font-size: 18px;"></i>
-                    <strong>Add New Newborn</strong>
-                </a>
-            </div>
-
-            <div class=" table-responsive">
-                <table id="newbornTable" class="table">
-                    <thead>
+            <div class="table-responsive">
+                <table id="newbornTable" class="table table-hover table-striped">
+                    <thead class="border-bottom-2">
                         <tr>
-                            <th>Case No</th>
-                            <th>Lastname</th>
+                            <th>Baby No</th>
                             <th>Firstname</th>
                             <th>Middlename</th>
-                            <th>Age</th>
-                            <th>Address</th>
-                            <th>Date of Birth</th>
+                            <th>Lastname</th>
+                            <th>Date Of Birth</th>
+                            <th>Time of Birth</th>
+                            <th>Mother Name</th>
                             <th>Date Added</th>
                             <th class="text-center">Action</th>
                         </tr>
@@ -121,84 +118,22 @@
                     <tbody>
                         <tr>
                             <td>P-01</td>
-                            <td>Pepito</td>
                             <td>Jen</td>
                             <td>Suarez</td>
-                            <td>21</td>
-                            <td>Mabolo Cebu City</td>
-                            <td>05/04/2024</td>
+                            <td>Pepito</td>
+                            <td>10/25/2024</td>
+                            <td>5:00 PM</td>
+                            <td>Jen Pepito</td>
                             <td>05/04/2024</td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-center gap-4">
-                                    <a class="text-dark" href="information">
-                                        <i class="fa-solid fa-list" style="font-size: 24px;"></i>
+                                    <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Newborn" asp-action="Information" asp-route-id="">
+                                        <i class="fa-solid fa-list"></i>
+                                        <span>Record</span>
                                     </a>
-
-                                    <a class="text-success" href="#">
-                                        <i class="fa-solid fa-pen-to-square" style="font-size: 24px;"></i>
-                                    </a>
-
-                                    <a class="text-danger" href="#">
-                                        <i class="fa-solid fa-trash-can" style="font-size: 24px;"></i>
-                                    </a>
-
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td>P-01</td>
-                            <td>Pepito</td>
-                            <td>Jen</td>
-                            <td>Suarez</td>
-                            <td>21</td>
-                            <td>Mabolo Cebu City</td>
-                            <td>05/04/2024</td>
-                            <td>05/04/2024</td>
-                            <td>
-                                <div class="d-flex align-items-center justify-content-center gap-4">
-                                    <a class="text-dark" href="#">
-                                        <i class="fa-solid fa-list" style="font-size: 24px;"></i>
-                                    </a>
-
-                                    <a class="text-success" href="#">
-                                        <i class="fa-solid fa-pen-to-square" style="font-size: 24px;"></i>
-                                    </a>
-
-                                    <a class="text-danger" href="#">
-                                        <i class="fa-solid fa-trash-can" style="font-size: 24px;"></i>
-                                    </a>
-
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>P-01</td>
-                            <td>Pepito</td>
-                            <td>Jen</td>
-                            <td>Suarez</td>
-                            <td>21</td>
-                            <td>Mabolo Cebu City</td>
-                            <td>05/04/2024</td>
-                            <td>05/04/2024</td>
-                            <td>
-                                <div class="d-flex align-items-center justify-content-center gap-4">
-                                    <a class="text-dark" href="#">
-                                        <i class="fa-solid fa-list" style="font-size: 24px;"></i>
-                                    </a>
-
-                                    <a class="text-success" href="#">
-                                        <i class="fa-solid fa-pen-to-square" style="font-size: 24px;"></i>
-                                    </a>
-
-                                    <a class="text-danger" href="#">
-                                        <i class="fa-solid fa-trash-can" style="font-size: 24px;"></i>
-                                    </a>
-
-                                </div>
-                            </td>
-                        </tr>
-
-
                     </tbody>
                 </table>
             </div>
@@ -217,25 +152,30 @@
 <script>
 
     document.addEventListener("DOMContentLoaded", function () {
-
         // Initialize DataTables
         $('#newbornTable').DataTable({
             paging: true,
             lengthChange: true,
             searching: true,
             ordering: true,
+            lengthMenu: [10, 20, 50, 100],
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search patients..."
+            },
+            language: {
+                paginate: {
+                    previous: "Previous",
+                    next: "Next"
+                }
+            },
             info: true,
             autoWidth: false,
             responsive: true,
-            columnDefs: [{ targets: [0, 0], orderable: false }],
-            language: {
-                paginate: {
-                    previous: "Previous", // Change "Previous"
-                    next: "Next" // Change "Next"
-                }
-            }
+            columnDefs: [
+                { orderable: false, targets: -1 }
+            ]
         });
-
 
     });
 

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using NatalCare.DataAccess.Extensions;
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.Models.Entities;
+using NatalCare.Models.ViewModel.Patient;
 
 namespace NatalCare_System.Controllers
 {
@@ -33,8 +33,6 @@ namespace NatalCare_System.Controllers
 
             return View(patients ?? new List<Patients>());
         }
-
-
         public async Task<IActionResult> Information(string id)
         {
             try
@@ -57,15 +55,36 @@ namespace NatalCare_System.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
         public async Task<IActionResult> MedicalRecords(string id)
         {
-
-            var response = await patientServices.GetMedicalRecords(id);
-            return View(response);
+            var patient = await patientServices.GetInformation(id);
+            return View(patient);
         }
 
         public IActionResult Payments()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> PrenatalRecord(string id)
+        {
+            var patient = await patientServices.GetInformation(id);
+            var prenatalRecord = await patientServices.GetPrenatalRecord(id);
+            if (prenatalRecord.CaseNo == null)
+            {
+                TempData["error"] = "No data found!";
+                return RedirectToAction("MedicalRecords", "Patient", new { id = patient.PatientID });
+            }
+            var prenatalVisitRecords = await patientServices.GetPrenatalVisitsRecords(prenatalRecord.CaseNo, patient.PatientID);
+            var viewModel = new PatientsVM
+            {
+                Patient = patient,
+                PrenatalRecord = prenatalRecord,
+                PrenatalVisitRecords = prenatalVisitRecords,
+            };
+            return View(viewModel);
+        }
+        public IActionResult AddFamilyPlanning()
         {
             return View();
         }
@@ -74,18 +93,6 @@ namespace NatalCare_System.Controllers
         {
             return View();
         }
-
-        public IActionResult PrenatalRecord()
-        {
-            return View();
-        }
-
-        public IActionResult AddFamilyPlanning()
-        {
-            return View();
-        }
-
-
         [HttpPost]
         public async Task<IActionResult> Create(Patients patient)
         {
@@ -114,7 +121,6 @@ namespace NatalCare_System.Controllers
 
             return View(patient); 
         }
-
         public async Task<IActionResult> Edit(string id)
         {
             var userId = GetCurrentUserId();
@@ -128,8 +134,6 @@ namespace NatalCare_System.Controllers
 
             return View(result);
         }
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Patients patient)
@@ -145,7 +149,7 @@ namespace NatalCare_System.Controllers
                     if (result)
                     {
                         TempData["success"] = "Record has been updated!";
-                        return RedirectToAction(nameof(Index));
+                        return RedirectToAction("Information", "Patient", new {id = patient.PatientID});
                     }
                 }
                 catch (ArgumentException argEx)
@@ -160,7 +164,6 @@ namespace NatalCare_System.Controllers
 
             return View(patient);
         }
-
         private string GetCurrentUserId()
         {
             return User.GetUserId();

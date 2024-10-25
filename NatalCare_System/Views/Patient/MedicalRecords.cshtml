@@ -1,5 +1,8 @@
 ﻿@model NatalCare.Models.Entities.Patients
 
+@* @using NatalCare.Models.ViewModel.Patient
+@model PatientsVM *@
+
 @{
     ViewData["Title"] = "Patient / Patient Information";
     Layout = "_UserLayout";
@@ -8,12 +11,12 @@
 <!-- Custom CSS -->
 <style>
     .nav-tabs .nav-link {
-        color: var(--dark); /* Default inactive color */
+        color: var(--dark);
     }
 
         .nav-tabs .nav-link.active {
-            color: var(--pink); /* Active tab color */
-            font-weight: bold; /* Make the active tab text bold if needed */
+            color: var(--pink); 
+            font-weight: bold; 
         }
 </style>
 
@@ -39,7 +42,7 @@
                         <!-- Patient Profile Info -->
                         <div class="d-flex flex-column align-items-center justify-content-center gap-2 text-center mt-3">
                             <img src="~/profile/defaultProfile.png" alt="Profile" class="img-fluid rounded-circle mb-3" />
-                            <input id="patient-id" value="@Model.PatientID" hidden/>
+                            <input id="patient-id" value="@Model.PatientID" hidden />
                             <h4 class="fw-bold text-pink">@Model.PatientID</h4>
                             <h5 class="fw-bold m-0 text-capitalize">@Model.FirstName @Model.LastName</h5>
                             <h6 class="m-0">@Model.MobileNumber</h6>

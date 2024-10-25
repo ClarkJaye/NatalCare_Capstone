@@ -2,6 +2,7 @@
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.DataAccess.Repository.IRepository;
 using NatalCare.Models.Entities;
+using NatalCare.Models.ViewModel;
 
 namespace NatalCare.DataAccess.Services
 {
@@ -14,6 +15,13 @@ namespace NatalCare.DataAccess.Services
             this.unitOfWork = unitOfWork;
         }
 
+        //Patient
+        public async Task<List<Patients>> GetPatients()
+        {
+            var patients = await unitOfWork.Repository<Patients>().GetAllAsync();
+            return patients.ToList();
+        }
+
         public async Task<Patients> GetInformation(string id)
         {
             var patient = await unitOfWork.Repository<Patients>().GetFirstOrDefaultAsync(p => p.PatientID == id);
@@ -24,24 +32,42 @@ namespace NatalCare.DataAccess.Services
             return patient;
         }
 
-        public async Task<Patients> GetMedicalRecords(string id)
+
+
+        //Services
+        public async Task<List<Prenatal>> GetPrenatalRecords(string patientId)
         {
-            var patient = await unitOfWork.Repository<Patients>().GetFirstOrDefaultAsync(p => p.PatientID == id);
+            var record = await unitOfWork.Repository<Prenatal>().GetAllAsync(p => p.PatientID == patientId && p.StatusCode == "AC");
+            if (!record.Any()) 
+            {
+                return new List<Prenatal>(); 
+            }
+            return record.ToList();
+        }
 
-            if (patient == null)
-                throw new KeyNotFoundException("Patient not found.");
-
-            return patient;
+        public async Task<Prenatal> GetPrenatalRecord(string patientId)
+        {
+            var record = await unitOfWork.Repository<Prenatal>().GetFirstOrDefaultAsync(p => p.PatientID == patientId);
+            if (record == null)
+            {
+                return new Prenatal();
+            }
+            return record;
+        }
+        public async Task<List<PrenatalVisit>> GetPrenatalVisitsRecords(string caseNo, string patientId)
+        {
+            var record = await unitOfWork.Repository<PrenatalVisit>().GetAllAsync(p => p.CaseNo == caseNo && p.PatientID == patientId && p.StatusCode == "AC");
+            if (!record.Any())
+            {
+                return new List<PrenatalVisit>();
+            }
+            return record.ToList();
         }
 
 
 
-        public async Task<List<Patients>> GetPatients()
-        {
-            var patients = await unitOfWork.Repository<Patients>().GetAllAsync();
-            return patients.ToList(); 
-        }
 
+        //Patient Operations
         public async Task<bool> Create(Patients patient, string userId)
         {
             if (patient == null)
@@ -60,7 +86,6 @@ namespace NatalCare.DataAccess.Services
             unitOfWork.Repository<Patients>().Add(patient);
             return await unitOfWork.Complete() > 0;
         }
-
         public async Task<Patients> Edit(string id, string userId)
         {
             var patient = await unitOfWork.Repository<Patients>().GetFirstOrDefaultAsync(p => p.PatientID == id);
@@ -70,7 +95,6 @@ namespace NatalCare.DataAccess.Services
 
             return patient;
         }
-
         public async Task<bool> Update(Patients patient, string userId)
         {
             if (patient == null)
@@ -121,9 +145,6 @@ namespace NatalCare.DataAccess.Services
         }
 
 
-
-
-
         // HELPER
         public async Task<int> GetTodayPatientCount()
         {
@@ -166,6 +187,5 @@ namespace NatalCare.DataAccess.Services
             return $"PT{newIdNumber:D4}"; // Formats as PT0001, PT0010, etc.
         }
 
-       
     }
 }

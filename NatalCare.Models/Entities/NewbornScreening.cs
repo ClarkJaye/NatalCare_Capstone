@@ -5,22 +5,24 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace NatalCare.Models.Entities
 {
-    public class Prenatal : BaseEntity
+    public class NewbornScreening : BaseEntity
     {
         [Key]
         [Required]
-        public string? CaseNo { get; set; }
-        public string? Gravida { get; set; }
-        public string? Para { get; set; }
-        public string? Abortion { get; set; }
-        public string? StillBirth { get; set; }
-        public DateOnly? LMP { get; set; }
-        public DateOnly? EDC { get; set; }
-        public string? HRCODE { get; set; }
-        public string? Notes { get; set; }
-        public DateTime? DateVisit { get; set; }
+        public string? ScreeningNo { get; set; }
+        public DateOnly? DateRegistration { get; set; }
+        public string? TypeOfSample { get; set; }
+        public string? FilterCardNo { get; set; }
+        public string? BabyWeight { get; set; }
+        public string? AOGWeek { get; set; }
 
         // Foreign Key
+        [Required]
+        public string? NewbornID { get; set; }
+        [ForeignKey("NewbornID")]
+        [ValidateNever]
+        public Newborn? Newborn { get; set; }
+
         [Required]
         public string? PatientID { get; set; }
         [ForeignKey("PatientID")]
@@ -45,5 +47,6 @@ namespace NatalCare.Models.Entities
         [ForeignKey("StatusCode")]
         [ValidateNever]
         public Status? Status { get; set; }
+
     }
 }

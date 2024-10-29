@@ -27,7 +27,7 @@ namespace NatalCare.DataAccess.Services
             var patient = await unitOfWork.Repository<Patients>().GetFirstOrDefaultAsync(p => p.PatientID == id);
 
             if (patient == null)
-                throw new KeyNotFoundException("Patient not found.");
+                return new Patients();
 
             return patient;
         }
@@ -78,7 +78,7 @@ namespace NatalCare.DataAccess.Services
                 throw new ArgumentException("Patient already exists!");
 
             // Generate a new PatientID
-            patient.PatientID = GeneratePatientID();
+            patient.PatientID = await GeneratePatientID();
             patient.Created_At = DateTime.Now;
             patient.StatusCode = "AC";
             patient.PatientCreatedBy = userId;
@@ -169,12 +169,12 @@ namespace NatalCare.DataAccess.Services
                 .AsQueryable()
                 .CountAsync(p => p.Created_At >= startOfYear && p.Created_At < startOfNextYear);
         }
-        private string GeneratePatientID()
+        private async Task<string> GeneratePatientID()
         {
-            var lastPatient = unitOfWork.Repository<Patients>()
+            var lastPatient = await unitOfWork.Repository<Patients>()
                 .AsQueryable()
                 .OrderByDescending(p => p.PatientID)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             int newIdNumber = 1; // Start at 1 if no patients are found
 

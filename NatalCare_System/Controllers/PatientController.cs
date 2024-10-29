@@ -164,6 +164,22 @@ namespace NatalCare_System.Controllers
 
             return View(patient);
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetMotherDetails(string motherID)
+        {
+            var mother = await patientServices.GetInformation(motherID);
+
+            if (mother.PatientID == null)
+            {
+                return Json(new { isSuccess = false, Message = "Mother not found." } );
+            }
+
+            return Json(new { isSuccess = true, firstName = mother.FirstName, middleName = mother.MiddleName, lastName = mother.LastName });
+        }
+
+
         private string GetCurrentUserId()
         {
             return User.GetUserId();

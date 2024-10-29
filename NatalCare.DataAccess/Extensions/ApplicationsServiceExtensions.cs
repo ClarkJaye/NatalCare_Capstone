@@ -26,6 +26,8 @@ namespace NatalCare.DataAccess.Extensions
             services.AddScoped<IProfileAccessServices, ProfileAccessServices>();
             // Register Services CRUD Operations
             services.AddScoped<IServicesOperationServices, ServicesOperationServices>();
+            // Register Newborn
+            services.AddScoped<INewbornServices, NewbornServices>();
 
             return services;
         }

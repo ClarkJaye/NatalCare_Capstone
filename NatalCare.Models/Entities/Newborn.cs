@@ -8,7 +8,6 @@ namespace NatalCare.Models.Entities
     public class Newborn : BaseEntity
     {
         [Key]
-        [Required]
         public string? NewbornID { get; set; }
 
         [Required]

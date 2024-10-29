@@ -1,4 +1,5 @@
-﻿using NatalCare.DataAccess.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using NatalCare.DataAccess.Interfaces;
 using NatalCare.DataAccess.Repository.IRepository;
 using NatalCare.Models.Entities;
 
@@ -23,7 +24,7 @@ namespace NatalCare.DataAccess.Services
                 throw new ArgumentException("Newborn already exists!");
 
             // Generate a new PatientID
-            newborn.NewbornID = GenerateNewbornID();
+            newborn.NewbornID = await GenerateNewbornID();
             newborn.Created_At = DateTime.Now;
             newborn.StatusCode = "AC";
             newborn.NewbornCreatedBy = userId;
@@ -32,12 +33,13 @@ namespace NatalCare.DataAccess.Services
             return await unitOfWork.Complete() > 0;
         }
 
-        private string GenerateNewbornID()
+
+        private async Task<string> GenerateNewbornID()
         {
-            var lastPatient = unitOfWork.Repository<Newborn>()
+            var lastPatient = await unitOfWork.Repository<Newborn>()
                 .AsQueryable()
                 .OrderByDescending(p => p.NewbornID)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             int newIdNumber = 1; // Start at 1 if no patients are found
 
@@ -47,7 +49,7 @@ namespace NatalCare.DataAccess.Services
                 newIdNumber = int.Parse(numericPart) + 1;
             }
 
-            return $"NB{newIdNumber:D4}"; 
+            return $"NB{newIdNumber:D4}";
         }
     }
 }

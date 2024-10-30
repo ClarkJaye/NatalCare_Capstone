@@ -10,7 +10,8 @@
     --poppins: 'Poppins', sans-serif;
     --lato: 'Lato', sans-serif;
     --kaushan: 'Kaushan Script', cursive;
-    --light: #F9F9F9;
+    /*--light: #F9F9F9;*/
+    --light: #fff;
     --grey: #eee;
     --dark1: #342E37;
     --dark: #342e37c4;
@@ -163,7 +164,7 @@ ul#patientManagementMenu {
 #sidebar .logo:after {
     content: '';
     position: absolute;
-    height: 80px;
+    height: 55px;
     width: 1px;
     background: var(--grey);
     right: 0;

@@ -33,6 +33,14 @@ namespace NatalCare_System.Controllers
 
             return View(patients ?? new List<Patients>());
         }
+
+        public async Task<IActionResult> DisplayPatients()
+        {
+            var patients = await patientServices.GetPatients();
+            return View(patients ?? new List<Patients>());
+        }
+
+
         public async Task<IActionResult> Information(string id)
         {
             try

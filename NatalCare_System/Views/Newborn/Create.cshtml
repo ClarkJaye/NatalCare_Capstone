@@ -113,7 +113,13 @@
                     <!--Mother Side-->
                     <h5 class="card-title my-3 mb-3">Mother Information</h5>
 
-                    <div class="form-group col-md-4 mb-3">
+                    <div class="form-group col-md-4 mb-3" data-bs-toggle="modal" data-bs-target="#searchMotherModal" id="searchMotherBtn">
+                        <label for="MotherID" class="control-label">Mother ID</label>
+                        <input id="MotherID" class="form-control" placeholder="Enter FirstName" />
+                    </div>
+
+
+                 @*    <div class="form-group col-md-4 mb-3">
                         <label asp-for="MotherID" class="control-label">Mother ID</label>
                         <input asp-for="MotherID" class="form-control text-uppercase" placeholder="(e.g, PT0001, PT0002 ...)" required />
                         <span asp-validation-for="MotherID" class="text-danger"></span>
@@ -121,19 +127,19 @@
 
 
                     <div class="form-group col-md-4 mb-3">
-                        <label for="Patient.FirstName" class="control-label">Mother First Name</label>
+                        <label for="Patient_FirstName" class="control-label">Mother First Name</label>
                         <input id="Patient_FirstName" class="form-control" placeholder="Enter FirstName" readonly />
                     </div>
 
                     <div class="form-group col-md-4 mb-3">
-                        <label for="Patient.MiddleName" class="control-label">Mother First Name</label>
+                        <label for="Patient_MiddleName" class="control-label">Mother First Name</label>
                         <input id="Patient_MiddleName" class="form-control" placeholder="Enter MiddleName" readonly />
                     </div>
 
                     <div class="form-group col-md-4 mb-3">
-                        <label for="Patient.LastName" class="control-label">Mother Last Name</label>
+                        <label for="Patient_LastName" class="control-label">Mother Last Name</label>
                         <input id="Patient_LastName" class="form-control" placeholder="Enter Lastname" readonly />
-                    </div>
+                    </div> *@
 
                     <div class="form-group col-12 mt-3 mb-3">
                         <div class="d-flex align-items-center justify-content-end gap-3">
@@ -154,11 +160,31 @@
 </div>
 
 
+
+<!-- Search Mother Modal -->
+<div class="modal fade" id="searchMotherModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header no-border">
+                <h5 class="modal-title">Search Mother</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-4 pt-0">
+                <!-- Add a div to load the partial view -->
+                <div id="patientsListContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="~/lib/toastr/toastr.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            loadPatientsPartialView();
+
             let typingTimer; 
             const typingDelay = 1000; 
 
@@ -198,7 +224,23 @@
                     $("#Patient_LastName").val(data.message);
                 }
             });
-        });
-    </script>
 
+        });
+
+        // Function to load the patients partial view
+        function loadPatientsPartialView() {
+            $.ajax({
+                url: '@Url.Action("DisplayPatients", "Patient")',
+                type: 'GET',
+                success: function (result) {
+                    // Inject the partial view HTML into the container div
+                    console.log(result)
+                    $("#patientsListContainer").html(result);
+                },
+                error: function () {
+                    console.error("Failed to load patients data.");
+                }
+            });
+        }
+    </script>
 }

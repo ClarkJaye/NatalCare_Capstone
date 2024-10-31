@@ -36,6 +36,8 @@ namespace NatalCare.Models.Entities
         public int? APGAR { get; set; }
 
         public string? Medication { get; set; }
+        public string? PlaceOfBirth { get; set; }
+        public string? Address { get; set; }
 
         [Required]
         public DateOnly? DateofBirth { get; set; }

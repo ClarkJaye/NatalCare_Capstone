@@ -2,7 +2,7 @@
 
 
 @{
-    ViewData["Title"] = "Add Newborn";
+    ViewData["Title"] = "Edit Newborn";
     Layout = "_UserLayout";
 }
 
@@ -13,7 +13,7 @@
 <div class="mx-5">
     <div class="card card-selected w-75 mx-auto mt-5">
         <div class="card-header card-header-selected d-flex justify-content-between align-items-center">
-            <h5 class="card-title my-2">Add Newborn</h5>
+            <h5 class="card-title my-2">Edit Newborn</h5>
         </div>
         <div class="card-body m-4 pt-0">
             <form asp-controller="Newborn" asp-action="Create">
@@ -154,11 +154,11 @@
                         <div class="d-flex align-items-center justify-content-end gap-3">
                             <button class="btn btn-pink" type="submit">
                                 <i class="fas fa-save"></i>
-                                <span>Save</span>
+                                <span>Update Newborn</span>
                             </button>
-                            <a class="btn btn-outline-secondary" asp-controller="Newborn" asp-action="Index">
+                            <a class="btn btn-outline-secondary" asp-controller="Newborn" asp-action="Information" asp-route-id="@Model.NewbornID">
                                 <i class="fas fa-undo"></i>
-                                <span>Back to List</span>
+                                <span>Back</span>
                             </a>
                         </div>
                     </div>
@@ -208,12 +208,10 @@
                 LoadMotherDetails(value);
             });
 
-            // $('#patientsListContainer').on('click', "#patientSelectTR", function () {
-            //     var value = $(this).data("patid");
-            //     value.toUpperCase();
-            //     LoadMotherDetails(value);
-            // });
-
+            if ($("#MotherID").val()) {
+                var value = $("#MotherID").val();
+                LoadMotherDetails(value);
+            }
         });
 
         function loadPatientssPartialView() {

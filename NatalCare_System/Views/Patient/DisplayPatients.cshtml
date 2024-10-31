@@ -1,15 +1,11 @@
 ﻿@model List<NatalCare.Models.Entities.Patients>
 
-
-<!-- Action Buttons -->
-<div class="d-flex align-items-center justify-content-end my-4">
-    <div class="d-flex align-items-center gap-2">
-        <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
-    </div>
-</div>
+@{
+    Layout = null;
+}
 
 <div class="table-responsive">
-    <table id="patientsTable" class="table table-hover table-striped">
+    <table id="DisplayPatientsTable" class="table table-hover table-striped">
         <thead class="border-bottom-2">
             <tr>
                 <th>Patient No</th>
@@ -20,36 +16,82 @@
                 <th>Gender</th>
                 <th>Address</th>
                 <th>Date of Birth</th>
+                <th class="text-center">Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var patient in Model)
+            @if (Model != null && Model.Any())
             {
-                <tr class="align-middle" style="cursor: pointer;">
-                    <td>@patient.PatientID</td>
-                    <td>@patient.FirstName</td>
-                    <td>@patient.MiddleName</td>
-                    <td>@patient.LastName</td>
-                    <td>
-                        @{
-                            if (patient.Birthdate.HasValue)
-                            {
-                                var birthYear = patient.Birthdate.Value.Year;
-                                var currentYear = DateTime.Now.Year;
-                                var age = currentYear - birthYear;
-                                <text>@age</text>
+                @foreach (var patient in Model)
+                {
+                    <tr data-patid="@patient.PatientID" class="align-middle" id="patientSelectTR" style="cursor: pointer;">
+                    @* <tr class="align-middle" style="cursor: pointer;"> *@
+                        <td>@patient.PatientID</td>
+                        <td>@patient.FirstName</td>
+                        <td>@patient.MiddleName</td>
+                        <td>@patient.LastName</td>
+                        <td>
+                            @{
+                                if (patient.Birthdate.HasValue)
+                                {
+                                    var birthYear = patient.Birthdate.Value.Year;
+                                    var currentYear = DateTime.Now.Year;
+                                    var age = currentYear - birthYear;
+                                    <text>@age</text>
+                                }
+                                else
+                                {
+                                    @:N/A
+                                }
                             }
-                            else
-                            {
-                                @:N/A
-                            }
-                        }
+                        </td>
+                        <td>@patient.Gender</td>
+                        <td>@patient.Address</td>
+                        <td>@patient.Birthdate?.ToString("MMM dd yyyy")</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-pink" id="patientSelectBtn" data-patientid="@patient.PatientID">Select</button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="20" class="text-center">
+                        No data available.
                     </td>
-                    <td>@patient.Gender</td>
-                    <td>@patient.Address</td>
-                    <td>@patient.Birthdate?.ToString("MMM dd yyyy")</td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+
+<script>
+    // Initialize DataTables
+    $('#patientsListContainer #DisplayPatientsTable').DataTable({
+        paging: true,
+        lengthChange: true,
+        searching: true,
+        ordering: true,
+        lengthMenu: [10, 20, 50, 100],
+        language: {
+            search: "_INPUT_",
+            searchPlaceholder: "Search patients..."
+        },
+        language: {
+            paginate: {
+                previous: "Previous",
+                next: "Next"
+            }
+        },
+        info: true,
+        autoWidth: false,
+        responsive: true,
+        columnDefs: [
+            { orderable: false, targets: -1 }
+        ]
+    });
+</script>
+
+

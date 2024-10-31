@@ -11,11 +11,12 @@ namespace NatalCare.DataAccess.Interfaces
         Task<bool> Create(Patients patient, string userId);
         Task<Patients> Edit(string id, string userId);
         Task<bool> Update(Patients patient, string userId);
-        
+
         //ViewBag
-        Task<int> GetTodayPatientCount();
-        Task<int> GetMonthlyPatientCount();
-        Task<int> GetYearlyPatientCount();
+        Task<(int todayCount, int monthCount, int yearCount)> GetPatientCountsAsync();
+        //Task<int> GetTodayPatientCount();
+        //Task<int> GetMonthlyPatientCount();
+        //Task<int> GetYearlyPatientCount();
 
 
         //Prenatal Services

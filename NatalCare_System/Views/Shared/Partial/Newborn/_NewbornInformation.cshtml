@@ -1,7 +1,7 @@
 ﻿<div class="col-md-9">
     <div class="card card-selected mb-5">
         <div class="card-body c-details">
-            <h5 class="card-title m-0">Patient Information</h5>
+            <h5 class="card-title m-0">Newborn Information</h5>
 
             <hr />
 
@@ -28,11 +28,23 @@
                 <div class="form-group col-md-4 mb-2">
                     <label class="form-label">Age</label>
                     @{
-                        var birthdate = Model.Birthdate;
-                        var age = DateTime.Now.Year - birthdate.Year;
+                        var birthdate = Model.DateofBirth;
+                        var today = DateOnly.FromDateTime(DateTime.Now);
+
+                        int years = today.Year - birthdate.Year;
+                        int months = today.Month - birthdate.Month;
+
+                        if (months < 0)
+                        {
+                            years--;
+                            months += 12;
+                        }
+
+                        var ageDisplay = $"{years} year{(years == 1 ? "" : "s")}, {months} month{(months == 1 ? "" : "s")}";
                     }
-                    <input class="form-control text-capitalize" value="@age" disabled />
+                    <input class="form-control text-capitalize" value="@ageDisplay" disabled />
                 </div>
+
 
                 <!-- Gender -->
                 <div class="form-group col-md-4 mb-2">
@@ -43,95 +55,63 @@
                 <!-- Birthdate -->
                 <div class="form-group col-md-4 mb-2">
                     <label class="form-label">Birthdate</label>
-                    <input class="form-control text-capitalize" value="@Model.Birthdate.ToString("MM/dd/yyyy")" disabled /> <!-- Adjusted to display formatted date -->
+                    <input class="form-control text-capitalize" value="@Model.DateofBirth?.ToString("MM/dd/yyyy")" disabled /> <!-- Adjusted to display formatted date -->
                 </div>
 
                 <!-- Birth Place -->
-                <div class="form-group col-md-6 mb-2">
+                <div class="form-group col-md-4 mb-2">
                     <label class="form-label">Birth Place</label>
                     <input class="form-control text-capitalize" value="@Model.PlaceOfBirth" disabled />
                 </div>
 
                 <!-- Address -->
-                <div class="form-group col-md-6 mb-2">
+                <div class="form-group col-md-4 mb-2">
                     <label class="form-label">Address</label>
                     <input class="form-control text-capitalize" value="@Model.Address" disabled />
                 </div>
 
-                <!-- Occupation -->
-                <div class="form-group col-md-6 mb-2">
-                    <label class="form-label">Occupation</label>
-                    <input class="form-control text-capitalize" value="@Model.Occupation" disabled />
-                </div>
-
-                <!-- Phone Number -->
-                <div class="form-group col-md-6 mb-2">
-                    <label class="form-label">Phone Number</label>
-                    <input class="form-control text-capitalize" value="@Model.MobileNumber" disabled />
-                </div>
-
-                <!-- Telephone Number -->
-                <div class="form-group col-md-6 mb-2">
-                    <label class="form-label">Telephone Number</label>
-                    <input class="form-control text-capitalize" value="@Model.TeleNumber" disabled />
-                </div>
-
-                <!-- Blood Type -->
-                <div class="form-group col-md-6 mb-2">
-                    <label class="form-label">Blood Type</label>
-                    <input class="form-control text-capitalize" value="@Model.BloodType" disabled />
-                </div>
-
-                <!-- Religion -->
-                <div class="form-group col-md-6 mb-2">
-                    <label class="form-label">Religion</label>
-                    <input class="form-control text-capitalize" value="@Model.Religion" disabled />
-                </div>
 
             </div>
 
 
 
             <!-- Emergency Contact Section -->
-            <h5 class="card-title mt-4 mb-3">Emergency Contact</h5>
-            <hr />
-            <div class="row mx-4">
-                <!-- Emergency Contact Name -->
-                <div class="form-group col-md-6 mb-2">
-                    <label class="form-label">Emergency Contact Name</label>
-                    <input class="form-control text-capitalize" value="@Model.Emergency_Name" disabled />
-                </div>
+            <div class="d-flex align-items-center justify-content-between mt-5 mb-3">
+                <h5 class="card-title">Mother Information</h5>
 
-                <!-- Emergency Contact Number -->
-                <div class="form-group col-md-6 mb-2">
-                    <label class="form-label">Emergency Contact Phonenumber</label>
-                    <input class="form-control text-capitalize" value="@Model.Emergency_Contact" disabled />
-                </div>
+                <button class="btn btn-sm btn-outline-pink mx-4" data-patientid="@Model.NewbornID">
+                    <i class="fas fa-eye"></i>
+                    <span>See Mother Detailed</span>
+                </button>
             </div>
-
-         
-
-            <!-- Insurance Section -->
-            <h5 class="card-title mt-4 mb-3">Insurance Details</h5>
             <hr />
             <div class="row mx-4">
-                <!-- PhilHealth Number -->
-                <div class="form-group col-md-6 mb-2">
-                    <label class="form-label">PhilHealth Number</label>
-                    <input class="form-control text-capitalize" value="@Model.PHIC_NO" disabled />
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Mother First Name</label>
+                    <input class="form-control text-capitalize" value="@Model.Patient?.FirstName" disabled />
+                </div>
+
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Mother Middle Name</label>
+                    <input class="form-control text-capitalize" value="@Model.Patient?.MiddleName" disabled />
+                </div>
+
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Mother Last Name</label>
+                    <input class="form-control text-capitalize" value="@Model.Patient?.LastName" disabled />
                 </div>
             </div>
 
             <div class="m-4 d-flex align-items-center justify-content-end">
                 <div class="d-flex align-items-center gap-3">
-                    <button class="btn btn-pink" data-patientid="@Model.PatientID">
+                    <button class="btn btn-pink" data-patientid="@Model.NewbornID">
                         <i class="fas fa-save"></i>
                         <span>Print</span>
                     </button>
 
-                    <a class="btn btn-primary d-flex align-items-center justify-content-center gap-1" asp-controller="Patient" asp-action="Edit" asp-route-id="@Model.PatientID">
+                    <a class="btn btn-primary d-flex align-items-center justify-content-center gap-1" asp-controller="Newborn" asp-action="Edit" asp-route-id="@Model.NewbornID">
                         <i class="fa-solid fa-pen-to-square"></i>
-                        <span>Edit Patient</span>
+                        <span>Edit Newborn</span>
                     </a>
                 </div>
             </div>

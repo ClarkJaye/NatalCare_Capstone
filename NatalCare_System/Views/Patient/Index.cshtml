@@ -20,10 +20,10 @@
                                 Today Patients
                             </div>
                             <div class="h4 fw-bold my-3">
-                                @(ViewBag.TodayPatient ?? 0)
+                                @(ViewBag.TodayRecord ?? 0)
                             </div>
                             <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
-                                Total Patients <span class="h6">@(ViewBag.TodayPatient ?? 0)</span> today
+                                Total Patients <span class="h6">@(ViewBag.TodayRecord ?? 0)</span> today
                             </div>
                         </div>
                         <div class="col-auto">
@@ -45,10 +45,10 @@
                                 Monthly Patients
                             </div>
                             <div class="h4 fw-bold my-3">
-                                @(ViewBag.MonthlyPatient ?? 0)
+                                @(ViewBag.MonthlyRecord ?? 0)
                             </div>
                             <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
-                                Total Patients <span class="h6">@(ViewBag.MonthlyPatient ?? 0)</span> this month
+                                Total Patients <span class="h6">@(ViewBag.MonthlyRecord ?? 0)</span> this month
                             </div>
                         </div>
                         <div class="col-auto">
@@ -70,10 +70,10 @@
                                 Yearly Patients
                             </div>
                             <div class="h4 fw-bold my-3">
-                                @(ViewBag.YearlyPatient ?? 0)
+                                @(ViewBag.YearlyRecord ?? 0)
                             </div>
                             <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
-                                Total Patients <span class="h6">@(ViewBag.YearlyPatient ?? 0)</span> this year
+                                Total Patients <span class="h6">@(ViewBag.YearlyRecord ?? 0)</span> this year
                             </div>
                         </div>
                         <div class="col-auto">
@@ -86,7 +86,7 @@
             </div>
         </div>
     </div>
-   
+
     <div class="mb-4 mt-2 d-flex align-items-center justify-content-end">
         <a class="btn btn-pink d-flex align-items-center gap-2" asp-controller="Patient" asp-action="Create">
             <i class='fas fa-user-plus' style="font-size: 18px;"></i>
@@ -95,14 +95,14 @@
     </div>
 
     <div class="card shadow-sm card-selected">
-       @*  <div class="card-header d-flex justify-content-between align-items-center bg-white">
-            <h5 class="card-title m-0">Patients</h5>
-            <div>
-                <a class="btn btn-sm btn-secondary d-flex align-items-center gap-2" asp-controller="Patient" asp-action="Inactive">
-                    <i class='bx bxs-trash'></i>
-                    <span>Show Temporary Deleted</span>
-                </a>
-            </div>
+        @*  <div class="card-header d-flex justify-content-between align-items-center bg-white">
+        <h5 class="card-title m-0">Patients</h5>
+        <div>
+        <a class="btn btn-sm btn-secondary d-flex align-items-center gap-2" asp-controller="Patient" asp-action="Inactive">
+        <i class='bx bxs-trash'></i>
+        <span>Show Temporary Deleted</span>
+        </a>
+        </div>
         </div> *@
         <div class="card-body">
             <div class="table-responsive">
@@ -165,40 +165,37 @@
     </div>
 </div>
 
-<!-- jQuery -->
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Initialize DataTables
-        $('#patientsTable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            lengthMenu: [10, 20, 50, 100],
-            language: {
-                search: "_INPUT_",
-                searchPlaceholder: "Search patients..."
-            },
-            language: {
-                paginate: {
-                    previous: "Previous",
-                    next: "Next"
-                }
-            },
-            info: true,
-            autoWidth: false,
-            responsive: true,
-            columnDefs: [
-                { orderable: false, targets: -1 }
-            ]
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Initialize DataTables
+            $('#patientsTable').DataTable({
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                lengthMenu: [10, 20, 50, 100],
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search patients..."
+                },
+                language: {
+                    paginate: {
+                        previous: "Previous",
+                        next: "Next"
+                    }
+                },
+                info: true,
+                autoWidth: false,
+                responsive: true,
+                columnDefs: [
+                    { orderable: false, targets: -1 }
+                ]
+            });
+
+
         });
-
-
-    });
-
-</script>
-
-
+    </script>
+}
 
 

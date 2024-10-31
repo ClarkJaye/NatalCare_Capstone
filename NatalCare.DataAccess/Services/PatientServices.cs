@@ -146,29 +146,50 @@ namespace NatalCare.DataAccess.Services
 
 
         // HELPER
-        public async Task<int> GetTodayPatientCount()
+
+        public async Task<(int todayCount, int monthCount, int yearCount)> GetPatientCountsAsync()
         {
             var today = DateTime.Today;
-            return await unitOfWork.Repository<Patients>()
+            var monthStart = new DateTime(today.Year, today.Month, 1);
+            var yearStart = new DateTime(today.Year, 1, 1);
+
+            var counts = await unitOfWork.Repository<Patients>()
                 .AsQueryable()
-                .CountAsync(p => p.Created_At >= today && p.Created_At < today.AddDays(1));
+                .Where(n => n.Created_At >= yearStart)
+                .GroupBy(n => 1)
+                .Select(g => new
+                {
+                    TodayCount = g.Count(n => n.Created_At >= today),
+                    MonthCount = g.Count(n => n.Created_At >= monthStart),
+                    YearCount = g.Count()
+                })
+                .FirstOrDefaultAsync();
+
+            return counts != null ? (counts.TodayCount, counts.MonthCount, counts.YearCount) : (0, 0, 0);
         }
-        public async Task<int> GetMonthlyPatientCount()
-        {
-            var startOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-            var startOfNextMonth = startOfMonth.AddMonths(1);
-            return await unitOfWork.Repository<Patients>()
-                .AsQueryable()
-                .CountAsync(p => p.Created_At >= startOfMonth && p.Created_At < startOfNextMonth);
-        }
-        public async Task<int> GetYearlyPatientCount()
-        {
-            var startOfYear = new DateTime(DateTime.Today.Year, 1, 1);
-            var startOfNextYear = startOfYear.AddYears(1);
-            return await unitOfWork.Repository<Patients>()
-                .AsQueryable()
-                .CountAsync(p => p.Created_At >= startOfYear && p.Created_At < startOfNextYear);
-        }
+        //public async Task<int> GetTodayPatientCount()
+        //{
+        //    var today = DateTime.Today;
+        //    return await unitOfWork.Repository<Patients>()
+        //        .AsQueryable()
+        //        .CountAsync(p => p.Created_At >= today && p.Created_At < today.AddDays(1));
+        //}
+        //public async Task<int> GetMonthlyPatientCount()
+        //{
+        //    var startOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+        //    var startOfNextMonth = startOfMonth.AddMonths(1);
+        //    return await unitOfWork.Repository<Patients>()
+        //        .AsQueryable()
+        //        .CountAsync(p => p.Created_At >= startOfMonth && p.Created_At < startOfNextMonth);
+        //}
+        //public async Task<int> GetYearlyPatientCount()
+        //{
+        //    var startOfYear = new DateTime(DateTime.Today.Year, 1, 1);
+        //    var startOfNextYear = startOfYear.AddYears(1);
+        //    return await unitOfWork.Repository<Patients>()
+        //        .AsQueryable()
+        //        .CountAsync(p => p.Created_At >= startOfYear && p.Created_At < startOfNextYear);
+        //}
         private async Task<string> GeneratePatientID()
         {
             var lastPatient = await unitOfWork.Repository<Patients>()

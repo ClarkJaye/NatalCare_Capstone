@@ -21,15 +21,12 @@ namespace NatalCare_System.Controllers
         {
             var patients = await patientServices.GetPatients();
 
-            // Get counts for today, this month, and this year
-            var todayPatientCount = await patientServices.GetTodayPatientCount();
-            var monthlyPatientCount = await patientServices.GetMonthlyPatientCount();
-            var yearlyPatientCount = await patientServices.GetYearlyPatientCount();
-
+            // Get all counts in one call
+            var (todayRecordCount, monthlyRecordCount, yearlyRecordCount) = await patientServices.GetPatientCountsAsync();
             // Pass counts to the view using ViewBag
-            ViewBag.TodayPatient = todayPatientCount;
-            ViewBag.MonthlyPatient = monthlyPatientCount;
-            ViewBag.YearlyPatient = yearlyPatientCount;
+            ViewBag.TodayRecord = todayRecordCount;
+            ViewBag.MonthlyRecord = monthlyRecordCount;
+            ViewBag.YearlyRecord = yearlyRecordCount;
 
             return View(patients ?? new List<Patients>());
         }
@@ -40,21 +37,12 @@ namespace NatalCare_System.Controllers
             return View(patients ?? new List<Patients>());
         }
 
-
         public async Task<IActionResult> Information(string id)
         {
             try
             {
                 var response = await patientServices.GetInformation(id);
                 return View(response);
-            }
-            catch (ArgumentException argEx)
-            {
-                TempData["error"] = argEx.Message;
-            }
-            catch (KeyNotFoundException knfEx)
-            {
-                TempData["error"] = knfEx.Message;
             }
             catch (Exception ex)
             {
@@ -179,12 +167,19 @@ namespace NatalCare_System.Controllers
         {
             var mother = await patientServices.GetInformation(motherID);
 
-            if (mother.PatientID == null)
+            if (mother.PatientID != null)
             {
-                return Json(new { isSuccess = false, Message = "Mother not found." } );
+                var motherData = new
+                {
+                    id = mother.PatientID,
+                    firstname = mother.FirstName,
+                    middlename = mother.MiddleName,
+                    lastname = mother.LastName,
+                };
+                return Json(new { isSuccess = true, item = motherData });
             }
+            return Json(new { isSuccess = false, Message = "Mother not found." } );
 
-            return Json(new { isSuccess = true, firstName = mother.FirstName, middleName = mother.MiddleName, lastName = mother.LastName });
         }
 
 

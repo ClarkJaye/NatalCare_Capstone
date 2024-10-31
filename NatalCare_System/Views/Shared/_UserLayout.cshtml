@@ -245,6 +245,30 @@
                 ]
             });
 
+            // FILTERING
+            $('.filterInput').on('keyup', function () {
+                var value = $(this).val().toLowerCase();
+                var rows = $('tbody tr:not(.no-record-found)');
+                var noRecordRow = $('.no-record-found');
+
+                // Filter rows
+                var visibleRows = rows.filter(function () {
+                    return $(this).text().toLowerCase().indexOf(value) > -1;
+                }).toggle(true);
+
+                // Hide rows that do not match
+                rows.not(visibleRows).toggle(false);
+
+                // If no rows are visible, show the "No record found" message
+                if (visibleRows.length === 0) {
+                    noRecordRow.show();
+                } else {
+                    noRecordRow.hide();
+                }
+            });
+
+
+
             // TOGGLE SIDEBAR
             const menuBar = document.getElementById('menuBar');
             const sidebar = document.getElementById('sidebar');

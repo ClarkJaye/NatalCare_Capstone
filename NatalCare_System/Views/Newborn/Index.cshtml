@@ -1,4 +1,4 @@
-﻿@* @model List<NatalCare.Models.Entities.Newborn> *@
+﻿@model List<NatalCare.Models.Entities.Newborn>
 
 
 @{
@@ -10,9 +10,7 @@
 <partial name="Partial/_Navbar" />
 
 <div class="mx-4">
-    <!-- Total Section -->
     <div class="row">
-        <!-- Totals Section -->
         <div class="col-md-4 mb-4">
             <div class="card shadow py-2 card-selected">
                 <div class="card-body">
@@ -22,10 +20,10 @@
                                 Today New Born
                             </div>
                             <div class="h4 fw-bold my-3">
-                                @(ViewBag.TodayPatient ?? 0)
+                                @(ViewBag.TodayRecord ?? 0)
                             </div>
                             <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
-                                Total Newborn <span class="h6">@(ViewBag.TodayPatient ?? 0)</span> today
+                                Total Newborn <span class="h6">@(ViewBag.TodayRecord ?? 0)</span> today
                             </div>
                         </div>
                         <div class="col-auto">
@@ -47,10 +45,10 @@
                                 Monthly New Born
                             </div>
                             <div class="h4 fw-bold my-3">
-                                @(ViewBag.MonthlyPatient ?? 0)
+                                @(ViewBag.MonthlyRecord ?? 0)
                             </div>
                             <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
-                                Total Newborn <span class="h6">@(ViewBag.MonthlyPatient ?? 0)</span> this month
+                                Total Newborn <span class="h6">@(ViewBag.MonthlyRecord ?? 0)</span> this month
                             </div>
                         </div>
                         <div class="col-auto">
@@ -72,10 +70,10 @@
                                 Yearly New Born
                             </div>
                             <div class="h4 fw-bold my-3">
-                                @(ViewBag.YearlyPatient ?? 0)
+                                @(ViewBag.YearlyRecord ?? 0)
                             </div>
                             <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
-                                Total Newborn <span class="h6">@(ViewBag.YearlyPatient ?? 0)</span> this year
+                                Total Newborn <span class="h6">@(ViewBag.YearlyRecord ?? 0)</span> this year
                             </div>
                         </div>
                         <div class="col-auto">
@@ -108,30 +106,33 @@
                             <th>Lastname</th>
                             <th>Date Of Birth</th>
                             <th>Time of Birth</th>
-                            <th>Mother Name</th>
+                            <th>Mother Full Name</th>
                             <th>Date Added</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>P-01</td>
-                            <td>Jen</td>
-                            <td>Suarez</td>
-                            <td>Pepito</td>
-                            <td>10/25/2024</td>
-                            <td>5:00 PM</td>
-                            <td>Jen Pepito</td>
-                            <td>05/04/2024</td>
-                            <td>
-                                <div class="d-flex align-items-center justify-content-center gap-4">
-                                    <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Newborn" asp-action="Information" asp-route-id="">
-                                        <i class="fa-solid fa-list"></i>
-                                        <span>Record</span>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.NewbornID</td>
+                                <td>@item.FirstName</td>
+                                <td>@item.MiddleName</td>
+                                <td>@item.LastName</td>
+                                <td>@item.DateofBirth?.ToString("MMM dd yyyy")</td>
+                                <td>@item.TimeofBirth</td>
+                                <td>@item.Patient?.FirstName @item.Patient?.MiddleName @item.Patient?.LastName</td>
+                                <td>@item.Created_At?.ToString("MMM dd yyyy h:mm tt")</td>
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center gap-4">
+                                        <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Newborn" asp-action="Information" asp-route-id="@item.NewbornID">
+                                            <i class="fa-solid fa-list"></i>
+                                            <span>Record</span>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -143,42 +144,40 @@
 
 
 
-<!-- jQuery -->
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Initialize DataTables
+            $('#newbornTable').DataTable({
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                lengthMenu: [10, 20, 50, 100],
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search newborn..."
+                },
+                language: {
+                    paginate: {
+                        previous: "Previous",
+                        next: "Next"
+                    }
+                },
+                info: true,
+                autoWidth: false,
+                responsive: true,
+                columnDefs: [
+                    { orderable: false, targets: -1 }
+                ]
+            });
 
-<script>
-
-    document.addEventListener("DOMContentLoaded", function () {
-        // Initialize DataTables
-        $('#newbornTable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            lengthMenu: [10, 20, 50, 100],
-            language: {
-                search: "_INPUT_",
-                searchPlaceholder: "Search patients..."
-            },
-            language: {
-                paginate: {
-                    previous: "Previous",
-                    next: "Next"
-                }
-            },
-            info: true,
-            autoWidth: false,
-            responsive: true,
-            columnDefs: [
-                { orderable: false, targets: -1 }
-            ]
         });
 
-    });
+    </script>
 
-</script>
-
+}
 
 
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NatalCare.DataAccess.Extensions;
 using NatalCare.DataAccess.Interfaces;
@@ -15,9 +16,22 @@ namespace NatalCare_System.Controllers
         {
             this.newbornServices = newbornServices;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            // Get all counts in one call
+            var (todayRecordCount, monthlyRecordCount, yearlyRecordCount) = await newbornServices.GetNewbornCountsAsync();
+            // Pass counts to the view using ViewBag
+            ViewBag.TodayRecord = todayRecordCount;
+            ViewBag.MonthlyRecord = monthlyRecordCount;
+            ViewBag.YearlyRecord = yearlyRecordCount;
+
+            var record = await newbornServices.GetNewborns();
+            if(record.Item == null)
+            {
+                TempData["error"] = record.Message;
+                return View(record.Item);
+            }
+            return View(record.Item);
         }
 
         public IActionResult Create()
@@ -30,33 +44,48 @@ namespace NatalCare_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var userId = GetCurrentUserId();
-                    var result = await newbornServices.Create(newborn, userId);
+                var userId = GetCurrentUserId();
+                var result = await newbornServices.Create(newborn, userId);
 
-                    if (result)
-                    {
-                        TempData["success"] = "Record has been added!";
-                        return RedirectToAction(nameof(Index));
-                    }
-                }
-                catch (ArgumentException argEx)
+                if (result.IsSuccess == true)
                 {
-                    TempData["error"] = argEx.Message;
-                }
-                catch (Exception ex)
-                {
-                    TempData["error"] = "An error occurred while creating the newborn.";
+                    TempData["success"] = result.Message;
+                    return RedirectToAction(nameof(Index));
                 }
             }
-
             return View(newborn);
         }
-
-        public IActionResult Information()
+        public async Task<IActionResult> Edit(string id)
         {
-            return View();
+            var userId = GetCurrentUserId();
+            var result = await newbornServices.Edit(id, userId);
+
+            if (result.IsSuccess == true)
+            {
+                TempData["success"] = result.Message;
+                return View(result.Item);
+            }
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        public async Task<IActionResult> Information(string id)
+        {
+            try
+            {
+                var response = await newbornServices.GetInformation(id);
+                if (response.IsSuccess == true)
+                {
+                    return View(response.Item);
+                }
+                TempData["error"] = response.Message;
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = "An unexpected error occurred while retrieving patient information.";
+            }
+            return RedirectToAction(nameof(Index));
         }
 
 

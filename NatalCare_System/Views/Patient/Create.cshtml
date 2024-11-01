@@ -42,12 +42,12 @@
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="PlaceOfBirth" class="control-label">Place of Birth</label>
-                        <input asp-for="PlaceOfBirth" class="form-control" placeholder="Enter place of birth" required />
+                        <input asp-for="PlaceOfBirth" class="form-control" placeholder="Enter place of birth (e.g., Street, City, Province)" required />
                         <span asp-validation-for="PlaceOfBirth" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
-                        <label asp-for="Address" class="control-label"></label>
-                        <input asp-for="Address" class="form-control" placeholder="Enter address" required />
+                        <label asp-for="Address" class="control-label">Address</label>
+                        <input asp-for="Address" class="form-control" placeholder="Enter full address (e.g., Street, Barangay, City)" required />
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">

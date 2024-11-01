@@ -22,13 +22,24 @@
                 <div class="card-body c-details">
                     <div class="d-flex justify-content-center align-items-center flex-column mb-3 mx-lg-5">
                         <!-- Patient Profile Info -->
-                        <div class="d-flex flex-column align-items-center justify-content-center gap-2 text-center mt-3">
-                            <img src="~/profile/defaultProfile.png" alt="Profile" class="img-fluid rounded-circle mb-3" />
-                            @* <h5 class="fw-bold">Case: <span class="text-pink">@Model.PatientID</span> </h5> *@
-                            <h4 class="fw-bold text-pink">@Model.PatientID</h4>
-                            <h5 class="fw-bold m-0 text-capitalize">@Model.FirstName @Model.LastName</h5>
-                            <h6 class="text-muted m-0">@Model.Email</h6>
-                            <h6 class="m-0">@Model.ContactNumber</h6>
+                        <div class="d-flex flex-column align-items-center justify-content-center gap-2 text-center mt-3" style="cursor: pointer;">
+                            @if (Model.Gender?.ToLower() == "female")
+                            {
+                                <img src="~/profile/woman.png" alt="Profile" class="img-fluid rounded-circle mb-3 p-2" style="border: 4px solid var(--pink);" />
+                            }
+                            else
+                            {
+                                <img src="~/profile/man.png" alt="Profile" class="img-fluid rounded-circle mb-3 p-2" style="border: 4px solid var(--pink);" />
+                            }
+                            <div class="mb-2">
+                                <h4 class="fw-bold text-pink mb-0">@Model.PatientID</h4>
+                                <span style="font-size: 14px;">Patient ID</span>
+                            </div>
+
+                            <div class="mb-2">
+                                <h5 class="fw-bold m-0 text-capitalize">@Model.FirstName @Model.MiddleName @Model.LastName</h5>
+                                <span style="font-size: 14px;">Patient Full Name</span>
+                            </div>
                         </div>
 
                         <!-- Sidebar Links -->

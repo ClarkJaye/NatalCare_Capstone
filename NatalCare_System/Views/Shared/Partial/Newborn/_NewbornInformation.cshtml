@@ -1,8 +1,14 @@
 ﻿<div class="col-md-9">
     <div class="card card-selected mb-5">
         <div class="card-body c-details">
-            <h5 class="card-title m-0">Newborn Information</h5>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h5 class="card-title m-0">Newborn Information</h5>
 
+                <button class="btn btn-sm btn-outline-pink mx-4" data-newbornid="@Model.NewbornID" data-bs-toggle="modal" data-bs-target="#nbDetailModal">
+                    <i class="fas fa-eye"></i>
+                    <span>See Baby Delivery History</span>
+                </button>
+            </div>
             <hr />
 
             <div class="row mx-4">
@@ -69,17 +75,13 @@
                     <label class="form-label">Address</label>
                     <input class="form-control text-capitalize" value="@Model.Address" disabled />
                 </div>
-
-
             </div>
-
-
 
             <!-- Emergency Contact Section -->
             <div class="d-flex align-items-center justify-content-between mt-5 mb-3">
                 <h5 class="card-title">Mother Information</h5>
 
-                <button class="btn btn-sm btn-outline-pink mx-4" data-patientid="@Model.NewbornID">
+                <button class="btn btn-sm btn-outline-pink mx-4" data-patientid="@Model.NewbornID" data-bs-toggle="modal" data-bs-target="#motherDetailModal">
                     <i class="fas fa-eye"></i>
                     <span>See Mother Detailed</span>
                 </button>
@@ -118,6 +120,180 @@
         </div>
     </div>
 </div>
+
+
+
+<!-- Newborn Information Modal -->
+<div class="modal fade" id="nbDetailModal" tabindex="-1" aria-labelledby="bbDetailedModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bbDetailedModalLabel">Newborn Information - Baby Delivery History</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5 class="card-title mb-3">Baby Information</h5>
+                <div class="row">
+                    <!-- Baby Name -->
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Baby Name</label>
+                        <input class="form-control" value="@Model.FirstName" disabled />
+                    </div>
+
+                    <!-- Date and Time of Birth -->
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Date of Birth</label>
+                        <input class="form-control" value="@Model.DateofBirth?.ToString("MM/dd/yyyy")" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Time of Birth</label>
+                        <input class="form-control" value="@Model.TimeofBirth" disabled />
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Gender</label>
+                        <input class="form-control" value="@Model.Gender" disabled />
+                    </div>
+
+                    <!-- Measurements -->
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Circumference</label>
+                        <input class="form-control" value="@Model.Circumference" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Head</label>
+                        <input class="form-control" value="@Model.Head" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Chest</label>
+                        <input class="form-control" value="@Model.Chest" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Length</label>
+                        <input class="form-control" value="@Model.Length" disabled />
+                    </div>
+
+                    <!-- Vital Information -->
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Temperature</label>
+                        <input class="form-control" value="@Model.Temp" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Weight</label>
+                        <input class="form-control" value="@Model.Weight" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>APGAR Score</label>
+                        <input class="form-control" value="@Model.APGAR" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Medication</label>
+                        <input class="form-control" value="@Model.Medication" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mother Information Modal -->
+<div class="modal fade" id="motherDetailModal" tabindex="-1" aria-labelledby="motherDetailedModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="motherDetailedModalLabel">Mother Information - Detailed View</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5 class="card-title mb-3">Mother Information: <span class="text-pink">@Model.Patient.PatientID</span></h5>
+                <div class="row">
+                    <!-- Mother Name -->
+                    <div class="form-group col-md-4 mb-3">
+                        <label>First Name</label>
+                        <input class="form-control" value="@Model.Patient.FirstName" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Middle Name</label>
+                        <input class="form-control" value="@Model.Patient.MiddleName" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Last Name</label>
+                        <input class="form-control" value="@Model.Patient.LastName" disabled />
+                    </div>
+
+                    <!-- Birth and Address Details -->
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Date of Birth</label>
+                        <input class="form-control" value="@Model.Patient.Birthdate?.ToString("MM/dd/yyyy")" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Place of Birth</label>
+                        <input class="form-control" value="@Model.Patient.PlaceOfBirth" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Address</label>
+                        <input class="form-control" value="@Model.Patient.Address" disabled />
+                    </div>
+
+                    <!-- Contact and Personal Info -->
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Gender</label>
+                        <input class="form-control" value="@Model.Patient.Gender" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Occupation</label>
+                        <input class="form-control" value="@Model.Patient.Occupation" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Civil Status</label>
+                        <input class="form-control" value="@Model.Patient.CivilStatus" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Mobile Number</label>
+                        <input class="form-control" value="@Model.Patient.MobileNumber" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Telephone Number</label>
+                        <input class="form-control" value="@Model.Patient.TeleNumber" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Religion</label>
+                        <input class="form-control" value="@Model.Patient.Religion" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Blood Type</label>
+                        <input class="form-control text-uppercase" value="@Model.Patient.BloodType" disabled />
+                    </div>
+                    @if (Model.Patient.HasPhilHealth == true)
+                    {
+                    <div class="form-group col-md-4 mb-3">
+                        <label>PhilHealth Number</label>
+                        <input class="form-control" value="@Model.Patient.PHIC_NO" disabled />
+                    </div>
+                    }
+                    <!-- Emergency Contact -->
+                    <h5 class="card-title my-3">Emergency Contact Information</h5>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Emergency Name</label>
+                        <input class="form-control" value="@Model.Patient.Emergency_Name" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Emergency Contact</label>
+                        <input class="form-control" value="@Model.Patient.Emergency_Contact" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <script>

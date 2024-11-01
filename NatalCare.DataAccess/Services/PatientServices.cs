@@ -133,11 +133,8 @@ namespace NatalCare.DataAccess.Services
                 existingPatient.HasPhilHealth = false;
                 existingPatient.PHIC_NO = null;
             }
-
             existingPatient.PatientUpdatedBy = userId;
             existingPatient.Updated_At = DateTime.Now;
-
-          
 
             // Update the patient in the repository
             unitOfWork.Repository<Patients>().Update(existingPatient);

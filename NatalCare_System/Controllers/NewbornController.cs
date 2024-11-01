@@ -1,9 +1,9 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NatalCare.DataAccess.Extensions;
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.Models.Entities;
+using NatalCare.Models.ViewModel.Patient;
 
 namespace NatalCare_System.Controllers
 {
@@ -25,13 +25,17 @@ namespace NatalCare_System.Controllers
             ViewBag.MonthlyRecord = monthlyRecordCount;
             ViewBag.YearlyRecord = yearlyRecordCount;
 
-            var record = await newbornServices.GetNewborns();
-            if(record.Item == null)
-            {
-                TempData["error"] = record.Message;
-                return View(record.Item);
-            }
-            return View(record.Item);
+            var records = await newbornServices.GetNewborns();
+
+            return View(records ?? new List<Newborn>());
+
+            //var record = await newbornServices.GetNewborns();
+            //if(record.IsSuccess == false)
+            //{
+            //    TempData["error"] = record.Message;
+            //    return View(record.Item);
+            //}
+            //return View(record.Item);
         }
 
         public IActionResult Create()
@@ -67,6 +71,37 @@ namespace NatalCare_System.Controllers
             }
             return RedirectToAction(nameof(Index));
 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Newborn newborn)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var userId = GetCurrentUserId();
+
+                    var result = await newbornServices.Update(newborn, userId);
+
+                    if (result.IsSuccess == true)
+                    {
+                        TempData["success"] = result.Message;
+                        return RedirectToAction("Information", "Newborn", new { id = result.Item });
+                    }
+                }
+                catch (ArgumentException argEx)
+                {
+                    TempData["error"] = argEx.Message;
+                }
+                catch (Exception ex)
+                {
+                    TempData["error"] = "An error occurred while updating the patient.";
+                }
+            }
+
+            return View(newborn);
         }
 
         public async Task<IActionResult> Information(string id)

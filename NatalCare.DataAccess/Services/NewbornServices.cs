@@ -15,15 +15,16 @@ namespace NatalCare.DataAccess.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<GeneralResponse> GetNewborns()
+        public async Task<List<Newborn>> GetNewborns()
         {
-            var newborns = await unitOfWork.Repository<Newborn>()
-                .GetAllAsync(includeProperties: "Patient");
+            var newborns = await unitOfWork.Repository<Newborn>().GetAllAsync(includeProperties: "Patient");
+            return newborns.ToList();
 
-            if (newborns == null || !newborns.Any())
-                return new GeneralResponse(false, null, "There are no patients.");
-
-            return new GeneralResponse(true, newborns, "Successfully Fetched.");
+            //var newborns = await unitOfWork.Repository<Newborn>()
+            //    .GetAllAsync(includeProperties: "Patient");
+            //if (newborns == null || !newborns.Any())
+            //    return new GeneralResponse(false, newborns, "There are no newborns.");
+            //return new GeneralResponse(true, newborns, "Successfully Fetched.");
         }
 
         public async Task<GeneralResponse> GetInformation(string id)
@@ -31,7 +32,7 @@ namespace NatalCare.DataAccess.Services
             var record = await unitOfWork.Repository<Newborn>()
                 .GetFirstOrDefaultAsync(x => x.NewbornID == id, includeProperties: "Patient");
 
-            if (record == null) return new GeneralResponse(false, null, "Newborn Not Found.");
+            if (record == null) return new GeneralResponse(false, record, "Newborn Not Found.");
 
             return new GeneralResponse(true, record, "Successfully Fetched.");
         }
@@ -65,6 +66,46 @@ namespace NatalCare.DataAccess.Services
 
             return new GeneralResponse(true, record, "Newborn Found Successful!");
         }
+
+        public async Task<GeneralResponse> Update(Newborn newborn, string userId)
+        {
+            // Retrieve the existing newborn record from the database
+            var existingRecord = await unitOfWork.Repository<Newborn>()
+                .GetFirstOrDefaultAsync(p => p.NewbornID == newborn.NewbornID);
+
+            if (existingRecord == null)
+            {
+                return new GeneralResponse(false, null, "Newborn not found for updating.");
+            }
+
+            // Update the existing newborn's properties
+            existingRecord.FirstName = newborn.FirstName;
+            existingRecord.LastName = newborn.LastName;
+            existingRecord.MiddleName = newborn.MiddleName;
+            existingRecord.PlaceOfBirth = newborn.PlaceOfBirth;
+            existingRecord.DateofBirth = newborn.DateofBirth;
+            existingRecord.TimeofBirth = newborn.TimeofBirth;
+            existingRecord.Address = newborn.Address;
+            existingRecord.Gender = newborn.Gender;
+            existingRecord.Circumference = newborn.Circumference;
+            existingRecord.Head = newborn.Head;
+            existingRecord.Chest = newborn.Chest;
+            existingRecord.Length = newborn.Length;
+            existingRecord.Temp = newborn.Temp;
+            existingRecord.Weight = newborn.Weight;
+            existingRecord.APGAR = newborn.APGAR;
+            existingRecord.Medication = newborn.Medication;
+            existingRecord.MotherID = newborn.MotherID;
+            existingRecord.StatusCode = newborn.StatusCode;
+            existingRecord.Updated_At = DateTime.Now;
+            existingRecord.NewbornUpdatedBy = userId;
+
+            // Save the updates
+            unitOfWork.Repository<Newborn>().Update(existingRecord);
+            await unitOfWork.SaveAsync();
+            return new GeneralResponse(true, existingRecord.NewbornID, "Newborn successfully updated!");
+        }
+
 
         // HELPER
         public async Task<(int todayCount, int monthCount, int yearCount)> GetNewbornCountsAsync()

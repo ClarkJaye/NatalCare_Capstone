@@ -14,16 +14,5 @@ namespace NatalCare.DataAccess.Interfaces
 
         //ViewBag
         Task<(int todayCount, int monthCount, int yearCount)> GetPatientCountsAsync();
-        //Task<int> GetTodayPatientCount();
-        //Task<int> GetMonthlyPatientCount();
-        //Task<int> GetYearlyPatientCount();
-
-
-        //Prenatal Services
-        Task<Prenatal> GetPrenatalRecord(string id);
-        Task<List<Prenatal>> GetPrenatalRecords(string patientId);
-        Task<List<PrenatalVisit>> GetPrenatalVisitsRecords(string caseNo, string patientId);
-
-
     }
 }

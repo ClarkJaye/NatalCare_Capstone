@@ -10,14 +10,111 @@ namespace NatalCare_System.Controllers
     [Authorize]
     public class ServicessController : BaseController<ServicessController>
     {
-        private readonly IServicesOperationServices crudServices;
+        private readonly IServicesOperationServices serviceServices;
 
-        public ServicessController(IServicesOperationServices crudServices)
+        public ServicessController(IServicesOperationServices serviceServices)
         {
-            this.crudServices = crudServices;
+            this.serviceServices = serviceServices;
+        }
+
+        //------ FAMILY PLANNING ------//
+        //Records
+        public async Task<IActionResult> FamilyPlanningRecords(string patientId)
+        {
+            var familyPlanningRecords = await serviceServices.GetFamilyPlanningRecords(patientId);
+            return ViewComponent("FamilyPlanningRecords", new { patientId = patientId });
+        }
+        //ADD 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddFPRecord(FamilyPlanning model, string patientID)
+        {
+            try
+            {
+                // Exclude CaseNo from validation
+                ModelState.Remove(nameof(model.CaseNo));
+                if (ModelState.IsValid)
+                {
+                    var userId = GetCurrentUserId();
+                    var result = await serviceServices.AddFPRecordAsync(model, patientID, userId);
+                    return Json(result);
+                }
+                return Json(new { IsSuccess = false, Message = "Add Record failed!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while adding family planning record for Patient ID: {model.PatientID}");
+                return Json(new { IsSuccess = false, Message = "An error occurred in AddPrenatalRecord." });
+            }
+        }
+        // GET/EDIT 
+        [HttpGet]
+        public async Task<JsonResult> EditFPRecord(string caseNo)
+        {
+            try
+            {
+                if (caseNo != null)
+                {
+                    var userId = GetCurrentUserId();
+                    var result = await serviceServices.GetFPRecordAsync(caseNo);
+                    return Json(result);
+                }
+                return Json(new { IsSuccess = false, Message = "Fetching Record failed!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while Edit family planning record for Patient");
+                return Json(new { IsSuccess = false, Message = "An error occurred in DeletePrenatalRecord." });
+            }
+        }
+        // UPDATE
+        [HttpPost]
+        public async Task<JsonResult> UpdateFPRecord(FamilyPlanning model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var userId = GetCurrentUserId();
+                    var result = await serviceServices.UpdateFPRecordAsync(model, userId);
+                    return Json(result);
+                }
+                return Json(new { IsSuccess = false, Message = "Update Record failed!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while updating the family planning record for Patient ID: {model.PatientID}");
+                return Json(new { IsSuccess = false, Message = "An error occurred in UpdatePrenatalRecord." });
+            }
+        }
+        // DELETE 
+        [HttpDelete]
+        public async Task<JsonResult> DeleteFPRecord(string caseNo)
+        {
+            try
+            {
+                if (caseNo != null)
+                {
+                    var userId = GetCurrentUserId();
+                    var result = await serviceServices.DeleteFPRecordAsync(caseNo, userId);
+                    return Json(result);
+                }
+                return Json(new { IsSuccess = false, Message = "Delete Record failed!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while deleting family planning record for Patient");
+                return Json(new { IsSuccess = false, Message = "An error occurred in DeleteFPRecord." });
+            }
         }
 
         //------ PRENATAL ------//
+        //Records
+        public async Task<IActionResult> PrenatalRecords(string patientId)
+        {
+            var records = await serviceServices.GetPrenatalRecords(patientId);
+            return ViewComponent("PrenatalRecords", new { patientId = patientId });
+        }
         //ADD 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -31,19 +128,9 @@ namespace NatalCare_System.Controllers
                 if (ModelState.IsValid)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await crudServices.AddPrenatalRecordAsync(model, patientID, userId);
-                    if(result.IsSuccess)
-                    {
-                        TempData["success"] = result.Message;
-                    }
-                    else
-                    {
-                        TempData["error"] = result.Message;
-                    }
+                    var result = await serviceServices.AddPrenatalRecordAsync(model, patientID, userId);
                     return Json(result);
-
                 }
-
                 return Json(new { IsSuccess = false, Message = "Add Record failed!" });
             }
             catch (Exception ex)
@@ -61,19 +148,9 @@ namespace NatalCare_System.Controllers
                 if (caseNo != null)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await crudServices.DeletePrenatalRecordAsync(caseNo, userId);
-                    if (result.IsSuccess)
-                    {
-                        TempData["success"] = result.Message;
-                    }
-                    else
-                    {
-                        TempData["error"] = result.Message;
-                    }
-                    return Json(new { IsSuccess = result.IsSuccess });
-
+                    var result = await serviceServices.DeletePrenatalRecordAsync(caseNo, userId);
+                    return Json(result);
                 }
-
                 return Json(new { IsSuccess = false, Message = "Delete Record failed!" });
             }
             catch (Exception ex)
@@ -91,14 +168,14 @@ namespace NatalCare_System.Controllers
                 if (caseNo != null)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await crudServices.GetPrenatalRecordAsync(caseNo);
+                    var result = await serviceServices.GetPrenatalRecordAsync(caseNo);
                     return Json(result);
                 }
                 return Json(new { IsSuccess = false, Message = "Fetching Record failed!" });
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, $"Error occurred while deleting prenatal record for Patient");
+                Logger.LogError(ex, $"Error occurred while Edit prenatal record for Patient");
                 return Json(new { IsSuccess = false, Message = "An error occurred in DeletePrenatalRecord." });
             }
         }
@@ -111,22 +188,14 @@ namespace NatalCare_System.Controllers
                 if (ModelState.IsValid)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await crudServices.UpdatePrenatalRecordAsync(model, userId);
-                    if (result.IsSuccess)
-                    {
-                        TempData["success"] = result.Message;
-                    }
-                    else
-                    {
-                        TempData["error"] = result.Message;
-                    }
+                    var result = await serviceServices.UpdatePrenatalRecordAsync(model, userId);
                     return Json(result);
                 }
                 return Json(new { IsSuccess = false, Message = "Update Record failed!" });
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, $"Error occurred while adding prenatal record for Patient ID: {model.PatientID}");
+                Logger.LogError(ex, $"Error occurred while updating the prenatal record for Patient ID: {model.PatientID}");
                 return Json(new { IsSuccess = false, Message = "An error occurred in UpdatePrenatalRecord." });
             }
         }
@@ -142,24 +211,15 @@ namespace NatalCare_System.Controllers
                 if (ModelState.IsValid)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await crudServices.AddPrenatalVisitRecordAsync(model, patientID, caseNo, userId);
-                    if (result.IsSuccess)
-                    {
-                        TempData["success"] = result.Message;
-                    }
-                    else
-                    {
-                        TempData["error"] = result.Message;
-                    }
+                    var result = await serviceServices.AddPrenatalVisitRecordAsync(model, patientID, caseNo, userId);
                     return Json(result);
-
                 }
 
                 return Json(new { IsSuccess = false, Message = "Add Record failed!" });
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, $"Error occurred while adding prenatal record for Patient ID: {patientID}");
+                Logger.LogError(ex, $"Error occurred while adding prenatal visit record for Patient ID: {patientID}");
                 return Json(new { IsSuccess = false, Message = "An error occurred in AddPrenatalRecord." });
             }
         }
@@ -173,14 +233,14 @@ namespace NatalCare_System.Controllers
                 if (caseNo != null)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await crudServices.GetPrenatalVisitRecordAsync(caseNo);
+                    var result = await serviceServices.GetPrenatalVisitRecordAsync(caseNo);
                     return Json(result);
                 }
                 return Json(new { IsSuccess = false, Message = "Fetching Record failed!" });
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, $"Error occurred while deleting prenatal visit record for Patient");
+                Logger.LogError(ex, $"Error occurred while getting prenatal visit detailed record for Patient");
                 return Json(new { IsSuccess = false, Message = "An error occurred in DetailPrenatalVisitRecord." });
             }
         }
@@ -194,22 +254,14 @@ namespace NatalCare_System.Controllers
                 if (ModelState.IsValid)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await crudServices.UpdatePrenatalVisitRecordAsync(model, userId);
-                    if (result.IsSuccess)
-                    {
-                        TempData["success"] = result.Message;
-                    }
-                    else
-                    {
-                        TempData["error"] = result.Message;
-                    }
+                    var result = await serviceServices.UpdatePrenatalVisitRecordAsync(model, userId);
                     return Json(result);
                 }
                 return Json(new { IsSuccess = false, Message = "Update Record failed!" });
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, $"Error occurred while adding prenatal record for Patient ID: {model.PatientID}");
+                Logger.LogError(ex, $"Error occurred while updating prenatal visit record for Patient ID: {model.PatientID}");
                 return Json(new { IsSuccess = false, Message = "An error occurred in UpdatePrenatalRecord." });
             }
         }
@@ -223,17 +275,8 @@ namespace NatalCare_System.Controllers
                 if (caseNo != null)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await crudServices.DeletePrenatalVisitRecordAsync(caseNo, userId);
-                    if (result.IsSuccess)
-                    {
-                        TempData["success"] = result.Message;
-                    }
-                    else
-                    {
-                        TempData["error"] = result.Message;
-                    }
-                    return Json(new { IsSuccess = result.IsSuccess });
-
+                    var result = await serviceServices.DeletePrenatalVisitRecordAsync(caseNo, userId);
+                    return Json(result);
                 }
 
                 return Json(new { IsSuccess = false, Message = "Delete Record failed!" });

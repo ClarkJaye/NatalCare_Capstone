@@ -15,7 +15,7 @@
             <i class="fas fa-arrow-left"></i>
             <span>Back</span>
         </a>
-        <h5 class="fw-bold m-0 text-capitalize">@Model.Patient.FirstName @Model.Patient.LastName</h5>
+        <h5 class="fw-bold m-0 text-capitalize">@Model.Patient.FirstName @Model.Patient.MiddleName @Model.Patient.LastName</h5>
     </div>
     <div class="card shadow-sm card-selected">
         <div class="card-body">
@@ -26,10 +26,9 @@
                         <i class="fas fa-plus"></i>
                         <span>Add New Visit</span>
                     </a>
-
-                    <a asp-controller="" asp-action="" class="btn btn-sm btn-outline-secondary">
-                        <i class="fas fa-trash-alt"></i>
-                        <span>Show Deleted History</span>
+                    <a asp-controller="" asp-action="" class="btn btn-sm btn-outline-pink" data-bs-toggle="modal" data-bs-target="#prenatalVisitAddModal">
+                        <i class="fas fa-eye"></i>
+                        <span>See All Detailed</span>
                     </a>
                 </div>
             </div>
@@ -55,17 +54,17 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>NUMBER OF VISIT</th>
-                            <th>DATE VISIT</th>
-                            <th>AOG WEEK</th>
-                            <th>WEIGHT</th>
+                            <th>Number of Visit</th>
+                            <th>Date Visit</th>
+                            <th>AOG Week</th>
+                            <th>Weight</th>
                             <th>BP</th>
                             <th>FH</th>
                             <th>FHT</th>
-                            <th>TEMPERATURE</th>
+                            <th>Temperature</th>
                             <th>CR</th>
                             <th>RR</th>
-                            <th>PHYSICAL ASSESSMENT</th>
+                            <th>Physical Asssessment</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>

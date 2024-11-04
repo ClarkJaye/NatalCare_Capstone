@@ -21,6 +21,7 @@ namespace NatalCare.DataAccess.data
         //Services
         public DbSet<Prenatal> Prenatal { get; set; }
         public DbSet<PrenatalVisit> PrenatalVisit { get; set; }
+        public DbSet<FamilyPlanning> FamilyPlanning { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

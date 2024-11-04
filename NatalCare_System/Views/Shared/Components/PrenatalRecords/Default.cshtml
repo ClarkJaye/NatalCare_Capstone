@@ -1,11 +1,15 @@
 ﻿@model List<NatalCare.Models.Entities.Prenatal>
 
 <h6 class="px-2">Prenatal Records</h6>
-<div class="d-flex justify-content-end my-3">
+<div class="d-flex justify-content-end my-3 gap-3">
     <a asp-controller="" asp-action="" class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#prenatalAddModal" data-patient-id="@Model.FirstOrDefault()?.PatientID">
         <i class="fas fa-plus"></i>
         <span>Add New Prenatal Record</span>
     </a>
+    <button id="displayDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
+        <i class="fas fa-trash"></i>
+        <span>Deleted History Records</span>
+    </button>
 </div>
 
 <div class="d-flex align-items-center gap-2">
@@ -17,13 +21,13 @@
             <tr>
                 <th>Case No#</th>
                 <th>Date Visit</th>
-                <th>GRAVIDA</th>
-                <th>PARA</th>
-                <th>ABORTION</th>
-                <th>STILL BIRTH</th>
+                <th>Gravida</th>
+                <th>Para</th>
+                <th>Abortion</th>
+                <th>Still Birth</th>
                 <th>LMP</th>
                 <th>EDC</th>
-                <th>H.R CODE</th>
+                <th>H.R Code</th>
                 <th>Notes</th>
                 <th class="text-center">Action</th>
             </tr>
@@ -46,7 +50,7 @@
                         <td>@item.Notes</td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
-                                <a asp-action="PrenatalRecord" asp-route-id="@item.PatientID" class="btn btn-sm btn-outline-secondary">
+                                <a asp-controller="Patient" asp-action="PrenatalRecord" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-sm btn-outline-secondary">
                                     <i class="fa-solid fa-list"></i>
                                     <span>Record</span>
                                 </a>
@@ -79,9 +83,6 @@
         </tbody>
     </table>
 </div>
-
-
-
 
 <!-- Add Prenatal Modal -->
 <div class="modal fade" id="prenatalAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -226,38 +227,68 @@
     </div>
 </div>
 
-<script src="~/lib/toastr/toastr.js"></script>
+<!-- Deleted History Modal -->
+<div class="modal fade" id="deletedPreModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger"><i class="fa-solid fa-trash"></i> Deleted Prenatal Records</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="deletedListContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Reset the form when the modal is hidden
-        $('#prenatalAddModal').on('hidden.bs.modal', function () {
-            var modal = $(this);
-            // Reset the form fields after the modal is hidden
-            modal.find('form')[0].reset();
-        });
-
-
-        $("#AddPrenatalForm").on("submit", function (e) {
-            e.preventDefault();
-            AddPrenatal();
-        });
-
-        $("#UpdatePrenatalForm").on("submit", function (e) {
-            e.preventDefault();
-            UpdatePrenatal();
-        });
-
-        $(".edit-Btn").on("click", function (e) {
-            var caseNo = $(this).data('caseno');
-            EditPrenatal(caseNo);
-        });
-        
-        $(".dlt-Btn").on("click", function (e) {
-            var caseNo = $(this).data('caseno');
-            DeletePrenatal(caseNo);
-        });
-
+    var patID = document.getElementById('patID').value;
+    // Reset the form when the modal is hidden
+    $('#prenatalAddModal').on('hidden.bs.modal', function () {
+        var modal = $(this);
+        // Reset the form fields after the modal is hidden
+        modal.find('form')[0].reset();
     });
+
+    $("#AddPrenatalForm").on("submit", function (e) {
+        e.preventDefault();
+        AddPrenatal();
+    });
+
+    $("#UpdatePrenatalForm").on("submit", function (e) {
+        e.preventDefault();
+        UpdatePrenatal();
+    });
+
+    $(".edit-Btn").on("click", function (e) {
+        var caseNo = $(this).data('caseno');
+        EditPrenatal(caseNo);
+    });
+        
+    $(".dlt-Btn").on("click", function (e) {
+        var caseNo = $(this).data('caseno');
+        DeletePrenatal(caseNo);
+    });
+
+    $('#displayDeletedHistoryBtn').on('click', function () {
+        LoadDeletedHistoryPrenatal();
+    });
+
+    function LoadDeletedHistoryPrenatal() {
+        $.ajax({
+            url: '@Url.Action("DisplayDeletedPrenatal", "Patient")',
+            type: 'GET',
+            data: { patientId: patID },
+            success: function (result) {
+                $("#deletedListContainer").html(result);
+                $('#deletedPreModal').modal('show');
+            },
+            error: function () {
+                console.error("Failed to load patients data.");
+            }
+        });
+    }
 
     // Update Prenatal Record
     function UpdatePrenatal() {
@@ -268,11 +299,11 @@
             data: formData,
             success: function (result) {
                 if (result.isSuccess) {
-                    toastr.success('Prenatal record updated successfully!');
                     $('#prenatalEditModal').modal('hide');
-                    location.reload();  
+                    toastr.success(result.message)
+                    LoadPrenatalComponent();
                 } else {
-                    toastr.error(result.message || 'Failed to update the prenatal record.');
+                    toastr.error(result.message);
                 }
             },
             error: function (err) {
@@ -281,7 +312,6 @@
             }
         });
     }
-
     //Edit Prenatal
     function EditPrenatal(caseNo){
         $.ajax({
@@ -297,7 +327,6 @@
                     $("#Para-Edit").val(item.para);
                     $("#Abortion-Edit").val(item.abortion);
                     $("#StillBirth-Edit").val(item.stillBirth);
-                    // Format the dates to 'YYYY-MM-DD' for input[type="date"]
                     $("#LMP-Edit").val(item.lmp ? item.lmp.split('T')[0] : '');
                     $("#EDC-Edit").val(item.edc ? item.edc.split('T')[0] : '');
                     $("#DateVisit-Edit").val(item.dateVisit);
@@ -315,7 +344,6 @@
             }
         })
     }
-
     //Delete Prenatal
     function DeletePrenatal(caseNo) {
         Swal.fire({
@@ -333,8 +361,11 @@
                     url: '@Url.Action("DeletePrenatalRecord", "Servicess")',
                     data: { caseNo: caseNo },
                     success: function (result) {
-                        if (result) {
-                            location.reload();
+                        if (result.isSuccess) {
+                            toastr.success(result.message)
+                            LoadPrenatalComponent();
+                        } else {
+                            toastr.error(result.message);
                         }
                     },
                     error: function () {
@@ -347,7 +378,6 @@
 
 
     }
-
     //Add Prenatal
     function AddPrenatal() {
         var patientId = $("#patID").val();
@@ -359,12 +389,29 @@
             type: 'POST',
             data: formData,
             success: function (result) {
-                if (result) {
-                    location.reload();
+                if (result.isSuccess) {
+                    toastr.success(result.message)
+                    LoadPrenatalComponent();
+                    $('#prenatalEditModal').modal('hide');
+                } else {
+                    toastr.error(result.message);
                 }
             },
             error: function (err) {
                 console.error('Error:', err);
+            }
+        });
+    }
+    //Load All Records
+    function LoadPrenatalComponent() {
+        $.ajax({
+            url: '@Url.Action("PrenatalRecords", "Servicess")',
+            data: { patientId: patID },
+            success: function (result) {
+                $('#prenatal').html(result);
+            },
+            error: function () {
+                toastr.error("Failed to reload the Prenatal records.");
             }
         });
     }

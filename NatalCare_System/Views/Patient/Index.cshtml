@@ -109,6 +109,7 @@
                 <table id="patientsTable" class="table table-hover table-striped">
                     <thead class="border-bottom-2">
                         <tr>
+                            <th>Profile</th>
                             <th>Patient No</th>
                             <th>Firstname</th>
                             <th>Middlename</th>
@@ -125,7 +126,17 @@
                         @foreach (var patient in Model)
                         {
                             <tr class="align-middle">
-                                <td>@patient.PatientID</td>
+                                <td>
+                                    @if (patient.Gender?.ToLower() == "female")
+                                    {
+                                        <img src="~/profile/woman.png" width="50" height="50" alt="Profile" class="img-fluid rounded-circle" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/profile/man.png" width="50" height="50" alt="Profile" class="img-fluid rounded-circle" />
+                                    }
+                                </td>
+                                <th>@patient.PatientID</th>
                                 <td>@patient.FirstName</td>
                                 <td>@patient.MiddleName</td>
                                 <td>@patient.LastName</td>

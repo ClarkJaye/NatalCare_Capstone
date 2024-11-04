@@ -1,11 +1,15 @@
-﻿@model List<NatalCare.Models.Entities.Prenatal>
+﻿@model List<NatalCare.Models.Entities.FamilyPlanning>
 
-<h6 class="px-2">Prenatal Records</h6>
-<div class="d-flex justify-content-end my-3">
-    <a asp-controller="" asp-action="" class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#prenatalAddModal" data-patient-id="@Model.FirstOrDefault()?.PatientID">
+<h6 class="px-2">Family Planning Records</h6>
+<div class="d-flex justify-content-end my-3 gap-3">
+    <a asp-controller="" asp-action="" class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#FPAddModal" data-patient-id="@Model.FirstOrDefault()?.PatientID">
         <i class="fas fa-plus"></i>
-        <span>Add New Prenatal Record</span>
+        <span>Add New  Family Planning Record</span>
     </a>
+    <button id="displayFPDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
+        <i class="fas fa-trash"></i>
+        <span>Deleted History Records</span>
+    </button>
 </div>
 
 <div class="d-flex align-items-center gap-2">
@@ -17,13 +21,12 @@
             <tr>
                 <th>Case No#</th>
                 <th>Date Visit</th>
-                <th>GRAVIDA</th>
-                <th>PARA</th>
-                <th>ABORTION</th>
-                <th>STILL BIRTH</th>
-                <th>LMP</th>
-                <th>EDC</th>
-                <th>H.R CODE</th>
+                <th>No Living Children</th>
+                <th>Plan to Have More Chidlren</th>
+                <th>Method Type</th>
+                <th>Average Monthly Income</th>
+                <th>Spouse Name</th>
+                <th>Spouse Name Occupation</th>
                 <th>Notes</th>
                 <th class="text-center">Action</th>
             </tr>
@@ -36,25 +39,33 @@
                     <tr>
                         <td>@item.CaseNo</td>
                         <td>@item.DateVisit?.ToString("MMM dd yyyy h:mm tt")</td>
-                        <td>@item.Gravida</td>
-                        <td>@item.Para</td>
-                        <td>@item.Abortion</td>
-                        <td>@item.StillBirth</td>
-                        <td>@item.LMP?.ToString("MMM dd yyyy")</td>
-                        <td>@item.EDC?.ToString("MMM dd yyyy")</td>
-                        <td>@item.HRCODE</td>
+                        <td>@item.NoOfLivingChild</td>
+                        <td>
+                            @if (item.PlanToHaveMoreChildren == true)
+                            {
+                                <text>Yes</text>
+                            }
+                            else
+                            {
+                                <text>No</text>
+                            }
+                        </td>
+                        <td>@item.MethodType</td>
+                        <td>@item.AverageMonthlyIncome</td>
+                        <td>@item.SpouseName</td>
+                        <td>@item.SpouseOccupation</td>
                         <td>@item.Notes</td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
-                                <a asp-action="PrenatalRecord" asp-route-id="@item.PatientID" class="btn btn-sm btn-outline-secondary">
+                                <a asp-action="FamilyPlanningRecord" asp-route-id="@item.PatientID" class="btn btn-sm btn-outline-secondary">
                                     <i class="fa-solid fa-list"></i>
-                                    <span>Record</span>
+                                    <span>Details</span>
                                 </a>
-                                <button class="btn btn-sm btn-outline-primary edit-Btn" data-caseno="@item.CaseNo">
+                                <button class="btn btn-sm btn-outline-primary editFP-Btn" data-caseno="@item.CaseNo">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                     <span>Edit</span>
                                 </button>
-                                <button class="btn btn-sm btn-outline-danger dlt-Btn" data-caseno="@item.CaseNo">
+                                <button class="btn btn-sm btn-outline-danger dltFP-Btn" data-caseno="@item.CaseNo">
                                     <i class="fa-solid fa-trash"></i>
                                     <span>Delete</span>
                                 </button>
@@ -81,63 +92,60 @@
 </div>
 
 
-
-
-<!-- Add Prenatal Modal -->
-<div class="modal fade" id="prenatalAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<!-- Add Family Planning Modal -->
+<div class="modal fade" id="FPAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Prenatal Record</h5>
+                <h5 class="modal-title">Add Family Planning Record</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="AddPrenatalForm" method="POST">
+                <form id="AddFPForm" method="POST">
                     @Html.AntiForgeryToken()
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="Gravida-Add" class="control-label">GRAVIDA</label>
-                            <input id="Gravida-Add" name="Gravida" class="form-control" placeholder="Enter number of Gravida" required />
+                            <label for="lvChildren-Add" class="control-label">No Living Children</label>
+                            <input id="lvChildren-Add" name="NoOfLivingChild" class="form-control" placeholder="Enter Number of Living Children" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="Para-Add" class="control-label">PARA</label>
-                            <input id="Para-Add" name="Para" class="form-control" placeholder="Enter number of Para" required />
+                            <label for="plantoHaveChildren-Add" class="control-label">Plan to Have More Chidlren</label>
+                            <select id="plantoHaveChildren-Add" name="PlanToHaveMoreChildren" class="form-select">
+                                <option>Select Yes or No</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="Abortion-Add" class="control-label">ABORTION</label>
-                            <input id="Abortion-Add" name="Abortion" class="form-control" placeholder="Enter number of Abortion" required />
+                            <label for="MethodType-Add" class="control-label">Method Type</label>
+                            <input id="MethodType-Add" name="MethodType" class="form-control" placeholder="Enter Method Type(e.g, Pills,etc)" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="StillBirth-Add" class="control-label">STILL BIRTH</label>
-                            <input id="StillBirth-Add" name="StillBirth" class="form-control" placeholder="Enter number of Still Birth" required />
+                            <label for="AverageMonthlyIncome-Add" class="control-label">Average Monthly Income</label>
+                            <input type="number" id="AverageMonthlyIncome-Add" name="AverageMonthlyIncome" class="form-control" placeholder="Enter Average Montly Income" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="LMP" class="control-label">LMP</label>
-                            <input type="date" id="LMP-Add" name="LMP" class="form-control" required />
+                            <label for="SpouseName" class="control-label">Spouse Name</label>
+                            <input id="SpouseName-Add" name="SpouseName" class="form-control" placeholder="Enter Spouse Name" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="EDC" class="control-label">EDC</label>
-                            <input type="date" id="EDC-Add" name="EDC" class="form-control" required />
+                            <label for="SpouseOccupation" class="control-label">Spouse Name</label>
+                            <input id="SpouseOccupation-Add" name="SpouseOccupation" class="form-control" placeholder="Enter Spouse Occupation" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="DateVisit-Add" class="control-label">DateVisit</label>
-                            <input type="datetime-local" id="DateVisit-Add" name="DateVisit" class="form-control" required />
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="HRCODE" class="control-label">H.R. Code</label>
-                            <input id="HRCODE-Add" name="HRCODE" class="form-control" placeholder="Enter H.R Code"required />
+                            <label for="DateVisitFP-Add" class="control-label">DateVisit</label>
+                            <input type="datetime-local" id="DateVisitFP-Add" name="DateVisit" class="form-control" required />
                         </div>
 
                         <div class="col-md-12 mb-3">
-                            <label for="Notes" class="control-label">Notes(Optional)</label>
-                            <textarea id="Notes-Add" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
+                            <label for="NotesFP" class="control-label">Notes(Optional)</label>
+                            <textarea id="NotesFP-Add" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
                         </div>
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
@@ -152,65 +160,63 @@
         </div>
     </div>
 </div>
-
-<!-- Edit Prenatal Modal -->
-<div class="modal fade" id="prenatalEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<!-- Edit Family Planning Modal -->
+<div class="modal fade" id="FPEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Prenatal Record</h5>
+                <h5 class="modal-title">Edit Family Planning Record</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="UpdatePrenatalForm" method="POST">
+                <form id="UpdateFPForm" method="POST">
                     @Html.AntiForgeryToken()
                     <div class="row">
-                        <input type="hidden" id="caseNo-Edit" name="CaseNo" />
-                        <input type="hidden" id="patientId-Edit" name="PatientID" />
+                        <input type="hidden" id="caseNoFP-Edit" name="CaseNo" />
+                        <input type="hidden" id="patientIdFP-Edit" name="PatientID" />
 
                         <div class="col-md-6 mb-3">
-                            <label for="Gravida-Edit" class="control-label">GRAVIDA</label>
-                            <input id="Gravida-Edit" name="Gravida" class="form-control" placeholder="Enter number of Gravida" required />
+                            <label for="lvChildren-Edit" class="control-label">No Living Children</label>
+                            <input id="lvChildren-Edit" name="NoOfLivingChild" class="form-control" placeholder="Enter Number of Living Children" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="Para-Edit" class="control-label">PARA</label>
-                            <input id="Para-Edit" name="Para" class="form-control" placeholder="Enter number of Para" required />
+                            <label for="plantoHaveChildren-Edit" class="control-label">Plan to Have More Chidlren</label>
+                            <select id="plantoHaveChildren-Edit" name="PlanToHaveMoreChildren" class="form-select">
+                                <option>Select Yes or No</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="Abortion-Edit" class="control-label">ABORTION</label>
-                            <input id="Abortion-Edit" name="Abortion" class="form-control" placeholder="Enter number of Abortion" required />
+                            <label for="MethodType-Edit" class="control-label">Method Type</label>
+                            <input id="MethodType-Edit" name="MethodType" class="form-control" placeholder="Enter Method Type(e.g, Pills,etc)" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="StillBirth-Edit" class="control-label">STILL BIRTH</label>
-                            <input id="StillBirth-Edit" name="StillBirth" class="form-control" placeholder="Enter number of Still Birth" required />
+                            <label for="AverageMonthlyIncome-Edit" class="control-label">Average Monthly Income</label>
+                            <input type="number" id="AverageMonthlyIncome-Edit" name="AverageMonthlyIncome" class="form-control" placeholder="Enter Average Montly Income" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="LMP" class="control-label">LMP</label>
-                            <input type="date" id="LMP-Edit" name="LMP" class="form-control" required />
+                            <label for="SpouseName-Edit" class="control-label">Spouse Name</label>
+                            <input id="SpouseName-Edit" name="SpouseName" class="form-control" placeholder="Enter Spouse Name" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="EDC" class="control-label">EDC</label>
-                            <input type="date" id="EDC-Edit" name="EDC" class="form-control" required />
+                            <label for="SpouseOccupation-Edit" class="control-label">Spouse Occupation</label>
+                            <input id="SpouseOccupation-Edit" name="SpouseOccupation" class="form-control" placeholder="Enter Spouse Occupation" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="DateVisit-Edit" class="control-label">DateVisit</label>
-                            <input type="datetime-local" id="DateVisit-Edit" name="DateVisit" class="form-control" required />
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="HRCODE" class="control-label">H.R. Code</label>
-                            <input id="HRCODE-Edit" name="HRCODE" class="form-control" placeholder="Enter H.R Code" required />
+                            <label for="DateVisitFP-Edit" class="control-label">DateVisit</label>
+                            <input type="datetime-local" id="DateVisitFP-Edit" name="DateVisit" class="form-control" required />
                         </div>
 
                         <div class="col-md-12 mb-3">
-                            <label for="Notes" class="control-label">Notes(Optional)</label>
-                            <textarea id="Notes-Edit" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
+                            <label for="NotesFP-Edit" class="control-label">Notes(Optional)</label>
+                            <textarea id="NotesFP-Edit" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
                         </div>
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
@@ -225,54 +231,83 @@
         </div>
     </div>
 </div>
+<!-- Deleted History Modal -->
+<div class="modal fade" id="deletedFPModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger"><i class="fa-solid fa-trash"></i> Deleted Famiy Planning Records</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="FPDeletedListContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<script src="~/lib/toastr/toastr.js"></script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Reset the form when the modal is hidden
-        $('#prenatalAddModal').on('hidden.bs.modal', function () {
-            var modal = $(this);
-            // Reset the form fields after the modal is hidden
-            modal.find('form')[0].reset();
-        });
-
-
-        $("#AddPrenatalForm").on("submit", function (e) {
-            e.preventDefault();
-            AddPrenatal();
-        });
-
-        $("#UpdatePrenatalForm").on("submit", function (e) {
-            e.preventDefault();
-            UpdatePrenatal();
-        });
-
-        $(".edit-Btn").on("click", function (e) {
-            var caseNo = $(this).data('caseno');
-            EditPrenatal(caseNo);
-        });
-        
-        $(".dlt-Btn").on("click", function (e) {
-            var caseNo = $(this).data('caseno');
-            DeletePrenatal(caseNo);
-        });
-
+    var patID = document.getElementById('patID').value;
+    // Reset the form when the modal is hidden
+    $('#FPAddModal').on('hidden.bs.modal', function () {
+        var modal = $(this);
+        modal.find('form')[0].reset();
     });
 
-    // Update Prenatal Record
-    function UpdatePrenatal() {
-        var formData = $("#UpdatePrenatalForm").serialize();  
+    $("#AddFPForm").on("submit", function (e) {
+        e.preventDefault();
+        AddFP();
+    });
+
+    $("#UpdateFPForm").on("submit", function (e) {
+        e.preventDefault();
+        UpdateFP();
+    });
+
+    $(".editFP-Btn").on("click", function () {
+        var caseNo = $(this).data('caseno');
+        EditFP(caseNo);
+    });
+
+    $(".dltFP-Btn").on("click", function () {
+        var caseNo = $(this).data('caseno');
+        DeleteFP(caseNo);
+    });
+
+    $('#displayFPDeletedHistoryBtn').on('click', function () {
+        LoadFPDeletedHistoryPrenatal();
+    });
+
+    function LoadFPDeletedHistoryPrenatal() {
         $.ajax({
-            url: '@Url.Action("UpdatePrenatalRecord", "Servicess")',
+            url: '@Url.Action("DisplayDeletedFP", "Patient")',
+            type: 'GET',
+            data: { patientId: patID },
+            success: function (result) {
+                $("#FPDeletedListContainer").html(result);
+                $('#deletedFPModal').modal('show');
+            },
+            error: function () {
+                console.error("Failed to load patients data.");
+            }
+        });
+    }
+
+    // Update Prenatal Record
+    function UpdateFP() {
+        var formData = $("#UpdateFPForm").serialize();
+        $.ajax({
+            url: '@Url.Action("UpdateFPRecord", "Servicess")',
             type: 'POST',
             data: formData,
             success: function (result) {
                 if (result.isSuccess) {
-                    toastr.success('Prenatal record updated successfully!');
-                    $('#prenatalEditModal').modal('hide');
-                    location.reload();  
+                    toastr.success(result.message)
+                    LoadFamilyPlanningComponent();
+                    $('#FPEditModal').modal('hide');
                 } else {
-                    toastr.error(result.message || 'Failed to update the prenatal record.');
+                    toastr.error(result.message);
                 }
             },
             error: function (err) {
@@ -281,43 +316,39 @@
             }
         });
     }
-
     //Edit Prenatal
-    function EditPrenatal(caseNo){
+    function EditFP(caseNo) {
         $.ajax({
             type: 'GET',
-            url: '@Url.Action("EditPrenatalRecord", "Servicess")',
+            url: '@Url.Action("EditFPRecord", "Servicess")',
             data: { caseNo: caseNo },
             success: function (result) {
                 var item = result.item;
-                if (result && result.isSuccess == true){
-                    $("#caseNo-Edit").val(item.caseNo);
-                    $("#patientId-Edit").val(item.patientID);
-                    $("#Gravida-Edit").val(item.gravida);
-                    $("#Para-Edit").val(item.para);
-                    $("#Abortion-Edit").val(item.abortion);
-                    $("#StillBirth-Edit").val(item.stillBirth);
-                    // Format the dates to 'YYYY-MM-DD' for input[type="date"]
-                    $("#LMP-Edit").val(item.lmp ? item.lmp.split('T')[0] : '');
-                    $("#EDC-Edit").val(item.edc ? item.edc.split('T')[0] : '');
-                    $("#DateVisit-Edit").val(item.dateVisit);
-                    $("#HRCODE-Edit").val(item.hrcode);
-                    $("#Notes-Edit").val(item.notes);
-                    //Show Modal
-                    $('#prenatalEditModal').modal('show');
-                }else{
-                    toastr.error(result.message || 'Unable to load prenatal record.');
+                if (result && result.isSuccess == true) {
+                    $("#caseNoFP-Edit").val(item.caseNo);
+                    $("#patientIdFP-Edit").val(item.patientID);
+                    $("#lvChildren-Edit").val(item.noOfLivingChild);
+                    $("#plantoHaveChildren-Edit").val(item.planToHaveMoreChildren ? "true" : "false");
+                    $("#MethodType-Edit").val(item.methodType);
+                    $("#AverageMonthlyIncome-Edit").val(item.averageMonthlyIncome);
+                    $("#SpouseName-Edit").val(item.spouseName);
+                    $("#SpouseOccupation-Edit").val(item.spouseOccupation);
+                    $("#DateVisitFP-Edit").val(item.dateVisit);
+                    $("#NotesFP-Edit").val(item.notes);
+                    // Show Modal
+                    $('#FPEditModal').modal('show');
+                } else {
+                    toastr.error(result.message || 'Unable to load family planning record.');
                 }
             },
             error: function () {
                 toastr.error('An error occurred while loading the prenatal record.');
                 console.log('Unable to get the data.');
             }
-        })
+        });
     }
-
     //Delete Prenatal
-    function DeletePrenatal(caseNo) {
+    function DeleteFP(caseNo) {
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this, but you can see this on deleted history!",
@@ -330,11 +361,14 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: 'DELETE',
-                    url: '@Url.Action("DeletePrenatalRecord", "Servicess")',
+                    url: '@Url.Action("DeleteFPRecord", "Servicess")',
                     data: { caseNo: caseNo },
                     success: function (result) {
-                        if (result) {
-                            location.reload();
+                        if (result.isSuccess) {
+                            toastr.success(result.message)
+                            LoadFamilyPlanningComponent();
+                        }else{
+                            toastr.error(result.message);
                         }
                     },
                     error: function () {
@@ -346,21 +380,24 @@
 
 
 
-    }
-
+    }   
     //Add Prenatal
-    function AddPrenatal() {
+    function AddFP() {
         var patientId = $("#patID").val();
-        var formData = $('#AddPrenatalForm').serializeArray();
+        var formData = $('#AddFPForm').serializeArray();
         formData.push({ name: 'patientID', value: patientId });
 
         $.ajax({
-            url: '@Url.Action("AddPrenatalRecord", "Servicess")',
+            url: '@Url.Action("AddFPRecord", "Servicess")',
             type: 'POST',
             data: formData,
             success: function (result) {
                 if (result) {
-                    location.reload();
+                    toastr.success(result.message)
+                    LoadFamilyPlanningComponent();
+                    $('#AddFPForm').modal('hide');
+                } else {
+                    toastr.error(result.message);
                 }
             },
             error: function (err) {
@@ -368,5 +405,17 @@
             }
         });
     }
-
+    //Load All Records
+    function LoadFamilyPlanningComponent() {
+        $.ajax({
+            url: '@Url.Action("FamilyPlanningRecords", "Servicess")',
+            data: { patientId: patID },
+            success: function (result) {
+                $('#family-planning').html(result);
+            },
+            error: function () {
+                toastr.error("Failed to reload the Family Planning records.");
+            }
+        });
+    }
 </script>

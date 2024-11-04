@@ -11,12 +11,15 @@ namespace NatalCare_System.Controllers
     public class PatientController : BaseController<PatientController>
     {
         private readonly IPatientServices patientServices;
+        private readonly IServicesOperationServices serviceServices;
 
-        public PatientController(IPatientServices patientServices)
+        public PatientController(IPatientServices patientServices, IServicesOperationServices serviceServices)
         {
             this.patientServices = patientServices;
+            this.serviceServices = serviceServices;
         }
 
+        //Get All Patients 
         public async Task<IActionResult> Index()
         {
             var patients = await patientServices.GetPatients();
@@ -30,13 +33,7 @@ namespace NatalCare_System.Controllers
 
             return View(patients ?? new List<Patients>());
         }
-
-        public async Task<IActionResult> DisplayPatients()
-        {
-            var patients = await patientServices.GetPatients();
-            return View(patients ?? new List<Patients>());
-        }
-
+        //Redirection of Each Tab
         public async Task<IActionResult> Information(string id)
         {
             try
@@ -56,22 +53,36 @@ namespace NatalCare_System.Controllers
             var patient = await patientServices.GetInformation(id);
             return View(patient);
         }
-
-        public IActionResult Payments()
+        public async Task<IActionResult> Payments(string id)
         {
-            return View();
+            try
+            {
+                var response = await patientServices.GetInformation(id);
+                return View(response);
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = "An unexpected error occurred while retrieving patient payements records.";
+            }
+            return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> PrenatalRecord(string id)
+
+        //Services Records
+        public async Task<IActionResult> PrenatalRecord(string patientid, string caseno)
         {
-            var patient = await patientServices.GetInformation(id);
-            var prenatalRecord = await patientServices.GetPrenatalRecord(id);
+            var patient = await patientServices.GetInformation(patientid);
+            var prenatalRecord = await serviceServices.GetPrenatalRecord(patientid, caseno);
             if (prenatalRecord.CaseNo == null)
             {
-                TempData["error"] = "No data found!";
-                return RedirectToAction("MedicalRecords", "Patient", new { id = patient.PatientID });
+                TempData["error"] = "No record found!";
+                if(patient.PatientID != null)
+                {
+                    return RedirectToAction("MedicalRecords", "Patient", new { id = patient.PatientID });
+                }
+                return RedirectToAction(nameof(Index));
             }
-            var prenatalVisitRecords = await patientServices.GetPrenatalVisitsRecords(prenatalRecord.CaseNo, patient.PatientID);
+            var prenatalVisitRecords = await serviceServices.GetPrenatalVisitsRecords(prenatalRecord.CaseNo, patient.PatientID);
             var viewModel = new PatientsVM
             {
                 Patient = patient,
@@ -80,11 +91,14 @@ namespace NatalCare_System.Controllers
             };
             return View(viewModel);
         }
-        public IActionResult AddFamilyPlanning()
-        {
-            return View();
-        }
 
+        //Get All Patients for In Modal
+        public async Task<IActionResult> DisplayPatients()
+        {
+            var patients = await patientServices.GetPatients();
+            return View(patients ?? new List<Patients>());
+        }
+        //Create Patient
         public IActionResult Create()
         {
             return View();
@@ -117,6 +131,7 @@ namespace NatalCare_System.Controllers
 
             return View(patient); 
         }
+        //Edit Patient
         public async Task<IActionResult> Edit(string id)
         {
             var userId = GetCurrentUserId();
@@ -160,8 +175,7 @@ namespace NatalCare_System.Controllers
 
             return View(patient);
         }
-
-
+        //Detail Patient
         [HttpGet]
         public async Task<IActionResult> GetMotherDetails(string motherID)
         {
@@ -180,6 +194,33 @@ namespace NatalCare_System.Controllers
             }
             return Json(new { isSuccess = false, Message = "Mother not found." } );
 
+        }
+
+
+        //Display Deleted records
+        public async Task<IActionResult> DisplayDeletedPrenatal(string patientId)
+        {
+            var records = await serviceServices.GetDeletedPrenatalRecords(patientId);
+            return View(records ?? new List<Prenatal>());
+        }
+        public async Task<IActionResult> DisplayDeletedFP(string patientId)
+        {
+            var records = await serviceServices.GetDeletedFPRecords(patientId);
+            return View(records ?? new List<FamilyPlanning>());
+        }
+        //Retrieved Record
+        public async Task<IActionResult> RetrievePrenatalRecord(string caseno)
+        {
+            var userId = GetCurrentUserId();
+            var result = await serviceServices.RetrievedPrenetalAync(caseno, userId);
+            return Json(result);
+
+        }
+        public async Task<IActionResult> RetrieveFPRecord(string caseno)
+        {
+            var userId = GetCurrentUserId();
+            var result = await serviceServices.RetrievedFPAync(caseno, userId);
+            return Json(result);
         }
 
 

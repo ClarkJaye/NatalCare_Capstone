@@ -18,7 +18,7 @@ namespace NatalCare.DataAccess.Services
         //Patient
         public async Task<List<Patients>> GetPatients()
         {
-            var patients = await unitOfWork.Repository<Patients>().GetAllAsync();
+            var patients = await unitOfWork.Repository<Patients>().GetAllAsync(p => p.StatusCode == "AC");
             return patients.ToList();
         }
 
@@ -31,41 +31,6 @@ namespace NatalCare.DataAccess.Services
 
             return patient;
         }
-
-
-
-        //Services
-        public async Task<List<Prenatal>> GetPrenatalRecords(string patientId)
-        {
-            var record = await unitOfWork.Repository<Prenatal>().GetAllAsync(p => p.PatientID == patientId && p.StatusCode == "AC");
-            if (!record.Any()) 
-            {
-                return new List<Prenatal>(); 
-            }
-            return record.ToList();
-        }
-
-        public async Task<Prenatal> GetPrenatalRecord(string patientId)
-        {
-            var record = await unitOfWork.Repository<Prenatal>().GetFirstOrDefaultAsync(p => p.PatientID == patientId);
-            if (record == null)
-            {
-                return new Prenatal();
-            }
-            return record;
-        }
-        public async Task<List<PrenatalVisit>> GetPrenatalVisitsRecords(string caseNo, string patientId)
-        {
-            var record = await unitOfWork.Repository<PrenatalVisit>().GetAllAsync(p => p.CaseNo == caseNo && p.PatientID == patientId && p.StatusCode == "AC");
-            if (!record.Any())
-            {
-                return new List<PrenatalVisit>();
-            }
-            return record.ToList();
-        }
-
-
-
 
         //Patient Operations
         public async Task<bool> Create(Patients patient, string userId)
@@ -164,29 +129,7 @@ namespace NatalCare.DataAccess.Services
 
             return counts != null ? (counts.TodayCount, counts.MonthCount, counts.YearCount) : (0, 0, 0);
         }
-        //public async Task<int> GetTodayPatientCount()
-        //{
-        //    var today = DateTime.Today;
-        //    return await unitOfWork.Repository<Patients>()
-        //        .AsQueryable()
-        //        .CountAsync(p => p.Created_At >= today && p.Created_At < today.AddDays(1));
-        //}
-        //public async Task<int> GetMonthlyPatientCount()
-        //{
-        //    var startOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-        //    var startOfNextMonth = startOfMonth.AddMonths(1);
-        //    return await unitOfWork.Repository<Patients>()
-        //        .AsQueryable()
-        //        .CountAsync(p => p.Created_At >= startOfMonth && p.Created_At < startOfNextMonth);
-        //}
-        //public async Task<int> GetYearlyPatientCount()
-        //{
-        //    var startOfYear = new DateTime(DateTime.Today.Year, 1, 1);
-        //    var startOfNextYear = startOfYear.AddYears(1);
-        //    return await unitOfWork.Repository<Patients>()
-        //        .AsQueryable()
-        //        .CountAsync(p => p.Created_At >= startOfYear && p.Created_At < startOfNextYear);
-        //}
+       
         private async Task<string> GeneratePatientID()
         {
             var lastPatient = await unitOfWork.Repository<Patients>()

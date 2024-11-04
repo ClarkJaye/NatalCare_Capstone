@@ -46,7 +46,10 @@
                     <td>@patient.Address</td>
                     <td>@patient.Birthdate?.ToString("MMM dd yyyy")</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-pink" id="patientSelectBtn" data-patientid="@patient.PatientID">Select</button>
+                        <button class="btn btn-sm btn-outline-pink d-flex align-items-center gap-2" id="patientSelectBtn" data-patientid="@patient.PatientID">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Select</span>
+                        </button>
                     </td>
                 </tr>
             }

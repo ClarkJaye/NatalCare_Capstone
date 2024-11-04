@@ -155,16 +155,39 @@
                     }
 
                     <!-- Reports -->
-                    @if (accessibleModules.Any(m => m.ModuleId == 8 && m.OpenAccess == "Y"))
+                    @if (accessibleModules.Any(m => m.ModuleId == 8 && m.OpenAccess == "Y" || m.ModuleId == 9 && m.OpenAccess == "Y"))
                     {
                         <li>
-                            <a asp-controller="Reports" asp-action="Index">
+                            <a href="#reportsMenu" data-bs-toggle="collapse" class="sidebar-link collapse">
                                 <i class="fa-solid fa-chart-line"></i>
                                 <span class="text">Reports</span>
                             </a>
                         </li>
+                        <div id="reportsMenu" class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "NatalityReport"
+                        || ViewContext.RouteData.Values["controller"]?.ToString() == "InvoicesReport" ? "show" : "")">
+                            <ul>
+                                @if (accessibleModules.Any(m => m.ModuleId == 8 && m.OpenAccess == "Y"))
+                                {
+                                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "NatalityReport" ? "active" : "")">
+                                        <a asp-controller="NatalityReport" asp-action="Index">
+                                            <i class="fa-solid fa-id-badge"></i>
+                                            <span class="text">Natality Reports</span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (accessibleModules.Any(m => m.ModuleId == 9 && m.OpenAccess == "Y"))
+                                {
+                                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "InvoicesReport" ? "active" : "")">
+                                        <a asp-controller="InvoicesReport" asp-action="Index">
+                                            <i class="fa-solid fa-users"></i>
+                                            <span class="text">Payments Reports</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                    </div>
                     }
-
+                
                     <!-- Maintenance -->
                     @if (accessibleModules.Any(m => m.ModuleId == 10 && m.OpenAccess == "Y" || m.ModuleId == 11 && m.OpenAccess == "Y"))
                     {
@@ -216,7 +239,7 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <script src="~/lib/toastr/toastr.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/dataTables/datatables.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

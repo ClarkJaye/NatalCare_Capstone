@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace NatalCare.Models.Entities
 {
-    public class FamilyPlanning : BaseEntity
+    public class Delivery : BaseEntity
     {
         [Key]
         [Required]
@@ -21,6 +21,7 @@ namespace NatalCare.Models.Entities
         public DateTime? DateVisit { get; set; }
         public string? Notes { get; set; }
 
+
         // Foreign Key
         [Required]
         public string? PatientID { get; set; }
@@ -31,15 +32,15 @@ namespace NatalCare.Models.Entities
         // Tracking Columns
         public DateTime? Created_At { get; set; }
         [Column("Created_By")]
-        public string? FPCreatedBy { get; set; }
-        [ForeignKey("FPCreatedBy")]
+        public string? DLCreatedBy { get; set; }
+        [ForeignKey("DLCreatedBy")]
         [ValidateNever]
         public User? CreatedBy { get; set; }
 
         public DateTime? Updated_At { get; set; }
         [Column("Updated_By")]
-        public string? FPUpdatedBy { get; set; }
-        [ForeignKey("FPUpdatedBy")]
+        public string? DLUpdatedBy { get; set; }
+        [ForeignKey("DLUpdatedBy")]
         [ValidateNever]
         public User? UpdatedBy { get; set; }
 

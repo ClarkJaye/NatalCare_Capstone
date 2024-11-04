@@ -100,6 +100,7 @@
                 <table id="newbornTable" class="table table-hover table-striped">
                     <thead class="border-bottom-2">
                         <tr>
+                            <th>Profile</th>
                             <th>Baby No</th>
                             <th>Firstname</th>
                             <th>Middlename</th>
@@ -115,7 +116,17 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td>@item.NewbornID</td>
+                                <td>
+                                    @if (item.Gender?.ToLower() == "female")
+                                    {
+                                        <img src="~/profile/bgirl.png" width="50" height="50" alt="Profile" class="img-fluid rounded-circle" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/profile/bboy.png" width="50" height="50" alt="Profile" class="img-fluid rounded-circle" />
+                                    }
+                                </td>
+                                <th>@item.NewbornID</th>
                                 <td>@item.FirstName</td>
                                 <td>@item.MiddleName</td>
                                 <td>@item.LastName</td>

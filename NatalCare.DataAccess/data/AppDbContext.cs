@@ -73,7 +73,8 @@ namespace NatalCare.DataAccess.data
             );
             modelBuilder.Entity<Status>().HasData(
               new Status { StatusCode = "AC", StatusName = "ACTIVE" },
-              new Status { StatusCode = "IN", StatusName = "INACTTIVE" }
+              new Status { StatusCode = "IN", StatusName = "INACTTIVE" },
+              new Status { StatusCode = "DL", StatusName = "DELETE" }
             );
             modelBuilder.Entity<Category>().HasData(
               new Category { CategoryId = 1, CategoryName = "Masters", StatusCode = "AC" },

@@ -4,6 +4,7 @@ using NatalCare.DataAccess.Extensions;
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.Models.Entities;
 using NatalCare.Models.ViewModel.Patient;
+using System.Text.RegularExpressions;
 
 namespace NatalCare_System.Controllers
 {
@@ -66,7 +67,6 @@ namespace NatalCare_System.Controllers
 
             if (result.IsSuccess == true)
             {
-                TempData["success"] = result.Message;
                 return View(result.Item);
             }
             return RedirectToAction(nameof(Index));
@@ -77,30 +77,23 @@ namespace NatalCare_System.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Newborn newborn)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
                     var userId = GetCurrentUserId();
-
                     var result = await newbornServices.Update(newborn, userId);
-
                     if (result.IsSuccess == true)
                     {
                         TempData["success"] = result.Message;
                         return RedirectToAction("Information", "Newborn", new { id = result.Item });
                     }
                 }
-                catch (ArgumentException argEx)
-                {
-                    TempData["error"] = argEx.Message;
-                }
-                catch (Exception ex)
-                {
-                    TempData["error"] = "An error occurred while updating the patient.";
-                }
             }
-
+            catch (Exception ex)
+            {
+                TempData["error"] = ex + "= An error occurred while updating the patient.";
+            }
             return View(newborn);
         }
 
@@ -118,7 +111,7 @@ namespace NatalCare_System.Controllers
             }
             catch (Exception ex)
             {
-                TempData["error"] = "An unexpected error occurred while retrieving patient information.";
+                TempData["error"] = ex + "= An unexpected error occurred while retrieving patient information.";
             }
             return RedirectToAction(nameof(Index));
         }

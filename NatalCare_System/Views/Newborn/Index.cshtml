@@ -109,6 +109,7 @@
                             <th>Time of Birth</th>
                             <th>Mother Full Name</th>
                             <th>Date Added</th>
+                            <th>Added By</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
@@ -134,12 +135,17 @@
                                 <td>@item.TimeofBirth</td>
                                 <td>@item.Patient?.FirstName @item.Patient?.MiddleName @item.Patient?.LastName</td>
                                 <td>@item.Created_At?.ToString("MMM dd yyyy h:mm tt")</td>
-                                <td>
-                                    <div class="d-flex align-items-center justify-content-center gap-4">
+                                <td>@item.CreatedBy?.FirstName @item.CreatedBy?.LastName</td>
+                                <td class="text-center">
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
                                         <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Newborn" asp-action="Information" asp-route-id="@item.NewbornID">
                                             <i class="fa-solid fa-list"></i>
                                             <span>Record</span>
                                         </a>
+                                        <button class="btn btn-sm btn-outline-danger dltFP-Btn" data-patientid="@item.NewbornID">
+                                            <i class="fa-solid fa-trash"></i>
+                                            <span>Delete</span>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>

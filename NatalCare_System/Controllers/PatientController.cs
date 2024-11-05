@@ -175,6 +175,27 @@ namespace NatalCare_System.Controllers
 
             return View(patient);
         }
+        // DELETE 
+        [HttpDelete]
+        public async Task<JsonResult> DeletePatientRecord(string patientid)
+        {
+            try
+            {
+                if (patientid != null)
+                {
+                    var userId = GetCurrentUserId();
+                    var result = await patientServices.Delete(patientid, userId);
+                    return Json(result);
+                }
+                return Json(new { IsSuccess = false, Message = "Delete Record failed!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while deleting family planning record for Patient");
+                return Json(new { IsSuccess = false, Message = "An error occurred in DeleteFPRecord." });
+            }
+        }
+
         //Detail Patient
         [HttpGet]
         public async Task<IActionResult> GetMotherDetails(string motherID)

@@ -16,8 +16,9 @@ namespace NatalCare.DataAccess.Services
         }
 
         public async Task<List<Newborn>> GetNewborns()
-        {
-            var newborns = await unitOfWork.Repository<Newborn>().GetAllAsync(includeProperties: "Patient");
+        { 
+            var newborns = await unitOfWork.Repository<Newborn>()
+                .GetAllAsync(p => p.StatusCode == "AC", includeProperties: "Patient,CreatedBy");
             return newborns.ToList();
 
             //var newborns = await unitOfWork.Repository<Newborn>()

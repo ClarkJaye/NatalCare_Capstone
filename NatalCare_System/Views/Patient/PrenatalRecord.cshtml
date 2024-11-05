@@ -26,7 +26,7 @@
                         <i class="fas fa-plus"></i>
                         <span>Add New Visit</span>
                     </a>
-                    <a asp-controller="" asp-action="" class="btn btn-sm btn-outline-pink" data-bs-toggle="modal" data-bs-target="#prenatalVisitAddModal">
+                    <a asp-controller="" asp-action="" class="btn btn-sm btn-outline-pink" data-bs-toggle="modal" data-bs-target="#prenatalVisitDetailModal">
                         <i class="fas fa-eye"></i>
                         <span>See All Detailed</span>
                     </a>
@@ -215,93 +215,6 @@
         </div>
     </div>
 </div>
-
-<!-- Details Prenatal Visit Modal -->
-<div class="modal fade" id="prenatalVisitDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Prenatal Visit Detail: <span class="text-pink" id="numVisit-detail"></span></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="row">
-                        <input type="hidden" id="caseNo-detail" name="CaseNo" />
-                        <input type="hidden" id="patientId-detail" name="PatientID" />
-
-                        <div class="col-md-6 mb-3">
-                            <label for="AOGWeek-detail" class="control-label">AOG Week</label>
-                            <input id="AOGWeek-detail" name="AOGWeek" class="form-control" placeholder="Enter AOG Week" readonly />
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="Weight-detail" class="control-label">Weight</label>
-                            <input id="Weight-detail" name="Weight" class="form-control" placeholder="Enter Weight" readonly />
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="BP-detail" class="control-label">Blood Pressure</label>
-                            <input id="BP-detail" name="BP" class="form-control" placeholder="Enter BP" readonly />
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="FH-detail" class="control-label">Fundal Height</label>
-                            <input id="FH-detail" name="FH" class="form-control" placeholder="Enter Fundal Height" readonly />
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="FHT-detail" class="control-label">Fetal Heart Rate</label>
-                            <input id="FHT-detail" name="FHT" class="form-control" placeholder="Enter Fetal Heart Rate" readonly />
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="Temp-detail" class="control-label">Temperature</label>
-                            <input id="Temp-detail" name="Temp" class="form-control" placeholder="Enter Temperature" readonly />
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="CR-detail" class="control-label">CR</label>
-                            <input id="CR-detail" name="CR" class="form-control" placeholder="Enter CR" readonly />
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="RR-detail" class="control-label">RR</label>
-                            <input id="RR-detail" name="RR" class="form-control" placeholder="Enter RR" readonly />
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="DateVisit-detail" class="control-label">Date of Visit</label>
-                            <input type="datetime-local" id="DateVisit-detail" name="DateVisit" class="form-control" readonly />
-                        </div>
-
-                        <div class="col-md-12 mb-3">
-                            <label for="PhyAsses-detail" class="control-label">Physical Assessment</label>
-                            <textarea id="PhyAsses-detail" name="PhysicalAssessment" class="form-control" placeholder="Enter Physical Assessment" rows="3" readonly></textarea>
-                        </div>
-
-                        <div class="col-md-12 mb-3">
-                            <label for="Notes-detail" class="control-label">Notes</label>
-                            <textarea id="Notes-detail" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3" readonly></textarea>
-                        </div>
-
-                        <div class="col-md-12 mb-3">
-                            <label for="RX-detail" class="control-label">Prescription</label>
-                            <textarea id="RX-detail" name="RX" class="form-control" placeholder="Enter advice prescription" rows="3" readonly></textarea>
-                        </div>
-
-                        <div class="col-12 mt-3 d-flex justify-content-end">
-                            <div class="d-flex align-items-center gap-2">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Edit Prenatal Visit Modal -->
 <div class="modal fade" id="prenatalVisitEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -393,8 +306,69 @@
         </div>
     </div>
 </div>
+<!-- Details Prenatal Visit Modal -->
+<div class="modal fade" id="prenatalVisitDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Prenatal Form</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="Gravida-Edit" class="control-label">GRAVIDA</label>
+                            <input id="Gravida-Edit" name="Gravida" class="form-control" placeholder="Enter number of Gravida" required />
+                        </div>
 
+                        <div class="col-md-3 mb-3">
+                            <label for="Para-Edit" class="control-label">PARA</label>
+                            <input id="Para-Edit" name="Para" class="form-control" placeholder="Enter number of Para" required />
+                        </div>
 
+                        <div class="col-md-3 mb-3">
+                            <label for="Abortion-Edit" class="control-label">ABORTION</label>
+                            <input id="Abortion-Edit" name="Abortion" class="form-control" placeholder="Enter number of Abortion" required />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="StillBirth-Edit" class="control-label">STILL BIRTH</label>
+                            <input id="StillBirth-Edit" name="StillBirth" class="form-control" placeholder="Enter number of Still Birth" required />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="LMP" class="control-label">LMP</label>
+                            <input type="date" id="LMP-Edit" name="LMP" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="EDC" class="control-label">EDC</label>
+                            <input type="date" id="EDC-Edit" name="EDC" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="DateVisit-Edit" class="control-label">DateVisit</label>
+                            <input type="datetime-local" id="DateVisit-Edit" name="DateVisit" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="HRCODE" class="control-label">H.R. Code</label>
+                            <input id="HRCODE-Edit" name="HRCODE" class="form-control" placeholder="Enter H.R Code" required />
+                        </div>
+
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button" class="btn btn-success">Print</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

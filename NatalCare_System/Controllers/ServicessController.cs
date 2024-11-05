@@ -176,7 +176,7 @@ namespace NatalCare_System.Controllers
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"Error occurred while Edit prenatal record for Patient");
-                return Json(new { IsSuccess = false, Message = "An error occurred in DeletePrenatalRecord." });
+                return Json(new { IsSuccess = false, Message = "An error occurred in EditPrenatalRecord." });
             }
         }
         // UPDATE

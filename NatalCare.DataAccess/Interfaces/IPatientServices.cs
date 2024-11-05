@@ -1,4 +1,5 @@
 ﻿using NatalCare.Models.Entities;
+using static NatalCare.DataAccess.Response.ServiceResponses;
 
 namespace NatalCare.DataAccess.Interfaces
 {
@@ -11,6 +12,7 @@ namespace NatalCare.DataAccess.Interfaces
         Task<bool> Create(Patients patient, string userId);
         Task<Patients> Edit(string id, string userId);
         Task<bool> Update(Patients patient, string userId);
+        Task<CommonResponse> Delete(string id, string userId);
 
         //ViewBag
         Task<(int todayCount, int monthCount, int yearCount)> GetPatientCountsAsync();

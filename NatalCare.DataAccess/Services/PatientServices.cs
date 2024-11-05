@@ -3,6 +3,7 @@ using NatalCare.DataAccess.Interfaces;
 using NatalCare.DataAccess.Repository.IRepository;
 using NatalCare.Models.Entities;
 using NatalCare.Models.ViewModel;
+using static NatalCare.DataAccess.Response.ServiceResponses;
 
 namespace NatalCare.DataAccess.Services
 {
@@ -18,7 +19,8 @@ namespace NatalCare.DataAccess.Services
         //Patient
         public async Task<List<Patients>> GetPatients()
         {
-            var patients = await unitOfWork.Repository<Patients>().GetAllAsync(p => p.StatusCode == "AC");
+            var patients = await unitOfWork.Repository<Patients>()
+            .GetAllAsync(p => p.StatusCode == "AC", includeProperties: "CreatedBy");
             return patients.ToList();
         }
 
@@ -105,10 +107,24 @@ namespace NatalCare.DataAccess.Services
             unitOfWork.Repository<Patients>().Update(existingPatient);
             return await unitOfWork.Complete() > 0;
         }
+        public async Task<CommonResponse> Delete(string id, string userId)
+        {
+            if (id == null) return new CommonResponse(false, "id is null!");
+
+            var item = await unitOfWork.Repository<Patients>().GetFirstOrDefaultAsync(x => x.PatientID == id);
+            if (item == null) return new CommonResponse(false, "Patient record not existing.");
+
+            item.StatusCode = "DL";
+            item.Updated_At = DateTime.Now;
+            item.PatientUpdatedBy = userId;
+
+            unitOfWork.Repository<Patients>().Update(item);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Patient record deleted successfully");
+        }
 
 
         // HELPER
-
         public async Task<(int todayCount, int monthCount, int yearCount)> GetPatientCountsAsync()
         {
             var today = DateTime.Today;

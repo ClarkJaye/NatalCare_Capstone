@@ -1,6 +1,4 @@
-﻿@model List<NatalCare.Models.Entities.Patients>
-
-@{
+﻿@{
     ViewData["Title"] = "Patients Records";
     Layout = "_UserLayout";
 }
@@ -95,151 +93,15 @@
     </div>
 
     <div class="card shadow-sm card-selected">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="patientsTable" class="table table-hover table-striped">
-                    <thead class="border-bottom-2">
-                        <tr>
-                            <th>Profile</th>
-                            <th>Patient No</th>
-                            <th>Firstname</th>
-                            <th>Middlename</th>
-                            <th>Lastname</th>
-                            <th>Age</th>
-                            <th>Gender</th>
-                            <th>Address</th>
-                            <th>Date of Birth</th>
-                            <th>Date Added</th>
-                            <th>Added By</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var patient in Model)
-                        {
-                            <tr class="align-middle">
-                                <td>
-                                    @if (patient.Gender?.ToLower() == "female")
-                                    {
-                                        <img src="~/profile/woman.png" width="50" height="50" alt="Profile" class="img-fluid rounded-circle" />
-                                    }
-                                    else
-                                    {
-                                        <img src="~/profile/man.png" width="50" height="50" alt="Profile" class="img-fluid rounded-circle" />
-                                    }
-                                </td>
-                                <th>@patient.PatientID</th>
-                                <td>@patient.FirstName</td>
-                                <td>@patient.MiddleName</td>
-                                <td>@patient.LastName</td>
-                                <td>
-                                    @{
-                                        if (patient.Birthdate.HasValue)
-                                        {
-                                            var birthYear = patient.Birthdate.Value.Year;
-                                            var currentYear = DateTime.Now.Year;
-                                            var age = currentYear - birthYear;
-                                            <text>@age</text>
-                                        }
-                                        else
-                                        {
-                                            @:N/A
-                                        }
-                                    }
-                                </td>
-                                <td>@patient.Gender</td>
-                                <td>@patient.Address</td>
-                                <td>@patient.Birthdate?.ToString("MMM dd yyyy")</td>
-                                <td>@patient.Created_At?.ToString("MMM dd yyyy h:mm tt")</td>
-                                <td>@patient.CreatedBy?.FirstName @patient.CreatedBy?.LastName</td>
-                                <td class="text-center">
-                                    <div class="d-flex align-items-center justify-content-center gap-2">
-                                        <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Patient" asp-action="Information" asp-route-id="@patient.PatientID">
-                                            <i class="fa-solid fa-list"></i>
-                                            <span>Record</span>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger dltFP-Btn" data-patientid="@patient.PatientID">
-                                            <i class="fa-solid fa-trash"></i>
-                                            <span>Delete</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+        <div class="card-body" id="patientsContainer">
+            @await Component.InvokeAsync("PatientsRecords")
         </div>
     </div>
 </div>
 
+
+
 @section Scripts {
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Initialize DataTables
-            $('#patientsTable').DataTable({
-                paging: true,
-                lengthChange: true,
-                searching: true,
-                ordering: true,
-                lengthMenu: [10, 20, 50, 100],
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search patients..."
-                },
-                language: {
-                    paginate: {
-                        previous: "Previous",
-                        next: "Next"
-                    }
-                },
-                info: true,
-                autoWidth: false,
-                responsive: true,
-                columnDefs: [
-                    { orderable: false, targets: -1 }
-                ]
-            });
-
-
-            $(".dlt-Btn").on("click", function (e) {
-                var patientid = $(this).data('patientid');
-                DeletePatient(patientid);
-            });
-        });
-
-        //Delete Prenatal
-        function DeletePatient(patientid) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this, but you can see this on deleted history!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        type: 'DELETE',
-                        url: '@Url.Action("DeletePatientRecord", "Patient")',
-                        data: { patientid: patientid },
-                        success: function (result) {
-                            if (result.isSuccess) {
-                                toastr.success(result.message)
-                                location.reload()
-                            } else {
-                                toastr.error(result.message);
-                            }
-                        },
-                        error: function () {
-                            console.log('Unable to get the data.');
-                        }
-                    })
-                }
-            });
-        }
-    </script>
+    <script src="/js/patientScripts.js"></script>
 }
-
 

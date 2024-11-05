@@ -280,7 +280,7 @@
 
     function LoadFPDeletedHistoryPrenatal() {
         $.ajax({
-            url: '@Url.Action("DisplayDeletedFP", "Patient")',
+            url: '@Url.Action("DisplayDeletedFP", "FamilyPlanning")',
             type: 'GET',
             data: { patientId: patID },
             success: function (result) {

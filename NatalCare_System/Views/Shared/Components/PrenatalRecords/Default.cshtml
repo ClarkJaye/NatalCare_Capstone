@@ -50,7 +50,7 @@
                         <td>@item.Notes</td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
-                                <a asp-controller="Patient" asp-action="PrenatalRecord" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-sm btn-outline-secondary">
+                                <a asp-controller="Prenatal" asp-action="PrenatalRecord" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-sm btn-outline-secondary">
                                     <i class="fa-solid fa-list"></i>
                                     <span>Record</span>
                                 </a>
@@ -277,7 +277,7 @@
 
     function LoadDeletedHistoryPrenatal() {
         $.ajax({
-            url: '@Url.Action("DisplayDeletedPrenatal", "Patient")',
+            url: '@Url.Action("DisplayDeletedPrenatal", "Prenatal")',
             type: 'GET',
             data: { patientId: patID },
             success: function (result) {
@@ -389,7 +389,7 @@
                 if (result.isSuccess) {
                     toastr.success(result.message)
                     LoadPrenatalComponent();
-                    $('#prenatalEditModal').modal('hide');
+                    $('#prenatalAddModal').modal('hide');
                 } else {
                     toastr.error(result.message);
                 }

@@ -1,0 +1,110 @@
+﻿@model List<NatalCare.Models.Entities.FamilyPlanning>
+
+@{
+    Layout = null;
+}
+
+<div class="table-responsive">
+    <table id="deletedFPTable" class="table table-hover table-striped table-datatable">
+        <thead class="border-bottom-2">
+            <tr>
+                <th>Case No#</th>
+                <th>Date Visit</th>
+                <th>No Living Children</th>
+                <th>Plan to Have More Chidlren</th>
+                <th>Method Type</th>
+                <th>Average Monthly Income</th>
+                <th>Spouse Name</th>
+                <th>Spouse Name Occupation</th>
+                <th>Notes</th>
+                <th class="text-center">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CaseNo</td>
+                    <td>@item.DateVisit?.ToString("MMM dd yyyy h:mm tt")</td>
+                    <td>@item.NoOfLivingChild</td>
+                    <td>
+                        @if (item.PlanToHaveMoreChildren == true)
+                        {
+                            <text>Yes</text>
+                        }
+                        else
+                        {
+                            <text>No</text>
+                        }
+                    </td>
+                    <td>@item.MethodType</td>
+                    <td>@item.AverageMonthlyIncome</td>
+                    <td>@item.SpouseName</td>
+                    <td>@item.SpouseOccupation</td>
+                    <td>@item.Notes</td>
+                    <td>
+                        <button id="retreiveFPBtn" class="btn btn-sm btn-outline-pink d-flex align-items-center gap-2" data-caseno="@item.CaseNo">
+                            <i class="fa-solid fa-undo"></i>
+                            <span>Retrieve</span>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    // Initialize DataTables
+    $('#FPDeletedListContainer #deletedFPTable').DataTable({
+        paging: true,
+        lengthChange: true,
+        searching: true,
+        ordering: true,
+        lengthMenu: [10, 20, 50, 100],
+        language: {
+            search: "_INPUT_",
+            searchPlaceholder: "Search record..."
+        },
+        language: {
+            paginate: {
+                previous: "Previous",
+                next: "Next"
+            }
+        },
+        info: true,
+        autoWidth: false,
+        responsive: true,
+        columnDefs: [
+            { orderable: false, targets: -1 }
+        ]
+    });
+
+    $("#retreiveFPBtn").on("click", function () {
+        var caseno = $(this).data('caseno');
+            retrieveRecord(caseno);
+    });
+
+        function retrieveRecord(caseno){
+        $.ajax({
+            url: '@Url.Action("RetrieveFPRecord", "FamilyPlanning")',
+            type: 'POST',
+            data: { caseno: caseno },
+            success: function (result) {
+                if (result.isSuccess) {
+                    toastr.success(result.message)
+                    LoadFamilyPlanningComponent();
+                    $('#deletedFPModal').modal('hide');
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function () {
+                console.error("Failed to load records.");
+            }
+        });
+    }
+</script>
+
+

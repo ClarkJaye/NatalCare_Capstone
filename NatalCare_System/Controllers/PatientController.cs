@@ -207,10 +207,20 @@ namespace NatalCare_System.Controllers
             return Json(new { isSuccess = false, Message = "Mother not found." } );
 
         }
+        //Get All Deleted Patient
+        public async Task<IActionResult> DisplayDeletedPatient()
+        {
+            var records = await patientServices.GetDeletedPatients();
+            return View(records ?? new List<Patients>());
+        }
 
-
-
-
+        //Retrieved Record
+        public async Task<IActionResult> RetrieveRecord(string caseno)
+        {
+            var userId = GetCurrentUserId();
+            var result = await patientServices.RetrievedAync(caseno, userId);
+            return Json(result);
+        }
 
         ////Services Records
         //public async Task<IActionResult> PrenatalRecord(string patientid, string caseno)

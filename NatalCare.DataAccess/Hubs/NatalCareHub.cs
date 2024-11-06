@@ -34,11 +34,6 @@ namespace PrinceQ.DataAccess.Hubs
 
             await base.OnDisconnectedAsync(exception);
         }
-
-
-
-
-
    
     }
 }

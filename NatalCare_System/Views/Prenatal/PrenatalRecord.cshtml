@@ -84,7 +84,7 @@
                                     <td>@item.FHT</td>
                                     <td>@item.Temp</td>
                                     <td>@item.CR</td>
-                                    <td>@item.RR</td> 
+                                    <td>@item.RR</td>
                                     <td>@item.PhysicalAssessment</td>
                                     <td>
                                         <div class="d-flex align-items-center justify-content-center gap-2">
@@ -112,7 +112,7 @@
                                     No data available.
                                 </td>
                             </tr>
-                        }          
+                        }
 
                         <!-- No match found row -->
                         <tr class="no-record-found" style="display: none;">
@@ -202,7 +202,7 @@
                             <label for="RX-ADD" class="control-label">RX (optional)</label>
                             <textarea id="RX-Add" name="RX" class="form-control" placeholder="Enter advice prescription" rows="3"></textarea>
                         </div>
-                      
+
                         <div class="col-12 mt-3 d-flex justify-content-end">
                             <div class="d-flex align-items-center gap-2">
                                 <button type="submit" class="btn btn-pink">Save</button>
@@ -374,221 +374,216 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-}
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/toastr/toastr.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        $('.filterInput').on('keyup', function () {
-            var value = $(this).val().toLowerCase();
-            var rows = $('tbody tr:not(.no-record-found)');
-            var noRecordRow = $('.no-record-found');
 
-            // Filter rows
-            var visibleRows = rows.filter(function () {
-                return $(this).text().toLowerCase().indexOf(value) > -1;
-            }).toggle(true);
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            $('.filterInput').on('keyup', function () {
+                var value = $(this).val().toLowerCase();
+                var rows = $('tbody tr:not(.no-record-found)');
+                var noRecordRow = $('.no-record-found');
+                // Filter rows
+                var visibleRows = rows.filter(function () {
+                    return $(this).text().toLowerCase().indexOf(value) > -1;
+                }).toggle(true);
 
-            // Hide rows that do not match
-            rows.not(visibleRows).toggle(false);
-
-            // If no rows are visible, show the "No match found" message
-            if (visibleRows.length === 0) {
-                noRecordRow.show();  // Show the no match found row
-            } else {
-                noRecordRow.hide();  // Hide the no match found row
-            }
-        });
-
-        // Reset the form when the modal is hidden
-        $('#prenatalVisitAddModal').on('hidden.bs.modal', function () {
-            var modal = $(this);
-            // Reset the form fields after the modal is hidden
-            modal.find('form')[0].reset();
-        });
-
-        // ADD
-        $("#AddPrenatalVisitForm").on("submit", function (e) {
-            e.preventDefault();
-            AddPrenatalVisit();
-        });
-        //Detail
-        $(".detail-Btn").on("click", function (e) {
-            var caseNo = $(this).data('caseno');
-            PrenatalVisitDetail(caseNo);
-        });
-        //Edit
-        $(".edit-Btn").on("click", function (e) {
-            var caseNo = $(this).data('caseno');
-            PrenatalVisitEdit(caseNo);
-        });
-        // UPDATE
-        $("#UpdatePrenatalVisitForm").on("submit", function (e) {
-            e.preventDefault();
-            UpdatePrenatalVisit();
-        });
-        // DELETE
-        $(".dlt-Btn").on("click", function (e) {
-            var caseNo = $(this).data('caseno');
-            DeletePrenatal(caseNo);
-        });
-    });
-
-    //Update Prenatal Visit
-    function UpdatePrenatalVisit(){
-        var formData = $("#UpdatePrenatalVisitForm").serialize();
-        console.log(formData)
-        $.ajax({
-            url: '@Url.Action("UpdatePrenatalVisitRecord", "Servicess")',
-            type: 'POST',
-            data: formData,
-            success: function (result) {
-                if (result.isSuccess) {
-                    toastr.success('Prenatal Visit record updated successfully!');
-                    $('#prenatalVisitEditModal').modal('hide');
-                    location.reload();
+                rows.not(visibleRows).toggle(false);
+                if (visibleRows.length === 0) {
+                    noRecordRow.show(); 
                 } else {
-                    toastr.error(result.message || 'Failed to update the prenatal visit record.');
+                    noRecordRow.hide();  
                 }
-            },
-            error: function (err) {
-                toastr.error('An error occurred while updating the prenatal visit record.');
-                console.error('Error:', err);
-            }
-        });
-    }
+            });
 
-    //Delete Prenatal Visit
-    function DeletePrenatal(caseNo) {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this, but you can see this on deleted history!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: 'DELETE',
-                    url: '@Url.Action("DeletePrenatalVisitRecord", "Servicess")',
-                    data: { caseNo: caseNo },
-                    success: function (result) {
-                        if (result) {
-                            location.reload();
-                        }
-                    },
-                    error: function () {
-                        console.log('Unable to get the data.');
+            // Reset the form when the modal is hidden
+            $('#prenatalVisitAddModal').on('hidden.bs.modal', function () {
+                var modal = $(this);
+                modal.find('form')[0].reset();
+            });
+
+            // ADD
+            $("#AddPrenatalVisitForm").on("submit", function (e) {
+                e.preventDefault();
+                AddPrenatalVisit();
+            });
+            //Detail
+            $(".detail-Btn").on("click", function (e) {
+                var caseNo = $(this).data('caseno');
+                PrenatalVisitDetail(caseNo);
+            });
+            //Edit
+            $(".edit-Btn").on("click", function (e) {
+                var caseNo = $(this).data('caseno');
+                PrenatalVisitEdit(caseNo);
+            });
+            // UPDATE
+            $("#UpdatePrenatalVisitForm").on("submit", function (e) {
+                e.preventDefault();
+                UpdatePrenatalVisit();
+            });
+            // DELETE
+            $(".dlt-Btn").on("click", function (e) {
+                var caseNo = $(this).data('caseno');
+                DeletePrenatal(caseNo);
+            });
+        });
+
+        //Update Prenatal Visit
+        function UpdatePrenatalVisit() {
+            var formData = $("#UpdatePrenatalVisitForm").serialize();
+            console.log(formData)
+            $.ajax({
+                url: '@Url.Action("UpdatePrenatalVisitRecord", "Servicess")',
+                type: 'POST',
+                data: formData,
+                success: function (result) {
+                    if (result.isSuccess) {
+                        toastr.success('Prenatal Visit record updated successfully!');
+                        $('#prenatalVisitEditModal').modal('hide');
+                        location.reload();
+                    } else {
+                        toastr.error(result.message || 'Failed to update the prenatal visit record.');
                     }
-                })
-            }
-        });
-
-
-
-    }
-
-    //Edit Prenatal Visit
-    function PrenatalVisitEdit(caseNo) {
-        $.ajax({
-            type: 'GET',
-            url: '@Url.Action("DetailPrenatalVisitRecord", "Servicess")',
-            data: { caseNo: caseNo },
-            success: function (result) {
-                var item = result.item;
-                if (result && result.isSuccess == true) {
-                    $("#caseNo-edit").val(item.caseNo);
-                    $("#patientId-edit").val(item.patientID);
-                    $("#numVisit-edit").text(item.numberOfVisit + " Visit");
-                    $("#numOfVisit-edit").val(item.numberOfVisit);
-                    $("#AOGWeek-edit").val(item.aogWeek);
-                    $("#Weight-edit").val(item.weight);
-                    $("#BP-edit").val(item.bp);
-                    $("#FH-edit").val(item.fh);
-                    $("#FHT-edit").val(item.fht);
-                    $("#Temp-edit").val(item.temp);
-                    $("#CR-edit").val(item.cr);
-                    $("#RR-edit").val(item.rr);
-                    $("#DateVisit-edit").val(item.dateVisit);
-                    $("#PhyAsses-edit").val(item.physicalAssessment);
-                    $("#Notes-edit").val(item.notes);
-                    $("#RX-edit").val(item.rx);
-
-                    //Show Modal
-                    $('#prenatalVisitEditModal').modal('show');
-                } else {
-                    toastr.error(result.message || 'Unable to load prenatal record.');
+                },
+                error: function (err) {
+                    toastr.error('An error occurred while updating the prenatal visit record.');
+                    console.error('Error:', err);
                 }
-            },
-            error: function () {
-                toastr.error('An error occurred while loading the prenatal record.');
-                console.log('Unable to get the data.');
-            }
-        })
-    }
+            });
+        }
 
-    //Detail Prenatal Visit
-    function PrenatalVisitDetail(caseNo) {
-        $.ajax({
-            type: 'GET',
-            url: '@Url.Action("DetailPrenatalVisitRecord", "Servicess")',
-            data: { caseNo: caseNo },
-            success: function (result) {
-                var item = result.item;
-                if (result && result.isSuccess == true) {
-                    $("#caseNo-detail").val(item.caseNo);
-                    $("#patientId-detail").val(item.patientID);
-                    $("#numVisit-detail").text(item.numberOfVisit + " Visit");
-                    $("#AOGWeek-detail").val(item.aogWeek);
-                    $("#Weight-detail").val(item.weight);
-                    $("#BP-detail").val(item.bp);
-                    $("#FH-detail").val(item.fh);
-                    $("#FHT-detail").val(item.fht);
-                    $("#Temp-detail").val(item.temp);
-                    $("#CR-detail").val(item.cr);
-                    $("#RR-detail").val(item.rr);
-                    $("#DateVisit-detail").val(item.dateVisit);
-                    $("#PhyAsses-detail").val(item.physicalAssessment);
-                    $("#Notes-detail").val(item.notes);
-                    $("#RX-detail").val(item.rx);
-                  
-                    //Show Modal
-                    $('#prenatalVisitDetailModal').modal('show');
-                } else {
-                    toastr.error(result.message || 'Unable to load prenatal record.');
+        //Delete Prenatal Visit
+        function DeletePrenatal(caseNo) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this, but you can see this on deleted history!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '@Url.Action("DeletePrenatalVisitRecord", "Servicess")',
+                        data: { caseNo: caseNo },
+                        success: function (result) {
+                            if (result) {
+                                location.reload();
+                            }
+                        },
+                        error: function () {
+                            console.log('Unable to get the data.');
+                        }
+                    })
                 }
-            },
-            error: function () {
-                toastr.error('An error occurred while loading the prenatal record.');
-                console.log('Unable to get the data.');
-            }
-        })
-    }
+            });
 
-    //Add Prenatal Visit
-    function AddPrenatalVisit() {
-        var patientId = $("#patID").val();
-        var caseNo = $("#caseID").val();
-        var formData = $('#AddPrenatalVisitForm').serializeArray();
-        formData.push({ name: 'patientID', value: patientId });
-        formData.push({ name: 'caseNo', value: caseNo });
 
-        console.log(formData)
 
-        $.ajax({
-            url: '@Url.Action("AddPrenatalVisitRecord", "Servicess")',
-            type: 'POST',
-            data: formData,
-            success: function (result) {
-                if (result) {
-                    location.reload();
+        }
+
+        //Edit Prenatal Visit
+        function PrenatalVisitEdit(caseNo) {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("DetailPrenatalVisitRecord", "Servicess")',
+                data: { caseNo: caseNo },
+                success: function (result) {
+                    var item = result.item;
+                    if (result && result.isSuccess == true) {
+                        $("#caseNo-edit").val(item.caseNo);
+                        $("#patientId-edit").val(item.patientID);
+                        $("#numVisit-edit").text(item.numberOfVisit + " Visit");
+                        $("#numOfVisit-edit").val(item.numberOfVisit);
+                        $("#AOGWeek-edit").val(item.aogWeek);
+                        $("#Weight-edit").val(item.weight);
+                        $("#BP-edit").val(item.bp);
+                        $("#FH-edit").val(item.fh);
+                        $("#FHT-edit").val(item.fht);
+                        $("#Temp-edit").val(item.temp);
+                        $("#CR-edit").val(item.cr);
+                        $("#RR-edit").val(item.rr);
+                        $("#DateVisit-edit").val(item.dateVisit);
+                        $("#PhyAsses-edit").val(item.physicalAssessment);
+                        $("#Notes-edit").val(item.notes);
+                        $("#RX-edit").val(item.rx);
+
+                        //Show Modal
+                        $('#prenatalVisitEditModal').modal('show');
+                    } else {
+                        toastr.error(result.message || 'Unable to load prenatal record.');
+                    }
+                },
+                error: function () {
+                    toastr.error('An error occurred while loading the prenatal record.');
+                    console.log('Unable to get the data.');
                 }
-            },
-            error: function (err) {
-                console.error('Error:', err);
-            }
-        });
-    }
-</script>
+            })
+        }
+
+        //Detail Prenatal Visit
+        function PrenatalVisitDetail(caseNo) {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("DetailPrenatalVisitRecord", "Servicess")',
+                data: { caseNo: caseNo },
+                success: function (result) {
+                    var item = result.item;
+                    if (result && result.isSuccess == true) {
+                        $("#caseNo-detail").val(item.caseNo);
+                        $("#patientId-detail").val(item.patientID);
+                        $("#numVisit-detail").text(item.numberOfVisit + " Visit");
+                        $("#AOGWeek-detail").val(item.aogWeek);
+                        $("#Weight-detail").val(item.weight);
+                        $("#BP-detail").val(item.bp);
+                        $("#FH-detail").val(item.fh);
+                        $("#FHT-detail").val(item.fht);
+                        $("#Temp-detail").val(item.temp);
+                        $("#CR-detail").val(item.cr);
+                        $("#RR-detail").val(item.rr);
+                        $("#DateVisit-detail").val(item.dateVisit);
+                        $("#PhyAsses-detail").val(item.physicalAssessment);
+                        $("#Notes-detail").val(item.notes);
+                        $("#RX-detail").val(item.rx);
+
+                        //Show Modal
+                        $('#prenatalVisitDetailModal').modal('show');
+                    } else {
+                        toastr.error(result.message || 'Unable to load prenatal record.');
+                    }
+                },
+                error: function () {
+                    toastr.error('An error occurred while loading the prenatal record.');
+                    console.log('Unable to get the data.');
+                }
+            })
+        }
+
+        //Add Prenatal Visit
+        function AddPrenatalVisit() {
+            var patientId = $("#patID").val();
+            var caseNo = $("#caseID").val();
+            var formData = $('#AddPrenatalVisitForm').serializeArray();
+            formData.push({ name: 'patientID', value: patientId });
+            formData.push({ name: 'caseNo', value: caseNo });
+
+            console.log(formData)
+
+            $.ajax({
+                url: '@Url.Action("AddPrenatalVisitRecord", "Servicess")',
+                type: 'POST',
+                data: formData,
+                success: function (result) {
+                    if (result) {
+                        location.reload();
+                    }
+                },
+                error: function (err) {
+                    console.error('Error:', err);
+                }
+            });
+        }
+    </script>
+
+}

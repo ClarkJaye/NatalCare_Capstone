@@ -64,8 +64,61 @@ namespace NatalCare_System.Controllers
             return View(model);
         }
 
+        // POST: /User/Create
+        [HttpPost]
+        public async Task<IActionResult> Create(UserDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.RoleList = _roleManager.Roles.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Name
+                });
+                return View(model);
+            }
 
-        // GET: /User/Edit/{id}
+            User user = new()
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                Birthdate = model.Birthdate,
+                MiddleName = model.MiddleName,
+                LastName = model.LastName,
+                Address = model.Address,
+                Gender = model.Gender,
+                StatusCode = "AC",
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                if (!string.IsNullOrEmpty(model.Role))
+                {
+                    await _userManager.AddToRoleAsync(user, model.Role);
+                }
+                TempData["success"] = "User created successfully!";
+                return RedirectToAction(nameof(Index));
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            model.RoleList = _roleManager.Roles.Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Name
+            });
+
+            return View(model);
+        }
+
+
+
         // GET: /User/Edit/{id}
         public async Task<IActionResult> Edit(string id)
         {

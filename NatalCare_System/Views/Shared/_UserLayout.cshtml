@@ -78,11 +78,12 @@
                             </a>
                         </li>
 
-                        <div id="patientManagementMenu" class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" || ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" || ViewContext.RouteData.Values["controller"]?.ToString() == "Newborn" || ViewContext.RouteData.Values["controller"]?.ToString() == "Admission" || ViewContext.RouteData.Values["controller"]?.ToString() == "OPD" ? "show" : "")">
+                        <div id="patientManagementMenu" class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" || ViewContext.RouteData.Values["controller"]?.ToString() == "Newborn" || ViewContext.RouteData.Values["controller"]?.ToString() == "Admission" || ViewContext.RouteData.Values["controller"]?.ToString() == "OPD" || ViewContext.RouteData.Values["controller"]?.ToString() == "Prenatal" ? "show" : "")">
                             <ul>
                                 @if (accessibleModules.Any(m => m.ModuleId == 2 && m.OpenAccess == "Y"))
                                 {
-                                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ? "active" : "")">
+                                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ||  
+                                    ViewContext.RouteData.Values["controller"]?.ToString() == "Prenatal" ? "active" : "")">
                                         <a asp-controller="Patient" asp-action="Index">
                                             <i class="fa-solid fa-folder"></i>
                                             <span class="text">Patient Records</span>
@@ -237,6 +238,8 @@
         @RenderBody()
     </section>
 
+    <script src="~/js/signalr.js"></script>
+    <script src="~/js/signalHub.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/lib/toastr/toastr.js"></script>
@@ -313,7 +316,7 @@
                 window.addEventListener('load', function () {
                     navigator.serviceWorker.register('/service-worker.js')
                         .then(function (registration) {
-                            console.log('Service Worker registered with scope:', registration.scope);
+                            // console.log('Service Worker registered with scope:', registration.scope);
                         })
                         .catch(function (error) {
                             console.error('Service Worker registration failed:', error);

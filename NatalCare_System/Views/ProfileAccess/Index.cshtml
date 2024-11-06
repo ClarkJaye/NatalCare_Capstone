@@ -13,8 +13,9 @@
 
 <div class="mx-4">
     <div class="mb-3">
-        <a class="btn btn-sm btn-outline-secondary" asp-controller="Profiles" asp-action="Index">
-            <span class="fas fa-undo"></span> Back to List
+        <a class="btn btn-outline-pink" asp-controller="User" asp-action="Index">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to List</span>
         </a>
     </div>
 
@@ -55,35 +56,33 @@
     </div>
 </div>
 
-<!-- jQuery -->
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/toastr/toastr.js"></script>
-<script>
-    $(".update-checkbox").change(function () {
-        const isChecked = $(this).is(':checked');
-        const roleId = $(this).data("role-id");
-        const moduleId = $(this).data("module-id");
 
-        $.ajax({
-            url: "@Url.Action("UpdateAccess", "ProfileAccess")",
-            type: "POST",
-            data: {
-                profileAccessList: [{
-                    RoleId: roleId,
-                    ModuleId: moduleId,
-                    OpenAccess: isChecked ? "Y" : "N" // Send "Y" or "N"
-                }]
-            },
-            success: function (response) {
-                if (response.success) {
-                    toastr.success(response.message);
-                } else {
-                    toastr.error(response.message);
+@section Scripts {
+    <script>
+        $(".update-checkbox").change(function () {
+            const isChecked = $(this).is(':checked');
+            const roleId = $(this).data("role-id");
+            const moduleId = $(this).data("module-id");
+
+            $.ajax({
+                url: "@Url.Action("UpdateAccess", "ProfileAccess")",
+                type: "POST",
+                data: {
+                    profileAccessList: [{
+                        RoleId: roleId,
+                        ModuleId: moduleId,
+                        OpenAccess: isChecked ? "Y" : "N" // Send "Y" or "N"
+                    }]
+                },
+                success: function (response) {
+                    if (response) {
+                        location.reload();
+                    }
+                },
+                error: function (error) {
+                    console.error("Error updating access:", error);
                 }
-            },
-            error: function (error) {
-                console.error("Error updating access:", error);
-            }
+            });
         });
-    });
-</script>
+    </script>
+}

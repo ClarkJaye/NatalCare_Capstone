@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.DataAccess.Repository.IRepository;
 using NatalCare.Models.Entities;
-using NatalCare.Models.ViewModel;
+using PrinceQ.DataAccess.Hubs;
 using static NatalCare.DataAccess.Response.ServiceResponses;
 
 namespace NatalCare.DataAccess.Services
@@ -10,10 +11,12 @@ namespace NatalCare.DataAccess.Services
     internal class PatientServices : IPatientServices
     {
         private readonly IAppUnitOfWork unitOfWork;
+        private readonly IHubContext<NatalCareHub> hubContext;
 
-        public PatientServices(IAppUnitOfWork unitOfWork)
+        public PatientServices(IAppUnitOfWork unitOfWork, IHubContext<NatalCareHub> hubContext)
         {
             this.unitOfWork = unitOfWork;
+            this.hubContext = hubContext;
         }
 
         //Patient
@@ -21,6 +24,12 @@ namespace NatalCare.DataAccess.Services
         {
             var patients = await unitOfWork.Repository<Patients>()
             .GetAllAsync(p => p.StatusCode == "AC", includeProperties: "CreatedBy");
+            return patients.ToList();
+        }
+        public async Task<List<Patients>> GetDeletedPatients()
+        {
+            var patients = await unitOfWork.Repository<Patients>()
+            .GetAllAsync(p => p.StatusCode == "DL", includeProperties: "CreatedBy");
             return patients.ToList();
         }
 
@@ -120,6 +129,7 @@ namespace NatalCare.DataAccess.Services
 
             unitOfWork.Repository<Patients>().Update(item);
             await unitOfWork.SaveAsync();
+            await hubContext.Clients.All.SendAsync("LoadPatients");
             return new CommonResponse(true, "Patient record deleted successfully");
         }
 
@@ -164,5 +174,20 @@ namespace NatalCare.DataAccess.Services
             return $"PT{newIdNumber:D4}"; // Formats as PT0001, PT0010, etc.
         }
 
+        public async Task<CommonResponse> RetrievedAync(string id, string userId)
+        {
+            var record = await unitOfWork.Repository<Patients>().GetFirstOrDefaultAsync(p => p.PatientID == id);
+            if (record == null)
+            {
+                return new CommonResponse(false, "Record Not Found.");
+            }
+            record.StatusCode = "AC";
+            record.PatientUpdatedBy = userId;
+            record.Updated_At = DateTime.Now;
+
+            unitOfWork.Repository<Patients>().Update(record);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Record Retrieved Successfully.");
+        }
     }
 }

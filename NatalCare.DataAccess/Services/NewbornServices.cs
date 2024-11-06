@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.DataAccess.Repository.IRepository;
 using NatalCare.Models.Entities;
+using PrinceQ.DataAccess.Hubs;
 using static NatalCare.DataAccess.Response.ServiceResponses;
 
 namespace NatalCare.DataAccess.Services
@@ -9,10 +11,12 @@ namespace NatalCare.DataAccess.Services
     internal class NewbornServices : INewbornServices
     {
         private readonly IAppUnitOfWork unitOfWork;
+        private readonly IHubContext<NatalCareHub> hubContext;
 
-        public NewbornServices(IAppUnitOfWork unitOfWork)
+        public NewbornServices(IAppUnitOfWork unitOfWork, IHubContext<NatalCareHub> hubContext)
         {
             this.unitOfWork = unitOfWork;
+            this.hubContext = hubContext;
         }
 
         public async Task<List<Newborn>> GetNewborns()
@@ -20,13 +24,14 @@ namespace NatalCare.DataAccess.Services
             var newborns = await unitOfWork.Repository<Newborn>()
                 .GetAllAsync(p => p.StatusCode == "AC", includeProperties: "Patient,CreatedBy");
             return newborns.ToList();
-
-            //var newborns = await unitOfWork.Repository<Newborn>()
-            //    .GetAllAsync(includeProperties: "Patient");
-            //if (newborns == null || !newborns.Any())
-            //    return new GeneralResponse(false, newborns, "There are no newborns.");
-            //return new GeneralResponse(true, newborns, "Successfully Fetched.");
         }
+        public async Task<List<Newborn>> GetDeletedNewborns()
+        {
+            var record = await unitOfWork.Repository<Newborn>()
+            .GetAllAsync(p => p.StatusCode == "DL", includeProperties: "CreatedBy");
+            return record.ToList();
+        }
+
 
         public async Task<GeneralResponse> GetInformation(string id)
         {
@@ -107,6 +112,38 @@ namespace NatalCare.DataAccess.Services
             return new GeneralResponse(true, existingRecord.NewbornID, "Newborn successfully updated!");
         }
 
+        public async Task<CommonResponse> Delete(string id, string userId)
+        {
+            if (id == null) return new CommonResponse(false, "id is null!");
+
+            var item = await unitOfWork.Repository<Newborn>().GetFirstOrDefaultAsync(x => x.NewbornID == id);
+            if (item == null) return new CommonResponse(false, "Newborn record not existing.");
+
+            item.StatusCode = "DL";
+            item.Updated_At = DateTime.Now;
+            item.NewbornUpdatedBy = userId;
+
+            unitOfWork.Repository<Newborn>().Update(item);
+            await unitOfWork.SaveAsync();
+            await hubContext.Clients.All.SendAsync("LoadNewborns");
+            return new CommonResponse(true, "Newborn record deleted successfully");
+        }
+
+        public async Task<CommonResponse> RetrievedAync(string id, string userId)
+        {
+            var record = await unitOfWork.Repository<Newborn>().GetFirstOrDefaultAsync(p => p.NewbornID == id);
+            if (record == null)
+            {
+                return new CommonResponse(false, "Record Not Found.");
+            }
+            record.StatusCode = "AC";
+            record.NewbornUpdatedBy = userId;
+            record.Updated_At = DateTime.Now;
+
+            unitOfWork.Repository<Newborn>().Update(record);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Record Retrieved Successfully.");
+        }
 
         // HELPER
         public async Task<(int todayCount, int monthCount, int yearCount)> GetNewbornCountsAsync()

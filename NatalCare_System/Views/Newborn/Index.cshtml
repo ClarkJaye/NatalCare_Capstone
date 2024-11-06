@@ -87,76 +87,40 @@
         </div>
     </div>
 
-    <div class="mb-4 mt-2 d-flex align-items-center justify-content-end">
+    <div class="mb-4 mt-2 d-flex align-items-center justify-content-end gap-3">
         <a class="btn btn-pink d-flex align-items-center gap-2" asp-controller="Newborn" asp-action="Create">
             <i class="fas fa-baby" style="font-size: 18px;"></i>
             <strong>Add New Newborn</strong>
         </a>
+
+        <button id="displayDeletedHistoryBtn" class="btn btn-outline-secondary">
+            <i class="fas fa-trash"></i>
+            <span>Deleted History Records</span>
+        </button>
     </div>
+
 
     <div class="card shadow-sm card-selected">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="newbornTable" class="table table-hover table-striped">
-                    <thead class="border-bottom-2">
-                        <tr>
-                            <th>Profile</th>
-                            <th>Baby No</th>
-                            <th>Firstname</th>
-                            <th>Middlename</th>
-                            <th>Lastname</th>
-                            <th>Date Of Birth</th>
-                            <th>Time of Birth</th>
-                            <th>Mother Full Name</th>
-                            <th>Date Added</th>
-                            <th>Added By</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @if (item.Gender?.ToLower() == "female")
-                                    {
-                                        <img src="~/profile/bgirl.png" width="50" height="50" alt="Profile" class="img-fluid rounded-circle" />
-                                    }
-                                    else
-                                    {
-                                        <img src="~/profile/bboy.png" width="50" height="50" alt="Profile" class="img-fluid rounded-circle" />
-                                    }
-                                </td>
-                                <th>@item.NewbornID</th>
-                                <td>@item.FirstName</td>
-                                <td>@item.MiddleName</td>
-                                <td>@item.LastName</td>
-                                <td>@item.DateofBirth?.ToString("MMM dd yyyy")</td>
-                                <td>@item.TimeofBirth</td>
-                                <td>@item.Patient?.FirstName @item.Patient?.MiddleName @item.Patient?.LastName</td>
-                                <td>@item.Created_At?.ToString("MMM dd yyyy h:mm tt")</td>
-                                <td>@item.CreatedBy?.FirstName @item.CreatedBy?.LastName</td>
-                                <td class="text-center">
-                                    <div class="d-flex align-items-center justify-content-center gap-2">
-                                        <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Newborn" asp-action="Information" asp-route-id="@item.NewbornID">
-                                            <i class="fa-solid fa-list"></i>
-                                            <span>Record</span>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger dltFP-Btn" data-patientid="@item.NewbornID">
-                                            <i class="fa-solid fa-trash"></i>
-                                            <span>Delete</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-
+        <div class="card-body" id="newbornsContainer">
+            @await Component.InvokeAsync("NewbornRecords")
         </div>
     </div>
+</div>
 
+
+<!-- Deleted History Modal -->
+<div class="modal fade" id="deletedNBModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger"><i class="fa-solid fa-trash"></i> Deleted Patient Records</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="deletedListContainer"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -164,37 +128,41 @@
 
 @section Scripts {
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Initialize DataTables
-            $('#newbornTable').DataTable({
-                paging: true,
-                lengthChange: true,
-                searching: true,
-                ordering: true,
-                lengthMenu: [10, 20, 50, 100],
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search newborn..."
-                },
-                language: {
-                    paginate: {
-                        previous: "Previous",
-                        next: "Next"
-                    }
-                },
-                info: true,
-                autoWidth: false,
-                responsive: true,
-                columnDefs: [
-                    { orderable: false, targets: -1 }
-                ]
+        $(document).ready(function () {
+            $('#displayDeletedHistoryBtn').on('click', function () {
+                LoadDeletedHistoryNewborn();
             });
-
         });
-
+        //Load All Deleted Records
+        function LoadDeletedHistoryNewborn() {
+            $.ajax({
+                url: '@Url.Action("DisplayDeletedNewborn", "Newborn")',
+                type: 'GET',
+                success: function (result) {
+                    $("#deletedListContainer").html(result);
+                    $('#deletedNBModal').modal('show');
+                },
+                error: function () {
+                    console.error("Failed to load patients data.");
+                }
+            });
+        }
+        //Load All Records Component
+        function LoadAllNewbornComponent() {
+            $.ajax({
+                url: '@Url.Action("GetAllNewborns", "Newborn")',
+                async: true,
+                success: function (result) {
+                    $('#newbornsContainer').html(result);
+                },
+                error: function () {
+                    toastr.error("Failed to reload the patients records.");
+                }
+            });
+        }
     </script>
-
 }
+
 
 
 

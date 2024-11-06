@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 namespace NatalCare_System.Controllers
 {
     [Authorize]
-    public class NewbornController : Controller
+    public class NewbornController : BaseController<NewbornController>
     {
         private readonly INewbornServices newbornServices;
 
@@ -19,31 +19,34 @@ namespace NatalCare_System.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            // Get all counts in one call
             var (todayRecordCount, monthlyRecordCount, yearlyRecordCount) = await newbornServices.GetNewbornCountsAsync();
-            // Pass counts to the view using ViewBag
             ViewBag.TodayRecord = todayRecordCount;
             ViewBag.MonthlyRecord = monthlyRecordCount;
             ViewBag.YearlyRecord = yearlyRecordCount;
 
-            var records = await newbornServices.GetNewborns();
+            return View();
+        }
 
-            return View(records ?? new List<Newborn>());
-
-            //var record = await newbornServices.GetNewborns();
-            //if(record.IsSuccess == false)
-            //{
-            //    TempData["error"] = record.Message;
-            //    return View(record.Item);
-            //}
-            //return View(record.Item);
+        //------ Newborn Records View Component ------//
+        public async Task<IActionResult> GetAllNewborns()
+        {
+            try
+            {
+                var NewbornRecords = await newbornServices.GetNewborns();
+                return ViewComponent("NewbornRecords");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Error in GetAllNewborns action");
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public IActionResult Create()
         {
             return View();
         }
-
+        // CREATE 
         [HttpPost]
         public async Task<IActionResult> Create(Newborn newborn)
         {
@@ -72,7 +75,7 @@ namespace NatalCare_System.Controllers
             return RedirectToAction(nameof(Index));
 
         }
-
+        // EDIT 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Newborn newborn)
@@ -96,7 +99,28 @@ namespace NatalCare_System.Controllers
             }
             return View(newborn);
         }
+        // DELETE 
+        [HttpDelete]
+        public async Task<JsonResult> Delete(string newbornId)
+        {
+            try
+            {
+                if (newbornId != null)
+                {
+                    var userId = GetCurrentUserId();
+                    var result = await newbornServices.Delete(newbornId, userId);
 
+                    return Json(result);
+                }
+                return Json(new { IsSuccess = false, Message = "Delete Record failed!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while deleting family planning record for Patient");
+                return Json(new { IsSuccess = false, Message = "An error occurred in DeleteFPRecord." });
+            }
+        }
+        //INFORMATION
         public async Task<IActionResult> Information(string id)
         {
             try
@@ -116,6 +140,20 @@ namespace NatalCare_System.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //Get All Deleted NEWBORN
+        public async Task<IActionResult> DisplayDeletedNewborn()
+        {
+            var records = await newbornServices.GetDeletedNewborns();
+            return View(records ?? new List<Newborn>());
+        }
+
+        //Retrieved Record
+        public async Task<IActionResult> RetrieveRecord(string nbid)
+        {
+            var userId = GetCurrentUserId();
+            var result = await newbornServices.RetrievedAync(nbid, userId);
+            return Json(result);
+        }
 
 
 

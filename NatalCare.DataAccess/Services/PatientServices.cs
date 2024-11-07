@@ -129,7 +129,6 @@ namespace NatalCare.DataAccess.Services
 
             unitOfWork.Repository<Patients>().Update(item);
             await unitOfWork.SaveAsync();
-            await hubContext.Clients.All.SendAsync("LoadPatients");
             return new CommonResponse(true, "Patient record deleted successfully");
         }
 

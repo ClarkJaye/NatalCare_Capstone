@@ -2,10 +2,10 @@
 
 <h6 class="px-2">Prenatal Records</h6>
 <div class="d-flex justify-content-end my-3 gap-3">
-    <a asp-controller="" asp-action="" class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#prenatalAddModal" data-patient-id="@Model.FirstOrDefault()?.PatientID">
+    <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#prenatalAddModal" data-patient-id="@Model.FirstOrDefault()?.PatientID">
         <i class="fas fa-plus"></i>
         <span>Add New Prenatal Record</span>
-    </a>
+    </button>
     <button id="displayDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
         <i class="fas fa-trash"></i>
         <span>Deleted History Records</span>

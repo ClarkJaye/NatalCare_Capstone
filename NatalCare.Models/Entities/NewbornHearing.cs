@@ -5,32 +5,22 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace NatalCare.Models.Entities
 {
-    public class NewbornScreening : BaseEntity
+    public class NewbornHearing : BaseEntity
     {
         [Key]
         [Required]
-        public string? ScreeningNo { get; set; }
-        public DateOnly? DateRegistration { get; set; }
-        public string? TypeOfSample { get; set; }
-        public string? FilterCardNo { get; set; }
-        public DateOnly? DateOfCollection { get; set; }
-        public TimeOnly? TimeOfCollection { get; set; }
-        public string? PlaceOfCollection { get; set; }
-        public string? Feeding { get; set; }
-        public string? Specimen { get; set; }
-        public string? BabyStatus { get; set; }
-        public string? ScreeningResults { get; set; }
-        public string? DataSampleSent { get; set; }
-        public string? Courier { get; set; }
-        public string? TrackingNubmer { get; set; }
-        public string? Remarks { get; set; }
+        public string? HearingNo { get; set; }
+        public DateTime? DateVisit { get; set; }
+        public string? HearingResults { get; set; }
+        public DateOnly? TestDate{ get; set; }
         public string? Notes { get; set; }
-
+        public string? BabyStatus { get; set; }
+        
 
         // Foreign Key
         [Required]
         public int? StaffID { get; set; }
-        [ForeignKey("StaffID ")]
+        [ForeignKey("StaffID")]
         [ValidateNever]
         public Staff? Staff { get; set; }
 
@@ -38,7 +28,7 @@ namespace NatalCare.Models.Entities
         public string? NewbornID { get; set; }
         [ForeignKey("NewbornID")]
         [ValidateNever]
-        public Newborn? Newborn { get; set; }
+        public Newborn? Newborn{ get; set; }
 
         [Required]
         public string? PatientID { get; set; }
@@ -48,15 +38,15 @@ namespace NatalCare.Models.Entities
 
         public DateTime? Created_At { get; set; }
         [Column("Created_By")]
-        public string? PrenatalCreatedBy { get; set; }
-        [ForeignKey("PrenatalCreatedBy")]
+        public string? HearingCreatedBy { get; set; }
+        [ForeignKey("HearingCreatedBy")]
         [ValidateNever]
         public User? CreatedBy { get; set; }
 
         public DateTime? Updated_At { get; set; }
         [Column("Updated_By")]
-        public string? PrenatalUpdatedBy { get; set; }
-        [ForeignKey("PrenatalUpdatedBy")]
+        public string? HearingUpdatedBy { get; set; }
+        [ForeignKey("HearingUpdatedBy")]
         [ValidateNever]
         public User? UpdatedBy { get; set; }
 
@@ -64,6 +54,5 @@ namespace NatalCare.Models.Entities
         [ForeignKey("StatusCode")]
         [ValidateNever]
         public Status? Status { get; set; }
-
     }
 }

@@ -35,6 +35,17 @@ namespace NatalCare.DataAccess.Interfaces
         Task<CommonResponse> DeleteFPRecordAsync(string caseNo, string userId);
         Task<CommonResponse> RetrievedFPAync(string caseno, string userId);
 
+        //------ NEWBORN HEARING ------// 
+        Task<List<NewbornHearing>> GetHearingRecords(string patientId);
+        Task<GeneralResponse> Get_Staff_NewbornAsync(string motherId);
+        Task<CommonResponse> AddHRRecordAsync(NewbornHearing item, string patientId, string userId);
+        Task<GeneralResponse> GetHRRecordAsync(string caseNo);
+        Task<CommonResponse> UpdateHRRecordAsync(NewbornHearing item, string userId);
+        Task<CommonResponse> DeleteHRRecordAsync(string caseNo, string userId);
+
+        //------ NEWBORN SCREENING ------// 
+        //------ DELIVERY ------// 
+
 
     }
 }

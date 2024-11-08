@@ -11,15 +11,14 @@ namespace NatalCare.Models.Entities
         [Required]
         public string? CaseNo { get; set; }
 
-        // Essential Family Planning Fields
-        public int? NoOfLivingChild { get; set; }
-        public bool? PlanToHaveMoreChildren { get; set; }
-        public string? MethodType { get; set; }
-        public double? AverageMonthlyIncome { get; set; }
-        public string? SpouseName { get; set; }
-        public string? SpouseOccupation { get; set; }
+       
+
+
+
         public DateTime? DateVisit { get; set; }
         public string? Notes { get; set; }
+
+
 
 
         // Foreign Key

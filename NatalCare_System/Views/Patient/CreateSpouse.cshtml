@@ -1,0 +1,85 @@
+﻿@model NatalCare.Models.Entities.Spouse
+
+
+@{
+    ViewData["Title"] = "Add Patient";
+    Layout = "_UserLayout";
+}
+
+<!-- NAVBAR -->
+<partial name="Partial/_Navbar" />
+
+
+<div class="mx-5">
+    <div class="card card-selected w-75 mx-auto mt-5">
+        <div class="card-header card-header-selected d-flex justify-content-between align-items-center">
+            <h5 class="card-title my-2">Add Patient</h5>
+        </div>
+        <div class="card-body m-4 pt-0">
+            <form asp-controller="Patient" asp-action="CreateSpouse">
+                <div class="row form-group">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <h5 class="card-title mb-3"> Basic Information</h5>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="FirstName" class="control-label">First Name</label>
+                        <input asp-for="FirstName" class="form-control" placeholder="Enter Firstname" required />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="MiddleName" class="control-label">Middle Name</label>
+                        <input asp-for="MiddleName" class="form-control" placeholder="Enter Middlename" />
+                        <span asp-validation-for="MiddleName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="LastName" class="control-label">Last Name</label>
+                        <input asp-for="LastName" class="form-control" placeholder="Enter Lastname" required />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="Birthdate" class="control-label"></label>
+                        <input asp-for="Birthdate" class="form-control" type="date" required />
+                        <span asp-validation-for="Birthdate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="Address" class="control-label">Address</label>
+                        <input asp-for="Address" class="form-control" placeholder="Enter full address (e.g., Street, Barangay, City)" required />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="Gender" class="control-label"></label>
+                        <select asp-for="Gender" class="form-select" required>
+                            <option disabled selected>select gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                 
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="Occupation" class="control-label"></label>
+                        <input asp-for="Occupation" class="form-control" placeholder="Enter occupation" required />
+                        <span asp-validation-for="Occupation" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-12 mt-3 mb-3">
+                        <div class="d-flex align-items-center justify-content-end gap-3">
+                            <button class="btn btn-pink" type="submit">
+                                <i class="fas fa-save"></i>
+                                <span>Save</span>
+                            </button>
+                            <a class="btn btn-outline-secondary" asp-controller="Patient" asp-action="Index">
+                                <i class="fas fa-undo"></i>
+                                <span>Back to List</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

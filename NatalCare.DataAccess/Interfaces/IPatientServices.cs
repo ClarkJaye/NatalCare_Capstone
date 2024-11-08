@@ -12,6 +12,7 @@ namespace NatalCare.DataAccess.Interfaces
         Task<List<Patients>> GetPatients();
         Task<List<Patients>> GetDeletedPatients();
         Task<bool> Create(Patients patient, string userId);
+        Task<bool> CreateSpouse(Spouse spouse);
         Task<Patients> Edit(string id, string userId);
         Task<bool> Update(Patients patient, string userId);
         Task<CommonResponse> Delete(string id, string userId);

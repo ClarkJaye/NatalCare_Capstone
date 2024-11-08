@@ -62,6 +62,19 @@ namespace NatalCare.DataAccess.Services
             unitOfWork.Repository<Patients>().Add(patient);
             return await unitOfWork.Complete() > 0;
         }
+        public async Task<bool> CreateSpouse(Spouse spouse)
+        {
+            if (spouse == null)
+                throw new ArgumentNullException(nameof(spouse), "Spouse cannot be null.");
+
+            // Validation checks
+            if (await unitOfWork.Repository<Spouse>().AnyAsync(x => x.SpouseId == spouse.SpouseId))
+                throw new ArgumentException("Spouse already exists!");
+
+
+            unitOfWork.Repository<Spouse>().Add(spouse);
+            return await unitOfWork.Complete() > 0;
+        }
         public async Task<Patients> Edit(string id, string userId)
         {
             var patient = await unitOfWork.Repository<Patients>().GetFirstOrDefaultAsync(p => p.PatientID == id);
@@ -96,7 +109,7 @@ namespace NatalCare.DataAccess.Services
             existingPatient.BloodType = patient.BloodType;
             existingPatient.PlaceOfBirth = patient.PlaceOfBirth;
             existingPatient.Emergency_Name = patient.Emergency_Name;
-            existingPatient.Emergency_Contact = patient.Emergency_Contact;
+            existingPatient.Emergency_MobileNumber = patient.Emergency_MobileNumber;
             existingPatient.StatusCode = patient.StatusCode;
 
             if (patient.HasPhilHealth == true)

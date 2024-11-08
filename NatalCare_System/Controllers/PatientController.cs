@@ -76,6 +76,10 @@ namespace NatalCare_System.Controllers
         {
             return View();
         }
+        public IActionResult CreateSpouse()
+        {
+            return View();
+        }
         [HttpPost]
         public async Task<IActionResult> Create(Patients patient)
         {
@@ -85,11 +89,10 @@ namespace NatalCare_System.Controllers
                 {
                     var userId = GetCurrentUserId();
                     var result = await patientServices.Create(patient, userId);
-
                     if (result)
                     {
-                        TempData["success"] = "Record has been added!";
-                        return RedirectToAction(nameof(Index));
+                        //TempData["success"] = "Record has been added!";
+                        return RedirectToAction("CreateSpouse", "Patient");
                     }
                 }
                 catch (ArgumentException argEx)
@@ -103,6 +106,32 @@ namespace NatalCare_System.Controllers
             }
 
             return View(patient); 
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateSpouse(Spouse spouse)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var result = await patientServices.CreateSpouse(spouse);
+                    if (result)
+                    {
+                        TempData["success"] = "Record has been added!";
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+                catch (ArgumentException argEx)
+                {
+                    TempData["error"] = argEx.Message;
+                }
+                catch (Exception ex)
+                {
+                    TempData["error"] = "An error occurred while creating the spouse.";
+                }
+            }
+
+            return View(spouse);
         }
         //Edit Patient
         public async Task<IActionResult> Edit(string id)

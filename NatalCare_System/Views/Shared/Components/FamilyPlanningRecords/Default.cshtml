@@ -297,7 +297,7 @@
     function UpdateFP() {
         var formData = $("#UpdateFPForm").serialize();
         $.ajax({
-            url: '@Url.Action("UpdateFPRecord", "Servicess")',
+            url: '@Url.Action("UpdateFPRecord", "FamilyPlanning")',
             type: 'POST',
             data: formData,
             success: function (result) {
@@ -319,7 +319,7 @@
     function EditFP(caseNo) {
         $.ajax({
             type: 'GET',
-            url: '@Url.Action("EditFPRecord", "Servicess")',
+            url: '@Url.Action("EditFPRecord", "FamilyPlanning")',
             data: { caseNo: caseNo },
             success: function (result) {
                 var item = result.item;
@@ -360,7 +360,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: 'DELETE',
-                    url: '@Url.Action("DeleteFPRecord", "Servicess")',
+                    url: '@Url.Action("DeleteFPRecord", "FamilyPlanning")',
                     data: { caseNo: caseNo },
                     success: function (result) {
                         if (result.isSuccess) {
@@ -387,7 +387,7 @@
         formData.push({ name: 'patientID', value: patientId });
 
         $.ajax({
-            url: '@Url.Action("AddFPRecord", "Servicess")',
+            url: '@Url.Action("AddFPRecord", "FamilyPlanning")',
             type: 'POST',
             data: formData,
             success: function (result) {
@@ -407,7 +407,7 @@
     //Load All Records
     function LoadFamilyPlanningComponent() {
         $.ajax({
-            url: '@Url.Action("FamilyPlanningRecords", "Servicess")',
+            url: '@Url.Action("FamilyPlanningRecords", "FamilyPlanning")',
             data: { patientId: patID },
             success: function (result) {
                 $('#family-planning').html(result);

@@ -25,17 +25,16 @@ namespace NatalCare.Models.Entities
         public string? TeleNumber { get; set; }
         public string? PlaceOfBirth { get; set; }
         public string? Emergency_Name { get; set; }
-        public string? Emergency_Contact { get; set; }
-        public bool? HasPhilHealth { get; set; }
+        public string? Emergency_MobileNumber { get; set; }
+        public bool HasPhilHealth { get; set; } = false;
         [RegularExpression(@"^\d{12}$", ErrorMessage = "Invalid PhilHealth number.")]
         public string? PHIC_NO { get; set; }
         public DateOnly? Birthdate { get; set; }
         public string? BloodType { get; set; }
         public string? Religion { get; set; }
-        //public string? NameOfSpouse { get; set; }
 
 
-
+        // Foreign Key to Status table
         public DateTime? Created_At { get; set; }
         [Column("Created_By")]
         public string? PatientCreatedBy { get; set; }
@@ -50,9 +49,13 @@ namespace NatalCare.Models.Entities
         [ValidateNever]
         public User? UpdatedBy { get; set; }
 
-        // Foreign Key to Status table
         public string? StatusCode { get; set; }
         [ForeignKey("StatusCode")]
         public Status? Status { get; set; }
+
+        public int? SpouseId { get; set; }
+        [ForeignKey("SpouseId")]
+        public Spouse? Spouse { get; set; }
+
     }
 }

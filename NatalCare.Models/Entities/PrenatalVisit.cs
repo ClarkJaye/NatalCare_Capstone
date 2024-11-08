@@ -23,7 +23,6 @@ namespace NatalCare.Models.Entities
         public string? RX { get; set; }
         public DateTime? DateVisit { get; set; }
         public DateTime? NextVisit { get; set; }
-        public int? NumberOfVisit { get; set; }
 
 
         // Foreign Key

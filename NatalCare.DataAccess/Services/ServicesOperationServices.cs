@@ -15,6 +15,14 @@ namespace NatalCare.DataAccess.Services
         }
 
         // Prenatal 
+        public async Task<GeneralResponse> GetPrenatalFormRecordAsync(string id)
+        {
+            if (id == null) return new GeneralResponse(false, null, "No Record found");
+            var record1 = await unitOfWork.Repository<Prenatal>().GetFirstOrDefaultAsync(p => p.CaseNo == id, includeProperties: "Patient");
+            var record2 = await unitOfWork.Repository<PrenatalVisit>().GetAllAsync(p => p.CaseNo == record1.CaseNo);
+
+            return new GeneralResponse(true, new { prenatalRecord = record1, prenatalVisit = record2 }, "Successfulldy retrieve" );
+        }
         public async Task<Prenatal> GetPrenatalRecord(string patientId, string caseno)
         {
             var record = await unitOfWork.Repository<Prenatal>().GetFirstOrDefaultAsync(p => p.PatientID == patientId && p.CaseNo == caseno);
@@ -161,11 +169,11 @@ namespace NatalCare.DataAccess.Services
         public async Task<CommonResponse> AddPrenatalVisitRecordAsync(PrenatalVisit prenatalvisit, string patientId, string caseNo, string userId)
         {
             if (prenatalvisit == null)
-                return new CommonResponse(false, "Prenatal cannot be null!");
+                return new CommonResponse(false, "Record cannot be null!");
 
             // Validation checks: Ensure CaseNo is unique if needed.
             if (await unitOfWork.Repository<PrenatalVisit>().AnyAsync(x => x.PrenatalVisitID == prenatalvisit.PrenatalVisitID))
-                return new CommonResponse(false, "Prenatal record already exists.");
+                return new CommonResponse(false, "Record already exists.");
 
             // Generate a new CaseNo for the record.
             prenatalvisit.CaseNo = caseNo;
@@ -176,7 +184,7 @@ namespace NatalCare.DataAccess.Services
 
             unitOfWork.Repository<PrenatalVisit>().Add(prenatalvisit);
             await unitOfWork.SaveAsync();
-            return new CommonResponse(true, "Prenatal record added successfully");
+            return new CommonResponse(true, "Record added successfully");
         }
         public async Task<GeneralResponse> GetPrenatalVisitRecordAsync(string caseNo)
         {
@@ -210,7 +218,6 @@ namespace NatalCare.DataAccess.Services
             existingRecord.PhysicalAssessment = prenatal.PhysicalAssessment; 
             existingRecord.Notes = prenatal.Notes;
             existingRecord.DateVisit = prenatal.DateVisit;
-            existingRecord.NumberOfVisit = prenatal.NumberOfVisit;
             existingRecord.RX = prenatal.RX;
             existingRecord.Updated_At = DateTime.Now;
             existingRecord.PrenatalUpdatedBy = userId;

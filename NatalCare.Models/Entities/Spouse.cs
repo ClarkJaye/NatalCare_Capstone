@@ -8,7 +8,7 @@ namespace NatalCare.Models.Entities
     public class Spouse : BaseEntity
     {
         [Key]
-        public string? SpouseId { get; set; }
+        public int SpouseId { get; set; }
         [StringLength(100)]
         public string? FirstName { get; set; }
         [StringLength(100)]

@@ -35,7 +35,7 @@ namespace NatalCare.DataAccess.Services
 
         public async Task<Patients> GetInformation(string id)
         {
-            var patient = await unitOfWork.Repository<Patients>().GetFirstOrDefaultAsync(p => p.PatientID == id);
+            var patient = await unitOfWork.Repository<Patients>().GetFirstOrDefaultAsync(p => p.PatientID == id, includeProperties: "Spouse");
 
             if (patient == null)
                 return new Patients();
@@ -47,11 +47,10 @@ namespace NatalCare.DataAccess.Services
         public async Task<bool> Create(Patients patient, string userId)
         {
             if (patient == null)
-                throw new ArgumentNullException(nameof(patient), "Patient cannot be null.");
-
+                throw new ArgumentNullException(nameof(patient), "Record cannot be null.");
             // Validation checks
             if (await unitOfWork.Repository<Patients>().AnyAsync(x => x.PatientID == patient.PatientID))
-                throw new ArgumentException("Patient already exists!");
+                throw new ArgumentException("Record already exists!");
 
             // Generate a new PatientID
             patient.PatientID = await GeneratePatientID();
@@ -60,24 +59,15 @@ namespace NatalCare.DataAccess.Services
             patient.PatientCreatedBy = userId;
 
             unitOfWork.Repository<Patients>().Add(patient);
-            return await unitOfWork.Complete() > 0;
-        }
-        public async Task<bool> CreateSpouse(Spouse spouse)
-        {
-            if (spouse == null)
-                throw new ArgumentNullException(nameof(spouse), "Spouse cannot be null.");
-
-            // Validation checks
-            if (await unitOfWork.Repository<Spouse>().AnyAsync(x => x.SpouseId == spouse.SpouseId))
-                throw new ArgumentException("Spouse already exists!");
-
-
-            unitOfWork.Repository<Spouse>().Add(spouse);
+            if(patient.SpouseId != null)
+            {
+                unitOfWork.Repository<Spouse>().Add(patient.Spouse);
+            }
             return await unitOfWork.Complete() > 0;
         }
         public async Task<Patients> Edit(string id, string userId)
         {
-            var patient = await unitOfWork.Repository<Patients>().GetFirstOrDefaultAsync(p => p.PatientID == id);
+            var patient = await unitOfWork.Repository<Patients>().GetFirstOrDefaultAsync(p => p.PatientID == id, includeProperties: "Spouse");
 
             if (patient == null)
                 throw new KeyNotFoundException("Patient not found.");
@@ -91,6 +81,7 @@ namespace NatalCare.DataAccess.Services
 
             // Retrieve the existing patient record from the database
             var existingPatient = await unitOfWork.Repository<Patients>().GetFirstOrDefaultAsync(p => p.PatientID == patient.PatientID);
+            var existingSpouse = await unitOfWork.Repository<Spouse>().GetFirstOrDefaultAsync(p => p.SpouseId == patient.SpouseId);
 
             if (existingPatient == null)
                 throw new KeyNotFoundException("Patient not found.");
@@ -102,6 +93,7 @@ namespace NatalCare.DataAccess.Services
             existingPatient.Gender = patient.Gender;
             existingPatient.Address = patient.Address;
             existingPatient.CivilStatus = patient.CivilStatus;
+            existingPatient.Birthdate = patient.Birthdate;
             existingPatient.Occupation = patient.Occupation;
             existingPatient.MobileNumber = patient.MobileNumber;
             existingPatient.TeleNumber = patient.TeleNumber;
@@ -111,6 +103,19 @@ namespace NatalCare.DataAccess.Services
             existingPatient.Emergency_Name = patient.Emergency_Name;
             existingPatient.Emergency_MobileNumber = patient.Emergency_MobileNumber;
             existingPatient.StatusCode = patient.StatusCode;
+
+            // Update Spouse
+            if(existingSpouse != null)
+            {
+                existingSpouse.FirstName = patient.Spouse.FirstName;
+                existingSpouse.MiddleName = patient.Spouse.MiddleName;
+                existingSpouse.LastName = patient.Spouse.LastName;
+                existingSpouse.Birthdate = patient.Spouse.Birthdate;
+                existingSpouse.Gender = patient.Spouse.Gender;
+                existingSpouse.Address = patient.Spouse.Address;
+                existingSpouse.Occupation = patient.Spouse.Occupation;
+            }
+           
 
             if (patient.HasPhilHealth == true)
             {

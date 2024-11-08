@@ -53,7 +53,7 @@
                             <div class="d-flex align-items-center justify-content-center gap-2">
                                 <a asp-controller="Prenatal" asp-action="PrenatalRecord" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-sm btn-outline-secondary">
                                     <i class="fa-solid fa-list"></i>
-                                    <span>Record</span>
+                                    <span>Records</span>
                                 </a>
                                 <button class="btn btn-sm btn-outline-primary edit-Btn" data-caseno="@item.CaseNo">
                                     <i class="fa-solid fa-pen-to-square"></i>
@@ -295,7 +295,7 @@
     function UpdatePrenatal() {
         var formData = $("#UpdatePrenatalForm").serialize();  
         $.ajax({
-            url: '@Url.Action("UpdatePrenatalRecord", "Servicess")',
+            url: '@Url.Action("UpdatePrenatalRecord", "Prenatal")',
             type: 'POST',
             data: formData,
             success: function (result) {
@@ -317,7 +317,7 @@
     function EditPrenatal(caseNo){
         $.ajax({
             type: 'GET',
-            url: '@Url.Action("EditPrenatalRecord", "Servicess")',
+            url: '@Url.Action("EditPrenatalRecord", "Prenatal")',
             data: { caseNo: caseNo },
             success: function (result) {
                 var item = result.item;
@@ -359,7 +359,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: 'DELETE',
-                    url: '@Url.Action("DeletePrenatalRecord", "Servicess")',
+                    url: '@Url.Action("DeletePrenatalRecord", "Prenatal")',
                     data: { caseNo: caseNo },
                     success: function (result) {
                         if (result.isSuccess) {
@@ -383,7 +383,7 @@
         formData.push({ name: 'patientID', value: patientId });
 
         $.ajax({
-            url: '@Url.Action("AddPrenatalRecord", "Servicess")',
+            url: '@Url.Action("AddPrenatalRecord", "Prenatal")',
             type: 'POST',
             data: formData,
             success: function (result) {
@@ -403,7 +403,7 @@
     //Load All Records
     function LoadPrenatalComponent() {
         $.ajax({
-            url: '@Url.Action("PrenatalRecords", "Servicess")',
+            url: '@Url.Action("PrenatalRecords", "Prenatal")',
             data: { patientId: patID },
             success: function (result) {
                 $('#prenatal').html(result);

@@ -406,30 +406,23 @@ ul#patientManagementMenu {
             font-size: 14px;
         }
 
-
-
-
-/* For Card or Table*/
-.table-hover tbody tr:hover {
-    background-color: #f5f5f5;
+.table > :not(caption) > * > * {
+    padding: .5rem .5rem;
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+    padding: 15px;
 }
 
-.table th, .table td {
-    border-top: none !important;
-    padding: 16px;
-    vertical-align: middle;
+.table thead {
+    position: sticky;
+    top: 0;
+    background: white;
+    border: none;
 }
 
-.card-selected {
-    border-radius: 12px !important;
-    background: var(--light) !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.card-header-selected {
-    font-weight: 500;
-    border-bottom: 2px solid #e0e0e0;
-    background: var(--light) !important;
-    border-top-left-radius: 12px !important;
-    border-top-right-radius: 12px !important;
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

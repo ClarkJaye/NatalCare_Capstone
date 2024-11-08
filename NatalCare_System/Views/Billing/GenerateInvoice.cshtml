@@ -1,0 +1,159 @@
+﻿@{
+    ViewData["Title"] = "Generate Invoice";
+    Layout = "_UserLayout";
+}
+
+<!-- NAVBAR -->
+<partial name="Partial/_Navbar" />
+
+<div class="mx-5">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title my-2">NEW INVOICE</h5>
+        </div>
+        <div class="card-body m-4">
+            <form controller="Newborn" action="Create">
+                <div class="row form-group">
+                    <div validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label for="FirstName" class="control-label">Patient Name</label>
+                        <input for="FirstName" class="form-control" placeholder="Enter Patient Name" required />
+                        <span validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label for="MiddleName" class="control-label">Staff Name</label>
+                        <input for="MiddleName" class="form-control" placeholder="Enter Staff Name" />
+                        <span validation-for="MiddleName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label for="LastName" class="control-label">Bill Date</label>
+                        <input for="LastName" class="form-control" type="date" required />
+                        <span validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label for="Birthdate" class="control-label">Due Date</label>
+                        <input for="Birthdate" class="form-control" type="date" required />
+                        <span validation-for="Birthdate" class="text-danger"></span>
+                    </div>
+
+
+
+                    <div class="form-group col-12 ">
+                        <div class="d-flex align-items-center justify-content-end gap-3">
+                            <button class="btn btn-pink addRow">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Row</span>
+                            </button>
+                            <button class="btn btn-pink addItem">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Item</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>  
+    
+            <hr />
+            <div class="row d-flex" style="height:20vh; overflow:auto; scrollbar-width:thin;">
+                <div class="h-100 w-100">
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Item</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Amount</th>
+                                <th>Philhealth Covered</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="createInvoiceTBody" >
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <select class="w-100 text-center form-select">
+                                        <option>PRENATAL/POSTNATAL CARE</option>
+                                        <option>2</option>
+                                    </select>
+                                </td>
+                                <td>text</td>
+                                <td>2</td>
+                                <td>200</td>
+                                <td>400</td>
+                                 <td>
+                                    <input class="w-100 text-center form-control" type="number"/>
+    
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+   
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row form-group">
+   
+                <div class="form-group col-md-5 mb-3">
+                    <label for="FirstName" class="control-label fw-bold">Notes:</label>
+                    <textarea for="FirstName" class="form-control" rows="4" cols="50"></textarea>
+                    <span validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-7 row">
+                    <div class="form-group col-5  d-flex flex-column align-items-end">
+                        <label for="MiddleName" class="control-label my-2 fw-bold">Subtotal:</label>
+                        <label for="MiddleName" class="control-label my-2 fw-bold">Philhealth Total:</label>
+                        <label for="MiddleName" class="control-label my-2 fw-bold">Is Discounted:</label>
+                        <label for="MiddleName" class="control-label my-2 fw-bold">Dicount:</label>
+
+
+                    </div>
+                    <div class="form-group col-7 mb-3  d-flex flex-column align-items-start">
+
+                        <p class=" mt-1 fw-bold">₱0.00</p>
+                        <p class=" mt-1 fw-bold">₱0.00</p>
+
+                        <input class="form-check-input discounted mb-3 fw-bold" type="checkbox" style="width: 25px;">
+                        <input for="MiddleName" class="form-control mb-3 fw-bold" type="text" />
+                        <p class="align-self-center fw-bold">Total Amount: ₱0.00</p>
+
+                    </div>
+                </div>
+
+                <div class="form-group row-md-12 d-flex justify-content-end align-items-center">
+
+                    <button class="btn btn-success mx-2">
+                        <i class="fas fa-plus"></i>
+                        <span>Make Payment</span>
+                    </button>
+                    <button class="btn btn-primary mx-2">
+                        <i class="fas fa-check"></i>
+                        <span>Save & Pay Later</span>
+                    </button>
+                    <button class="btn btn-dark mx-2">
+                        <i class="fas fa-close"></i>
+                        <span>Cancel</span>
+                    </button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<style>
+    .form-check-input:checked{
+        background-color: #FF8EA6;
+        border-color: #FF8EA6;
+    }
+
+    .discounted:hover{
+        cursor:pointer;
+    }
+</style>
+<script>
+
+</script>

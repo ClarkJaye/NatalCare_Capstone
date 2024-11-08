@@ -135,8 +135,9 @@
                             <ul>
                                 @if (accessibleModules.Any(m => m.ModuleId == 6 && m.OpenAccess == "Y"))
                                 {
-                                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Billing" ? "active" : "")">
-                                        <a asp-controller="Billing" asp-action="Invoices">
+                                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Billing" && ViewContext.RouteData.Values["action"]?.ToString() == "InvoiceList" ? "active" : "")">
+                                        
+                                        <a asp-controller="Billing" asp-action="InvoiceList">
                                             <i class="fa-solid fa-dollar-sign"></i>
                                             <span class="text">Invoice List</span>
                                         </a>
@@ -144,8 +145,8 @@
                                 }
                                 @if (accessibleModules.Any(m => m.ModuleId == 7 && m.OpenAccess == "Y"))
                                 {
-                                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Billing" ? "active" : "")">
-                                        <a asp-controller="Billing" asp-action="Create">
+                                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Billing" && ViewContext.RouteData.Values["action"]?.ToString() == "GenerateInvoice" ? "active" : "")">
+                                        <a asp-controller="Billing" asp-action="GenerateInvoice">
                                             <i class="fa-solid fa-file-invoice"></i>
                                             <span class="text">Generate Invoice</span>
                                         </a>
@@ -246,6 +247,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/dataTables/datatables.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/admin/billing.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
     <script>
@@ -312,20 +314,20 @@
             window.addEventListener('resize', toggleSidebarOnResize);
 
             // Check if Service Workers are supported in the current browser
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function () {
-                    navigator.serviceWorker.register('/service-worker.js')
-                        .then(function (registration) {
-                            // console.log('Service Worker registered with scope:', registration.scope);
-                        })
-                        .catch(function (error) {
-                            console.error('Service Worker registration failed:', error);
-                        });
-                });
-            } else {
-                console.warn('Service Worker is not supported in this browser.');
-            }
-
+            // if ('serviceWorker' in navigator) {
+            //     window.addEventListener('load', function () {
+            //         navigator.serviceWorker.register('/service-worker.js')
+            //             .then(function (registration) {
+            //                 console.log('Service Worker registered with scope:', registration.scope);
+            //             })
+            //             .catch(function (error) {
+            //                 console.error('Service Worker registration failed:', error);
+            //             });
+            //     });
+            // } else {
+            //     console.warn('Service Worker is not supported in this browser.');
+            // }
+        
 
         });
     </script>

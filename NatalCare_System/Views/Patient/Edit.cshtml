@@ -1,0 +1,173 @@
+﻿@model NatalCare.Models.Entities.Patients
+
+
+@{
+    ViewData["Title"] = "Edit Patient";
+    Layout = "_UserLayout";
+}
+
+<!-- NAVBAR -->
+<partial name="Partial/_Navbar" />
+
+
+
+<div class="mx-5">
+    <div class="card card-selected w-75 mx-auto mt-5">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title my-2">Edit Patient Basic Information</h5>
+        </div>
+        <div class="card-body m-4 pt-0">
+            <form asp-action="Edit" method="post">
+
+                <h5 class="card-title mb-3"> Basic Information</h5>
+                <div class="row form-group">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="PatientID" class="form-control" hidden />
+
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="FirstName" class="control-label">First Name</label>
+                        <input asp-for="FirstName" class="form-control" placeholder="Enter Firstname" required />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="MiddleName" class="control-label">Middle Name</label>
+                        <input asp-for="MiddleName" class="form-control" placeholder="Enter Middlename" />
+                        <span asp-validation-for="MiddleName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="LastName" class="control-label">Last Name</label>
+                        <input asp-for="LastName" class="form-control" placeholder="Enter Lastname" required />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="Birthdate" class="control-label"></label>
+                        <input asp-for="Birthdate" class="form-control" type="date" required />
+                        <span asp-validation-for="Birthdate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="PlaceOfBirth" class="control-label">Place of Birth</label>
+                        <input asp-for="PlaceOfBirth" class="form-control" placeholder="Enter place of birth" required />
+                        <span asp-validation-for="PlaceOfBirth" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="Address" class="control-label"></label>
+                        <input asp-for="Address" class="form-control" placeholder="Enter address" required />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="Gender" class="control-label"></label>
+                        <select asp-for="Gender" class="form-select" required>
+                            <option disabled selected>select gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>        
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="Occupation" class="control-label"></label>
+                        <input asp-for="Occupation" class="form-control" placeholder="Enter occupation" required />
+                        <span asp-validation-for="Occupation" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-4">
+                        <label asp-for="CivilStatus" class="control-label">Civil Status</label>
+                        <input asp-for="CivilStatus" class="form-control" placeholder="Enter civil status" required />
+                        <span asp-validation-for="CivilStatus" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="MobileNumber" class="control-label">Mobile Number</label>
+                        <input asp-for="MobileNumber" class="form-control" placeholder="Enter mobile number" required />
+                        <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="TeleNumber" class="control-label">Telephone Number</label>
+                        <input asp-for="TeleNumber" class="form-control" placeholder="Enter telephone number" />
+                        <span asp-validation-for="TeleNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="Religion" class="control-label">Religion</label>
+                        <input asp-for="Religion" class="form-control" placeholder="Enter religion" />
+                        <span asp-validation-for="Religion" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="BloodType" class="control-label">Blood Type</label>
+                        <input asp-for="BloodType" class="form-control" placeholder="Enter blood type" />
+                        <span asp-validation-for="BloodType" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="HasPhilHealth" class="control-label">Has PhilHealth?</label>
+                        <select asp-for="HasPhilHealth" class="form-select" required>
+                            <option disabled selected>Yes / No</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>   
+                        <span asp-validation-for="HasPhilHealth" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-md-4 mb-3" id="philHealthSection" style="display:none;">
+                        <label asp-for="PHIC_NO" class="control-label">PhilHealth Number</label>
+                        <input asp-for="PHIC_NO" class="form-control" placeholder="Enter PhilHealth Number" required/>
+                        <span asp-validation-for="PHIC_NO" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="StatusCode" class="control-label">Status</label>
+                        <select asp-for="StatusCode" class="form-select" required>
+                            <option disabled selected>select status</option>
+                            <option value="AC">Alive</option>
+                            <option value="IN">Dead</option>
+                        </select>
+                        <span asp-validation-for="StatusCode" class="text-danger"></span>
+                    </div>
+                    <!--Emergency Side-->
+                    <h5 class="card-title my-2 mb-3">Emergency Contact Information</h5>
+
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="Emergency_Name" class="control-label"> Emergency Name</label>
+                        <input asp-for="Emergency_Name" class="form-control" placeholder="Enter Emergency name" />
+                        <span asp-validation-for="Emergency_Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-md-4 mb-5">
+                        <label asp-for="Emergency_Contact" class="control-label">Emergency Contact</label>
+                        <input asp-for="Emergency_Contact" class="form-control" type="number" placeholder="Enter Emergency contact" />
+                        <span asp-validation-for="Emergency_Contact" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-12 mt-3 mb-3">
+                        <div class="d-flex align-items-center justify-content-end gap-3">
+                            <button class="btn btn-pink" type="submit">
+                                <i class="fas fa-save"></i>
+                                <span>Update Patient</span>
+                            </button>
+                            <a class="btn btn-outline-secondary" asp-controller="Patient" asp-action="Information" asp-route-id="@Model.PatientID">
+                                <i class="fas fa-undo"></i>
+                                <span>Back</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            function togglePhilHealthSection() {
+                if ($('#HasPhilHealth').val() === 'true') {
+                    $('#philHealthSection').show();
+                } else {
+                    $('#philHealthSection').hide();
+                    $('#philHealthSection').prop("disabled", true);
+
+                }
+            }
+            togglePhilHealthSection();
+            $('#HasPhilHealth').on('change', togglePhilHealthSection);
+        });
+    </script>
+}

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NatalCare.DataAccess.data;
 using NatalCare.DataAccess.Extensions;
 using NatalCare.Models.Entities;
+using PrinceQ.DataAccess.Hubs;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,11 +19,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Configure Identity
 builder.Services.AddIdentity<User, Role>(options =>
 {
-    options.Password.RequireDigit = true;
+    options.Password.RequireDigit = false;
     options.Password.RequiredLength = 6;
     options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = true;
-    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
 
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.MaxFailedAccessAttempts = 5;
@@ -47,6 +48,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -67,5 +70,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
+
+app.MapHub<NatalCareHub>("/NatalCare.DataAccess/hubs/natalCareHub");
 
 app.Run();

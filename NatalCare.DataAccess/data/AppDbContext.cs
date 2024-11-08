@@ -18,6 +18,12 @@ namespace NatalCare.DataAccess.data
         public DbSet<Patients> Patients { get; set; }
         public DbSet<Newborn> Newborn { get; set; }
 
+        //Services
+        public DbSet<Prenatal> Prenatal { get; set; }
+        public DbSet<PrenatalVisit> PrenatalVisit { get; set; }
+        public DbSet<FamilyPlanning> FamilyPlanning { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -67,7 +73,8 @@ namespace NatalCare.DataAccess.data
             );
             modelBuilder.Entity<Status>().HasData(
               new Status { StatusCode = "AC", StatusName = "ACTIVE" },
-              new Status { StatusCode = "IN", StatusName = "INACTTIVE" }
+              new Status { StatusCode = "IN", StatusName = "INACTTIVE" },
+              new Status { StatusCode = "DL", StatusName = "DELETE" }
             );
             modelBuilder.Entity<Category>().HasData(
               new Category { CategoryId = 1, CategoryName = "Masters", StatusCode = "AC" },
@@ -117,7 +124,9 @@ namespace NatalCare.DataAccess.data
                 typeof(Patients),
                 typeof(Newborn),
                 typeof(Modules),
-                typeof(Category)
+                typeof(Category),
+                typeof(Prenatal),
+                typeof(PrenatalVisit)
             };
 
             foreach (var entity in entitiesWithCreatedAt)
@@ -126,6 +135,19 @@ namespace NatalCare.DataAccess.data
                     .Property("Created_At")
                     .HasDefaultValueSql("GETDATE()");
             }
+
+            modelBuilder.Entity<PrenatalVisit>()
+                .HasOne(p => p.PrenatalCase)
+                .WithMany()
+                .HasForeignKey(p => p.CaseNo)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PrenatalVisit>()
+                .HasOne(p => p.Patient)
+                .WithMany()
+                .HasForeignKey(p => p.PatientID)
+                .OnDelete(DeleteBehavior.Restrict);  
+
         }
     }
 }

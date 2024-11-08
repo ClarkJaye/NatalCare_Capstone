@@ -1,0 +1,180 @@
+﻿<div class="col-md-9">
+    <div class="card card-selected mb-5">
+        <div class="card-body c-details">
+            <h5 class="card-title m-0">Patient Information</h5>
+
+            <hr />
+
+            <div class="row mx-4">
+                <!-- Firstname -->
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Firstname</label>
+                    <input class="form-control text-capitalize" value="@Model.FirstName" disabled />
+                </div>
+
+                <!-- Middlename -->
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Middlename</label>
+                    <input class="form-control text-capitalize" value="@Model.MiddleName" disabled />
+                </div>
+
+                <!-- Lastname -->
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Lastname</label>
+                    <input class="form-control text-capitalize" value="@Model.LastName" disabled />
+                </div>
+
+                <!-- Age Calculation -->
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Age</label>
+                    @{
+                        var birthdate = Model.Birthdate;
+                        var age = DateTime.Now.Year - birthdate.Year;
+                    }
+                    <input class="form-control text-capitalize" value="@age" disabled />
+                </div>
+
+                <!-- Gender -->
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Gender</label>
+                    <input class="form-control text-capitalize" value="@Model.Gender" disabled />
+                </div>
+
+                <!-- Birthdate -->
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Birthdate</label>
+                    <input class="form-control text-capitalize" value="@Model.Birthdate.ToString("MM/dd/yyyy")" disabled /> <!-- Adjusted to display formatted date -->
+                </div>
+
+                <!-- Birth Place -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Birth Place</label>
+                    <input class="form-control text-capitalize" value="@Model.PlaceOfBirth" disabled />
+                </div>
+
+                <!-- Address -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Address</label>
+                    <input class="form-control text-capitalize" value="@Model.Address" disabled />
+                </div>
+
+                <!-- Occupation -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Occupation</label>
+                    <input class="form-control text-capitalize" value="@Model.Occupation" disabled />
+                </div>
+
+                <!-- Phone Number -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Phone Number</label>
+                    <input class="form-control text-capitalize" value="@Model.MobileNumber" disabled />
+                </div>
+
+                <!-- Telephone Number -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Telephone Number</label>
+                    <input class="form-control text-capitalize" value="@Model.TeleNumber" disabled />
+                </div>
+
+                <!-- Blood Type -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Blood Type</label>
+                    <input class="form-control text-capitalize" value="@Model.BloodType" disabled />
+                </div>
+
+                <!-- Religion -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Religion</label>
+                    <input class="form-control text-capitalize" value="@Model.Religion" disabled />
+                </div>
+
+            </div>
+
+
+
+            <!-- Emergency Contact Section -->
+            <h5 class="card-title mt-4 mb-3">Emergency Contact</h5>
+            <hr />
+            <div class="row mx-4">
+                <!-- Emergency Contact Name -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Emergency Contact Name</label>
+                    <input class="form-control text-capitalize" value="@Model.Emergency_Name" disabled />
+                </div>
+
+                <!-- Emergency Contact Number -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">Emergency Contact Phonenumber</label>
+                    <input class="form-control text-capitalize" value="@Model.Emergency_Contact" disabled />
+                </div>
+            </div>
+
+         
+
+            <!-- Insurance Section -->
+            <h5 class="card-title mt-4 mb-3">Insurance Details</h5>
+            <hr />
+            <div class="row mx-4">
+                <!-- PhilHealth Number -->
+                <div class="form-group col-md-6 mb-2">
+                    <label class="form-label">PhilHealth Number</label>
+                    <input class="form-control text-capitalize" value="@Model.PHIC_NO" disabled />
+                </div>
+            </div>
+
+            <div class="m-4 d-flex align-items-center justify-content-end">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-pink" data-patientid="@Model.PatientID">
+                        <i class="fas fa-save"></i>
+                        <span>Print</span>
+                    </button>
+
+                    <a class="btn btn-primary d-flex align-items-center justify-content-center gap-1" asp-controller="Patient" asp-action="Edit" asp-route-id="@Model.PatientID">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>Edit Patient</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        $('#printBtn').on("click", function (){
+            var patentId = $(this).data('patientid');
+            PrintQueueForm(patentId);
+        });
+    });
+
+
+
+    function PrintQueueForm(patentId) {
+        $.ajax({
+            type: 'GET',
+            url: "/Clerk/Print_QueueNumber",
+            data: { patentID: patentId },
+            success: function (response) {
+                if (response && response.isSuccess === false) {
+                    alert(response.message);
+                } else if (response && response.isSuccess === true) {
+                    window.location.href = "/Clerk/Print_Form?date=" + date + "&categoryId=" + categoryId + "&queueNumber=" + queueNumber;
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle error
+                alert("An error occurred while generating the queue number.");
+            }
+        });
+    }
+
+
+    // function PrintQueueForm() {
+    //     window.onafterprint = function () {
+    //         window.location.href = "/Patient/Information";
+    //     };
+    //     window.print();
+    // }
+
+</script>

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model NatalCare.Models.Entities.Newborn
+
+@{
     ViewData["Title"] = "Newborm / Newborn Information";
     Layout = "_UserLayout";
 }
@@ -9,40 +11,74 @@
 
 <div class="mx-4">
     <div class="row">
-        <div class="col-md-8">
-            <div class="card mb-4 position-relative">
-                <div class="b-left"></div>
-                <div class="card-body">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="fw-bold text-uppercase" style="font-size: .7em;">
-                            Newborn Name:
+        <div class="d-flex align-items-center justify-content-start gap-3 mb-3">
+            <a asp-action="Index" class="btn btn-outline-pink">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back</span>
+            </a>
+            <h5 class="fw-bold m-0 text-capitalize">@Model.FirstName @Model.MiddleName @Model.LastName</h5>
+        </div>
+
+        <!-- Left Sidebar: Patient Information -->
+        <div class="col-md-3 mb-4">
+            <div class="card card-selected">
+                <div class="card-body c-details">
+                    <div class="d-flex justify-content-center align-items-center flex-column mb-3 mx-lg-5">
+                        <!-- Patient Profile Info -->
+                        <div class="d-flex flex-column align-items-center justify-content-center gap-2 text-center mt-3">
+                            @if (Model.Gender?.ToLower() == "female")
+                            {
+                                <img src="~/profile/bgirl.png" alt="Profile" class="img-fluid rounded-circle mb-3 p-2" style="border: 4px solid var(--pink);" />
+                            }
+                            else
+                            {
+                                <img src="~/profile/bboy.png" alt="Profile" class="img-fluid rounded-circle mb-3 p-2" style="border: 4px solid var(--pink);" />
+                            }
+
+                            <div class="mb-2">
+                                <h4 class="fw-bold text-pink mb-0">@Model.NewbornID</h4>
+                                <span style="font-size: 14px;">Newborn ID</span>
+                            </div>
+
+                            <div class="mb-2">
+                                <h5 class="fw-bold m-0 text-capitalize">@Model.FirstName @Model.MiddleName @Model.LastName</h5>
+                                <span  style="font-size: 14px;">Newborn Full Name</span>
+                            </div>
+
+                            <div class="mb-2">
+                                <h5 class="m-0 text-capitalize">@Model.Patient.FirstName @Model.Patient.MiddleName @Model.Patient.LastName</h5>
+                                <span style="font-size: 14px;">Mother Full Name</span>
+                            </div>
                         </div>
-                        <div class="h4 fw-bold mb-0">
-                            Maria Pepito
+
+                        <!-- Sidebar Links -->
+                        <div class="d-flex flex-column gap-4 mt-5 w-100">
+                            <a asp-action="Information" asp-route-id="@Model.NewbornID" class="btn btn-outline-pink py-2 @(ViewContext.RouteData.Values["action"]?.ToString() == "Information" ? "active" : "")">
+                                <i class="fas fa-user"></i>
+                                <span style="font-weight: 600;">Patient Information</span>
+                            </a>
+
+                            <a asp-action="MedicalRecords" asp-route-id="@Model.NewbornID" class="btn btn-outline-pink py-2 @(ViewContext.RouteData.Values["action"]?.ToString() == "MedicalRecords" ? "active" : "")">
+                                <i class="fas fa-file-medical"></i>
+                                <span style="font-weight: 600;">Medical Records</span>
+                            </a>
+
+                            <a asp-action="Payments" class="btn btn-outline-pink py-2 @(ViewContext.RouteData.Values["action"]?.ToString() == "Payments" ? "active" : "")">
+                                <i class="fas fa-receipt"></i>
+                                <span style="font-weight: 600;">Payments / Invoices</span>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card mb-4 position-relative">
-                <div class="b-left"></div>
-                <div class="card-body">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="fw-bold text-uppercase" style="font-size: .7em;">
-                            Newborn ID:
-                        </div>
-                        <div class="h4 fw-bold mb-0">
-                            NB-101
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+        <!-- Right Content: Patient Information Partial -->
+        <partial name="Partial/Newborn/_NewbornInformation" />
     </div>
+</div>
 
-
-    <div class="row">
+@*     <div class="row">
         <div class="d-flex justify-content-end mb-3">
             <a asp-controller="" asp-action="" class="btn btn-pink">
                 <i class="fas fa-plus"></i>
@@ -108,13 +144,6 @@
             <div class="card mb-5">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title m-0">Newborn Screening Test</h5>
-                    @* <h5 class="card-title m-0" style="color: var(--pink)">OPD Visit</h5> *@
-                    @* <div>
-                        <a class="text-success" href="#">
-                        <i class="fas fa-plus" style="color: var(--pink); font-size: 24px;"></i>
-                        </a>
-                    </div> *@
-
                     <div>
                         <a class="text-success" href="#">
                             <i class="fas fa-plus" style="color: var(--pink); font-size: 24px;"></i>
@@ -222,6 +251,4 @@
             </div>
         </div>
 
-    </div>
-
-</div>
+    </div> *@

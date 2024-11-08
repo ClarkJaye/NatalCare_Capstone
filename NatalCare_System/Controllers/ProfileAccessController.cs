@@ -44,12 +44,14 @@ namespace NatalCare_System.Controllers
         {
             if (profileAccessList == null || !profileAccessList.Any())
             {
-                return Json(new { success = false, message = "Access record can not update!" });
+                TempData["error"] = "Access record can not update!";
+                return Json(new { success = false });
             }
 
             // Update access records using the service
             await profileAccessServices.UpdateAccess(profileAccessList);
-            return Json(new { success = true, message = "Access record updated successfully." });
+            TempData["success"] = "Access record updated successfully.";
+            return Json(new { success = true });
         }
 
 

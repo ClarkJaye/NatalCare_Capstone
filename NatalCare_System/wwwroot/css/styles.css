@@ -4,13 +4,15 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    text-decoration: none;
 }
 
 :root {
     --poppins: 'Poppins', sans-serif;
     --lato: 'Lato', sans-serif;
     --kaushan: 'Kaushan Script', cursive;
-    --light: #F9F9F9;
+    /*--light: #F9F9F9;*/
+    --light: #fff;
     --grey: #eee;
     --dark1: #342E37;
     --dark: #342e37c4;
@@ -43,6 +45,7 @@ html {
 
 a {
     text-decoration: none;
+    color: var(--dark);
 }
 
 li {
@@ -61,6 +64,7 @@ ul {
 body {
     background: var(--grey);
     overflow-x: hidden;
+    padding: 0 !important;
 }
 
 .modal, .modal-open {
@@ -68,6 +72,9 @@ body {
 }
 
 
+.text-pink{
+    color: var(--pink);
+}
 
 .btn-pink {
     color: #fff;
@@ -80,6 +87,30 @@ body {
         border-color: #FF8EA6;
         color: #fff;
     }
+
+.btn-outline-pink {
+    color: var(--pink);
+    border-color: var(--pink);
+}
+    .btn-outline-pink:hover {
+        color: var(--light);
+        background-color: var(--pink);
+    }
+    .btn-outline-pink.active {
+        color: var(--light);
+        background-color: var(--pink);
+    }
+
+.btn-lightgrey {
+    color: var(--dark);
+    background-color: var(--grey);
+}
+
+    .btn-lightgrey:hover {
+        color: var(--dark);
+        background-color: #d9d7d7;
+    } 
+
 
 #menuBar:hover {
     color: var(--pink);
@@ -134,7 +165,7 @@ ul#patientManagementMenu {
 #sidebar .logo:after {
     content: '';
     position: absolute;
-    height: 80px;
+    height: 55px;
     width: 1px;
     background: var(--grey);
     right: 0;
@@ -222,7 +253,8 @@ ul#patientManagementMenu {
     display: flex;
     align-items: center;
     border-radius: 48px;
-    font-size: 16px;
+    /*font-size: 16px;*/
+    font-size: 14px;
     white-space: nowrap;
     overflow-x: hidden;
     padding: 10px 0;
@@ -316,6 +348,10 @@ ul#patientManagementMenu {
 }
 .table th {
     color: var(--dark) !important;
+    font-size: 14px;
+}
+.table tbody td {
+    font-size: 14px;
 }
 .dt-search {
     margin-bottom: 1rem;
@@ -370,7 +406,6 @@ ul#patientManagementMenu {
             font-size: 14px;
         }
 
-
 .table > :not(caption) > * > * {
     padding: .5rem .5rem;
     background-color: var(--bs-table-bg);
@@ -382,8 +417,8 @@ ul#patientManagementMenu {
 .table thead {
     position: sticky;
     top: 0;
-    background:white;
-   border:none;
+    background: white;
+    border: none;
 }
 
 input[type=number]::-webkit-outer-spin-button,

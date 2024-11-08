@@ -4,7 +4,7 @@
 @inject SignInManager<User> SignInManager
 
 <!-- NAVBAR -->
-<nav class="mb-4">
+<nav class="mb-4" style="border-bottom: 2px solid var(--grey);">
 	<div class="d-flex align-items-center">
 		<button class="btn" id="menuBar">
 			<i class="fa-solid fa-bars" style="font-size: 20px;"></i>
@@ -18,15 +18,40 @@
 		</div>
 	</div>
 
-	<div class="d-flex align-items-center gap-3">
+	<div class="d-flex align-items-center gap-4">
+		<ul class="navbar-nav">
+			<!-- Shortcut dropdown -->
+			<li class="nav-item dropdown">
+				<a href="#" class="nav-link dropdown-toggle d-flex align-items-center gap-2" id="shortcutDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+					<i class="fa-solid fa-plus"></i>
+					<span>Shortcuts</span>
+				</a>
+				<ul class="dropdown-menu" aria-labelledby="shortcutDropdown">
+					<li>
+						<a asp-controller="Patient" asp-action="Create" class="dropdown-item d-flex align-items-center gap-2">
+							<i class="fa-solid fa-user-plus"></i>
+							<span>Add Patient</span>
+						</a>
+					</li>
+					<li>
+						<a asp-controller="Newborn" asp-action="Create" class="dropdown-item d-flex align-items-center gap-2">
+							<i class="fa-solid fa-baby-carriage"></i>
+							<span>Add Newborn</span>
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
+
 		<a href="#" class="notification">
-			<i class="fa-solid fa-bell"></i> <!-- FontAwesome Bell Icon -->
+			<i class="fa-solid fa-bell"></i>
 			<span class="num">8</span>
 		</a>
 
 		<ul class="navbar-nav">
 			<li class="nav-item dropdown">
-				<a href="#" class="d-flex align-items-center gap-2 profile nav-link dropdown-toggle item-name" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+				<a href="#" class="d-flex align-items-center gap-2 profile nav-link dropdown-toggle item-name" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 					<img src="~/profile/defaultProfile.png">
 					<span>@User?.Identity?.Name</span>
 				</a>
@@ -336,7 +361,20 @@
 	}
 
 
-	
 
 
+	//Sweetalert
+	function showSwalAlert(type, title, text, confirmButtonText = 'OK', callback = null) {
+		Swal.fire({
+			icon: type,
+			title: title,
+			text: text,
+			confirmButtonColor: type === 'success' ? '#FC7995' : '#d33',
+			confirmButtonText: confirmButtonText
+		}).then((result) => {
+			if (result.isConfirmed && callback) {
+				callback();
+			}
+		});
+	}
 </script>

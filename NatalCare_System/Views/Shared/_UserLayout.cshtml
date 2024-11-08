@@ -78,11 +78,12 @@
                             </a>
                         </li>
 
-                        <div id="patientManagementMenu" class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" || ViewContext.RouteData.Values["controller"]?.ToString() == "Newborn" || ViewContext.RouteData.Values["controller"]?.ToString() == "Admission" || ViewContext.RouteData.Values["controller"]?.ToString() == "OPD" ? "show" : "")">
+                        <div id="patientManagementMenu" class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" || ViewContext.RouteData.Values["controller"]?.ToString() == "Newborn" || ViewContext.RouteData.Values["controller"]?.ToString() == "Admission" || ViewContext.RouteData.Values["controller"]?.ToString() == "OPD" || ViewContext.RouteData.Values["controller"]?.ToString() == "Prenatal" ? "show" : "")">
                             <ul>
                                 @if (accessibleModules.Any(m => m.ModuleId == 2 && m.OpenAccess == "Y"))
                                 {
-                                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ? "active" : "")">
+                                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ||  
+                                    ViewContext.RouteData.Values["controller"]?.ToString() == "Prenatal" ? "active" : "")">
                                         <a asp-controller="Patient" asp-action="Index">
                                             <i class="fa-solid fa-folder"></i>
                                             <span class="text">Patient Records</span>
@@ -156,16 +157,39 @@
                     }
 
                     <!-- Reports -->
-                    @if (accessibleModules.Any(m => m.ModuleId == 8 && m.OpenAccess == "Y"))
+                    @if (accessibleModules.Any(m => m.ModuleId == 8 && m.OpenAccess == "Y" || m.ModuleId == 9 && m.OpenAccess == "Y"))
                     {
                         <li>
-                            <a asp-controller="Reports" asp-action="Index">
+                            <a href="#reportsMenu" data-bs-toggle="collapse" class="sidebar-link collapse">
                                 <i class="fa-solid fa-chart-line"></i>
                                 <span class="text">Reports</span>
                             </a>
                         </li>
+                        <div id="reportsMenu" class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "NatalityReport"
+                        || ViewContext.RouteData.Values["controller"]?.ToString() == "InvoicesReport" ? "show" : "")">
+                            <ul>
+                                @if (accessibleModules.Any(m => m.ModuleId == 8 && m.OpenAccess == "Y"))
+                                {
+                                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "NatalityReport" ? "active" : "")">
+                                        <a asp-controller="NatalityReport" asp-action="Index">
+                                            <i class="fa-solid fa-id-badge"></i>
+                                            <span class="text">Natality Reports</span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (accessibleModules.Any(m => m.ModuleId == 9 && m.OpenAccess == "Y"))
+                                {
+                                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "InvoicesReport" ? "active" : "")">
+                                        <a asp-controller="InvoicesReport" asp-action="Index">
+                                            <i class="fa-solid fa-users"></i>
+                                            <span class="text">Payments Reports</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                    </div>
                     }
-
+                
                     <!-- Maintenance -->
                     @if (accessibleModules.Any(m => m.ModuleId == 10 && m.OpenAccess == "Y" || m.ModuleId == 11 && m.OpenAccess == "Y"))
                     {
@@ -215,9 +239,11 @@
         @RenderBody()
     </section>
 
+@*     <script src="~/js/signalr.js"></script>
+    <script src="~/js/signalHub.js"></script> *@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <script src="~/lib/toastr/toastr.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/dataTables/datatables.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -232,14 +258,12 @@
                 lengthChange: true,
                 searching: true,
                 ordering: true,
-                lengthMenu: [5, 10, 25, 50],
+                lengthMenu: [10, 25, 50, 100],
                 language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search patients..."
-                },
-                paginate: {
-                    previous: "Previous",
-                    next: "Next"
+                    paginate: {
+                        previous: "Previous",
+                        next: "Next"
+                    }
                 },
                 info: true,
                 autoWidth: false,
@@ -248,6 +272,30 @@
                     { orderable: false, targets: -1 }
                 ]
             });
+
+            // FILTERING
+            $('.filterInput').on('keyup', function () {
+                var value = $(this).val().toLowerCase();
+                var rows = $('tbody tr:not(.no-record-found)');
+                var noRecordRow = $('.no-record-found');
+
+                // Filter rows
+                var visibleRows = rows.filter(function () {
+                    return $(this).text().toLowerCase().indexOf(value) > -1;
+                }).toggle(true);
+
+                // Hide rows that do not match
+                rows.not(visibleRows).toggle(false);
+
+                // If no rows are visible, show the "No record found" message
+                if (visibleRows.length === 0) {
+                    noRecordRow.show();
+                } else {
+                    noRecordRow.hide();
+                }
+            });
+
+
 
             // TOGGLE SIDEBAR
             const menuBar = document.getElementById('menuBar');
@@ -265,20 +313,6 @@
             toggleSidebarOnResize();
             window.addEventListener('resize', toggleSidebarOnResize);
 
-            //Sweetalert
-            function showSwalAlert(type, title, text, confirmButtonText = 'OK', callback = null) {
-                Swal.fire({
-                    icon: type,
-                    title: title,
-                    text: text,
-                    confirmButtonColor: type === 'success' ? '#3085d6' : '#d33',
-                    confirmButtonText: confirmButtonText
-                }).then((result) => {
-                    if (result.isConfirmed && callback) {
-                        callback();
-                    }
-                });
-            }
             // Check if Service Workers are supported in the current browser
             // if ('serviceWorker' in navigator) {
             //     window.addEventListener('load', function () {
@@ -293,143 +327,9 @@
             // } else {
             //     console.warn('Service Worker is not supported in this browser.');
             // }
-
+        
 
         });
     </script>
 </body>
 </html>
-
-
-
-
-
-
-@*     @if (SignInManager.IsSignedIn(User))
-    {
-        var user = await UserManager.GetUserAsync(User);
-        if (user != null)
-        {
-            var roles = await UserManager.GetRolesAsync(user);
-
-            <!-- SIDEBAR -->
-            <aside id="sidebar">
-                <a asp-controller="Home" asp-action="Dashboard" class="logo d-flex justify-content-center pt-2 position-relative">
-                    <img src="~/img/logo.png" alt="Logo" width="200" class="logo-h1" />
-                    <img src="~/img/logo-icon.png" alt="Logo" width="50" class="logo-h2 d-none" />
-                </a>
-                <ul class="side-menu">
-                    <!-- Dashboard -->
-                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
-                        <a asp-controller="Home" asp-action="Dashboard">
-                            <i class="fa-solid fa-house"></i>
-                            <span class="text">Dashboard</span>
-                        </a>
-                    </li>
-
-                    <!-- Patient Management -->
-                    <li>
-                        <a href="#patientManagementMenu" data-bs-toggle="collapse" class="sidebar-link collapse">
-                            <i class="fa-solid fa-user"></i>
-                            <span class="text">Patient Management</span>
-                        </a>
-                    </li>
-                    <div id="patientManagementMenu" class="collapse show
-                        @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" || ViewContext.RouteData.Values["controller"]?.ToString() == "Newborn" || ViewContext.RouteData.Values["controller"]?.ToString() == "Admission" || ViewContext.RouteData.Values["controller"]?.ToString() == "OPD" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "show" : "")" )">
-                        <ul>
-                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ||
-                                            ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" && ViewContext.RouteData.Values["action"]?.ToString() == "Information" ? "active" : "")">
-                                <a asp-controller="Patient" asp-action="Index">
-                                    <i class="fa-solid fa-folder"></i>
-                                    <span class="text">Patient Records</span>
-                                </a>
-                            </li>
-                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Newborn" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ||
-                                            ViewContext.RouteData.Values["controller"]?.ToString() == "Newborn" && ViewContext.RouteData.Values["action"]?.ToString() == "Information" ? "active" : "")">
-                                <a asp-controller="Newborn" asp-action="Index">
-                                    <i class="fa-solid fa-baby-carriage"></i>
-                                    <span class="text">Newborn Records</span>
-                                </a>
-                            </li>
-                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Admission" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
-                                <a asp-controller="Admission" asp-action="Index">
-                                    <i class="fa-solid fa-bed"></i>
-                                    <span class="text">Admission / In-Patient</span>
-                                </a>
-                            </li>
-                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "OPD" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
-                                <a asp-controller="OPD" asp-action="Index">
-                                    <i class="fa-solid fa-hospital"></i>
-                                    <span class="text">Out-Patient (OPD)</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Generate Invoice -->
-                    <li>
-                        <a href="#BillingMenu" data-bs-toggle="collapse" class="sidebar-link collapse">
-                            <i class="fa-solid fa-file-invoice"></i>
-                            <span class="text">Billing & Payment </span>
-                        </a>
-                    </li>
-                    <div id="BillingMenu" class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "Billing" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "show" : "")">
-                        <ul>
-                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Billing" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
-                                <a asp-controller="Billing" asp-action="Invoices">
-                                    <i class="fa-solid fa-dollar-sign"></i>
-                                    <span class="text">Invoice List</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-controller="Billing" asp-action="Create">
-                                    <i class="fa-solid fa-file-invoice"></i>
-                                    <span class="text">Generate Invoice</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Reports -->
-                    <li>
-                        <a asp-controller="Reports" asp-action="Index">
-                            <i class="fa-solid fa-chart-line"></i>
-                            <span class="text">Reports</span>
-                        </a>
-                    </li>
-
-
-                    <!-- Maintenance (Users, Midwives, etc.) -->
-                    <li>
-                        <a href="#maintenanceMenu" data-bs-toggle="collapse" class="sidebar-link collapse">
-                            <i class="fa-solid fa-gear"></i>
-                            <span class="text">Maintenance </span>
-                        </a>
-                    </li>
-                    <div id="maintenanceMenu" class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "User" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "show" : "")">
-                        <ul>
-                            <li>
-                                <a asp-controller="Profiles" asp-action="Index">
-                                    <i class="fa-solid fa-id-badge"></i>
-                                    <span class="text">Profiles</span>
-                                </a>
-                            </li>
-                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "User" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
-                                <a asp-controller="User" asp-action="Index">
-                                    <i class="fa-solid fa-users"></i>
-                                    <span class="text">Users</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-controller="Midwives" asp-action="Index">
-                                    <i class="fa-solid fa-user-nurse"></i>
-                                    <span class="text">Midwives</span>
-                                </a>
-                            </li>
-
-                        </ul>
-                    </div>
-                </ul>
-            </aside>
-        }
-    } *@

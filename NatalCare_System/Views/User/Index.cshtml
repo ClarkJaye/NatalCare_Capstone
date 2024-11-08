@@ -43,7 +43,6 @@
                     </thead>
                     <tbody>
                         @foreach (var userRoles in Model)
-
                         {
                             <tr>
                                 <td>@userRoles.User.FirstName</td>
@@ -79,22 +78,32 @@
                                 <td>
                                     @foreach (var role in userRoles.Roles)
                                     {
-                                        <span class="badge bg-info text-dark">@role</span> 
+                                        if(role.ToLower() == "admin")
+                                        {
+                                            <span class="badge bg-success">
+                                                @role
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-info text-dark">@role</span> 
+                                        }
                                     }
                                 </td>
                                 <td>@userRoles.User.Created_At</td> 
                                 <td>
-                                    <div class="d-flex align-items-center justify-content-center gap-4">
-                                        <a class="text-dark btnIcon" asp-action="Details" asp-route-id="@userRoles.User.Id">
-                                            <i class="fa-solid fa-list" style="font-size: 24px;"></i>
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                        <a class="detail-Btn btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-action="Details" asp-route-id="@userRoles.User.Id">
+                                            <i class="fa-solid fa-list"></i>
+                                            <span>Details</span>
                                         </a>
-
-                                        <a class="text-success btnIcon" asp-action="Edit" asp-route-id="@userRoles.User.Id">
-                                            <i class="fa-solid fa-pen-to-square" style="font-size: 24px;"></i>
+                                        <a class="edit-Btn btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center gap-1" asp-action="Edit" asp-route-id="@userRoles.User.Id">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            <span>Edit</span>
                                         </a>
-
-                                        <a class="text-danger btnIcon" data-Id="@userRoles.User.Id" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                            <i class="fa-solid fa-trash-can" style="font-size: 24px;"></i>
+                                        <a class="dlt-Btn btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center gap-1" data-Id="@userRoles.User.Id" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                            <i class="fa-solid fa-trash"></i>
+                                            <span>Delete</span>
                                         </a>
                                     </div>
                                 </td>

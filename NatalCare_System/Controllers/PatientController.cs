@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using NatalCare.DataAccess.Extensions;
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.Models.Entities;
-using NatalCare.Models.ViewModel.Patient;
 
 namespace NatalCare_System.Controllers
 {
@@ -76,6 +75,7 @@ namespace NatalCare_System.Controllers
         {
             return View();
         }
+     
         [HttpPost]
         public async Task<IActionResult> Create(Patients patient)
         {
@@ -85,7 +85,6 @@ namespace NatalCare_System.Controllers
                 {
                     var userId = GetCurrentUserId();
                     var result = await patientServices.Create(patient, userId);
-
                     if (result)
                     {
                         TempData["success"] = "Record has been added!";
@@ -104,6 +103,7 @@ namespace NatalCare_System.Controllers
 
             return View(patient); 
         }
+       
         //Edit Patient
         public async Task<IActionResult> Edit(string id)
         {
@@ -213,7 +213,6 @@ namespace NatalCare_System.Controllers
             var records = await patientServices.GetDeletedPatients();
             return View(records ?? new List<Patients>());
         }
-
         //Retrieved Record
         public async Task<IActionResult> RetrieveRecord(string caseno)
         {
@@ -221,56 +220,6 @@ namespace NatalCare_System.Controllers
             var result = await patientServices.RetrievedAync(caseno, userId);
             return Json(result);
         }
-
-        ////Services Records
-        //public async Task<IActionResult> PrenatalRecord(string patientid, string caseno)
-        //{
-        //    var patient = await patientServices.GetInformation(patientid);
-        //    var prenatalRecord = await serviceServices.GetPrenatalRecord(patientid, caseno);
-        //    if (prenatalRecord.CaseNo == null)
-        //    {
-        //        TempData["error"] = "No record found!";
-        //        if(patient.PatientID != null)
-        //        {
-        //            return RedirectToAction("MedicalRecords", "Patient", new { id = patient.PatientID });
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    var prenatalVisitRecords = await serviceServices.GetPrenatalVisitsRecords(prenatalRecord.CaseNo, patient.PatientID);
-        //    var viewModel = new PatientsVM
-        //    {
-        //        Patient = patient,
-        //        PrenatalRecord = prenatalRecord,
-        //        PrenatalVisitRecords = prenatalVisitRecords,
-        //    };
-        //    return View(viewModel);
-        //}
-
-        ////Display Deleted records
-        //public async Task<IActionResult> DisplayDeletedPrenatal(string patientId)
-        //{
-        //    var records = await serviceServices.GetDeletedPrenatalRecords(patientId);
-        //    return View(records ?? new List<Prenatal>());
-        //}
-        //public async Task<IActionResult> DisplayDeletedFP(string patientId)
-        //{
-        //    var records = await serviceServices.GetDeletedFPRecords(patientId);
-        //    return View(records ?? new List<FamilyPlanning>());
-        //}
-        ////Retrieved Record
-        //public async Task<IActionResult> RetrievePrenatalRecord(string caseno)
-        //{
-        //    var userId = GetCurrentUserId();
-        //    var result = await serviceServices.RetrievedPrenetalAync(caseno, userId);
-        //    return Json(result);
-
-        //}
-        //public async Task<IActionResult> RetrieveFPRecord(string caseno)
-        //{
-        //    var userId = GetCurrentUserId();
-        //    var result = await serviceServices.RetrievedFPAync(caseno, userId);
-        //    return Json(result);
-        //}
 
 
         private string GetCurrentUserId()

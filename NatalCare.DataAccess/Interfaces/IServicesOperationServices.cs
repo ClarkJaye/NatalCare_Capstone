@@ -6,6 +6,7 @@ namespace NatalCare.DataAccess.Interfaces
     public interface IServicesOperationServices
     {
         //------ PRENATAL ------//
+        Task<GeneralResponse> GetPrenatalFormRecordAsync(string id);
         Task<Prenatal> GetPrenatalRecord(string id, string caseno);
         Task<List<Prenatal>> GetDeletedPrenatalRecords(string patientId);
         Task<List<Prenatal>> GetPrenatalRecords(string patientId);

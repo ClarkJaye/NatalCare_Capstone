@@ -26,7 +26,7 @@
                         <i class="fas fa-plus"></i>
                         <span>Add New Visit</span>
                     </a>
-                    <a asp-controller="" asp-action="" class="btn btn-sm btn-outline-pink" data-bs-toggle="modal" data-bs-target="#prenatalVisitDetailModal">
+                    <a id="preFormBtn" class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1" data-preid="@Model.PrenatalRecord.CaseNo">
                         <i class="fas fa-eye"></i>
                         <span>See All Detailed</span>
                     </a>
@@ -42,7 +42,7 @@
                 <div class="d-flex align-items-center gap-2" style="cursor:pointer;">
                     <span class="h6">Case No#:</span>
                     <h3 class="btn btn-sm btn-outline-pink fw-bold border-0" style="font-size: 14px;">@Model.PrenatalRecord.CaseNo</h3>
-                    <input type="hidden" id="caseID" name="patientID" value="@Model.PrenatalRecord.CaseNo" />
+                    <input type="hidden" id="caseID" name="caseNo" value="@Model.PrenatalRecord.CaseNo" />
                 </div>
             </div>
 
@@ -54,7 +54,6 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Number of Visit</th>
                             <th>Date Visit</th>
                             <th>AOG Week</th>
                             <th>Weight</th>
@@ -75,7 +74,6 @@
                             @foreach (var item in Model.PrenatalVisitRecords)
                             {
                                 <tr>
-                                    <td>@item.NumberOfVisit visit</td>
                                     <td>@item.DateVisit?.ToString("MMM dd yyyy h:mm tt")</td>
                                     <td>@item.AOGWeek</td>
                                     <td>@item.Weight</td>
@@ -126,6 +124,102 @@
 </div>
 
 
+
+<!-- Prenatal Records Form Modal -->
+<div class="modal fade" id="prenatalFormModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Prenatal Record Form</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <h5 class="card-title my-2 mb-3">Present Pregnancy</h5>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="Gravida-Form" class="control-label">GRAVIDA</label>
+                            <input id="Gravida-Form" name="Gravida" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="Para-Form" class="control-label">PARA</label>
+                            <input id="Para-Form" name="Para" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="Abortion-Form" class="control-label">ABORTION</label>
+                            <input id="Abortion-Form" name="Abortion" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="StillBirth-Form" class="control-label">STILL BIRTH</label>
+                            <input id="StillBirth-Form" name="StillBirth" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="LMP-Form" class="control-label">LMP</label>
+                            <input type="date" id="LMP-Form" name="LMP" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="EDC-Form" class="control-label">EDC</label>
+                            <input type="date" id="EDC-Form" name="EDC" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="DateVisit-Form" class="control-label">DateVisit</label>
+                            <input type="datetime-local" id="DateVisit-Form" name="DateVisit" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="HRCODE-Form" class="control-label">H.R. Code</label>
+                            <input id="HRCODE-Form" name="HRCODE" class="form-control bg-white" readonly />
+                        </div>
+
+                        <hr />
+
+                        <h5 class="card-title my-2 mb-3">Prenatal Visit</h5>
+
+                        <!-- Prenatal Visit Records Table -->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>AOG Week</th>
+                                        <th>Weight</th>
+                                        <th>BP</th>
+                                        <th>Fundal Height</th>
+                                        <th>Fetal Heart Rate</th>
+                                        <th>Temperature</th>
+                                        <th>CR</th>
+                                        <th>RR</th>
+                                        <th>Date of Visit</th>
+                                        <th>Physical Assessment</th>
+                                        <th>Notes</th>
+                                        <th>RX</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="prenatalVisitTableBody">
+                                    <!-- Rows will be dynamically inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button" class="btn btn-success">Print</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Add Prenatal Visit Modal -->
 <div class="modal fade" id="prenatalVisitAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -138,11 +232,6 @@
                 <form id="AddPrenatalVisitForm" method="POST">
                     @Html.AntiForgeryToken()
                     <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="numOfVisit-Add" class="control-label">Number of Visit</label>
-                            <input type="number" id="numOfVisit-Add" name="NumberOfVisit" class="form-control" placeholder="Enter number of Visit" required />
-                        </div>
-
                         <div class="col-md-6 mb-3">
                             <label for="AOGWeek-Add" class="control-label">AOG Week</label>
                             <input id="AOGWeek-Add" name="AOGWeek" class="form-control" placeholder="Enter AOG Week" required />
@@ -220,7 +309,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Prenatal Visit: <span class="text-pink" id="numVisit-edit"></span></h5>
+                <h5 class="modal-title">Edit Prenatal Visit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -228,11 +317,6 @@
                     <div class="row">
                         <input type="hidden" id="caseNo-edit" name="CaseNo" />
                         <input type="hidden" id="patientId-edit" name="PatientID" />
-
-                        <div class="col-md-6 mb-3">
-                            <label for="numOfVisit-edit" class="control-label">Number of Visit</label>
-                            <input type="number" id="numOfVisit-edit" name="NumberOfVisit" class="form-control" placeholder="Enter number of Visit" required />
-                        </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="AOGWeek-edit" class="control-label">AOG Week</label>
@@ -308,58 +392,77 @@
 </div>
 <!-- Details Prenatal Visit Modal -->
 <div class="modal fade" id="prenatalVisitDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Prenatal Form</h5>
+                <h5 class="modal-title">Details Prenatal Visit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <label for="Gravida-Edit" class="control-label">GRAVIDA</label>
-                            <input id="Gravida-Edit" name="Gravida" class="form-control" placeholder="Enter number of Gravida" required />
+                        <div class="col-md-6 mb-3">
+                            <label for="AOGWeek-detail" class="control-label">AOG Week</label>
+                            <input id="AOGWeek-detail" name="AOGWeek" class="form-control" disabled />
                         </div>
 
-                        <div class="col-md-3 mb-3">
-                            <label for="Para-Edit" class="control-label">PARA</label>
-                            <input id="Para-Edit" name="Para" class="form-control" placeholder="Enter number of Para" required />
+                        <div class="col-md-6 mb-3">
+                            <label for="Weight-detail" class="control-label">Weight</label>
+                            <input id="Weight-detail" name="Weight" class="form-control" disabled />
                         </div>
 
-                        <div class="col-md-3 mb-3">
-                            <label for="Abortion-Edit" class="control-label">ABORTION</label>
-                            <input id="Abortion-Edit" name="Abortion" class="form-control" placeholder="Enter number of Abortion" required />
+                        <div class="col-md-6 mb-3">
+                            <label for="BP-detail" class="control-label">Blood Pressure</label>
+                            <input id="BP-detail" name="BP" class="form-control" disabled />
                         </div>
 
-                        <div class="col-md-3 mb-3">
-                            <label for="StillBirth-Edit" class="control-label">STILL BIRTH</label>
-                            <input id="StillBirth-Edit" name="StillBirth" class="form-control" placeholder="Enter number of Still Birth" required />
+                        <div class="col-md-6 mb-3">
+                            <label for="FH-detail" class="control-label">Fundal Height</label>
+                            <input id="FH-detail" name="FH" class="form-control" disabled />
                         </div>
 
-                        <div class="col-md-3 mb-3">
-                            <label for="LMP" class="control-label">LMP</label>
-                            <input type="date" id="LMP-Edit" name="LMP" class="form-control" required />
+                        <div class="col-md-6 mb-3">
+                            <label for="FHT-detail" class="control-label">Fetal Heart Rate</label>
+                            <input id="FHT-detail" name="FHT" class="form-control" disabled />
                         </div>
 
-                        <div class="col-md-3 mb-3">
-                            <label for="EDC" class="control-label">EDC</label>
-                            <input type="date" id="EDC-Edit" name="EDC" class="form-control" required />
+                        <div class="col-md-6 mb-3">
+                            <label for="Temp-detail" class="control-label">Temperature</label>
+                            <input id="Temp-detail" name="Temp" class="form-control" disabled />
                         </div>
 
-                        <div class="col-md-3 mb-3">
-                            <label for="DateVisit-Edit" class="control-label">DateVisit</label>
-                            <input type="datetime-local" id="DateVisit-Edit" name="DateVisit" class="form-control" required />
+                        <div class="col-md-6 mb-3">
+                            <label for="CR-detail" class="control-label">CR</label>
+                            <input id="CR-detail" name="CR" class="form-control" disabled />
                         </div>
 
-                        <div class="col-md-3 mb-3">
-                            <label for="HRCODE" class="control-label">H.R. Code</label>
-                            <input id="HRCODE-Edit" name="HRCODE" class="form-control" placeholder="Enter H.R Code" required />
+                        <div class="col-md-6 mb-3">
+                            <label for="RR-detail" class="control-label">RR</label>
+                            <input id="RR-detail" name="RR" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DateVisit-detail" class="control-label">Date of Visit</label>
+                            <input type="datetime-local" id="DateVisit-detail" name="DateVisit" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="PhyAsses-detail" class="control-label">Physical Assessment</label>
+                            <textarea id="PhyAsses-detail" name="PhysicalAssessment" class="form-control" rows="3" disabled></textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="Notes-detail" class="control-label">Notes</label>
+                            <textarea id="Notes-detail" name="Notes" class="form-control" rows="3" disabled></textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="RX-detail" class="control-label">Prescription</label>
+                            <textarea id="RX-detail" name="RX" class="form-control" rows="3" disabled></textarea>
                         </div>
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
                             <div class="d-flex align-items-center gap-2">
-                                <button type="button" class="btn btn-success">Print</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
@@ -369,7 +472,6 @@
         </div>
     </div>
 </div>
-
 
 
 @section Scripts {
@@ -405,10 +507,15 @@
                 e.preventDefault();
                 AddPrenatalVisit();
             });
+            //Prenatal Form Modal
+            $("#preFormBtn").on("click", function (e) {
+                var preId = $(this).data('preid');
+                PrenatalFormModal(preId);
+            });
             //Detail
             $(".detail-Btn").on("click", function (e) {
                 var caseNo = $(this).data('caseno');
-                PrenatalVisitDetail(caseNo);
+                PrenatalVisitDetailModal(caseNo);
             });
             //Edit
             $(".edit-Btn").on("click", function (e) {
@@ -423,7 +530,7 @@
             // DELETE
             $(".dlt-Btn").on("click", function (e) {
                 var caseNo = $(this).data('caseno');
-                DeletePrenatal(caseNo);
+                DeletePrenatalVisit(caseNo);
             });
         });
 
@@ -432,7 +539,7 @@
             var formData = $("#UpdatePrenatalVisitForm").serialize();
             console.log(formData)
             $.ajax({
-                url: '@Url.Action("UpdatePrenatalVisitRecord", "Servicess")',
+                url: '@Url.Action("UpdatePrenatalVisitRecord", "Prenatal")',
                 type: 'POST',
                 data: formData,
                 success: function (result) {
@@ -452,7 +559,7 @@
         }
 
         //Delete Prenatal Visit
-        function DeletePrenatal(caseNo) {
+        function DeletePrenatalVisit(caseNo) {
             Swal.fire({
                 title: "Are you sure?",
                 text: "You won't be able to revert this, but you can see this on deleted history!",
@@ -465,7 +572,7 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         type: 'DELETE',
-                        url: '@Url.Action("DeletePrenatalVisitRecord", "Servicess")',
+                        url: '@Url.Action("DeletePrenatalVisitRecord", "Prenatal")',
                         data: { caseNo: caseNo },
                         success: function (result) {
                             if (result) {
@@ -487,14 +594,13 @@
         function PrenatalVisitEdit(caseNo) {
             $.ajax({
                 type: 'GET',
-                url: '@Url.Action("DetailPrenatalVisitRecord", "Servicess")',
+                url: '@Url.Action("DetailPrenatalVisitRecord", "Prenatal")',
                 data: { caseNo: caseNo },
                 success: function (result) {
                     var item = result.item;
                     if (result && result.isSuccess == true) {
                         $("#caseNo-edit").val(item.caseNo);
                         $("#patientId-edit").val(item.patientID);
-                        $("#numVisit-edit").text(item.numberOfVisit + " Visit");
                         $("#numOfVisit-edit").val(item.numberOfVisit);
                         $("#AOGWeek-edit").val(item.aogWeek);
                         $("#Weight-edit").val(item.weight);
@@ -523,17 +629,16 @@
         }
 
         //Detail Prenatal Visit
-        function PrenatalVisitDetail(caseNo) {
+        function PrenatalVisitDetailModal(caseNo) {
             $.ajax({
                 type: 'GET',
-                url: '@Url.Action("DetailPrenatalVisitRecord", "Servicess")',
+                url: '@Url.Action("DetailPrenatalVisitRecord", "Prenatal")',
                 data: { caseNo: caseNo },
                 success: function (result) {
                     var item = result.item;
                     if (result && result.isSuccess == true) {
                         $("#caseNo-detail").val(item.caseNo);
                         $("#patientId-detail").val(item.patientID);
-                        $("#numVisit-detail").text(item.numberOfVisit + " Visit");
                         $("#AOGWeek-detail").val(item.aogWeek);
                         $("#Weight-detail").val(item.weight);
                         $("#BP-detail").val(item.bp);
@@ -560,6 +665,62 @@
             })
         }
 
+        //Prenatal Form Detail
+        function PrenatalFormModal(preId) {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("PrenatalFormRecords", "Prenatal")',
+                data: { prenatalId: preId },
+                success: function (result) {
+                    console.log(result)
+                    var prenatal = result.item.prenatalRecord;
+                    if (result && result.isSuccess == true) {
+                        $("#caseNo-Form").val(prenatal.caseNo);
+                        $("#Gravida-Form").val(prenatal.gravida);
+                        $("#Para-Form").val(prenatal.para);
+                        $("#Abortion-Form").val(prenatal.abortion);
+                        $("#StillBirth-Form").val(prenatal.stillBirth);
+                        $("#LMP-Form").val(prenatal.lmp ? prenatal.lmp.split('T')[0] : '');
+                        $("#EDC-Form").val(prenatal.edc ? prenatal.edc.split('T')[0] : '');
+                        $("#DateVisit-Form").val(prenatal.dateVisit);
+                        $("#HRCODE-Form").val(prenatal.hrcode);
+                        $("#Notes-Form").val(prenatal.notes);
+
+                        var prenatalVisits = result.item.prenatalVisit;
+                        // Clear existing table rows
+                        $("#prenatalVisitTableBody").empty();
+                        // Populate the table with prenatal visit records
+                        prenatalVisits.forEach(function (visit) {
+                            var row = `<tr>
+                                <td>${visit.aogWeek}</td>
+                                <td>${visit.weight}</td>
+                                <td>${visit.bp}</td>
+                                <td>${visit.fh}</td>
+                                <td>${visit.fht}</td>
+                                <td>${visit.temp}</td>
+                                <td>${visit.cr}</td>
+                                <td>${visit.rr}</td>
+                                <td>${visit.dateVisit ? new Date(visit.dateVisit).toLocaleDateString() : ''}</td>
+                                <td>${visit.physicalAssessment || ''}</td>
+                                <td>${visit.notes || ''}</td>
+                                <td>${visit.rx || ''}</td>
+                            </tr>`;
+                            $("#prenatalVisitTableBody").append(row);
+                        });
+
+                        //Show Modal
+                        $('#prenatalFormModal').modal('show');
+                    } else {
+                        toastr.error(result.message || 'Unable to load prenatal record.');
+                    }
+                },
+                error: function () {
+                    toastr.error('An error occurred while loading the prenatal record.');
+                    console.log('Unable to get the data.');
+                }
+            })
+        }
+
         //Add Prenatal Visit
         function AddPrenatalVisit() {
             var patientId = $("#patID").val();
@@ -571,7 +732,7 @@
             console.log(formData)
 
             $.ajax({
-                url: '@Url.Action("AddPrenatalVisitRecord", "Servicess")',
+                url: '@Url.Action("AddPrenatalVisitRecord", "Prenatal")',
                 type: 'POST',
                 data: formData,
                 success: function (result) {

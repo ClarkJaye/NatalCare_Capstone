@@ -59,72 +59,96 @@
                 </div>
 
                 <!-- Occupation -->
-                <div class="form-group col-md-6 mb-2">
+                <div class="form-group col-md-4 mb-2">
                     <label class="form-label">Occupation</label>
                     <input class="form-control text-capitalize" value="@Model.Occupation" disabled />
                 </div>
 
                 <!-- Phone Number -->
-                <div class="form-group col-md-6 mb-2">
+                <div class="form-group col-md-4 mb-2">
                     <label class="form-label">Phone Number</label>
                     <input class="form-control text-capitalize" value="@Model.MobileNumber" disabled />
                 </div>
 
                 <!-- Telephone Number -->
-                <div class="form-group col-md-6 mb-2">
+                <div class="form-group col-md-4 mb-2">
                     <label class="form-label">Telephone Number</label>
                     <input class="form-control text-capitalize" value="@Model.TeleNumber" disabled />
                 </div>
 
                 <!-- Blood Type -->
-                <div class="form-group col-md-6 mb-2">
+                <div class="form-group col-md-4 mb-2">
                     <label class="form-label">Blood Type</label>
                     <input class="form-control text-capitalize" value="@Model.BloodType" disabled />
                 </div>
 
                 <!-- Religion -->
-                <div class="form-group col-md-6 mb-2">
+                <div class="form-group col-md-4 mb-2">
                     <label class="form-label">Religion</label>
                     <input class="form-control text-capitalize" value="@Model.Religion" disabled />
                 </div>
-
             </div>
-
-
-
             <!-- Emergency Contact Section -->
             <h5 class="card-title mt-4 mb-3">Emergency Contact</h5>
             <hr />
             <div class="row mx-4">
-                <!-- Emergency Contact Name -->
                 <div class="form-group col-md-6 mb-2">
                     <label class="form-label">Emergency Contact Name</label>
                     <input class="form-control text-capitalize" value="@Model.Emergency_Name" disabled />
                 </div>
-
-                <!-- Emergency Contact Number -->
                 <div class="form-group col-md-6 mb-2">
                     <label class="form-label">Emergency Contact Phonenumber</label>
-                    <input class="form-control text-capitalize" value="@Model.Emergency_Contact" disabled />
+                    <input class="form-control text-capitalize" value="@Model.Emergency_MobileNumber" disabled />
                 </div>
             </div>
-
-         
-
             <!-- Insurance Section -->
             <h5 class="card-title mt-4 mb-3">Insurance Details</h5>
             <hr />
             <div class="row mx-4">
-                <!-- PhilHealth Number -->
                 <div class="form-group col-md-6 mb-2">
                     <label class="form-label">PhilHealth Number</label>
                     <input class="form-control text-capitalize" value="@Model.PHIC_NO" disabled />
                 </div>
             </div>
 
+            <!-- Spouse Section -->
+            <h5 class="card-title mt-4 mb-3">Spouse / Partner's Information</h5>
+            <hr />
+            <div class="row mx-4">
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Spouse Firstname</label>
+                    <input class="form-control text-capitalize" value="@Model.Spouse.FirstName" disabled />
+                </div>
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Spouse MiddleName</label>
+                    <input class="form-control text-capitalize" value="@Model.Spouse.MiddleName" disabled />
+                </div>
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Spouse LastName</label>
+                    <input class="form-control text-capitalize" value="@Model.Spouse.LastName" disabled />
+                </div>
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Spouse Firstname</label>
+                    <input class="form-control text-capitalize" value="@Model.Spouse.Birthdate" disabled />
+                </div>
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Spouse Address</label>
+                    <input class="form-control text-capitalize" value="@Model.Spouse.Address" disabled />
+                </div>
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Spouse Gender</label>
+                    <input class="form-control text-capitalize" value="@Model.Spouse.Gender" disabled />
+                </div>
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Spouse Occupation</label>
+                    <input class="form-control text-capitalize" value="@Model.Spouse.Occupation" disabled />
+                </div>
+            </div>
+
+            <!-- Buttons Section -->
             <div class="m-4 d-flex align-items-center justify-content-end">
                 <div class="d-flex align-items-center gap-3">
-                    <button class="btn btn-pink" data-patientid="@Model.PatientID">
+                    <button class="btn btn-pink" id="printBtn" data-patientid="@Model.PatientID">
                         <i class="fas fa-save"></i>
                         <span>Print</span>
                     </button>
@@ -142,39 +166,31 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        $('#printBtn').on("click", function (){
+        $('#printBtn').on("click", function () {
             var patentId = $(this).data('patientid');
-            PrintQueueForm(patentId);
+            PrintForm(patentId);
         });
     });
 
 
 
-    function PrintQueueForm(patentId) {
+    function PrintForm(patentId) {
         $.ajax({
             type: 'GET',
-            url: "/Clerk/Print_QueueNumber",
-            data: { patentID: patentId },
+            url: '@Url.Action("PrintPatientForm", "Print")',
+            data: { id: patentId },
             success: function (response) {
                 if (response && response.isSuccess === false) {
                     alert(response.message);
                 } else if (response && response.isSuccess === true) {
-                    window.location.href = "/Clerk/Print_Form?date=" + date + "&categoryId=" + categoryId + "&queueNumber=" + queueNumber;
+                    window.location.href = "/Print/Patient_Form?id=" + response.patientId;
                 }
             },
             error: function (xhr, status, error) {
                 // Handle error
-                alert("An error occurred while generating the queue number.");
+                alert("An error occurred, Please ask the It support.");
             }
         });
     }
-
-
-    // function PrintQueueForm() {
-    //     window.onafterprint = function () {
-    //         window.location.href = "/Patient/Information";
-    //     };
-    //     window.print();
-    // }
 
 </script>

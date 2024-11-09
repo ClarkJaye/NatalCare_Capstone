@@ -92,7 +92,7 @@ namespace NatalCare_System.Controllers
                 return Json(new { IsSuccess = false, Message = "Fetching Record failed!" });
             }
             catch (Exception ex)
-            {2222222222222222222222222222222222222222222222222222222222222222
+            {
                 Logger.LogError(ex, $"Error occurred while Edit  record for Patient");
                 return Json(new { IsSuccess = false, Message = "An error occurred in EditHRRecord." });
             }

@@ -141,7 +141,7 @@ namespace NatalCare.DataAccess.data
                   Birthdate = new DateOnly(1998, 01, 04),
                   BloodType = "O+",
                   Religion = "Catholic",
-                  Created_At = new DateTime(),
+                  Created_At = new DateTime(2024,02,28),
                   PatientCreatedBy = "223e5845-f58c-493f-b6b4-46ff3b18a332",
                   StatusCode = "AC",
                   SpouseId = 1,

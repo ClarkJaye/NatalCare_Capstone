@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.DataAccess.Repository.IRepository;
 using NatalCare.Models.Entities;
+using NatalCare.Models.ViewModel.Patient;
 using PrinceQ.DataAccess.Hubs;
 using static NatalCare.DataAccess.Response.ServiceResponses;
 
@@ -20,6 +21,18 @@ namespace NatalCare.DataAccess.Services
         }
 
         //Patient
+        public async Task<List<Patients>> GetRecentPatientsAsync()
+        {
+            var patients = await unitOfWork.Repository<Patients>().AsQueryable()
+                .OrderByDescending(p => p.Created_At ?? DateTime.MinValue)
+                .ThenByDescending(p => p.Updated_At ?? DateTime.MinValue)
+                .Take(10)
+                .Include(p => p.CreatedBy) 
+                .ToListAsync();
+
+            return patients;
+        }
+
         public async Task<List<Patients>> GetPatients()
         {
             var patients = await unitOfWork.Repository<Patients>()

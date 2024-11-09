@@ -96,58 +96,7 @@
 
                 <!-- Screening Tab -->
                 <div class="tab-pane fade" id="screening" role="tabpanel">
-                    <h6 class="px-2">Screening Records</h6>
-                    <div class="d-flex justify-content-end my-3">
-                        <a asp-controller="" asp-action="" class="btn btn-sm btn-pink">
-                            <i class="fas fa-plus"></i>
-                            <span>Add New</span>
-                        </a>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Screening No#</th>
-                                    <th>Date</th>
-                                    <th>Baby Name</th>
-                                    <th>Test Typee</th>
-                                    <th>Results</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Data -->
-                                <tr>
-                                    <td>01</td>
-                                    <td>Aug 23 2024</td>
-                                    <td>Baby A</td>
-                                    <td>Blood Test</td>
-                                    <td>Normal</td>
-                                    <td>
-                                        <div class="d-flex align-items-center justify-content-center gap-2">
-                                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1">
-                                                <i class="fa-solid fa-list"></i>
-                                                <span>Details</span>
-                                            </a>
-                                            <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                                <span>Edit</span>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr> 
-                                <!-- "No record found" message row -->
-                                <tr class="no-record-found" style="display: none;">
-                                    <td colspan="6" class="text-center">No record found</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Form/Table -->
+                    @await Component.InvokeAsync("ScreeningsRecords", new { patientId = Model.PatientID })
                 </div>
 
                 <!-- Hearing Tab -->

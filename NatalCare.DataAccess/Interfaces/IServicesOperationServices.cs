@@ -44,6 +44,13 @@ namespace NatalCare.DataAccess.Interfaces
         Task<CommonResponse> DeleteHRRecordAsync(string caseNo, string userId);
 
         //------ NEWBORN SCREENING ------// 
+        Task<List<NewbornScreening>> GetScreeningRecords(string patientId);
+        Task<CommonResponse> AddSNRecorddAsync(NewbornScreening item, string patientId, string userId);
+        Task<GeneralResponse> GetScreeningRecordAsync(string caseNo);
+
+
+
+
         //------ DELIVERY ------// 
 
 

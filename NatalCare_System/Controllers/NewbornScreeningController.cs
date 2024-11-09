@@ -8,12 +8,12 @@ using NatalCare.Models.ViewModel.Patient;
 namespace NatalCare_System.Controllers
 {
     [Authorize]
-    public class NewbornHearingController : BaseController<NewbornHearingController>
+    public class NewbornScreeningController : BaseController<NewbornScreeningController>
     {
         private readonly IPatientServices patientServices;
         private readonly IServicesOperationServices serviceServices;
 
-        public NewbornHearingController(IPatientServices patientServices, IServicesOperationServices serviceServices)
+        public NewbornScreeningController(IPatientServices patientServices, IServicesOperationServices serviceServices)
         {
             this.patientServices = patientServices;
             this.serviceServices = serviceServices;
@@ -28,25 +28,25 @@ namespace NatalCare_System.Controllers
         }
 
         //------ PRENATAL ------//
-        public async Task<IActionResult> HearingRecords(string patientId)
+        public async Task<IActionResult> ScreeningRecords(string patientId)
         {
-            var HearingRecords = await serviceServices.GetHearingRecords(patientId);
-            return ViewComponent("HearingRecords", new { patientId = patientId });
+            var ScreeningRecords = await serviceServices.GetScreeningRecords(patientId);
+            return ViewComponent("ScreeningRecords", new { patientId = patientId });
         }
         //ADD 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddHRRecord(NewbornHearing model, string patientID)
+        public async Task<JsonResult> AddScreeningRecord(NewbornScreening model, string patientID)
         {
             try
             {
                 // Exclude CaseNo from validation
-                ModelState.Remove(nameof(model.HearingNo));
+                ModelState.Remove(nameof(model.ScreeningNo));
 
                 if (ModelState.IsValid)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await serviceServices.AddHRRecordAsync(model, patientID, userId);
+                    var result = await serviceServices.AddSNRecorddAsync(model, patientID, userId);
                     return Json(result);
                 }
                 return Json(new { IsSuccess = false, Message = "Add Record failed!" });
@@ -79,20 +79,20 @@ namespace NatalCare_System.Controllers
         }
         // GET/EDIT 
         [HttpGet]
-        public async Task<JsonResult> GetHRRecord(string caseNo)
+        public async Task<JsonResult> GetScreeningRecord(string caseNo)
         {
             try
             {
                 if (caseNo != null)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await serviceServices.GetHRRecordAsync(caseNo);
+                    var result = await serviceServices.GetScreeningRecordAsync(caseNo);
                     return Json(result);
                 }
                 return Json(new { IsSuccess = false, Message = "Fetching Record failed!" });
             }
             catch (Exception ex)
-            {
+            {2222222222222222222222222222222222222222222222222222222222222222
                 Logger.LogError(ex, $"Error occurred while Edit  record for Patient");
                 return Json(new { IsSuccess = false, Message = "An error occurred in EditHRRecord." });
             }

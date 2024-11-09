@@ -10,6 +10,7 @@ namespace NatalCare.Models.Entities
         [Key]
         [Required]
         public string? ScreeningNo { get; set; }
+        public DateTime? DateVisit { get; set; }
         public DateOnly? DateRegistration { get; set; }
         public string? TypeOfSample { get; set; }
         public string? FilterCardNo { get; set; }
@@ -48,15 +49,15 @@ namespace NatalCare.Models.Entities
 
         public DateTime? Created_At { get; set; }
         [Column("Created_By")]
-        public string? PrenatalCreatedBy { get; set; }
-        [ForeignKey("PrenatalCreatedBy")]
+        public string? ScreeningCreatedBy { get; set; }
+        [ForeignKey("ScreeningCreatedBy ")]
         [ValidateNever]
         public User? CreatedBy { get; set; }
 
         public DateTime? Updated_At { get; set; }
         [Column("Updated_By")]
-        public string? PrenatalUpdatedBy { get; set; }
-        [ForeignKey("PrenatalUpdatedBy")]
+        public string? ScreeningUpdatedBy { get; set; }
+        [ForeignKey("ScreeningUpdatedBy ")]
         [ValidateNever]
         public User? UpdatedBy { get; set; }
 

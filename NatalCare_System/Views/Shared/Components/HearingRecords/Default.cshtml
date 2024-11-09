@@ -21,9 +21,10 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Test No##</th>
-                <th>Date</th>
+                <th>Case No##</th>
+                <th>Date Visit</th>
                 <th>Baby Name</th>
+                <th>Test Date</th>
                 <th>Baby Status</th>
                 <th>Test Result</th>
                 <th>Notes</th>
@@ -39,12 +40,13 @@
                         <td>@item.HearingNo</td>
                         <td>@item.DateVisit?.ToString("MMM dd yyyy h:mm tt")</td>
                         <td>@item.Newborn?.FirstName @item.Newborn?.MiddleName @item.Newborn?.LastName</td>
+                        <td>@item.TestDate?.ToString("MMM dd yyyy")</td>
                         <td>@item.BabyStatus</td>
                         <td>@item.HearingResults</td>
                         <td>@item.Notes</td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
-                                <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1">
+                                <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1 detailHR-Btn" data-hearingid="@item.HearingNo">
                                     <i class="fa-solid fa-list"></i>
                                     <span>Details</span>
                                 </a>
@@ -115,7 +117,7 @@
 
                         <div class="col-md-12 mb-3">
                             <label for="hearingResult-Add" class="control-label">Hearing Result</label>
-                            <textarea id="hearingResult-Add" name="HearingResult" class="form-control" laceholder="Enter the result" rows="3"></textarea>
+                            <textarea id="hearingResult-Add" name="HearingResult" class="form-control" placeholder="Enter the result" rows="3"></textarea>
                         </div>
 
                         <div class="col-md-12 mb-3">
@@ -182,7 +184,7 @@
 
                         <div class="col-md-12 mb-3">
                             <label for="hearingResult-Edit" class="control-label">Hearing Result</label>
-                            <textarea id="hearingResult-Edit" name="HearingResult" class="form-control" laceholder="Enter the result" rows="3"></textarea>
+                            <textarea id="hearingResult-Edit" name="HearingResults" class="form-control" placeholder="Enter the result" rows="3"></textarea>
                         </div>
 
                         <div class="col-md-12 mb-3">
@@ -200,6 +202,74 @@
                         <div class="col-12 mt-3 d-flex justify-content-end">
                             <div class="d-flex align-items-center gap-2">
                                 <button type="submit" class="btn btn-pink">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Details Hearing Modal -->
+<div class="modal fade" id="HRDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detail Hearing Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <input type="hidden" id="caseNoHR-Detail" name="HearingNo" />
+                        <input type="hidden" id="patientID-EDetaildit" name="PatientID" />
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DateVisitHR-Detail" class="control-label">Date Visit</label>
+                            <input type="datetime-local" id="DateVisitHR-Detail" name="DateVisit" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="newbornBb-Detail" class="control-label">Select Newborn</label>
+                            <select id="newbornBb-Detail" class="form-control" name="NewbornID" required>
+                                <option disabled selected>select newborn baby</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="testDate-Detail" class="control-label">Test Date</label>
+                            <input type="date" id="testDate-Detail" name="TestDate" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="babyStatus-Detail" class="control-label">Baby Status</label>
+                            <input id="babyStatus-Detail" name="BabyStatus" class="form-control"  disabled />
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="hearingResult-Detail" class="control-label">Hearing Result</label>
+                            <textarea id="hearingResult-Detail" name="HearingResults" class="form-control" rows="3" disabled></textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="NotesHR-Detail" class="control-label">Notes(Optional)</label>
+                            <textarea id="NotesHR-Detail" name="Notes" class="form-control" rows="3" disabled></textarea>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="staff-Detail" class="control-label">Select Encharged Staff</label>
+                            <select id="staff-Detail" class="form-control" name="StaffID" required>
+                                <option disabled selected>select encharged staff</option>
+                            </select>
+                        </div>
+
+
+
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-pink">Print</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
@@ -244,10 +314,19 @@
         var caseNo = $(this).data('hearingid');
         DeleteHR(caseNo);
     });
+    
+    $(".detailHR-Btn").on("click", function (e) {
+        var caseNo = $(this).data('hearingid');
+        DetailHR(caseNo);
+    });
+
+
 
     $('#displayDeletedHistoryBtn').on('click', function () {
         LoadDeletedHistoryPrenatal();
     });
+
+
 
     function LoadDeletedHistoryPrenatal() {
         $.ajax({
@@ -290,10 +369,9 @@
     function EditHR(caseNo) {
         $.ajax({
             type: 'GET',
-            url: '@Url.Action("EditHRRecord", "NewbornHearing")',
+            url: '@Url.Action("GetHRRecord", "NewbornHearing")',
             data: { caseNo: caseNo },
             success: function (response) {
-                console.log(response);
                 if (response && response.isSuccess) {
                     var item = response.item.result;
                     var staff = response.item.staff;
@@ -330,6 +408,57 @@
                     });
                     // Show Edit Modal
                     $('#HREditModal').modal('show');
+                } else {
+                    toastr.error(response.message || 'Unable to load hearing record.');
+                }
+            },
+            error: function () {
+                toastr.error('An error occurred while loading the hearing record.');
+            }
+        });
+    }
+
+    // Edit Hearing Record
+    function DetailHR(caseNo) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetHRRecord", "NewbornHearing")',
+            data: { caseNo: caseNo },
+            success: function (response) {
+                if (response && response.isSuccess) {
+                    var item = response.item.result;
+                    var staff = response.item.staff;
+                    var newborn = response.item.newborn;
+
+                    // Set values for editable fields
+                    $("#caseNoHR-Detail").val(item.hearingNo);
+                    $("#patientID-Detail").val(item.patientId);
+                    $("#DateVisitHR-Detail").val(item.dateVisit);
+                    $("#testDate-Detail").val(item.testDate);
+                    $("#babyStatus-Detail").val(item.babyStatus);
+                    $("#hearingResult-Detail").val(item.hearingResult);
+                    $("#NotesHR-Detail").val(item.notes);
+                    
+                    staff.forEach(function (data) {
+                        $('#staff-Detail').append(
+                            $('<option>', {
+                                value: data.id,
+                                text: data.staffName,
+                                selected: item.staffID === data.id
+                            })
+                        );
+                    });
+                    newborn.forEach(function (data) {
+                        $('#newbornBb-Detail').append(
+                            $('<option>', {
+                                value: data.id,
+                                text: data.firstname + " " + data.middlename + " " + data.lastname + " - " + data.birthdate,
+                                selected: item.newbornID === data.id
+                            })
+                        );
+                    });
+                    // Show Edit Modal
+                    $('#HRDetailModal').modal('show');
                 } else {
                     toastr.error(response.message || 'Unable to load hearing record.');
                 }
@@ -383,7 +512,6 @@
             data: { id: patientId },
             success: function (result) {
                 if (result.isSuccess) {
-                    console.log(result)
                     var newborn = result.item.newborn;
                     var staff = result.item.staff;
                     $('#newbornBb-Add').empty().append('<option disabled selected>select newborn baby</option>');

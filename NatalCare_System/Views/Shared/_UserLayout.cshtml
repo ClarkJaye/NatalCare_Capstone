@@ -297,21 +297,59 @@
 
 
 
-            // TOGGLE SIDEBAR
-            const menuBar = document.getElementById('menuBar');
-            const sidebar = document.getElementById('sidebar');
-            function toggleSidebarOnResize() {
-                if (window.innerWidth <= 1200) {  // 1200/960px is the breakpoint for md
+            // // TOGGLE SIDEBAR
+            // const menuBar = document.getElementById('menuBar');
+            // const sidebar = document.getElementById('sidebar');
+            // function toggleSidebarOnResize() {
+            //     if (window.innerWidth <= 1200) {  // 1200/960px is the breakpoint for md
+            //         sidebar.classList.add('hide');
+            //     } else {
+            //         sidebar.classList.remove('hide');
+            //     }
+            // }
+            // menuBar.addEventListener('click', function () {
+            //     sidebar.classList.toggle('hide');
+            // });
+            // toggleSidebarOnResize();
+            // window.addEventListener('resize', toggleSidebarOnResize);
+
+            function applyStoredSidebarState() {
+                const sidebarState = localStorage.getItem('sidebarState');
+                if (sidebarState === 'hidden') {
                     sidebar.classList.add('hide');
                 } else {
                     sidebar.classList.remove('hide');
                 }
             }
+
+            // Toggle sidebar and store the new state in localStorage
             menuBar.addEventListener('click', function () {
                 sidebar.classList.toggle('hide');
+                if (sidebar.classList.contains('hide')) {
+                    localStorage.setItem('sidebarState', 'hidden');
+                } else {
+                    localStorage.setItem('sidebarState', 'visible');
+                }
             });
-            toggleSidebarOnResize();
+
+            // Handle resizing and sidebar visibility at certain breakpoints
+            function toggleSidebarOnResize() {
+                if (window.innerWidth <= 1200) {  // 1200px is the breakpoint for md
+                    sidebar.classList.add('hide');
+                } else {
+                    const sidebarState = localStorage.getItem('sidebarState');
+                    if (sidebarState !== 'hidden') {
+                        sidebar.classList.remove('hide');
+                    }
+                }
+            }
+
+            applyStoredSidebarState();  // Apply the stored state when page loads
+            toggleSidebarOnResize();    // Apply the resize rule on page load
+
+            // Event listeners for toggling and resizing
             window.addEventListener('resize', toggleSidebarOnResize);
+
 
             // Check if Service Workers are supported in the current browser
             // if ('serviceWorker' in navigator) {

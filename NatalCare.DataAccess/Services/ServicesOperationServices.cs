@@ -468,7 +468,8 @@ namespace NatalCare.DataAccess.Services
                 babyStatus = item.BabyStatus,
                 hearingResult = item.HearingResults,
                 notes = item.Notes,
-                staffID = item.StaffID
+                staffID = item.StaffID,
+                patientId = item.PatientID
             };
 
             return new GeneralResponse(true, new { result , staff, newborn }, "Record fetched successfully!.");
@@ -495,6 +496,85 @@ namespace NatalCare.DataAccess.Services
             unitOfWork.Repository<NewbornHearing>().Update(existingRecord);
             await unitOfWork.SaveAsync();
             return new CommonResponse(true, "Record updated successfully.");
+        }
+
+        // Newborn Screening
+        public async Task<List<NewbornScreening>> GetScreeningRecords(string patientId)
+        {
+            var record = await unitOfWork.Repository<NewbornScreening>()
+                .GetAllAsync(p => p.PatientID == patientId && p.StatusCode == "AC", includeProperties: "Newborn");
+            return record.ToList();
+        }
+        public async Task<CommonResponse> AddSNRecorddAsync(NewbornScreening item, string patientId, string userId)
+        {
+            if (item == null)
+                return new CommonResponse(false, "item cannot be null!");
+
+            // Validation checks: Ensure CaseNo is unique if needed.
+            if (await unitOfWork.Repository<NewbornScreening>().AnyAsync(x => x.ScreeningNo == item.ScreeningNo))
+                return new CommonResponse(false, "Newborn Screening ecord already exists.");
+
+            // Generate a new CaseNo for the record.
+            item.ScreeningNo = GenerateHearingID();
+            item.PatientID = patientId;
+            item.Created_At = DateTime.Now;
+            item.StatusCode = "AC";
+            item.ScreeningCreatedBy = userId;
+
+            unitOfWork.Repository<NewbornScreening>().Add(item);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Newborn Screening record added successfully");
+        }
+
+        public async Task<GeneralResponse> GetScreeningRecordAsync(string caseNo)
+        {
+            if (caseNo == null)
+                return new GeneralResponse(false, null, "Case No cannot found!");
+
+            // Validation checks: Ensure CaseNo is unique if needed.
+            var item = await unitOfWork.Repository<NewbornScreening>().GetFirstOrDefaultAsync(x => x.ScreeningNo == caseNo, includeProperties: "Newborn,Staff");
+            if (item == null)
+                return new GeneralResponse(false, item, "Record not existing.");
+
+            var staff = await unitOfWork.Repository<Staff>().GetAllAsync();
+            var newborn = await unitOfWork.Repository<Newborn>()
+                                           .AsQueryable()
+                                           .Where(a => a.MotherID == item.PatientID)
+                                           .Select(a => new
+                                           {
+                                               id = a.NewbornID,
+                                               firstname = a.FirstName,
+                                               middlename = a.MiddleName,
+                                               lastname = a.LastName,
+                                               birthdate = a.DateofBirth,
+                                           })
+                                           .ToListAsync();
+
+
+            var result = new
+            {
+                screeningNo = item.ScreeningNo,
+                dateVisit = item.DateVisit,
+                dateRegistration = item.DateRegistration,
+                filterCardNo = item.FilterCardNo,
+                typeOfSample = item.TypeOfSample,
+                dateOfCollection = item.DateOfCollection,
+                timeOfCollection = item.TimeOfCollection,
+                placeOfCollection = item.PlaceOfCollection,
+                feeding = item.Feeding,
+                specimen = item.Specimen,
+                babyStatus = item.BabyStatus,
+                dataSampleSent = item.DataSampleSent,
+                courier = item.Courier,
+                trackingNubmer = item.TrackingNubmer,
+                remarks = item.Remarks,
+                notes = item.Notes,
+                newbornID = item.NewbornID,
+                staffID = item.StaffID,
+                patientId = item.PatientID
+            };
+
+            return new GeneralResponse(true, new { result, staff, newborn }, "Record fetched successfully!.");
         }
 
 
@@ -556,3 +636,4 @@ namespace NatalCare.DataAccess.Services
       
     }
 }
+

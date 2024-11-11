@@ -12,9 +12,9 @@
                 <li class="nav-item">
                     <a class="nav-link" id="delivery-tab" data-bs-toggle="tab" href="#delivery" role="tab">Delivery</a>
                 </li>
-                <li class="nav-item">
+               @*  <li class="nav-item">
                     <a class="nav-link" id="family-planning-tab" data-bs-toggle="tab" href="#family-planning" role="tab">Family Planning</a>
-                </li>
+                </li> *@
                 <li class="nav-item">
                     <a class="nav-link" id="screening-tab" data-bs-toggle="tab" href="#screening" role="tab">Newborn Screening</a>
                 </li>
@@ -89,10 +89,10 @@
                     </div>
                 </div>
 
-                <!-- Family Planning Tab -->
+              @*   <!-- Family Planning Tab -->
                 <div class="tab-pane fade" id="family-planning" role="tabpanel">
                     @await Component.InvokeAsync("FamilyPlanningRecords", new { patientId = Model.PatientID })
-                </div>
+                </div> *@
 
                 <!-- Screening Tab -->
                 <div class="tab-pane fade" id="screening" role="tabpanel">

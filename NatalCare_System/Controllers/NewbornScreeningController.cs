@@ -30,8 +30,8 @@ namespace NatalCare_System.Controllers
         //------ PRENATAL ------//
         public async Task<IActionResult> ScreeningRecords(string patientId)
         {
-            var ScreeningRecords = await serviceServices.GetScreeningRecords(patientId);
-            return ViewComponent("ScreeningRecords", new { patientId = patientId });
+            var ScreeningsRecords = await serviceServices.GetScreeningRecords(patientId);
+            return ViewComponent("ScreeningsRecords", new { patientId = patientId });
         }
         //ADD 
         [HttpPost]
@@ -42,6 +42,8 @@ namespace NatalCare_System.Controllers
             {
                 // Exclude CaseNo from validation
                 ModelState.Remove(nameof(model.ScreeningNo));
+
+                if(model.NewbornID == null) return Json(new { IsSuccess = false, newborn = false,  Message = "select a newborn baby!" });
 
                 if (ModelState.IsValid)
                 {
@@ -59,14 +61,14 @@ namespace NatalCare_System.Controllers
         }
         // DELETE 
         [HttpDelete]
-        public async Task<JsonResult> DeleteHRRecord(string caseNo)
+        public async Task<JsonResult> DeleteScreeningRecord(string caseNo)
         {
             try
             {
                 if (caseNo != null)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await serviceServices.DeleteHRRecordAsync(caseNo, userId);
+                    var result = await serviceServices.DeleteScreeningRecordAsync(caseNo, userId);
                     return Json(result);
                 }
                 return Json(new { IsSuccess = false, Message = "Delete Record failed!" });
@@ -99,14 +101,14 @@ namespace NatalCare_System.Controllers
         }
         // UPDATE
         [HttpPost]
-        public async Task<JsonResult> UpdateHRRecord(NewbornHearing model)
+        public async Task<JsonResult> UpdateScreeningRecord(NewbornScreening model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await serviceServices.UpdateHRRecordAsync(model, userId);
+                    var result = await serviceServices.UpdateScreeningRecordAsync(model, userId);
                     return Json(result);
                 }
                 return Json(new { IsSuccess = false, Message = "Update Record failed!" });

@@ -6,11 +6,15 @@ namespace NatalCare_System.Controllers
     [Authorize]
     public class ReportsController : BaseController<ReportsController>
     {
-        public IActionResult Index()
+        public IActionResult Natality()
         {
             return View();
         }
 
+        public IActionResult Invoices()
+        {
+            return View();
+        }
 
     }
 }

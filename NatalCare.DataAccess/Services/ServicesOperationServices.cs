@@ -515,7 +515,7 @@ namespace NatalCare.DataAccess.Services
                 return new CommonResponse(false, "Newborn Screening ecord already exists.");
 
             // Generate a new CaseNo for the record.
-            item.ScreeningNo = GenerateHearingID();
+            item.ScreeningNo = GenerateScreeningID();
             item.PatientID = patientId;
             item.Created_At = DateTime.Now;
             item.StatusCode = "AC";
@@ -576,6 +576,61 @@ namespace NatalCare.DataAccess.Services
 
             return new GeneralResponse(true, new { result, staff, newborn }, "Record fetched successfully!.");
         }
+        public async Task<CommonResponse> DeleteScreeningRecordAsync(string caseNo, string userId)
+        {
+            if (caseNo == null)
+                return new CommonResponse(false, "CaseNo cannot be null!");
+
+            // Validation checks: Ensure CaseNo is unique if needed.
+            var item = await unitOfWork.Repository<NewbornScreening>().GetFirstOrDefaultAsync(x => x.ScreeningNo == caseNo);
+            if (item == null)
+                return new CommonResponse(false, "Screening record not found.");
+
+            item.StatusCode = "DL";
+            item.Updated_At = DateTime.Now;
+            item.ScreeningUpdatedBy = userId;
+
+            unitOfWork.Repository<NewbornScreening>().Update(item);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Screening record deleted successfully");
+        }
+        public async Task<CommonResponse> UpdateScreeningRecordAsync(NewbornScreening item, string userId)
+        {
+            var existingRecord = await unitOfWork.Repository<NewbornScreening>().GetFirstOrDefaultAsync(p => p.ScreeningNo == item.ScreeningNo);
+
+            if (existingRecord == null)
+                return new CommonResponse(false, "Record not found.");
+
+            // Update the existing record fields
+            existingRecord.DateVisit = item.DateVisit;
+            existingRecord.DateRegistration = item.DateRegistration;
+            existingRecord.TypeOfSample = item.TypeOfSample;
+            existingRecord.FilterCardNo = item.FilterCardNo;
+            existingRecord.DateOfCollection = item.DateOfCollection;
+            existingRecord.TimeOfCollection = item.TimeOfCollection;
+            existingRecord.PlaceOfCollection = item.PlaceOfCollection;
+            existingRecord.Feeding = item.Feeding;
+            existingRecord.Specimen = item.Specimen;
+            existingRecord.BabyStatus = item.BabyStatus;
+            existingRecord.ScreeningResults = item.ScreeningResults;
+            existingRecord.DataSampleSent = item.DataSampleSent;
+            existingRecord.Courier = item.Courier;
+            existingRecord.TrackingNubmer = item.TrackingNubmer;
+            existingRecord.Remarks = item.Remarks;
+            existingRecord.Notes = item.Notes;
+            existingRecord.Updated_At = DateTime.UtcNow;
+            existingRecord.ScreeningUpdatedBy = userId;
+            existingRecord.NewbornID = item.NewbornID;
+            existingRecord.StaffID = item.StaffID;
+
+            unitOfWork.Repository<NewbornScreening>().Update(existingRecord);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Record updated successfully.");
+        }
+
+
+
+
 
 
         //Generation of ID's
@@ -630,10 +685,26 @@ namespace NatalCare.DataAccess.Services
                 newIdNumber = int.Parse(numericPart) + 1;
             }
             return $"HR{newIdNumber:D4}"; // Formats as HR0001, HR0010, etc.
+        }
+        // Newborn Screening
+        private string GenerateScreeningID()
+        {
+            var lastRecord = unitOfWork.Repository<NewbornScreening>()
+                .AsQueryable()
+                .OrderByDescending(p => p.ScreeningNo)
+                .FirstOrDefault();
+
+            int newIdNumber = 1;
+
+            if (lastRecord != null && lastRecord.ScreeningNo != null)
+            {
+                string numericPart = lastRecord.ScreeningNo.Substring(2);
+                newIdNumber = int.Parse(numericPart) + 1;
+            }
+            return $"SC{newIdNumber:D4}"; // Formats as HR0001, HR0010, etc.
 
         }
 
-      
     }
 }
 

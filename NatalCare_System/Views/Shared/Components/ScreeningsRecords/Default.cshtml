@@ -92,7 +92,7 @@
 <div class="modal fade" id="ScreeningAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Add Newborn Screening Record</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -210,7 +210,7 @@
 <div class="modal fade" id="ScreeningEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Edit Screening Record</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -218,7 +218,7 @@
                 <form id="UpdateScreeningForm" method="POST">
                     @Html.AntiForgeryToken()
                     <div class="row">
-                        <input type="hidden" id="caseNoSN-Edit" name="ScreeningN" />
+                        <input type="hidden" id="caseNoSN-Edit" name="ScreeningNo" />
                         <input type="hidden" id="patientIDSN-Edit" name="PatientID" />
 
                         <div class="col-md-6 mb-3">
@@ -330,7 +330,7 @@
 <div class="modal fade" id="ScreeningDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Detail Screening Record</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -511,17 +511,17 @@
     }
 
     // Update Hearing Record
-    function UpdateHR() {
-        var formData = $("#UpdateHRForm").serialize();
+    function UpdateScreening() {
+        var formData = $("#UpdateScreeningForm").serialize();
         $.ajax({
-            url: '@Url.Action("UpdateHRRecord", "NewbornHearing")',
+            url: '@Url.Action("UpdateScreeningRecord", "NewbornScreening")',
             type: 'POST',
             data: formData,
             success: function (result) {
                 if (result.isSuccess) {
-                    $('#HREditModal').modal('hide');
+                    $('#ScreeningEditModal').modal('hide');
                     toastr.success(result.message)
-                    LoadHearingComponent();
+                    LoadScreeningComponent();
                 } else {
                     toastr.error(result.message);
                 }
@@ -539,8 +539,8 @@
             url: '@Url.Action("GetScreeningRecord", "NewbornScreening")',
             data: { caseNo: caseNo },
             success: function (response) {
-                console.log(response)
                 if (response && response.isSuccess) {
+                    console.log(response)
                     var item = response.item.result;
                     var staff = response.item.staff;
                     var newborn = response.item.newborn;
@@ -585,13 +585,13 @@
                         );
                     });
                     // Show Edit Modal
-                    $('#HREditModal').modal('show');
+                    $('#ScreeningEditModal').modal('show');
                 } else {
-                    toastr.error(response.message || 'Unable to load hearing record.');
+                    toastr.error(response.message || 'Unable to load screening record.');
                 }
             },
             error: function () {
-                toastr.error('An error occurred while loading the hearing record.');
+                toastr.error('An error occurred while loading the screening record.');
             }
         });
     }
@@ -649,7 +649,7 @@
 
 
     //Delete Hearing
-    function DeleteHR(caseNo) {
+    function DeleteScreening(caseNo) {
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this, but you can see this on deleted history!",
@@ -662,12 +662,12 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: 'DELETE',
-                    url: '@Url.Action("DeleteHRRecord", "NewbornHearing")',
+                    url: '@Url.Action("DeleteScreeningRecord", "NewbornScreening")',
                     data: { caseNo: caseNo },
                     success: function (result) {
                         if (result.isSuccess) {
                             toastr.success(result.message)
-                            LoadHearingComponent();
+                            LoadScreeningComponent();
                         } else {
                             toastr.error(result.message);
                         }
@@ -680,14 +680,12 @@
         });
     }
 
-    //Add Hearing View Modal
+    //Add Screening View Modal
     function ViewAddScreeningModal() {
-        var patientId = $("#patID").val();
-
         $.ajax({
             url: '@Url.Action("Get_Staff_Newborn", "NewbornScreening")',
             type: 'GET',
-            data: { id: patientId },
+            data: { id: patID },
             success: function (result) {
                 if (result.isSuccess) {
                     console.log(result)
@@ -722,24 +720,29 @@
         });
     }
 
-
-    //Add the Hearing Record
+    //Add the Screening Record
     function AddScreening() {
-        var patientId = $("#patID").val();
         var formData = $('#AddScreeningForm').serializeArray();
-        formData.push({ name: 'patientID', value: patientId });
+        formData.push({ name: 'patientID', value: patID });
 
         $.ajax({
             url: '@Url.Action("AddScreeningRecord", "NewbornScreening")',
             type: 'POST',
             data: formData,
             success: function (result) {
+                console.log(result)
                 if (result.isSuccess) {
                     toastr.success(result.message)
                     LoadScreeningComponent();
                     $('#ScreeningAddModal').modal('hide');
-                } else {
-                    toastr.error(result.message);
+                } 
+                else {
+                    if (result.newborn == false) {
+                        alert(result.message)
+                    }
+                    else {
+                        toastr.error(result.message);
+                    }
                 }
             },
             error: function (err) {
@@ -749,9 +752,10 @@
     }
     //Load All Records
     function LoadScreeningComponent() {
+        var patientId = $("#patID").val();
         $.ajax({
             url: '@Url.Action("ScreeningRecords", "NewbornScreening")',
-            data: { patientId: patID },
+            data: { patientId: patientId },
             success: function (result) {
                 $('#screening').html(result);
             },

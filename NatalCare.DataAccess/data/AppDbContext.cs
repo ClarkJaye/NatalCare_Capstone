@@ -30,9 +30,13 @@ namespace NatalCare.DataAccess.data
         public DbSet<NewbornScreening> NewbornScreening { get; set; }
 
 
-
-
-
+        //Payments
+        public DbSet<Items> Items { get; set; }
+        public DbSet<ItemPayments> ItemPayments { get; set; }
+        public DbSet<Servicesss> Services { get; set; }
+        public DbSet<ServicesPayment> ServicesPayments { get; set; }
+        public DbSet<Payments> Payments { get; set; }
+        public DbSet<PatientPayments> PatientPayments { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -161,21 +165,26 @@ namespace NatalCare.DataAccess.data
              }
            );
 
-
-            // For Junction 
-            modelBuilder.Entity<Role_Access>()
-                .HasKey(x => new { x.RoleId, x.ModuleId });
-
             modelBuilder.Entity<RoleStaff>().HasData(
-                new RoleStaff { Id = 1, RoleName = "Staff" },
-                new RoleStaff { Id = 2, RoleName = "Midwife" },
-                new RoleStaff { Id = 3, RoleName = "Physician" }
+             new RoleStaff { Id = 1, RoleName = "Staff" },
+             new RoleStaff { Id = 2, RoleName = "Midwife" },
+             new RoleStaff { Id = 3, RoleName = "Physician" }
             );
             modelBuilder.Entity<Staff>().HasData(
                  new Staff { Id = 1, StaffName = "Shane", RoleId = 1, StatusCode = "AC" },
                  new Staff { Id = 2, StaffName = "Jane", RoleId = 2, StatusCode = "AC" },
                  new Staff { Id = 3, StaffName = "Liza", RoleId = 3, StatusCode = "AC" }
             );
+
+
+            // For Junction 
+            modelBuilder.Entity<Role_Access>()
+                .HasKey(x => new { x.RoleId, x.ModuleId });
+
+            modelBuilder.Entity<ItemPayments>()
+                .HasKey(x => new { x.ItemID, x.PaymentID });
+            modelBuilder.Entity<ServicesPayment>()
+               .HasKey(x => new { x.ServiceID, x.PaymentID });
 
             // Default Date
             var entitiesWithCreatedAt = new[]
@@ -190,9 +199,9 @@ namespace NatalCare.DataAccess.data
                 typeof(Category),
                 typeof(Prenatal),
                 typeof(PrenatalVisit),
-                typeof(NewbornHearing)
+                typeof(NewbornHearing),
+                typeof(Payments),
             };
-
             foreach (var entity in entitiesWithCreatedAt)
             {
                 modelBuilder.Entity(entity)
@@ -200,6 +209,31 @@ namespace NatalCare.DataAccess.data
                     .HasDefaultValueSql("GETDATE()");
             }
 
+            modelBuilder.Entity<Items>()
+                .Property(i => i.Price)
+                .HasColumnType("decimal(18, 2)"); 
+
+            modelBuilder.Entity<PatientPayments>()
+                .Property(p => p.Amount)
+                .HasColumnType("decimal(18, 2)");
+
+            modelBuilder.Entity<Payments>()
+                .Property(p => p.Discount)
+                .HasColumnType("decimal(18, 2)");
+
+            modelBuilder.Entity<Payments>()
+                .Property(p => p.PhilHealth_Deduction)
+                .HasColumnType("decimal(18, 2)");
+
+            modelBuilder.Entity<Payments>()
+                .Property(p => p.Total_Amount)
+                .HasColumnType("decimal(18, 2)");
+
+            modelBuilder.Entity<Servicesss>()
+                .Property(s => s.Price)
+                .HasColumnType("decimal(18, 2)");
+
+            // Constraints
             modelBuilder.Entity<PrenatalVisit>()
                 .HasOne(p => p.PrenatalCase)
                 .WithMany()
@@ -212,6 +246,13 @@ namespace NatalCare.DataAccess.data
                 .HasForeignKey(p => p.PatientID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<PatientPayments>()
+                .HasOne(p => p.Payments)
+                .WithMany()
+                .HasForeignKey(p => p.PaymentID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+           
         }
     }
 }

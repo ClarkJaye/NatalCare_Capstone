@@ -7,7 +7,7 @@
         <i class="fas fa-plus"></i>
         <span>Add New Screening Record</span>
     </button>
-    <button id="displayFPDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
+    <button id="displaySNDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
         <i class="fas fa-trash"></i>
         <span>Deleted History Records</span>
     </button>
@@ -175,10 +175,14 @@
                             <input id="TrackingNubmerSN-Add" name="TrackingNubmer" class="form-control" placeholder="Enter tracking number" />
                         </div>
 
-
                         <div class="col-md-12 mb-3">
                             <label for="RemarksSN-Add" class="control-label">Remarks</label>
                             <textarea id="RemarksSN-Add" name="Remarks" class="form-control" placeholder="Enter remarks" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="ScreeningResultsSN-Add" class="control-label">Screening Results</label>
+                            <textarea id="ScreeningResultsSN-Add" name="ScreeningResults" class="form-control" placeholder="Enter remarks" rows="3"></textarea>
                         </div>
 
                         <div class="col-md-12 mb-3">
@@ -295,6 +299,10 @@
                             <input id="TrackingNubmerSN-Edit" name="TrackingNubmer" class="form-control" placeholder="Enter tracking number" />
                         </div>
 
+                        <div class="col-md-12 mb-3">
+                            <label for="ScreeningResultsSN-Edit" class="control-label">Screening Results</label>
+                            <textarea id="ScreeningResultsSN-Edit" name="ScreeningResults" class="form-control" placeholder="Enter remarks" rows="3"></textarea>
+                        </div>
 
                         <div class="col-md-12 mb-3">
                             <label for="RemarksSN-Edit" class="control-label">Remarks</label>
@@ -415,6 +423,10 @@
                             <input id="TrackingNubmerSN-Detail" name="TrackingNubmer" class="form-control" disabled />
                         </div>
 
+                        <div class="col-md-12 mb-3">
+                            <label for="ScreeningResultsSN-Detail" class="control-label">Screening Results</label>
+                            <textarea id="ScreeningResultsSN-Detail" name="ScreeningResults" class="form-control" placeholder="Enter remarks" rows="3"></textarea>
+                        </div>
 
                         <div class="col-md-12 mb-3">
                             <label for="RemarksSN-Detail" class="control-label">Remarks</label>
@@ -447,7 +459,20 @@
     </div>
 </div>
 
-
+<!-- Deleted History Modal -->
+<div class="modal fade" id="deletedSNModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger"><i class="fa-solid fa-trash"></i> Deleted Screening Records</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="deletedSNListContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     var patID = document.getElementById('patID').value;
@@ -488,24 +513,22 @@
     });
 
 
-
-    $('#displayDeletedHistoryBtn').on('click', function () {
+    $('#displaySNDeletedHistoryBtn').on('click', function () {
         LoadDeletedHistoryScreening();
     });
 
 
-
     function LoadDeletedHistoryScreening() {
         $.ajax({
-            url: '@Url.Action("DisplayDeletedPrenatal", "Prenatal")',
+            url: '@Url.Action("DisplayDeletedScreening", "NewbornScreening")',
             type: 'GET',
             data: { patientId: patID },
             success: function (result) {
-                $("#deletedListContainer").html(result);
-                $('#deletedPreModal').modal('show');
+                $("#deletedSNListContainer").html(result);
+                $('#deletedSNModal').modal('show');
             },
             error: function () {
-                console.error("Failed to load patients data.");
+                console.error("Failed to load records.");
             }
         });
     }
@@ -561,6 +584,7 @@
                     $("#DataSampleSent-Edit").val(item.dataSampleSent);
                     $("#CourierSN-Edit").val(item.courier);
                     $("#TrackingNubmerSN-Edit").val(item.trackingNubmer);
+                    $("#ScreeningResultsSN-Edit").val(item.ScreeningResults);
                     $("#RemarksSN-Edit").val(item.remarks);
                     $("#NotesHR-Edit").val(item.notes);
 
@@ -646,7 +670,6 @@
             }
         });
     }
-
 
     //Delete Hearing
     function DeleteScreening(caseNo) {

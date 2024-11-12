@@ -122,17 +122,17 @@ namespace NatalCare_System.Controllers
 
 
         //Display Deleted records
-        public async Task<IActionResult> DisplayDeletedPrenatal(string patientId)
+        public async Task<IActionResult> DisplayDeletedScreening(string patientId)
         {
-            var records = await serviceServices.GetDeletedPrenatalRecords(patientId);
-            return View(records ?? new List<Prenatal>());
+            var records = await serviceServices.GetDeletedSNRecords(patientId);
+            return View(records ?? new List<NewbornScreening>());
         }
       
         //Retrieved Record
-        public async Task<IActionResult> RetrievePrenatalRecord(string caseno)
+        public async Task<IActionResult> RetrieveSNRecord(string caseno)
         {
             var userId = GetCurrentUserId();
-            var result = await serviceServices.RetrievedPrenetalAync(caseno, userId);
+            var result = await serviceServices.RetrievedSNAync(caseno, userId);
             return Json(result);
 
         }

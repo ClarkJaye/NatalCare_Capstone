@@ -27,7 +27,7 @@ namespace NatalCare_System.Controllers
             return Json(result);
         }
 
-        //------ PRENATAL ------//
+        //------ HEARING ------//
         public async Task<IActionResult> HearingRecords(string patientId)
         {
             var HearingRecords = await serviceServices.GetHearingRecords(patientId);
@@ -120,17 +120,17 @@ namespace NatalCare_System.Controllers
 
 
         //Display Deleted records
-        public async Task<IActionResult> DisplayDeletedPrenatal(string patientId)
+        public async Task<IActionResult> DisplayDeletedHearing(string patientId)
         {
-            var records = await serviceServices.GetDeletedPrenatalRecords(patientId);
-            return View(records ?? new List<Prenatal>());
+            var records = await serviceServices.GetDeletedHRRecords(patientId);
+            return View(records ?? new List<NewbornHearing>());
         }
       
         //Retrieved Record
-        public async Task<IActionResult> RetrievePrenatalRecord(string caseno)
+        public async Task<IActionResult> RetrieveHearingRecord(string caseno)
         {
             var userId = GetCurrentUserId();
-            var result = await serviceServices.RetrievedPrenetalAync(caseno, userId);
+            var result = await serviceServices.RetrievedHRAync(caseno, userId);
             return Json(result);
 
         }

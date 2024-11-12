@@ -358,6 +358,30 @@ namespace NatalCare.DataAccess.Services
         }
 
         // Newborn Hearing
+        public async Task<List<NewbornHearing>> GetDeletedHRRecords(string patientId)
+        {
+            var record = await unitOfWork.Repository<NewbornHearing>().GetAllAsync(p => p.PatientID == patientId && p.StatusCode == "DL");
+            if (!record.Any())
+            {
+                return new List<NewbornHearing>();
+            }
+            return record.ToList();
+        }
+        public async Task<CommonResponse> RetrievedHRAync(string caseno, string userId)
+        {
+            var record = await unitOfWork.Repository<NewbornHearing>().GetFirstOrDefaultAsync(p => p.HearingNo == caseno);
+            if (record == null)
+            {
+                return new CommonResponse(false, "Record Not Found.");
+            }
+            record.StatusCode = "AC";
+            record.HearingUpdatedBy = userId;
+            record.Updated_At = DateTime.Now;
+            
+            unitOfWork.Repository<NewbornHearing>().Update(record);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Record Retrieved Successfully.");
+        }
         public async Task<List<NewbornHearing>> GetHearingRecords(string patientId)
         {
             var record = await unitOfWork.Repository<NewbornHearing>()
@@ -394,7 +418,6 @@ namespace NatalCare.DataAccess.Services
 
             return new GeneralResponse(true, new { staff, newborn }, "Record fetched successfully!");
         }
-
         public async Task<CommonResponse> AddHRRecordAsync(NewbornHearing item, string patientId, string userId)
         {
             if (item == null)
@@ -433,7 +456,6 @@ namespace NatalCare.DataAccess.Services
             await unitOfWork.SaveAsync();
             return new CommonResponse(true, "Record deleted successfully");
         }
-
         public async Task<GeneralResponse> GetHRRecordAsync(string caseNo)
         {
             if (caseNo == null)
@@ -474,7 +496,6 @@ namespace NatalCare.DataAccess.Services
 
             return new GeneralResponse(true, new { result , staff, newborn }, "Record fetched successfully!.");
         }
-
         public async Task<CommonResponse> UpdateHRRecordAsync(NewbornHearing item, string userId)
         {
             var existingRecord = await unitOfWork.Repository<NewbornHearing>().GetFirstOrDefaultAsync(p => p.HearingNo == item.HearingNo);
@@ -499,6 +520,30 @@ namespace NatalCare.DataAccess.Services
         }
 
         // Newborn Screening
+        public async Task<List<NewbornScreening>> GetDeletedSNRecords(string patientId)
+        {
+            var record = await unitOfWork.Repository<NewbornScreening>().GetAllAsync(p => p.PatientID == patientId && p.StatusCode == "DL");
+            if (!record.Any())
+            {
+                return new List<NewbornScreening>();
+            }
+            return record.ToList();
+        }
+        public async Task<CommonResponse> RetrievedSNAync(string caseno, string userId)
+        {
+            var record = await unitOfWork.Repository<NewbornScreening>().GetFirstOrDefaultAsync(p => p.ScreeningNo == caseno);
+            if (record == null)
+            {
+                return new CommonResponse(false, "Record Not Found.");
+            }
+            record.StatusCode = "AC";
+            record.ScreeningUpdatedBy = userId;
+            record.Updated_At = DateTime.Now;
+
+            unitOfWork.Repository<NewbornScreening>().Update(record);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Record Retrieved Successfully.");
+        }
         public async Task<List<NewbornScreening>> GetScreeningRecords(string patientId)
         {
             var record = await unitOfWork.Repository<NewbornScreening>()
@@ -525,7 +570,6 @@ namespace NatalCare.DataAccess.Services
             await unitOfWork.SaveAsync();
             return new CommonResponse(true, "Newborn Screening record added successfully");
         }
-
         public async Task<GeneralResponse> GetScreeningRecordAsync(string caseNo)
         {
             if (caseNo == null)
@@ -634,7 +678,6 @@ namespace NatalCare.DataAccess.Services
 
 
         //Generation of ID's
-
         // Prenatal
         private string GeneratePrenatalID()
         {

@@ -7,7 +7,7 @@
         <i class="fas fa-plus"></i>
         <span>Add New Hearing Record</span>
     </button>
-    <button id="displayFPDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
+    <button id="displayHRDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
         <i class="fas fa-trash"></i>
         <span>Deleted History Records</span>
     </button>
@@ -84,7 +84,7 @@
 <div class="modal fade" id="HRAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Add Hearing Record</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -149,7 +149,7 @@
 <div class="modal fade" id="HREditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Edit Hearing Record</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -216,7 +216,7 @@
 <div class="modal fade" id="HRDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Detail Hearing Record</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -280,7 +280,20 @@
     </div>
 </div>
 
-
+<!-- Deleted History Modal -->
+<div class="modal fade" id="deletedHRModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger"><i class="fa-solid fa-trash"></i> Deleted Hearing Records</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="deletedHRListContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     var patID = document.getElementById('patID').value;
@@ -322,20 +335,20 @@
 
 
 
-    $('#displayDeletedHistoryBtn').on('click', function () {
-        LoadDeletedHistoryPrenatal();
+    $('#displayHRDeletedHistoryBtn').on('click', function () {
+        LoadDeletedHistoryHR();
     });
 
 
 
-    function LoadDeletedHistoryPrenatal() {
+    function LoadDeletedHistoryHR() {
         $.ajax({
-            url: '@Url.Action("DisplayDeletedPrenatal", "Prenatal")',
+            url: '@Url.Action("DisplayDeletedHearing", "NewbornHearing")',
             type: 'GET',
             data: { patientId: patID },
             success: function (result) {
-                $("#deletedListContainer").html(result);
-                $('#deletedPreModal').modal('show');
+                $("#deletedHRListContainer").html(result);
+                $('#deletedHRModal').modal('show');
             },
             error: function () {
                 console.error("Failed to load patients data.");
@@ -544,19 +557,37 @@
     }
 
 
-    //Add the Hearing Record
     function AddHR() {
         var patientId = $("#patID").val();
+
+        // Validate newborn and staff selection
+        var newbornSelected = $('#newbornBb-Add').val();
+        var staffSelected = $('#staff-Add').val();
+
+        if (!newbornSelected) {
+            alert("Please select a newborn baby.");
+            $('#newbornBb-Add').focus();
+            return; // Stop if newborn is not selected
+        }
+
+        if (!staffSelected) {
+            alert("Please select encharged staff.");
+            $('#staff-Add').focus();
+            return; // Stop if staff is not selected
+        }
+
+        // Serialize form data
         var formData = $('#AddHRForm').serializeArray();
         formData.push({ name: 'patientID', value: patientId });
 
+        // Proceed with Ajax request if validation passes
         $.ajax({
             url: '@Url.Action("AddHRRecord", "NewbornHearing")',
             type: 'POST',
             data: formData,
             success: function (result) {
                 if (result.isSuccess) {
-                    toastr.success(result.message)
+                    toastr.success(result.message);
                     LoadHearingComponent();
                     $('#HRAddModal').modal('hide');
                 } else {
@@ -568,6 +599,8 @@
             }
         });
     }
+
+
     //Load All Records
     function LoadHearingComponent() {
         $.ajax({

@@ -2,6 +2,7 @@
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.DataAccess.Repository.IRepository;
 using NatalCare.Models.Entities;
+using System.Collections.Concurrent;
 using System.Diagnostics.Metrics;
 using static NatalCare.DataAccess.Response.ServiceResponses;
 
@@ -394,9 +395,8 @@ namespace NatalCare.DataAccess.Services
             .GetAllAsync(p => p.StatusCode == "AC", includeProperties: "CreatedBy");
             return patients.ToList();
         }
-        public async Task<GeneralResponse> Get_Staff_NewbornAsync(string motherId)
+        public async Task<GeneralResponse> Get_Newborn(string motherId)
         {
-            var staff = await unitOfWork.Repository<Staff>().GetAllAsync();
             var newborn = await unitOfWork.Repository<Newborn>()
                                            .AsQueryable()
                                            .Where(a => a.MotherID == motherId)
@@ -410,13 +410,7 @@ namespace NatalCare.DataAccess.Services
                                            })
                                            .ToListAsync();
 
-            // Check if both collections have records
-            if (!staff.Any() && !newborn.Any())
-            {
-                return new GeneralResponse(false, new { staff, newborn }, "There is no record.");
-            }
-
-            return new GeneralResponse(true, new { staff, newborn }, "Record fetched successfully!");
+            return new GeneralResponse(true, new { newborn }, "Record fetched successfully!");
         }
         public async Task<CommonResponse> AddHRRecordAsync(NewbornHearing item, string patientId, string userId)
         {
@@ -466,7 +460,6 @@ namespace NatalCare.DataAccess.Services
             if (item == null)
                 return new GeneralResponse(false, item, "Record not existing.");
 
-            var staff = await unitOfWork.Repository<Staff>().GetAllAsync();
             var newborn = await unitOfWork.Repository<Newborn>()
                                            .AsQueryable()
                                            .Where(a => a.MotherID == item.PatientID)
@@ -490,11 +483,11 @@ namespace NatalCare.DataAccess.Services
                 babyStatus = item.BabyStatus,
                 hearingResult = item.HearingResults,
                 notes = item.Notes,
-                staffID = item.StaffID,
+                practitioner = item.AttendingPractioner,
                 patientId = item.PatientID
             };
 
-            return new GeneralResponse(true, new { result , staff, newborn }, "Record fetched successfully!.");
+            return new GeneralResponse(true, new { result, newborn }, "Record fetched successfully!.");
         }
         public async Task<CommonResponse> UpdateHRRecordAsync(NewbornHearing item, string userId)
         {
@@ -510,7 +503,7 @@ namespace NatalCare.DataAccess.Services
             existingRecord.BabyStatus = item.BabyStatus;
             existingRecord.HearingResults = item.HearingResults;
             existingRecord.Notes = item.Notes;
-            existingRecord.StaffID = item.StaffID;
+            existingRecord.AttendingPractioner = item.AttendingPractioner;
             existingRecord.Updated_At = DateTime.UtcNow;
             existingRecord.HearingUpdatedBy = userId;
 

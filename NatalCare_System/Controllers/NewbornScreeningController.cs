@@ -23,7 +23,7 @@ namespace NatalCare_System.Controllers
         public async Task<JsonResult> Get_Staff_Newborn(string id)
         {
             var userId = GetCurrentUserId();
-            var result = await serviceServices.Get_Staff_NewbornAsync(id);
+            var result = await serviceServices.Get_Newborn(id);
             return Json(result);
         }
 

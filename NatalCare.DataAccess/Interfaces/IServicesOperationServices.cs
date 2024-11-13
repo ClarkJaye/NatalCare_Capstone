@@ -40,7 +40,7 @@ namespace NatalCare.DataAccess.Interfaces
         Task<List<NewbornHearing>> GetDeletedHRRecords(string patientId);
         Task<CommonResponse> RetrievedHRAync(string caseno, string userId);
         Task<List<NewbornHearing>> GetHearingRecords(string patientId);
-        Task<GeneralResponse> Get_Staff_NewbornAsync(string motherId);
+        Task<GeneralResponse> Get_Newborn(string motherId);
         Task<CommonResponse> AddHRRecordAsync(NewbornHearing item, string patientId, string userId);
         Task<GeneralResponse> GetHRRecordAsync(string caseNo);
         Task<CommonResponse> UpdateHRRecordAsync(NewbornHearing item, string userId);

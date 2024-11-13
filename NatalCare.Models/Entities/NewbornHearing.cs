@@ -15,15 +15,8 @@ namespace NatalCare.Models.Entities
         public DateOnly? TestDate{ get; set; }
         public string? Notes { get; set; }
         public string? BabyStatus { get; set; }
+        public string? AttendingPractioner { get; set; }
         
-
-        // Foreign Key
-        [Required]
-        public int? StaffID { get; set; }
-        [ForeignKey("StaffID")]
-        [ValidateNever]
-        public Staff? Staff { get; set; }
-
         [Required]
         public string? NewbornID { get; set; }
         [ForeignKey("NewbornID")]

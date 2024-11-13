@@ -126,10 +126,12 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="staff-Add" class="control-label">Select Encharged Staff</label>
-                            <select id="staff-Add" class="form-select" name="StaffID" required>
+                            <label for="practitionerHR-Add" class="control-label">Attending Practitioner</label>
+                            <input id="practitionerHR-Add" name="AttendingPractioner" class="form-control" required />
+
+                          @*   <select id="staff-Add" class="form-select" name="StaffID" required>
                                 <option disabled selected>select encharged staff</option>
-                            </select>
+                            </select> *@
                         </div>
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
@@ -192,11 +194,16 @@
                             <textarea id="NotesHR-Edit" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                       @*  <div class="col-md-6 mb-3">
                             <label for="staff-Edit" class="control-label">Select Encharged Staff</label>
                             <select id="staff-Edit" class="form-select" name="StaffID" required>
                                 <option disabled selected>select encharged staff</option>
                             </select>
+                        </div> *@
+
+                        <div class="col-md-6 mb-3">
+                            <label for="practitionerHR-Edit" class="control-label">Attending Practitioner</label>
+                            <input id="practitionerHR-Edit" name="AttendingPractitioner" class="form-control" required />
                         </div>
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
@@ -259,12 +266,9 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="staff-Detail" class="control-label">Select Encharged Staff</label>
-                            <select id="staff-Detail" class="form-control" name="StaffID" required>
-                                <option disabled selected>select encharged staff</option>
-                            </select>
+                            <label for="practitionerHR-Detail" class="control-label">Attending Practitioner</label>
+                            <input id="practitionerHR-Detail" name="AttendingPractitioner" class="form-control" required />
                         </div>
-
 
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
@@ -333,13 +337,9 @@
         DetailHR(caseNo);
     });
 
-
-
     $('#displayHRDeletedHistoryBtn').on('click', function () {
         LoadDeletedHistoryHR();
     });
-
-
 
     function LoadDeletedHistoryHR() {
         $.ajax({
@@ -387,8 +387,7 @@
             success: function (response) {
                 if (response && response.isSuccess) {
                     var item = response.item.result;
-                    var staff = response.item.staff;
-                    var newborn = response.item.newborn;
+                    var newborn = result.item.newborn;
 
                     // Set values for editable fields
                     $("#caseNoHR-Edit").val(item.hearingNo);
@@ -398,18 +397,19 @@
                     $("#babyStatus-Edit").val(item.babyStatus);
                     $("#hearingResult-Edit").val(item.hearingResult);
                     $("#NotesHR-Edit").val(item.notes);
+                    $("#practitionerHR-Edit").val(item.attendingPractioner);
 
+                    // $('#staff-Edit').empty().append('<option disabled selected>select encharged staff</option>');
+                    // staff.forEach(function (data) {
+                    //     $('#staff-Edit').append(
+                    //         $('<option>', {
+                    //             value: data.id,
+                    //             text: data.staffName,
+                    //             selected: item.staffID === data.id
+                    //         })
+                    //     );
+                    // }); 
                     $('#newbornBb-Edit').empty().append('<option disabled selected>select newborn baby</option>');
-                    $('#staff-Edit').empty().append('<option disabled selected>select encharged staff</option>');
-                    staff.forEach(function (data) {
-                        $('#staff-Edit').append(
-                            $('<option>', {
-                                value: data.id,
-                                text: data.staffName,
-                                selected: item.staffID === data.id
-                            })
-                        );
-                    }); 
                     newborn.forEach(function (data) {
                         $('#newbornBb-Edit').append(
                             $('<option>', {
@@ -440,8 +440,7 @@
             success: function (response) {
                 if (response && response.isSuccess) {
                     var item = response.item.result;
-                    var staff = response.item.staff;
-                    var newborn = response.item.newborn;
+                    var newborn = result.item.newborn;
 
                     // Set values for editable fields
                     $("#caseNoHR-Detail").val(item.hearingNo);
@@ -451,16 +450,17 @@
                     $("#babyStatus-Detail").val(item.babyStatus);
                     $("#hearingResult-Detail").val(item.hearingResult);
                     $("#NotesHR-Detail").val(item.notes);
+                    $("#practitionerHR-Detail").val(item.attendingPractioner);
                     
-                    staff.forEach(function (data) {
-                        $('#staff-Detail').append(
-                            $('<option>', {
-                                value: data.id,
-                                text: data.staffName,
-                                selected: item.staffID === data.id
-                            })
-                        );
-                    });
+                    // staff.forEach(function (data) {
+                    //     $('#staff-Detail').append(
+                    //         $('<option>', {
+                    //             value: data.id,
+                    //             text: data.staffName,
+                    //             selected: item.staffID === data.id
+                    //         })
+                    //     );
+                    // });
                     newborn.forEach(function (data) {
                         $('#newbornBb-Detail').append(
                             $('<option>', {
@@ -524,19 +524,9 @@
             type: 'GET',
             data: { id: patientId },
             success: function (result) {
-                if (result.isSuccess) {
+                if (result) {
                     var newborn = result.item.newborn;
-                    var staff = result.item.staff;
                     $('#newbornBb-Add').empty().append('<option disabled selected>select newborn baby</option>');
-                    $('#staff-Add').empty().append('<option disabled selected>select encharged staff</option>');
-                    staff.forEach(function (item) {
-                        $('#staff-Add').append(
-                            $('<option>', {
-                                value: item.id,
-                                text: item.staffName
-                            })
-                        );
-                    });
                     newborn.forEach(function (item) {
                         $('#newbornBb-Add').append(
                             $('<option>', {
@@ -570,11 +560,11 @@
             return; // Stop if newborn is not selected
         }
 
-        if (!staffSelected) {
-            alert("Please select encharged staff.");
-            $('#staff-Add').focus();
-            return; // Stop if staff is not selected
-        }
+        // if (!staffSelected) {
+        //     alert("Please select encharged staff.");
+        //     $('#staff-Add').focus();
+        //     return; // Stop if staff is not selected
+        // }
 
         // Serialize form data
         var formData = $('#AddHRForm').serializeArray();

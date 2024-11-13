@@ -93,12 +93,12 @@ namespace NatalCare.DataAccess.Services
             existingRecord.TimeofBirth = newborn.TimeofBirth;
             existingRecord.Address = newborn.Address;
             existingRecord.Gender = newborn.Gender;
-            existingRecord.Circumference = newborn.Circumference;
-            existingRecord.Head = newborn.Head;
-            existingRecord.Chest = newborn.Chest;
-            existingRecord.Length = newborn.Length;
-            existingRecord.Temp = newborn.Temp;
             existingRecord.Weight = newborn.Weight;
+            existingRecord.Length = newborn.Length;
+            existingRecord.HeadCircumference = newborn.HeadCircumference;
+            existingRecord.ChestCircumference = newborn.ChestCircumference;
+            existingRecord.MidArmCircumference = newborn.MidArmCircumference;
+            existingRecord.Temp = newborn.Temp;
             existingRecord.APGAR = newborn.APGAR;
             existingRecord.Medication = newborn.Medication;
             existingRecord.MotherID = newborn.MotherID;

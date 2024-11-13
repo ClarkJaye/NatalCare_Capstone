@@ -104,12 +104,13 @@ namespace NatalCare.DataAccess.data
               new Modules { ModuleId = 3, ModuleTitle = "Newborn Records", CategoryId = 2, StatusCode = "AC" },
               new Modules { ModuleId = 4, ModuleTitle = "Admission / In-Patient", CategoryId = 2, StatusCode = "AC" },
               new Modules { ModuleId = 5, ModuleTitle = "Out-Patient (OPD)", CategoryId = 2, StatusCode = "AC" },
-              new Modules { ModuleId = 6, ModuleTitle = "Invoice List", CategoryId = 3, StatusCode = "AC" },
-              new Modules { ModuleId = 7, ModuleTitle = "Generate Invoice", CategoryId = 3, StatusCode = "AC" },
-              new Modules { ModuleId = 8, ModuleTitle = "Natality Reports", CategoryId = 4, StatusCode = "AC" },
-              new Modules { ModuleId = 9, ModuleTitle = "Invoice Reports", CategoryId = 4, StatusCode = "AC" },
-              new Modules { ModuleId = 10, ModuleTitle = "Profiles", CategoryId = 5, StatusCode = "AC" },
-              new Modules { ModuleId = 11, ModuleTitle = "Users", CategoryId = 5, StatusCode = "AC" }
+              new Modules { ModuleId = 6, ModuleTitle = "Refferal Patient", CategoryId = 2, StatusCode = "AC" },
+              new Modules { ModuleId = 7, ModuleTitle = "Invoice List", CategoryId = 3, StatusCode = "AC" },
+              new Modules { ModuleId = 8, ModuleTitle = "Generate Invoice", CategoryId = 3, StatusCode = "AC" },
+              new Modules { ModuleId = 9, ModuleTitle = "Natality Reports", CategoryId = 4, StatusCode = "AC" },
+              new Modules { ModuleId = 10, ModuleTitle = "Invoice Reports", CategoryId = 4, StatusCode = "AC" },
+              new Modules { ModuleId = 11, ModuleTitle = "Profiles", CategoryId = 5, StatusCode = "AC" },
+              new Modules { ModuleId = 12, ModuleTitle = "Users", CategoryId = 5, StatusCode = "AC" }
             );
             modelBuilder.Entity<Role_Access>().HasData(
              new Role_Access { RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c", ModuleId = 1, OpenAccess = "Y" },
@@ -122,7 +123,8 @@ namespace NatalCare.DataAccess.data
              new Role_Access { RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c", ModuleId = 8, OpenAccess = "Y" },
              new Role_Access { RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c", ModuleId = 9, OpenAccess = "Y" },
              new Role_Access { RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c", ModuleId = 10, OpenAccess = "Y" },
-             new Role_Access { RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c", ModuleId = 11, OpenAccess = "Y" }
+             new Role_Access { RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c", ModuleId = 11, OpenAccess = "Y" },
+             new Role_Access { RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c", ModuleId = 12, OpenAccess = "Y" }
            );
 
             modelBuilder.Entity<Patients>().HasData(

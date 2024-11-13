@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using NatalCare.DataAccess.Extensions;
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.Models.Entities;
-using NatalCare.Models.ViewModel.Patient;
-using System.Text.RegularExpressions;
 
 namespace NatalCare_System.Controllers
 {
@@ -12,10 +10,12 @@ namespace NatalCare_System.Controllers
     public class NewbornController : BaseController<NewbornController>
     {
         private readonly INewbornServices newbornServices;
+        private readonly ISelectListServices selectListServices;
 
-        public NewbornController(INewbornServices newbornServices)
+        public NewbornController(INewbornServices newbornServices, ISelectListServices selectListServices)
         {
             this.newbornServices = newbornServices;
+            this.selectListServices = selectListServices;
         }
         public async Task<IActionResult> Index()
         {
@@ -42,14 +42,22 @@ namespace NatalCare_System.Controllers
             }
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewData["midwifeList"] = await selectListServices.GetMidwifeSelectListAsync();
+            ViewData["staffList"] = await selectListServices.GetStaffSelectListAsync();
+            ViewData["physicianList"] = await selectListServices.GetPhysicianSelectListAsync();
+
+
             return View();
         }
         // CREATE 
         [HttpPost]
         public async Task<IActionResult> Create(Newborn newborn)
         {
+            ViewData["midwifeList"] = await selectListServices.GetMidwifeSelectListAsync();
+            ViewData["staffList"] = await selectListServices.GetStaffSelectListAsync();
+            ViewData["physicianList"] = await selectListServices.GetPhysicianSelectListAsync();
             if (ModelState.IsValid)
             {
                 var userId = GetCurrentUserId();
@@ -65,6 +73,10 @@ namespace NatalCare_System.Controllers
         }
         public async Task<IActionResult> Edit(string id)
         {
+            ViewData["midwifeList"] = await selectListServices.GetMidwifeSelectListAsync();
+            ViewData["staffList"] = await selectListServices.GetStaffSelectListAsync();
+            ViewData["physicianList"] = await selectListServices.GetPhysicianSelectListAsync();
+
             var userId = GetCurrentUserId();
             var result = await newbornServices.Edit(id, userId);
 
@@ -82,6 +94,10 @@ namespace NatalCare_System.Controllers
         {
             try
             {
+                ViewData["midwifeList"] = await selectListServices.GetMidwifeSelectListAsync();
+                ViewData["staffList"] = await selectListServices.GetStaffSelectListAsync();
+                ViewData["physicianList"] = await selectListServices.GetPhysicianSelectListAsync();
+
                 if (ModelState.IsValid)
                 {
                     var userId = GetCurrentUserId();

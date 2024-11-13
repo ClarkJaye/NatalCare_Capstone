@@ -36,7 +36,7 @@ namespace NatalCare.DataAccess.Services
         public async Task<GeneralResponse> GetInformation(string id)
         {
             var record = await unitOfWork.Repository<Newborn>()
-                .GetFirstOrDefaultAsync(x => x.NewbornID == id, includeProperties: "Patient");
+                .GetFirstOrDefaultAsync(x => x.NewbornID == id, includeProperties: "Patient,Father,Midwife,Physician,AssisstedBy");
 
             if (record == null) return new GeneralResponse(false, record, "Newborn Not Found.");
 
@@ -101,6 +101,10 @@ namespace NatalCare.DataAccess.Services
             existingRecord.Temp = newborn.Temp;
             existingRecord.APGAR = newborn.APGAR;
             existingRecord.Medication = newborn.Medication;
+            existingRecord.DeliveryType = newborn.DeliveryType;
+            existingRecord.MidwifeID = newborn.MidwifeID;
+            existingRecord.StaffID = newborn.StaffID;
+            existingRecord.PhysicianID = newborn.PhysicianID;
             existingRecord.MotherID = newborn.MotherID;
             existingRecord.StatusCode = newborn.StatusCode;
             existingRecord.Updated_At = DateTime.Now;

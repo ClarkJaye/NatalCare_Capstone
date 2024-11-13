@@ -461,7 +461,8 @@ namespace NatalCare.DataAccess.Migrations
                     Updated_At = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Updated_By = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     StatusCode = table.Column<string>(type: "nvarchar(2)", nullable: true),
-                    MotherID = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    MotherID = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    FatherID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -481,6 +482,11 @@ namespace NatalCare.DataAccess.Migrations
                         column: x => x.MotherID,
                         principalTable: "Patients",
                         principalColumn: "PatientID");
+                    table.ForeignKey(
+                        name: "FK_Newborn_Spouse_FatherID",
+                        column: x => x.FatherID,
+                        principalTable: "Spouse",
+                        principalColumn: "SpouseId");
                     table.ForeignKey(
                         name: "FK_Newborn_Status_StatusCode",
                         column: x => x.StatusCode,
@@ -875,9 +881,9 @@ namespace NatalCare.DataAccess.Migrations
                 columns: new[] { "StatusCode", "Created_At", "StatusName" },
                 values: new object[,]
                 {
-                    { "AC", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2850), "ACTIVE" },
-                    { "DL", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2854), "DELETE" },
-                    { "IN", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2853), "INACTTIVE" }
+                    { "AC", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(485), "ACTIVE" },
+                    { "DL", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(488), "DELETE" },
+                    { "IN", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(487), "INACTTIVE" }
                 });
 
             migrationBuilder.InsertData(
@@ -890,11 +896,11 @@ namespace NatalCare.DataAccess.Migrations
                 columns: new[] { "CategoryId", "CategoryName", "Created_At", "StatusCode" },
                 values: new object[,]
                 {
-                    { 1, "Masters", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2869), "AC" },
-                    { 2, "Patient Management", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2871), "AC" },
-                    { 3, "Billing & Payement", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2872), "AC" },
-                    { 4, "Reports", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2872), "AC" },
-                    { 5, "Maintenance", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2873), "AC" }
+                    { 1, "Masters", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(503), "AC" },
+                    { 2, "Patient Management", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(505), "AC" },
+                    { 3, "Billing & Payement", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(505), "AC" },
+                    { 4, "Reports", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(506), "AC" },
+                    { 5, "Maintenance", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(507), "AC" }
                 });
 
             migrationBuilder.InsertData(
@@ -910,25 +916,25 @@ namespace NatalCare.DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Created_At", "Description", "Discriminator", "Name", "NormalizedName", "Created_By", "Updated_By", "Updated_At" },
-                values: new object[] { "18ab63db-22b1-4656-93e8-6240c08c988c", null, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2807), "CRUD Anything", "Role", "Admin", "ADMIN", "223e5845-f58c-493f-b6b4-46ff3b18a332", null, null });
+                values: new object[] { "18ab63db-22b1-4656-93e8-6240c08c988c", null, new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(440), "CRUD Anything", "Role", "Admin", "ADMIN", "223e5845-f58c-493f-b6b4-46ff3b18a332", null, null });
 
             migrationBuilder.InsertData(
                 table: "Module",
                 columns: new[] { "ModuleId", "CategoryId", "Created_At", "ModuleTitle", "StatusCode" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2888), "Dashboard", "AC" },
-                    { 2, 2, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2890), "Patient Records", "AC" },
-                    { 3, 2, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2891), "Newborn Records", "AC" },
-                    { 4, 2, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2892), "Admission / In-Patient", "AC" },
-                    { 5, 2, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2893), "Out-Patient (OPD)", "AC" },
-                    { 6, 2, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2894), "Refferal Patient", "AC" },
-                    { 7, 3, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2894), "Invoice List", "AC" },
-                    { 8, 3, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2895), "Generate Invoice", "AC" },
-                    { 9, 4, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2896), "Natality Reports", "AC" },
-                    { 10, 4, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2897), "Invoice Reports", "AC" },
-                    { 11, 5, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2897), "Profiles", "AC" },
-                    { 12, 5, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2898), "Users", "AC" }
+                    { 1, 1, new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(526), "Dashboard", "AC" },
+                    { 2, 2, new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(530), "Patient Records", "AC" },
+                    { 3, 2, new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(531), "Newborn Records", "AC" },
+                    { 4, 2, new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(532), "Admission / In-Patient", "AC" },
+                    { 5, 2, new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(533), "Out-Patient (OPD)", "AC" },
+                    { 6, 2, new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(533), "Refferal Patient", "AC" },
+                    { 7, 3, new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(534), "Invoice List", "AC" },
+                    { 8, 3, new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(535), "Generate Invoice", "AC" },
+                    { 9, 4, new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(536), "Natality Reports", "AC" },
+                    { 10, 4, new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(536), "Invoice Reports", "AC" },
+                    { 11, 5, new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(537), "Profiles", "AC" },
+                    { 12, 5, new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(538), "Users", "AC" }
                 });
 
             migrationBuilder.InsertData(
@@ -946,18 +952,18 @@ namespace NatalCare.DataAccess.Migrations
                 columns: new[] { "ModuleId", "RoleId", "Created_At", "OpenAccess" },
                 values: new object[,]
                 {
-                    { 1, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2915), "Y" },
-                    { 2, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2917), "Y" },
-                    { 3, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2919), "Y" },
-                    { 4, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2919), "Y" },
-                    { 5, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2920), "Y" },
-                    { 6, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2921), "Y" },
-                    { 7, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2922), "Y" },
-                    { 8, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2922), "Y" },
-                    { 9, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2923), "Y" },
-                    { 10, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2924), "Y" },
-                    { 11, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2925), "Y" },
-                    { 12, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2946), "Y" }
+                    { 1, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(593), "Y" },
+                    { 2, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(597), "Y" },
+                    { 3, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(597), "Y" },
+                    { 4, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(598), "Y" },
+                    { 5, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(599), "Y" },
+                    { 6, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(599), "Y" },
+                    { 7, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(600), "Y" },
+                    { 8, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(601), "Y" },
+                    { 9, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(602), "Y" },
+                    { 10, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(602), "Y" },
+                    { 11, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(603), "Y" },
+                    { 12, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 15, 39, 8, 280, DateTimeKind.Local).AddTicks(604), "Y" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -1058,6 +1064,11 @@ namespace NatalCare.DataAccess.Migrations
                 name: "IX_Newborn_Created_By",
                 table: "Newborn",
                 column: "Created_By");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Newborn_FatherID",
+                table: "Newborn",
+                column: "FatherID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Newborn_MotherID",

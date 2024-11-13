@@ -24,17 +24,12 @@ namespace NatalCare.Models.Entities
         public string? DataSampleSent { get; set; }
         public string? Courier { get; set; }
         public string? TrackingNubmer { get; set; }
+        public string? AttendingPractitioner { get; set; }
         public string? Remarks { get; set; }
         public string? Notes { get; set; }
 
 
         // Foreign Key
-        [Required]
-        public int? StaffID { get; set; }
-        [ForeignKey("StaffID ")]
-        [ValidateNever]
-        public Staff? Staff { get; set; }
-
         [Required]
         public string? NewbornID { get; set; }
         [ForeignKey("NewbornID")]

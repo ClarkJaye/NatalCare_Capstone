@@ -101,24 +101,24 @@
                         <span asp-validation-for="Birthdate" class="text-danger"></span>
                     </div>
 
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-4 mb-3" hidden>
                         <label asp-for="Password" class="control-label"></label>
                         <div class="input-group">
                             <label asp-for="Password" class="input-group-text" style="cursor:pointer">
                                 <i class="fas fa-lock"></i> 
                             </label>
-                            <input asp-for="Password" class="form-control form-control-lg fs-6" placeholder="Enter Password" required />
+                            <input asp-for="Password" class="form-control form-control-lg fs-6" value="123456" placeholder="Enter Password" required />
                         </div>
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
 
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-4 mb-3" hidden>
                         <label asp-for="ConfirmPassword" class="control-label">Confirm Password</label>
                         <div class="input-group">
                             <label asp-for="ConfirmPassword" class="input-group-text" style="cursor:pointer">
                                 <i class="fas fa-lock"></i> 
                             </label>
-                            <input asp-for="ConfirmPassword" class="form-control form-control-lg fs-6" placeholder="Enter Confirm password" required/>
+                            <input asp-for="ConfirmPassword" class="form-control form-control-lg fs-6" value="123456" placeholder="Enter Confirm password"/>
                         </div>
                         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>

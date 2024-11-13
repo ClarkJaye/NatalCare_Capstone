@@ -607,7 +607,7 @@ namespace NatalCare.DataAccess.Services
                 remarks = item.Remarks,
                 notes = item.Notes,
                 newbornID = item.NewbornID,
-                staffID = item.StaffID,
+                attendingPractitioner = item.AttendingPractitioner,
                 patientId = item.PatientID
             };
 
@@ -658,7 +658,7 @@ namespace NatalCare.DataAccess.Services
             existingRecord.Updated_At = DateTime.UtcNow;
             existingRecord.ScreeningUpdatedBy = userId;
             existingRecord.NewbornID = item.NewbornID;
-            existingRecord.StaffID = item.StaffID;
+            existingRecord.AttendingPractitioner = item.AttendingPractitioner;
 
             unitOfWork.Repository<NewbornScreening>().Update(existingRecord);
             await unitOfWork.SaveAsync();

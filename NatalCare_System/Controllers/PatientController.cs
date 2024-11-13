@@ -191,16 +191,20 @@ namespace NatalCare_System.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMotherDetails(string motherID)
         {
-            var mother = await patientServices.GetInformation(motherID);
+            var data = await patientServices.GetInformation(motherID);
 
-            if (mother.PatientID != null)
+            if (data.PatientID != null)
             {
                 var motherData = new
                 {
-                    id = mother.PatientID,
-                    firstname = mother.FirstName,
-                    middlename = mother.MiddleName,
-                    lastname = mother.LastName,
+                    id = data.PatientID,
+                    firstname = data.FirstName,
+                    middlename = data.MiddleName,
+                    lastname = data.LastName,
+                    fatherId = data.SpouseId,
+                    fFirstname = data.Spouse.FirstName,
+                    fMiddlename = data.Spouse.MiddleName,
+                    fLastname = data.Spouse.LastName
                 };
                 return Json(new { isSuccess = true, item = motherData });
             }

@@ -75,6 +75,12 @@
                     <label class="form-label">Address</label>
                     <input class="form-control text-capitalize" value="@Model.Address" disabled />
                 </div>
+                
+                <!-- Delivery Method -->
+                <div class="form-group col-md-4 mb-2">
+                    <label class="form-label">Delivery Method</label>
+                    <input class="form-control text-capitalize" value="@Model.DeliveryType" disabled />
+                </div>
             </div>
 
             <!-- Emergency Contact Section -->
@@ -83,7 +89,7 @@
 
                 <button class="btn btn-sm btn-outline-pink mx-4" data-patientid="@Model.NewbornID" data-bs-toggle="modal" data-bs-target="#motherDetailModal">
                     <i class="fas fa-eye"></i>
-                    <span>See Mother Detailed</span>
+                    <span>See Parent's Detailed</span>
                 </button>
             </div>
             <hr />
@@ -122,12 +128,11 @@
 </div>
 
 
-
 <!-- Newborn Information Modal -->
 <div class="modal fade" id="nbDetailModal" tabindex="-1" aria-labelledby="bbDetailedModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title" id="bbDetailedModalLabel">Newborn Information - Baby Delivery History</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -156,32 +161,43 @@
                         <input class="form-control" value="@Model.Gender" disabled />
                     </div>
 
-                    <!-- Measurements -->
+                    <!-- Delivery Method -->
                     <div class="form-group col-md-4 mb-3">
-                        <label>Circumference</label>
-                        <input class="form-control" value="@Model.Circumference" disabled />
+                        <label>Delivery Method</label>
+                        <input class="form-control" value="@Model.DeliveryType" disabled />
+                    </div>
+                </div>
+
+                <hr class="my-3" />
+
+                <!-- Measurements -->
+                <h5 class="card-title mb-3">Measurements</h5>
+                <div class="row">
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Head Circumference</label>
+                        <input class="form-control" value="@Model.HeadCircumference cm" disabled />
                     </div>
                     <div class="form-group col-md-4 mb-3">
-                        <label>Head</label>
-                        <input class="form-control" value="@Model.Head" disabled />
+                        <label>Chest Circumference</label>
+                        <input class="form-control" value="@Model.ChestCircumference cm" disabled />
                     </div>
                     <div class="form-group col-md-4 mb-3">
-                        <label>Chest</label>
-                        <input class="form-control" value="@Model.Chest" disabled />
+                        <label>Mid-Arm Circumference</label>
+                        <input class="form-control" value="@Model.MidArmCircumference cm" disabled />
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label>Length</label>
-                        <input class="form-control" value="@Model.Length" disabled />
+                        <input class="form-control" value="@Model.Length cm" disabled />
                     </div>
 
                     <!-- Vital Information -->
                     <div class="form-group col-md-4 mb-3">
                         <label>Temperature</label>
-                        <input class="form-control" value="@Model.Temp" disabled />
+                        <input class="form-control" value="@Model.Temp C" disabled />
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label>Weight</label>
-                        <input class="form-control" value="@Model.Weight" disabled />
+                        <input class="form-control" value="@Model.Weight grams" disabled />
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label>APGAR Score</label>
@@ -190,6 +206,20 @@
                     <div class="form-group col-md-4 mb-3">
                         <label>Medication</label>
                         <input class="form-control" value="@Model.Medication" disabled />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Midwife</label>
+                        <input class="form-control" value="@Model.Midwife.FirstName @Model.Midwife.MiddleName @Model.Midwife.LastName" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Physician</label>
+                        <input class="form-control" value="@Model.Physician.FirstName @Model.Physician.MiddleName @Model.Physician.LastName" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Assisted By</label>
+                        <input class="form-control" value="@Model.AssisstedBy.FirstName @Model.AssisstedBy.MiddleName @Model.AssisstedBy.LastName" disabled />
                     </div>
                 </div>
             </div>
@@ -204,8 +234,8 @@
 <div class="modal fade" id="motherDetailModal" tabindex="-1" aria-labelledby="motherDetailedModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="motherDetailedModalLabel">Mother Information - Detailed View</h5>
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title" id="motherDetailedModalLabel">Parent Information - Detailed View</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -275,6 +305,43 @@
                         <input class="form-control" value="@Model.Patient.PHIC_NO" disabled />
                     </div>
                     }
+
+                    <!-- Father Information-->
+                    <h5 class="card-title my-3">Father Information</h5>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>First Name</label>
+                        <input class="form-control" value="@Model.Father?.FirstName" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Middle Name</label>
+                        <input class="form-control" value="@Model.Father?.MiddleName" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Last Name</label>
+                        <input class="form-control" value="@Model.Father?.LastName" disabled />
+                    </div>
+
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Address</label>
+                        <input class="form-control" value="@Model.Father.Address" disabled />
+                    </div>
+
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Date of Birth</label>
+                        <input class="form-control" value="@Model.Father.Birthdate?.ToString("MM/dd/yyyy")" disabled />
+                    </div>
+
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Gender</label>
+                        <input class="form-control" value="@Model.Father.Gender" disabled />
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label>Occupation</label>
+                        <input class="form-control" value="@Model.Father.Occupation" disabled />
+                    </div>
+
+
+
                     <!-- Emergency Contact -->
                     <h5 class="card-title my-3">Emergency Contact Information</h5>
                     <div class="form-group col-md-4 mb-3">
@@ -283,7 +350,7 @@
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label>Emergency Contact</label>
-                        <input class="form-control" value="@Model.Patient.Emergency_Contact" disabled />
+                        <input class="form-control" value="@Model.Patient.Emergency_MobileNumber" disabled />
                     </div>
                 </div>
             </div>

@@ -67,14 +67,28 @@ body {
     padding: 0 !important;
 }
 
+.card-selected {
+    border-radius: 12px !important;
+    background: var(--light) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header-selected {
+    font-weight: 500;
+    border-bottom: 2px solid #e0e0e0;
+    background: var(--light) !important;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+}
+
 .modal, .modal-open {
     padding: 0 !important;
 }
 
 
 .bg-pink {
-    color: #fff;
-    background-color: #FC7995;
+    color: #fff!important;
+    background-color: #FC7995 !important;
 }
 
 .text-pink{

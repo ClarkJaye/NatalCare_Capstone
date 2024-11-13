@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<NatalCare.Models.Entities.Patients>
+
+@{
     ViewData["Title"] = "Dashboard";
     Layout = "_UserLayout";
 }
@@ -77,7 +79,7 @@
         <h6>Recent Patient</h6>
         <div class="p-2">
 
-            <table class="table">
+            <table class="table table-striped" style="max-height: 600px;">
                 <thead>
                     <tr>
                         <th>Patent No#</th>
@@ -87,40 +89,37 @@
                         <th>Address</th>
                         <th>Age</th>
                         <th>Date Added</th>
-                        <th>Services</th>
+                        <th>Added By</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>PT0001</td>
-                        <td>Jen</td>
-                        <td>cruz</td>
-                        <td>Pepito</td>
-                        <td>Mabolo Cebu City</td>
-                        <td>21</td>
-                        <td>05/04/2024</td>
-                        <td>Delivery</td>
-                    </tr>
-                    <tr>
-                        <td>PT0001</td>
-                        <td>Jen</td>
-                        <td>cruz</td>
-                        <td>Pepito</td>
-                        <td>Mabolo Cebu City</td>
-                        <td>21</td>
-                        <td>05/04/2024</td>
-                        <td>Prenatal</td>
-                    </tr>
-                    <tr>
-                      <td>PT0001</td>
-                        <td>Jen</td>
-                        <td>cruz</td>
-                        <td>Pepito</td>
-                        <td>Mabolo Cebu City</td>
-                        <td>21</td>
-                        <td>05/04/2024</td>
-                        <td>FamiyPlanning</td>
-                    </tr>
+                    @foreach (var patient in Model)
+                    {
+                        <tr>
+                            <td>@patient.PatientID</td>
+                            <td>@patient.FirstName</td>
+                            <td>@patient.MiddleName</td>
+                            <td>@patient.LastName</td>
+                            <td>@patient.Address</td>
+                            <td>
+                                @{
+                                    if (patient.Birthdate.HasValue)
+                                    {
+                                        var birthYear = patient.Birthdate.Value.Year;
+                                        var currentYear = DateTime.Now.Year;
+                                        var age = currentYear - birthYear;
+                                        <text>@age</text>
+                                    }
+                                    else
+                                    {
+                                        @:N/A
+                                    }
+                                }
+                            </td>
+                            <td>@patient.Created_At?.ToString("MMM dd yyyy hh mm tt")</td>
+                            <td>@patient.CreatedBy.FirstName @patient.CreatedBy.MiddleName @patient.CreatedBy.LastName </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>

@@ -1,4 +1,5 @@
-﻿using NatalCare.Models.Entities;
+﻿using NatalCare.DataAccess.Repository;
+using NatalCare.Models.Entities;
 using static NatalCare.DataAccess.Response.ServiceResponses;
 
 namespace NatalCare.DataAccess.Interfaces
@@ -34,6 +35,28 @@ namespace NatalCare.DataAccess.Interfaces
         Task<CommonResponse> UpdateFPRecordAsync(FamilyPlanning fp, string userId);
         Task<CommonResponse> DeleteFPRecordAsync(string caseNo, string userId);
         Task<CommonResponse> RetrievedFPAync(string caseno, string userId);
+
+        //------ NEWBORN HEARING ------// 
+        Task<List<NewbornHearing>> GetDeletedHRRecords(string patientId);
+        Task<CommonResponse> RetrievedHRAync(string caseno, string userId);
+        Task<List<NewbornHearing>> GetHearingRecords(string patientId);
+        Task<GeneralResponse> Get_Newborn(string motherId);
+        Task<CommonResponse> AddHRRecordAsync(NewbornHearing item, string patientId, string userId);
+        Task<GeneralResponse> GetHRRecordAsync(string caseNo);
+        Task<CommonResponse> UpdateHRRecordAsync(NewbornHearing item, string userId);
+        Task<CommonResponse> DeleteHRRecordAsync(string caseNo, string userId);
+
+        //------ NEWBORN SCREENING ------// 
+        Task<List<NewbornScreening>> GetDeletedSNRecords(string patientId);
+        Task<CommonResponse> RetrievedSNAync(string caseno, string userId);
+        Task<List<NewbornScreening>> GetScreeningRecords(string patientId);
+        Task<CommonResponse> AddSNRecorddAsync(NewbornScreening item, string patientId, string userId);
+        Task<GeneralResponse> GetScreeningRecordAsync(string caseNo);
+        Task<CommonResponse> DeleteScreeningRecordAsync(string caseNo, string userId);
+        Task<CommonResponse> UpdateScreeningRecordAsync(NewbornScreening item, string userId);
+
+
+        //------ DELIVERY ------// 
 
 
     }

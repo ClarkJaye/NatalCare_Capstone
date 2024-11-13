@@ -1,22 +1,19 @@
-﻿@model List<NatalCare.Models.Entities.Prenatal>
+﻿@model List<NatalCare.Models.Entities.NewbornHearing>
 
 @{
     Layout = null;
 }
 
 <div class="table-responsive">
-    <table id="deletedPrenetalTable" class="table table-hover table-striped">
-        <thead class="border-bottom-2">
+    <table id="deletedHRTable" class="table table-hover table-striped">
+        <thead>
             <tr>
-                <th>Case No#</th>
+                <th>Case No##</th>
                 <th>Date Visit</th>
-                <th>Gravida</th>
-                <th>Para</th>
-                <th>Abortion</th>
-                <th>Still Birth</th>
-                <th>LMP</th>
-                <th>EDC</th>
-                <th>H.R Code</th>
+                <th>Baby Name</th>
+                <th>Test Date</th>
+                <th>Baby Status</th>
+                <th>Test Result</th>
                 <th>Notes</th>
                 <th class="text-center">Action</th>
             </tr>
@@ -25,18 +22,15 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.CaseNo</td>
+                    <th>@item.HearingNo</th>
                     <td>@item.DateVisit?.ToString("MMM dd yyyy h:mm tt")</td>
-                    <td>@item.Gravida</td>
-                    <td>@item.Para</td>
-                    <td>@item.Abortion</td>
-                    <td>@item.StillBirth</td>
-                    <td>@item.LMP?.ToString("MMM dd yyyy")</td>
-                    <td>@item.EDC?.ToString("MMM dd yyyy")</td>
-                    <td>@item.HRCODE</td>
+                    <td>@item.Newborn?.FirstName @item.Newborn?.MiddleName @item.Newborn?.LastName</td>
+                    <td>@item.TestDate?.ToString("MMM dd yyyy")</td>
+                    <td>@item.BabyStatus</td>
+                    <td>@item.HearingResults</td>
                     <td>@item.Notes</td>
                     <td>
-                        <button id="retreiveBtn" class="btn btn-sm btn-outline-pink d-flex align-items-center gap-2" data-caseno="@item.CaseNo">
+                        <button class="btn btn-sm btn-outline-pink d-flex align-items-center gap-2 retreiveBtn" data-caseno="@item.HearingNo">
                             <i class="fa-solid fa-undo"></i>
                             <span>Retrieve</span>
                         </button>
@@ -50,7 +44,7 @@
 
 <script>
     // Initialize DataTables
-    $('#deletedListContainer #deletedPrenetalTable').DataTable({
+    $('#deletedHRListContainer #deletedHRTable').DataTable({
         paging: true,
         lengthChange: true,
         searching: true,
@@ -74,27 +68,27 @@
         ]
     });
 
-    $("#retreiveBtn").on("click", function () {
+    $(".retreiveBtn").on("click", function () {
         var caseno = $(this).data('caseno');
         retrieveRecord(caseno);
     });
 
     function retrieveRecord(caseno) {
         $.ajax({
-            url: '@Url.Action("RetrievePrenatalRecord", "Prenatal")',
+            url: '@Url.Action("RetrieveHearingRecord", "NewbornHearing")',
             type: 'POST',
             data: { caseno: caseno },
             success: function (result) {
                 if (result.isSuccess) {
                     toastr.success(result.message)
-                    LoadPrenatalComponent();
-                    $('#deletedPreModal').modal('hide');
+                    LoadHearingComponent();
+                    $('#deletedHRModal').modal('hide');
                 } else {
                     toastr.error(result.message);
                 }
             },
             error: function () {
-                console.error("Failed to load patients data.");
+                console.error("Failed to load records.");
             }
         });
     }

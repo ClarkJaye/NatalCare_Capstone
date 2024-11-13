@@ -128,8 +128,15 @@
 <!-- Prenatal Records Form Modal -->
 <div class="modal fade" id="prenatalFormModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
+        <style>
+            @@media (min-width: 1200px) {
+                .modal-xl {
+                    max-width: 1400px;
+                }
+            }
+        </style>
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Prenatal Record Form</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -178,7 +185,7 @@
                             <input id="HRCODE-Form" name="HRCODE" class="form-control bg-white" readonly />
                         </div>
 
-                        <hr />
+                        <hr class="my-2 " />
 
                         <h5 class="card-title my-2 mb-3">Prenatal Visit</h5>
 
@@ -224,7 +231,7 @@
 <div class="modal fade" id="prenatalVisitAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Add Prenatal Visit Record</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -308,7 +315,7 @@
 <div class="modal fade" id="prenatalVisitEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Edit Prenatal Visit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -394,7 +401,7 @@
 <div class="modal fade" id="prenatalVisitDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Details Prenatal Visit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -672,7 +679,6 @@
                 url: '@Url.Action("PrenatalFormRecords", "Prenatal")',
                 data: { prenatalId: preId },
                 success: function (result) {
-                    console.log(result)
                     var prenatal = result.item.prenatalRecord;
                     if (result && result.isSuccess == true) {
                         $("#caseNo-Form").val(prenatal.caseNo);

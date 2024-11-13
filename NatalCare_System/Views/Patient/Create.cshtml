@@ -11,28 +11,31 @@
 
 
 <div class="mx-5">
-    <div class="card card-selected w-75 mx-auto mt-5">
-        <div class="card-header card-header-selected d-flex justify-content-between align-items-center">
+    <div class="card w-75 mx-auto mt-5 shadow">
+        <div class="card-header bg-pink text-white d-flex justify-content-between align-items-center">
             <h5 class="card-title my-2">Add Patient</h5>
         </div>
         <div class="card-body m-4 pt-0">
-            <form asp-controller="Patient" asp-action="Create">
-                <div class="row form-group">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <h5 class="card-title mb-3"> Basic Information</h5>
+            <form asp-controller="Patient" asp-action="Create" class="needs-validation" novalidate>
+                <div class="row">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <!-- Basic Information Section -->
+                    <h5 class="mb-3">Basic Information</h5>
+
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="FirstName" class="control-label">First Name</label>
-                        <input asp-for="FirstName" class="form-control" placeholder="Enter Firstname" required />
+                        <input asp-for="FirstName" class="form-control" placeholder="e.g, Maria" required />
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="MiddleName" class="control-label">Middle Name</label>
-                        <input asp-for="MiddleName" class="form-control" placeholder="Enter Middlename" />
+                        <input asp-for="MiddleName" class="form-control" placeholder="e.g, asuncion" />
                         <span asp-validation-for="MiddleName" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="LastName" class="control-label">Last Name</label>
-                        <input asp-for="LastName" class="form-control" placeholder="Enter Lastname" required />
+                        <input asp-for="LastName" class="form-control" placeholder="e.g, Cruz" required />
                         <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
@@ -42,12 +45,12 @@
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="PlaceOfBirth" class="control-label">Place of Birth</label>
-                        <input asp-for="PlaceOfBirth" class="form-control" placeholder="Enter place of birth (e.g., Street, City, Province)" required />
+                        <input asp-for="PlaceOfBirth" class="form-control" placeholder="e.g., Street, City, Province" required />
                         <span asp-validation-for="PlaceOfBirth" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Address" class="control-label">Address</label>
-                        <input asp-for="Address" class="form-control" placeholder="Enter full address (e.g., Street, Barangay, City)" required />
+                        <input asp-for="Address" class="form-control" placeholder="Enter full address (e.g., Street, Barangay, City, Province)" required />
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
@@ -63,24 +66,36 @@
                  
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Occupation" class="control-label"></label>
-                        <input asp-for="Occupation" class="form-control" placeholder="Enter occupation" required />
+                        <input asp-for="Occupation" class="form-control" placeholder="e.g, Civil Enginneer, Teacher" required />
                         <span asp-validation-for="Occupation" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group col-md-4 mb-4">
+                @*     <div class="form-group col-md-4 mb-4">
                         <label asp-for="CivilStatus" class="control-label">Civil Status</label>
-                        <input asp-for="CivilStatus" class="form-control" placeholder="Enter civil status" required />
+                        <input asp-for="CivilStatus" class="form-control" placeholder="e.g, single, married, ..." required />
+                        <span asp-validation-for="CivilStatus" class="text-danger"></span>
+                    </div> *@
+
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="CivilStatus" class="control-label">Civil Status</label>
+                        <select asp-for="CivilStatus" class="form-select" required>
+                            <option disabled selected>select status</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Separated">Separated</option>
+                            <option value="Others">Others</option>
+                        </select>
                         <span asp-validation-for="CivilStatus" class="text-danger"></span>
                     </div>
 
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="MobileNumber" class="control-label">Mobile Number</label>
-                        <input asp-for="MobileNumber" class="form-control" placeholder="Enter mobile number" required />
+                        <input asp-for="MobileNumber" class="form-control" placeholder="e.g, 092134657899" />
                         <span asp-validation-for="MobileNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="TeleNumber" class="control-label">Telephone Number</label>
-                        <input asp-for="TeleNumber" class="form-control" placeholder="Enter telephone number" />
+                        <input asp-for="TeleNumber" class="form-control" placeholder="Enter tel number" />
                         <span asp-validation-for="TeleNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
@@ -90,7 +105,7 @@
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="BloodType" class="control-label">Blood Type</label>
-                        <input asp-for="BloodType" class="form-control text-uppercase" placeholder="Enter blood type" />
+                        <input asp-for="BloodType" class="form-control text-uppercase" placeholder="O+, AB" />
                         <span asp-validation-for="BloodType" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
@@ -109,6 +124,7 @@
                         <span asp-validation-for="PHIC_NO" class="text-danger"></span>
                     </div>
 
+                    <hr class="my-4" />
 
                     <!--Emergency Side-->
                     <h5 class="card-title my-2 mb-3">Emergency Contact Information</h5>
@@ -121,45 +137,47 @@
 
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Emergency_MobileNumber" class="control-label">Mobile Number</label>
-                        <input asp-for="Emergency_MobileNumber" class="form-control" type="number" placeholder="Enter Mobile Number" />
+                        <input asp-for="Emergency_MobileNumber" class="form-control" type="number" placeholder="e.g, 092134657899" />
                         <span asp-validation-for="Emergency_MobileNumber" class="text-danger"></span>
                     </div>
 
+                    <hr class="my-4" />
+
                     <!--Spouse Side-->
-                    <h5 class="card-title my-2 mb-3">Spouse / Partner's Information</h5>
+                    <h5 class="card-title">Spouse / Partner's Information</h5>
 
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Spouse.FirstName" class="control-label"> First Name</label>
-                        <input asp-for="Spouse.FirstName" class="form-control" p placeholder="Enter Firstname" required />
+                        <input asp-for="Spouse.FirstName" class="form-control" placeholder="e.g, Juan" />
                         <span asp-validation-for="Spouse.FirstName" class="text-danger"></span>
                     </div>
 
                      <div class="form-group col-md-4 mb-3">
                         <label asp-for="Spouse.MiddleName" class="control-label"> Middle Name</label>
-                        <input asp-for="Spouse.MiddleName" class="form-control" p placeholder="Enter Middlename" required />
+                        <input asp-for="Spouse.MiddleName" class="form-control" p placeholder="e.g, Dela"  />
                         <span asp-validation-for="Spouse.MiddleName" class="text-danger"></span>
                     </div>
 
                     <div class="form-group col-md-4 mb-3">
-                        <label asp-for="Spouse.LastName" class="control-label"> LastName Name</label>
-                        <input asp-for="Spouse.LastName" class="form-control" p placeholder="Enter Lastname" required />
+                        <label asp-for="Spouse.LastName" class="control-label"> Last Name</label>
+                        <input asp-for="Spouse.LastName" class="form-control" p placeholder="e.g, Cruz"  />
                         <span asp-validation-for="Spouse.LastName" class="text-danger"></span>
                     </div>
 
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Spouse.Birthdate" class="control-label"></label>
-                        <input asp-for="Spouse.Birthdate" class="form-control" type="date" required />
+                        <input asp-for="Spouse.Birthdate" class="form-control" type="date"  />
                         <span asp-validation-for="Spouse.Birthdate" class="text-danger"></span>
                     </div>
 
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Spouse.Address" class="control-label">Address</label>
-                        <input asp-for="Spouse.Address" class="form-control" placeholder="Enter full address (e.g., Street, Barangay, City)" required />
+                        <input asp-for="Spouse.Address" class="form-control" placeholder="Enter full address (e.g., Street, Barangay, City, Province)"  />
                         <span asp-validation-for="Spouse.Address" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Spouse.Gender" class="control-label"></label>
-                        <select asp-for="Spouse.Gender" class="form-select" required>
+                        <select asp-for="Spouse.Gender" class="form-select" >
                             <option disabled selected>select gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
@@ -170,7 +188,7 @@
 
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Spouse.Occupation" class="control-label"></label>
-                        <input asp-for="Spouse.Occupation" class="form-control" placeholder="Enter occupation" required />
+                        <input asp-for="Spouse.Occupation" class="form-control" placeholder="e.g, civil enginneer, teacher" />
                         <span asp-validation-for="Spouse.Occupation" class="text-danger"></span>
                     </div>
 
@@ -183,7 +201,7 @@
                                 <span>Save</span>
                             </button>
                             <a class="btn btn-outline-secondary" asp-controller="Patient" asp-action="Index">
-                                <i class="fas fa-undo"></i>
+                                <i class="fas fa-arrow-left me-1"></i>
                                 <span>Back to List</span>
                             </a>
                         </div>

@@ -8,6 +8,7 @@ namespace NatalCare.DataAccess.Interfaces
     {
         //Patient Info
         Task<Patients> GetInformation(string id);
+        Task<List<Patients>> GetRecentPatientsAsync();
         Task<List<Patients>> GetPatients();
         Task<List<Patients>> GetDeletedPatients();
         Task<bool> Create(Patients patient, string userId);

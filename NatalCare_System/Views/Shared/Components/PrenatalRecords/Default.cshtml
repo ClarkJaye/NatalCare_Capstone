@@ -2,10 +2,10 @@
 
 <h6 class="px-2">Prenatal Records</h6>
 <div class="d-flex justify-content-end my-3 gap-3">
-    <a asp-controller="" asp-action="" class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#prenatalAddModal" data-patient-id="@Model.FirstOrDefault()?.PatientID">
+    <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#prenatalAddModal" data-patient-id="@Model.FirstOrDefault()?.PatientID">
         <i class="fas fa-plus"></i>
         <span>Add New Prenatal Record</span>
-    </a>
+    </button>
     <button id="displayDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
         <i class="fas fa-trash"></i>
         <span>Deleted History Records</span>
@@ -89,7 +89,7 @@
 <div class="modal fade" id="prenatalAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Add Prenatal Record</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -159,7 +159,7 @@
 <div class="modal fade" id="prenatalEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Edit Prenatal Record</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>

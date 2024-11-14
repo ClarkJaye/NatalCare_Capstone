@@ -173,11 +173,10 @@ namespace NatalCare_System.Controllers
 
         //------ Patient Records View Component ------//
         //Records
-        public async Task<IActionResult> GetAllPatients()
+        public IActionResult GetAllPatients()
         {
             try
             {
-                var PatientsRecords = await patientServices.GetPatients();
                 return ViewComponent("PatientsRecords");
             }
             catch (Exception ex)

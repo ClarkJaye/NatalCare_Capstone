@@ -28,9 +28,8 @@ namespace NatalCare_System.Controllers
         }
 
         //------ HEARING ------//
-        public async Task<IActionResult> HearingRecords(string patientId)
+        public IActionResult HearingRecords(string patientId)
         {
-            var HearingRecords = await serviceServices.GetHearingRecords(patientId);
             return ViewComponent("HearingRecords", new { patientId = patientId });
         }
         //ADD 

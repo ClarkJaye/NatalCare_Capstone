@@ -23,6 +23,8 @@ namespace NatalCare.DataAccess.data
 
 
         //Services
+        public DbSet<Delivery> Delivery { get; set; }
+        public DbSet<DeliveryStatus> DeliveryStatus { get; set; }
         public DbSet<Prenatal> Prenatal { get; set; }
         public DbSet<PrenatalVisit> PrenatalVisit { get; set; }
         public DbSet<FamilyPlanning> FamilyPlanning { get; set; }
@@ -170,11 +172,11 @@ namespace NatalCare.DataAccess.data
            );
 
             modelBuilder.Entity<RoleStaff>().HasData(
-             new RoleStaff { Id = 1, RoleName = "Staff" },
-             new RoleStaff { Id = 2, RoleName = "Midwife" },
-             new RoleStaff { Id = 3, RoleName = "Physician" },
-             new RoleStaff { Id = 4, RoleName = "Nurse" },
-             new RoleStaff { Id = 5, RoleName = "Doctor" }
+                 new RoleStaff { Id = 1, RoleName = "Staff" },
+                 new RoleStaff { Id = 2, RoleName = "Midwife" },
+                 new RoleStaff { Id = 3, RoleName = "Physician" },
+                 new RoleStaff { Id = 4, RoleName = "Nurse" },
+                 new RoleStaff { Id = 5, RoleName = "Doctor" }
             );
             modelBuilder.Entity<Staff>().HasData(
                  new Staff { Id = 1, FirstName = "Shane", MiddleName = "Dela", LastName = "Cruz", RoleId = 1 },
@@ -182,6 +184,12 @@ namespace NatalCare.DataAccess.data
                  new Staff { Id = 3, FirstName = "Liza", MiddleName = "Aries", LastName = "Ariesgado", RoleId = 3 }
             );
 
+            modelBuilder.Entity<DeliveryStatus>().HasData(
+                new DeliveryStatus { Id = 1, StatusName = "In-Labor" },
+                new DeliveryStatus { Id = 2, StatusName = "Pospartum" },
+                new DeliveryStatus { Id = 3, StatusName = "Discharged" },
+                new DeliveryStatus { Id = 4, StatusName = "Referral" }
+            );
 
             // For Junction 
             modelBuilder.Entity<Role_Access>()
@@ -203,6 +211,7 @@ namespace NatalCare.DataAccess.data
                 typeof(Newborn),
                 typeof(Modules),
                 typeof(Category),
+                typeof(Delivery),
                 typeof(Prenatal),
                 typeof(PrenatalVisit),
                 typeof(NewbornHearing),
@@ -240,6 +249,12 @@ namespace NatalCare.DataAccess.data
                 .HasColumnType("decimal(18, 2)");
 
             // Constraints
+            modelBuilder.Entity<Delivery>()
+               .HasOne(p => p.Prenatal)
+               .WithMany()
+               .HasForeignKey(p => p.CaseNo)
+               .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<PrenatalVisit>()
                 .HasOne(p => p.PrenatalCase)
                 .WithMany()

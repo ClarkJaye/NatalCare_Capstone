@@ -121,6 +121,12 @@
                         <span asp-validation-for="APGAR" class="text-danger"></span>
                     </div>
 
+                    <div class="form-group col-md-4 mb-3" hidden>
+                        <label asp-for="StatusCode" class="control-label"></label>
+                        <input asp-for="StatusCode" class="form-control"/>
+                        <span asp-validation-for="StatusCode" class="text-danger"></span>
+                    </div>
+
 
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Medication" class="control-label">Medication</label>
@@ -145,7 +151,7 @@
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="MidwifeID" class="control-label">Midwife</label>
                         <select asp-for="MidwifeID" class="form-select" asp-items="ViewBag.midwifeList">
-                            <option disabled selected>select midwife</option>
+                            <option value="" class="text-muted" selected>select midwife</option>
                         </select>
                         <span asp-validation-for="MidwifeID" class="text-danger"></span>
                     </div>
@@ -153,7 +159,7 @@
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="StaffID" class="control-label">Assisted By</label>
                         <select asp-for="StaffID" class="form-select" asp-items="ViewBag.staffList">
-                            <option disabled selected>select Assisted by</option>
+                            <option value="" class="text-muted" selected>select Assisted by</option>
                         </select>
                         <span asp-validation-for="StaffID" class="text-danger"></span>
                     </div>
@@ -161,7 +167,7 @@
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="PhysicianID" class="control-label">Physician</label>
                         <select asp-for="PhysicianID" class="form-select" asp-items="ViewBag.physicianList">
-                            <option disabled selected>select physician</option>
+                            <option value="" class="text-muted" selected>select physician</option>
                         </select>
                         <span asp-validation-for="PhysicianID" class="text-danger"></span>
                     </div>

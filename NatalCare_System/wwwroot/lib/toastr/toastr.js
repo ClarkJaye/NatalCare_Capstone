@@ -152,7 +152,7 @@
 
             function getDefaults() {
                 return {
-                    "closeButton": true,
+                    closeButton: true,
                     tapToDismiss: true,
                     toastClass: 'toast',
                     containerId: 'toast-container',

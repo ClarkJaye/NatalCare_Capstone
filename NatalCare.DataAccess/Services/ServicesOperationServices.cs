@@ -665,12 +665,105 @@ namespace NatalCare.DataAccess.Services
             return new CommonResponse(true, "Record updated successfully.");
         }
 
+        // Delivery
+        public async Task<List<Delivery>> GetDeliveryRecords(string patientId)
+        {
+            var record = await unitOfWork.Repository<Delivery>().GetAllAsync(p => p.PatientID == patientId && p.StatusCode == "AC");
+            if (!record.Any())
+            {
+                return new List<Delivery>();
+            }
+            return record.ToList();
+        }
+        public async Task<CommonResponse> AddDeliveryRecordAsync(Delivery delivery, string patientId, string userId)
+        {
+            if (delivery == null)
+                return new CommonResponse(false, "Delivery cannot be null!");
 
+            // Validation checks: Ensure CaseNo is unique if needed.
+            if (await unitOfWork.Repository<Delivery>().AnyAsync(x => x.CaseNo == delivery.CaseNo))
+                return new CommonResponse(false, "Delivery record already exists.");
+
+            // Generate a new CaseNo for the record.
+            delivery.CaseNo = GenerateDeliveryID();
+            delivery.PatientID = patientId;
+            delivery.Created_At = DateTime.Now;
+            delivery.StatusCode = "AC";
+            delivery.DLCreatedBy = userId;
+
+            unitOfWork.Repository<Delivery>().Add(delivery);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Delivery record added successfully");
+        }
+        public async Task<GeneralResponse> GetDeliveryRecordAsync(string caseNo)
+        {
+            if (caseNo == null)
+                return new GeneralResponse(false, null, "Case No cannot found!");
+
+            // Validation checks: Ensure CaseNo is unique if needed.
+            var item = await unitOfWork.Repository<Delivery>().GetFirstOrDefaultAsync(x => x.CaseNo == caseNo);
+            if (item == null)
+                return new GeneralResponse(false, item, "Delivery record not existing.");
+
+            return new GeneralResponse(true, item, "Delivery record fetched successfully!.");
+        }
+        public async Task<CommonResponse> UpdateDeliveryRecordAsync(Delivery delivery, string userId)
+        {
+            var existingRecord = await unitOfWork.Repository<Delivery>().GetFirstOrDefaultAsync(p => p.CaseNo == delivery.CaseNo);
+
+            if (existingRecord == null)
+                return new CommonResponse(false, "Delivery record not found.");
+
+            // Update the existing record fields
+           
+            existingRecord.Notes = delivery.Notes;
+            existingRecord.Updated_At = DateTime.UtcNow;
+            existingRecord.DLUpdatedBy = userId;
+
+            unitOfWork.Repository<Delivery>().Update(existingRecord);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Delivery record updated successfully.");
+        }
+        public async Task<CommonResponse> DeleteDeliveryRecordAsync(string caseNo, string userId)
+        {
+            if (caseNo == null)
+                return new CommonResponse(false, "CaseNo cannot be null!");
+
+            // Validation checks: Ensure CaseNo is unique if needed.
+            var item = await unitOfWork.Repository<Delivery>().GetFirstOrDefaultAsync(x => x.CaseNo == caseNo);
+            if (item == null)
+                return new CommonResponse(false, "Delivery record not found.");
+
+            item.StatusCode = "DL";
+            item.Updated_At = DateTime.Now;
+            item.DLUpdatedBy = userId;
+
+            unitOfWork.Repository<Delivery>().Update(item);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Delivery record deleted successfully");
+        }
 
 
 
 
         //Generation of ID's
+        // Delivery
+        private string GenerateDeliveryID()
+        {
+            var lastPrenatal = unitOfWork.Repository<Delivery>()
+                .AsQueryable()
+                .OrderByDescending(p => p.CaseNo)
+                .FirstOrDefault();
+
+            int newIdNumber = 1;
+
+            if (lastPrenatal != null && lastPrenatal.CaseNo != null)
+            {
+                string numericPart = lastPrenatal.CaseNo.Substring(3);
+                newIdNumber = int.Parse(numericPart) + 1;
+            }
+            return $"DLV{newIdNumber:D4}"; // Formats as PRE0001, PRE0010, etc.
+        }
         // Prenatal
         private string GeneratePrenatalID()
         {

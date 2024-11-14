@@ -1,0 +1,64 @@
+﻿.addItemModalBody {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.addItemModalBodyDiv1 {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+    .addItemModalBodyDiv1 label {
+        width: 33%;
+        color: #FF456E;
+    }
+
+    .addItemModalBodyDiv1 textarea {
+        max-height: 120px;
+
+    }
+
+.createInvoiceTBody .fa-trash:before {
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 1.5rem;
+    padding:.5rem;
+    margin-top:1rem;
+}
+
+
+
+.descriptionModalBody{
+    display:flex;
+    flex-direction:column;
+}
+
+.descriptionModalBodyDiv1 {
+    height: 20%;
+    display:flex;
+    justify-content:center;
+    align-items:center
+}
+.descriptionModalBodyDiv2 {
+    height: 300px;
+    border-top: 1px solid #FF3864;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: auto;
+    scrollbar-width:thin;
+    scrollbar-color:pink;
+}
+
+.descriptionModalBodyDiv2 h5{
+    margin-top:1rem;
+}

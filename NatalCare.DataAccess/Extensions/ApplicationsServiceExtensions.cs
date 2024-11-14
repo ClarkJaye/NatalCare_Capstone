@@ -29,6 +29,9 @@ namespace NatalCare.DataAccess.Extensions
             // Register Newborn
             services.AddScoped<INewbornServices, NewbornServices>();
 
+            // Register Newborn
+            services.AddScoped<IBillingServices, BillingServices>();
+
             return services;
         }
     }

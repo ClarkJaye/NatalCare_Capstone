@@ -175,6 +175,28 @@ namespace NatalCare_System.Controllers
             }
         }
 
+        // DELETE Spouse
+        [HttpDelete]
+        public async Task<JsonResult> DeleteSpouse(int spouseId)
+        {
+            try
+            {
+                if (spouseId > 0)
+                {
+                    var result = await patientServices.DeleteSpouse(spouseId);
+                    return Json(new { isSuccess = result.IsSuccess, message = result.Message });
+                }
+                return Json(new { isSuccess = false, message = "Invalid Spouse ID." });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Error occurred while deleting spouse record for Patient");
+                return Json(new { isSuccess = false, message = "An error occurred while deleting the spouse record." });
+            }
+        }
+
+
+
 
         //------ Patient Records View Component ------//
         //Records

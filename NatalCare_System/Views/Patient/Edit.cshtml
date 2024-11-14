@@ -152,7 +152,15 @@
                     <hr class="my-4" />
 
                     <!--Spouse Side-->
+
+                <div class="d-flex align-items-center justify-content-between">
                     <h5 class="card-title">Spouse / Partner's Information</h5>
+
+                    <button type="button" id="clearBtn" class="btn btn-sm btn-outline-danger">
+                        <i class="fas fa-cancel"></i>
+                        <span>Clear</span>
+                    </button>
+                </div>
 
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Spouse.FirstName" class="control-label"> First Name</label>
@@ -225,17 +233,56 @@
 
     <script>
         $(document).ready(function () {
-            function togglePhilHealthSection() {
-                if ($('#HasPhilHealth').val() === 'true') {
-                    $('#philHealthSection').show();
-                } else {
-                    $('#philHealthSection').hide();
-                    $('#philHealthSection').prop("disabled", true);
-
-                }
-            }
             togglePhilHealthSection();
             $('#HasPhilHealth').on('change', togglePhilHealthSection);
+
+            $("#clearBtn").on('click', function(){
+                DeleteSpouse();
+            })
+
         });
+
+        function DeleteSpouse(){
+            var spouseId = $("#SpouseId").val();
+
+            $.ajax({
+                type: 'DELETE',
+                url: '@Url.Action("DeleteSpouse", "Patient")',
+                data: { spouseId: spouseId },
+                success: function (result) {
+                    if (result.isSuccess) {
+                        toastr.success(result.message);
+                        clearSpouseFields();
+                    } else {
+                        toastr.error(result.message);
+                    }
+                },
+                error: function () {
+                    console.log('Unable to delete the patient.');
+                }
+            });
+
+        }
+
+        function clearSpouseFields() {
+            $("#Spouse_FirstName").val("").attr("placeholder", "Enter First Name");
+            $("#Spouse_MiddleName").val("").attr("placeholder", "Enter Middle Name");
+            $("#Spouse_LastName").val("").attr("placeholder", "Enter Last Name");
+            $("#Spouse_Birthdate").val("");
+            $("#Spouse_Address").val("").attr("placeholder", "Enter Address");
+            $("#Spouse_Gender").val("");
+            $("#Spouse_Occupation").val("").attr("placeholder", "Enter Occupation");
+        }
+
+        function togglePhilHealthSection() {
+            if ($('#HasPhilHealth').val() === 'true') {
+                $('#philHealthSection').show();
+            } else {
+                $('#philHealthSection').hide();
+                $('#philHealthSection').prop("disabled", true);
+
+            }
+        }
+
     </script>
 }

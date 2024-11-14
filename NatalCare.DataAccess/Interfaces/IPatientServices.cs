@@ -15,6 +15,7 @@ namespace NatalCare.DataAccess.Interfaces
         Task<Patients> Edit(string id, string userId);
         Task<bool> Update(Patients patient, string userId);
         Task<CommonResponse> Delete(string id, string userId);
+        Task<CommonResponse> DeleteSpouse(int id);
         Task<CommonResponse> RetrievedAync(string id, string userId);
 
         //ViewBag

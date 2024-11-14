@@ -88,19 +88,19 @@
                 </div>
 
                 <div class="form-group col-md-4 mb-3">
-                    <label asp-for="HeadCircumference" class="control-label">Head</label>
+                    <label asp-for="HeadCircumference" class="control-label">Head Circumference</label>
                     <input asp-for="HeadCircumference" class="form-control" placeholder="Enter head circumference (cm)" required />
                     <span asp-validation-for="HeadCircumference" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-md-4 mb-3">
-                    <label asp-for="ChestCircumference" class="control-label">Chest</label>
+                    <label asp-for="ChestCircumference" class="control-label">Chest Circumference</label>
                     <input asp-for="ChestCircumference" class="form-control" placeholder="Enter chest circumference (cm)" required />
                     <span asp-validation-for="ChestCircumference" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-md-4 mb-3">
-                    <label asp-for="MidArmCircumference" class="control-label">Chest</label>
+                    <label asp-for="MidArmCircumference" class="control-label">Mid Arm Circumference</label>
                     <input asp-for="MidArmCircumference" class="form-control" placeholder="Enter mid-arm circumference (cm)" required />
                     <span asp-validation-for="MidArmCircumference" class="text-danger"></span>
                 </div>
@@ -328,18 +328,21 @@
                         $("#Patient_MiddleName").val(item.middlename);
                         $("#Patient_LastName").val(item.lastname);
                         $("#FatherID").val(item.fatherId);
-                        $("#Father_FirstName").val(item.fFirstname);
-                        $("#Father_MiddleName").val(item.fMiddlename);
-                        $("#Father_LastName").val(item.fLastname);
+                        $("#Father_FirstName").val(item.fFirstname).show();
+                        $("#Father_MiddleName").val(item.fMiddlename).show();
+                        $("#Father_LastName").val(item.fLastname).show();
                         toastr.success('Mother selected!');
                     } else {
                         $("#MotherID").val(item.message);
                         $("#Patient_FirstName").val(item.message);
                         $("#Patient_MiddleName").val(item.message);
                         $("#Patient_LastName").val(item.message);
-                        $("#Father_FirstName").val(item.fFirstname);
-                        $("#Father_MiddleName").val(item.fMiddlename);
-                        $("#Father_LastName").val(item.fLastname);
+                        // Hide father details if fatherId is null
+                        if (item.fatherId === null) {
+                            $("#Father_FirstName").hide();
+                            $("#Father_MiddleName").hide();
+                            $("#Father_LastName").hide();
+                        }
                         toastr.error('Mother Not Found!');
                     }
                     $('#searchMotherModal').modal('hide');

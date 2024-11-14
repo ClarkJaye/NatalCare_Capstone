@@ -163,6 +163,16 @@ namespace NatalCare.DataAccess.Services
             return new CommonResponse(true, "Patient record deleted successfully");
         }
 
+        public async Task<CommonResponse> DeleteSpouse(int id)
+        {
+            var item = await unitOfWork.Repository<Spouse>().GetFirstOrDefaultAsync(x => x.SpouseId == id);
+            if (item == null) return new CommonResponse(false, "Spouse record not existing.");
+
+            unitOfWork.Repository<Spouse>().Remove(item);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Spouse record deleted successfully");
+        }
+
 
         // HELPER
         public async Task<(int todayCount, int monthCount, int yearCount)> GetPatientCountsAsync()

@@ -17,25 +17,21 @@ namespace NatalCare.Models.Entities
         public string? Notes { get; set; }
         
         // Foreign Key
-        [Required]
         public int? DeliveryStatusID { get; set; }
         [ForeignKey("DeliveryStatusID")]
         [ValidateNever]
         public DeliveryStatus? DeliveryStatus { get; set; }
 
-        [Required]
-        public string? PrentalID { get; set; }
-        [ForeignKey("PrentalID")]
+        public string? PrenatalID{ get; set; }
+        [ForeignKey("PrenatalID")]
         [ValidateNever]
-        public Prenatal? Prenatal { get; set; }
+        public Prenatal? PrenatalCase { get; set; }
 
-        [Required]
         public string? NewbornID { get; set; }
         [ForeignKey("NewbornID")]
         [ValidateNever]
         public Newborn? Newborn { get; set; }
 
-        [Required]
         public string? PatientID { get; set; }
         [ForeignKey("PatientID")]
         [ValidateNever]

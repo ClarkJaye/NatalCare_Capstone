@@ -185,10 +185,11 @@ namespace NatalCare.DataAccess.data
             );
 
             modelBuilder.Entity<DeliveryStatus>().HasData(
-                new DeliveryStatus { Id = 1, StatusName = "In-Labor" },
-                new DeliveryStatus { Id = 2, StatusName = "Pospartum" },
-                new DeliveryStatus { Id = 3, StatusName = "Discharged" },
-                new DeliveryStatus { Id = 4, StatusName = "Referral" }
+                new DeliveryStatus { Id = 1, StatusName = "Monitoring" },
+                new DeliveryStatus { Id = 2, StatusName = "In-Labor" },
+                new DeliveryStatus { Id = 3, StatusName = "Pospartum" },
+                new DeliveryStatus { Id = 4, StatusName = "Discharged" },
+                new DeliveryStatus { Id = 5, StatusName = "Referred" }
             );
 
             // For Junction 
@@ -250,9 +251,9 @@ namespace NatalCare.DataAccess.data
 
             // Constraints
             modelBuilder.Entity<Delivery>()
-               .HasOne(p => p.Prenatal)
+               .HasOne(p => p.PrenatalCase)
                .WithMany()
-               .HasForeignKey(p => p.CaseNo)
+               .HasForeignKey(p => p.PrenatalID)
                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<PrenatalVisit>()

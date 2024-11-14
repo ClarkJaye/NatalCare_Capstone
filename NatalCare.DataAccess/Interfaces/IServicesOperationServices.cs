@@ -1,5 +1,4 @@
-﻿using NatalCare.DataAccess.Repository;
-using NatalCare.Models.Entities;
+﻿using NatalCare.Models.Entities;
 using static NatalCare.DataAccess.Response.ServiceResponses;
 
 namespace NatalCare.DataAccess.Interfaces

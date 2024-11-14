@@ -2,7 +2,7 @@
 
 <h6 class="px-2">Delivery Records</h6>
 <div class="d-flex justify-content-end my-3 gap-3">
-    <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#deliveryAddModal" data-patient-id="@Model.FirstOrDefault()?.PatientID">
+    <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
         <i class="fas fa-plus"></i>
         <span>Add New Delivery Record</span>
     </button>
@@ -22,6 +22,7 @@
             <tr>
                 <th>Case No#</th>
                 <th>Date Admitted</th>
+                <th>Time Admitted</th>
                 <th>Date Discharged</th>
                 <th>Ward No#</th>
                 <th>Status</th>
@@ -37,11 +38,28 @@
                 {
                     <tr>
                         <td>@item.CaseNo</td>
-                        <td>@item.Date_Admitted?.ToString("MMM dd yyyy h:mm tt")</td>
+                        <td>@item.Date_Admitted?.ToString("MMM dd yyyy")</td>
                         <td>@item.Time_Admitted?.ToString("h:mm tt")</td>
-                        <td>@item.Date_Discharged</td>
+                        <td>@item.Date_Discharged?.ToString("MMM dd yyyy h:mm tt")</td>
                         <td>@item.WardNumber</td>
-                        <td>@item.DeliveryStatus?.StatusName</td>
+                        <td>
+                            @if (item.DeliveryStatusID == 1 || item.DeliveryStatusID == 2)
+                            {
+                                <span class="badge bg-pink">@item.DeliveryStatus?.StatusName</span>
+                            }
+                            else if(item.DeliveryStatusID == 4)
+                            {
+                                <span class="badge bg-secondary">@item.DeliveryStatus?.StatusName</span>
+                            }
+                            else if (item.DeliveryStatusID == 5)
+                            {
+                                <span class="badge bg-info text-dark">@item.DeliveryStatus?.StatusName</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">@item.DeliveryStatus?.StatusName</span>
+                            }
+                        </td>
                         <td>@item.Newborn?.FirstName @item.Newborn?.MiddleName @item.Newborn?.LastName</td>
                         <td>@item.Notes</td>
                         <td>
@@ -92,27 +110,49 @@
                 <form id="AddDeliveryForm" method="POST">
                     @Html.AntiForgeryToken()
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-4">
                             <label for="Date_Admitted-Add" class="control-label">Date Admitted</label>
                             <input type="date" id="Date_Admitted-Add" name="Date_Admitted" class="form-control" required />
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-4">
                             <label for="Time_Admitted-Add" class="control-label">Time Admitted</label>
                             <input type="time" id="Time_Admitted-Add" name="Time_Admitted" class="form-control" required />
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-4">
                             <label for="Date_Discharged-Add" class="control-label">Date Discharged</label>
                             <input type="date" id="Date_Discharged-Add" name="Date_Discharged" class="form-control" />
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-4">
                             <label for="WardNumber-Add" class="control-label">Ward No#</label>
-                            <input type="number" id="WardNumber-Add" name="WardNumber" class="form-control" placeholder="Enter Ward No#" required />
+                            <input type="number" id="WardNumber-Add" name="WardNumber" class="form-control" placeholder="Enter Ward No#" />
                         </div>
 
-                        <div class="col-md-12 mb-3">
+                        <div class="form-group col-md-6 mb-4">
+                            <label for="PrenatalDel-Add" class="control-label">Prenatal Case Record</label>
+                            <select id="PrenatalDel-Add" class="form-select" name="PrenatalID" asp-items="ViewBag.prenatalList">
+                                <option value="" class="text-muted" selected>select prenatal record</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group col-md-6 mb-4">
+                            <label for="NewbornID-Add" class="control-label">Newborn Baby</label>
+                            <select id="NewbornID-Add" class="form-select" name="NewbornID" asp-items="ViewBag.newbornList">
+                                <option value="" class="text-muted" selected>select newborn baby</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-6 mb-4">
+                            <label for="statusDel-Add" class="control-label">Status</label>
+                            <select id="statusDel-Add" class="form-select" name="DeliveryStatusID" asp-items="ViewBag.dlstatusList" required>
+                                <option value="" class="text-muted" selected>select status</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12 mb-4">
                             <label for="NotesDel-Add" class="control-label">Notes(Optional)</label>
                             <textarea id="NotesDel-Add" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
                         </div>
@@ -145,27 +185,49 @@
                         <input type="hidden" id="caseNoDel-Edit" name="CaseNo" />
                         <input type="hidden" id="patientIdDel-Edit" name="PatientID" />
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-4">
                             <label for="Date_Admitted-Edit" class="control-label">Date Admitted</label>
                             <input type="date" id="Date_Admitted-Edit" name="Date_Admitted" class="form-control" required />
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-4">
                             <label for="Time_Admitted-Edit" class="control-label">Time Admitted</label>
                             <input type="time" id="Time_Admitted-Edit" name="Time_Admitted" class="form-control" required />
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-4">
                             <label for="Date_Discharged-Edit" class="control-label">Date Discharged</label>
                             <input type="date" id="Date_Discharged-Edit" name="Date_Discharged" class="form-control" />
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-4">
                             <label for="WardNumber-Edit" class="control-label">Ward No#</label>
-                            <input type="number" id="WardNumber-Edit" name="WardNumber" class="form-control" placeholder="Enter Ward No#" required />
+                            <input type="number" id="WardNumber-Edit" name="WardNumber" class="form-control" placeholder="Enter Ward No#" />
                         </div>
 
-                        <div class="col-md-12 mb-3">
+                        <div class="form-group col-md-6 mb-4">
+                            <label for="PrenatalDel-Edit" class="control-label">Prenatal Case Record</label>
+                            <select id="PrenatalDel-Edit" class="form-select" name="PrenatalID" asp-items="ViewBag.prenatalList">
+                                <option value="" class="text-muted" selected>select prenatal record</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group col-md-6 mb-4">
+                            <label for="NewbornID-Edit" class="control-label">Newborn Baby</label>
+                            <select id="NewbornID-Edit" class="form-select" name="NewbornID" asp-items="ViewBag.newbornList">
+                                <option value="" class="text-muted" selected>select newborn baby</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-6 mb-4">
+                            <label for="statusDel-Edit" class="control-label">Status</label>
+                            <select id="statusDel-Edit" class="form-select" name="DeliveryStatusID" asp-items="ViewBag.dlstatusList" required>
+                                <option value="" class="text-muted" selected>select status</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12 mb-4">
                             <label for="NotesDel-Edit" class="control-label">Notes(Optional)</label>
                             <textarea id="NotesDel-Edit" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
                         </div>
@@ -201,15 +263,15 @@
 <script>
     var patID = document.getElementById('patID').value;
     // Reset the form when the modal is hidden
-    $('#prenatalAddModal').on('hidden.bs.modal', function () {
+    $('#deliveryAddModal').on('hidden.bs.modal', function () {
         var modal = $(this);
         // Reset the form fields after the modal is hidden
         modal.find('form')[0].reset();
     });
 
-    $("#AddPrenatalForm").on("submit", function (e) {
+    $("#AddDeliveryForm").on("submit", function (e) {
         e.preventDefault();
-        AddPrenatal();
+        AddDelivery();
     });
 
     $("#UpdatePrenatalForm").on("submit", function (e) {
@@ -314,7 +376,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: 'DELETE',
-                    url: '@Url.Action("DeletePrenatalRecord", "Prenatal")',
+                    url: '@Url.Action("DeleteDeliveryRecord", "Delivery")',
                     data: { caseNo: caseNo },
                     success: function (result) {
                         if (result.isSuccess) {
@@ -332,20 +394,20 @@
         });
     }
     //Add Prenatal
-    function AddPrenatal() {
+    function AddDelivery() {
         var patientId = $("#patID").val();
-        var formData = $('#AddPrenatalForm').serializeArray();
+        var formData = $('#AddDeliveryForm').serializeArray();
         formData.push({ name: 'patientID', value: patientId });
 
         $.ajax({
-            url: '@Url.Action("AddPrenatalRecord", "Prenatal")',
+            url: '@Url.Action("AddDeliveryRecord", "Delivery")',
             type: 'POST',
             data: formData,
             success: function (result) {
                 if (result.isSuccess) {
                     toastr.success(result.message)
-                    LoadPrenatalComponent();
-                    $('#prenatalAddModal').modal('hide');
+                    LoadDeliveryComponent();
+                    $('#deliveryAddModal').modal('hide');
                 } else {
                     toastr.error(result.message);
                 }
@@ -356,15 +418,15 @@
         });
     }
     //Load All Records
-    function LoadPrenatalComponent() {
+    function LoadDeliveryComponent() {
         $.ajax({
-            url: '@Url.Action("PrenatalRecords", "Prenatal")',
+            url: '@Url.Action("DeliveryRecords", "Delivery")',
             data: { patientId: patID },
             success: function (result) {
-                $('#prenatal').html(result);
+                $('#delivery').html(result);
             },
             error: function () {
-                toastr.error("Failed to reload the Prenatal records.");
+                toastr.error("Failed to reload the Delivery records.");
             }
         });
     }

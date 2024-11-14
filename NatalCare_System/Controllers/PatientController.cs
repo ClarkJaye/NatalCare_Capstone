@@ -11,11 +11,13 @@ namespace NatalCare_System.Controllers
     {
         private readonly IPatientServices patientServices;
         private readonly IServicesOperationServices serviceServices;
+        private readonly ISelectListServices selectListServices;
 
-        public PatientController(IPatientServices patientServices, IServicesOperationServices serviceServices)
+        public PatientController(IPatientServices patientServices, IServicesOperationServices serviceServices, ISelectListServices selectListServices)
         {
             this.patientServices = patientServices;
             this.serviceServices = serviceServices;
+            this.selectListServices = selectListServices;
         }
 
         public async Task<IActionResult> Index()
@@ -45,6 +47,9 @@ namespace NatalCare_System.Controllers
         }
         public async Task<IActionResult> MedicalRecords(string id)
         {
+            ViewData["newbornList"] = await selectListServices.GetAllNewbornSelectListAsync(id);
+            ViewData["prenatalList"] = await selectListServices.GetAllPrenatalSelectListAsync(id);
+            ViewData["dlstatusList"] = await selectListServices.GetDeliveryStatusSelectListAsync();
             var patient = await patientServices.GetInformation(id);
             return View(patient);
         }

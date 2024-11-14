@@ -12,6 +12,31 @@ public class SelectListServices : ISelectListServices
         this.unitOfWork = unitOfWork;
     }
 
+    //PRENATAL 
+    public async Task<SelectList> GetAllNewbornSelectListAsync(string patientId)
+    {
+        var roles = await unitOfWork.Repository<Newborn>().GetAllAsync(x => x.MotherID == patientId);
+        var staffWithFullNames = roles.Select(s => new
+        {
+            s.NewbornID,
+            FullName = $"{s.LastName}, {(s.MiddleName ?? "")} {s.FirstName}".Trim()
+        }).ToList();
+
+        return new SelectList(staffWithFullNames, "NewbornID", "FullName");
+    }
+
+
+    //PRENATAL 
+    public async Task<SelectList> GetAllPrenatalSelectListAsync(string patientId)
+    {
+        var roles = await unitOfWork.Repository<Prenatal>().GetAllAsync(x => x.PatientID == patientId);
+        return new SelectList(roles, "CaseNo", "CaseNo");
+    }
+
+    //DELIVERY
+
+
+    // STAFF
     public async Task<SelectList> GetAllStaffSelectListAsync()
     {
         var roles = await unitOfWork.Repository<Staff>().GetAllAsync(includeProperties: "RoleStaff");
@@ -92,6 +117,11 @@ public class SelectListServices : ISelectListServices
         return new SelectList(status, "StatusCode", "StatusName");
     }
 
+    public async Task<SelectList> GetDeliveryStatusSelectListAsync()
+    {
+        var status = await unitOfWork.Repository<DeliveryStatus>().GetAllAsync();
+        return new SelectList(status, "Id", "StatusName");
+    }
 
 
 

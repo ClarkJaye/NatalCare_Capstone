@@ -44,6 +44,7 @@ namespace NatalCare_System.Controllers
                 return Json(new { IsSuccess = false, Message = "An error occurred in         public async Task<IActionResult> PrenatalFormRecords(string patientId)\r\n." });
             }
         }
+
         public IActionResult DeliveryRecords(string patientId)
         {
             return ViewComponent("deliveryrecords", new { patientId = patientId });
@@ -57,6 +58,8 @@ namespace NatalCare_System.Controllers
             {
                 // Exclude CaseNo from validation
                 ModelState.Remove(nameof(model.CaseNo));
+                ModelState.Remove(nameof(model.NewbornID));
+                ModelState.Remove(nameof(model.PrenatalID));
 
                 if (ModelState.IsValid)
                 {
@@ -69,200 +72,73 @@ namespace NatalCare_System.Controllers
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"Error occurred while adding prenatal record for Patient ID: {model.PatientID}");
-                return Json(new { IsSuccess = false, Message = "An error occurred in AddDeliveryRecord." });
+                return Json(new { IsSuccess = false, Message = "An error occurred in Add Delivery Record." });
             }
         }
         // DELETE 
         [HttpDelete]
-        public async Task<JsonResult> DeletePrenatalRecord(string caseNo)
+        public async Task<JsonResult> DeleteDeliveryRecord(string caseNo)
         {
             try
             {
                 if (caseNo != null)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await serviceServices.DeletePrenatalRecordAsync(caseNo, userId);
+                    var result = await serviceServices.DeleteDeliveryRecordAsync(caseNo, userId);
                     return Json(result);
                 }
                 return Json(new { IsSuccess = false, Message = "Delete Record failed!" });
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, $"Error occurred while deleting prenatal record for Patient");
-                return Json(new { IsSuccess = false, Message = "An error occurred in DeletePrenatalRecord." });
+                Logger.LogError(ex, $"Error occurred while deleting delivery record for Patient");
+                return Json(new { IsSuccess = false, Message = "An error occurred in DeleteDeliveryRecord." });
             }
         }
         // GET/EDIT 
         [HttpGet]
-        public async Task<JsonResult> EditPrenatalRecord(string caseNo)
+        public async Task<JsonResult> EditDeliveryRecord(string caseNo)
         {
             try
             {
                 if (caseNo != null)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await serviceServices.GetPrenatalRecordAsync(caseNo);
+                    var result = await serviceServices.GetDeliveryRecordAsync(caseNo);
                     return Json(result);
                 }
                 return Json(new { IsSuccess = false, Message = "Fetching Record failed!" });
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, $"Error occurred while Edit prenatal record for Patient");
-                return Json(new { IsSuccess = false, Message = "An error occurred in EditPrenatalRecord." });
+                Logger.LogError(ex, $"Error occurred while Edit delivery record for Patient");
+                return Json(new { IsSuccess = false, Message = "An error occurred in EditDeliveryRecord." });
             }
         }
         // UPDATE
         [HttpPost]
-        public async Task<JsonResult> UpdatePrenatalRecord(Prenatal model)
+        public async Task<JsonResult> UpdateDeliveryRecord(Delivery model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await serviceServices.UpdatePrenatalRecordAsync(model, userId);
+                    var result = await serviceServices.UpdateDeliveryRecordAsync(model, userId);
                     return Json(result);
                 }
                 return Json(new { IsSuccess = false, Message = "Update Record failed!" });
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, $"Error occurred while updating the prenatal record for Patient ID: {model.PatientID}");
-                return Json(new { IsSuccess = false, Message = "An error occurred in UpdatePrenatalRecord." });
+                Logger.LogError(ex, $"Error occurred while updating the delivery record for Patient ID: {model.PatientID}");
+                return Json(new { IsSuccess = false, Message = "An error occurred in UpdateDeliveryRecord." });
             }
         }
 
-        //------ PRENATAL VISIT ------//
-        //ADD 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddPrenatalVisitRecord(PrenatalVisit model, string patientID, string caseNo)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    var userId = GetCurrentUserId();
-                    var result = await serviceServices.AddPrenatalVisitRecordAsync(model, patientID, caseNo, userId);
-                    if(result.IsSuccess == true)
-                    {
-                        TempData["success"] = result.Message;
-                    }
-                    else
-                    {
-                        TempData["error"] = result.Message;
-                    }
-                    return Json(result);
-                }
-                return Json(new { IsSuccess = false, Message = "Add Record failed!" });
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, $"Error occurred while adding prenatal visit record for Patient ID: {patientID}");
-                return Json(new { IsSuccess = false, Message = "An error occurred in AddPrenatalRecord." });
-            }
-        }
-
-        // GET/EDIT 
-        [HttpGet]
-        public async Task<JsonResult> DetailPrenatalVisitRecord(string caseNo)
-        {
-            try
-            {
-                if (caseNo != null)
-                {
-                    var userId = GetCurrentUserId();
-                    var result = await serviceServices.GetPrenatalVisitRecordAsync(caseNo);
-                    return Json(result);
-                }
-                return Json(new { IsSuccess = false, Message = "Fetching Record failed!" });
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, $"Error occurred while getting prenatal visit detailed record for Patient");
-                return Json(new { IsSuccess = false, Message = "An error occurred in DetailPrenatalVisitRecord." });
-            }
-        }
-
-        // UPDATE
-        [HttpPost]
-        public async Task<JsonResult> UpdatePrenatalVisitRecord(PrenatalVisit model)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    var userId = GetCurrentUserId();
-                    var result = await serviceServices.UpdatePrenatalVisitRecordAsync(model, userId);
-                    if (result.IsSuccess == true)
-                    {
-                        TempData["success"] = result.Message;
-                    }
-                    else
-                    {
-                        TempData["error"] = result.Message;
-                    }
-                    return Json(result);
-                }
-                return Json(new { IsSuccess = false, Message = "Update Record failed!" });
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, $"Error occurred while updating prenatal visit record for Patient ID: {model.PatientID}");
-                return Json(new { IsSuccess = false, Message = "An error occurred in UpdatePrenatalRecord." });
-            }
-        }
-
-        // DELETE 
-        [HttpDelete]
-        public async Task<JsonResult> DeletePrenatalVisitRecord(string caseNo)
-        {
-            try
-            {
-                if (caseNo != null)
-                {
-                    var userId = GetCurrentUserId();
-                    var result = await serviceServices.DeletePrenatalVisitRecordAsync(caseNo, userId);
-                    return Json(result);
-                }
-
-                return Json(new { IsSuccess = false, Message = "Delete Record failed!" });
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, $"Error occurred while deleting prenatal visit record for Patient");
-                return Json(new { IsSuccess = false, Message = "An error occurred in DeletePrenatalVisitRecord." });
-            }
-        }
-
-
-        //Records
-        public async Task<IActionResult> PrenatalRecord(string patientid, string caseno)
-        {
-            var patient = await patientServices.GetInformation(patientid);
-            var prenatalRecord = await serviceServices.GetPrenatalRecord(patientid, caseno);
-            if (prenatalRecord.CaseNo == null)
-            {
-                TempData["error"] = "No record found!";
-                if(patient.PatientID != null)
-                {
-                    return RedirectToAction("MedicalRecords", "Patient", new { id = patient.PatientID });
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            var prenatalVisitRecords = await serviceServices.GetPrenatalVisitsRecords(prenatalRecord.CaseNo, patient.PatientID);
-            var viewModel = new PatientsVM
-            {
-                Patient = patient,
-                PrenatalRecord = prenatalRecord,
-                PrenatalVisitRecords = prenatalVisitRecords,
-            };
-            return View(viewModel);
-        }
-
+     
         //Display Deleted records
-        public async Task<IActionResult> DisplayDeletedPrenatal(string patientId)
+        public async Task<IActionResult> DisplayDeletedDelivery(string patientId)
         {
             var records = await serviceServices.GetDeletedPrenatalRecords(patientId);
             return View(records ?? new List<Prenatal>());

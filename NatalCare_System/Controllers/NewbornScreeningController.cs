@@ -28,9 +28,8 @@ namespace NatalCare_System.Controllers
         }
 
         //------ PRENATAL ------//
-        public async Task<IActionResult> ScreeningRecords(string patientId)
+        public IActionResult ScreeningRecords(string patientId)
         {
-            var ScreeningsRecords = await serviceServices.GetScreeningRecords(patientId);
             return ViewComponent("ScreeningsRecords", new { patientId = patientId });
         }
         //ADD 

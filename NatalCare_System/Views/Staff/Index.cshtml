@@ -1,0 +1,122 @@
+﻿@model List<NatalCare.Models.Entities.Staff>
+
+@{
+    ViewData["Title"] = "Staff List";
+    Layout = "_UserLayout";
+}
+
+<!-- NAVBAR -->
+<partial name="Partial/_Navbar" />
+
+<div class="mx-4">
+    <div class="mb-3 mt-2 d-flex align-items-center justify-content-start gap-3">
+        <a class="btn btn-sm btn-pink d-flex align-items-center gap-2" asp-controller="Staff" asp-action="Create">
+            <i class='fas fa-user-plus' style="font-size: 18px;"></i>
+            <strong>Add New Staff</strong>
+        </a>
+    </div>
+
+    <div class="card shadow-sm card-selected">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped table-datatable">
+                    <thead class="border-bottom-2">
+                        <tr>
+                            <th>First Name</th>
+                            <th>Middle Name</th>
+                            <th>Last Name</th>
+                            <th>Staff Role</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var role in Model)
+                        {
+                            <tr>
+                                <td>@role.FirstName</td>
+                                <td>@role.MiddleName</td>
+                                <td>@role.LastName</td>
+                                <td>@role.RoleStaff?.RoleName</td>
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center gap-4">
+                                        <a class="btn btn-sm btn-outline-primary d-flex align-items-center gap-2" asp-controller="Staff" asp-action="Edit" asp-route-id="@role.Id">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            <span>Edit</span>
+                                        </a>
+
+                                        <a class="btn btn-sm btn-outline-danger d-flex align-items-center gap-2 dlt-Btn" data-staffId="@role.Id">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                            <span>Delete</span>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // DELETE
+        $(".dlt-Btn").on("click", function (e) {
+            var id = $(this).data('staffid');
+            DeleteStaff(id);
+        });
+
+
+        //Delete Prenatal Visit
+        function DeleteStaff(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this, but you can see this on deleted history!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '@Url.Action("DeleteStaff", "Staff")',
+                        data: { id: id },
+                        success: function (result) {
+                            if (result) {
+                                location.reload();
+                            }
+                        },
+                        error: function () {
+                            console.log('Unable to get the data.');
+                        }
+                    })
+                }
+            });
+
+
+
+        }
+        //DELETE
+        $('#deleteModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.attr('data-staffId');
+            console.log(id);
+
+            $('#deleteStaffId').val(id);
+
+            var form = $('#deleteForm');
+            form.attr('action', '/Staff/Delete/' + id);
+        });
+    });
+
+</script>
+
+
+
+
+

@@ -118,7 +118,7 @@ namespace NatalCare.DataAccess.Services
             existingPatient.StatusCode = patient.StatusCode;
 
             // Update Spouse
-            if(existingSpouse != null)
+            if(existingSpouse.SpouseId != null)
             {
                 existingSpouse.FirstName = patient.Spouse.FirstName;
                 existingSpouse.MiddleName = patient.Spouse.MiddleName;

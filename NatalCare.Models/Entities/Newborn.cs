@@ -21,14 +21,25 @@ namespace NatalCare.Models.Entities
         [Required]
         public string? Gender { get; set; }
 
-        // Measurements
+        public string? PlaceOfBirth { get; set; }
+        public string? Address { get; set; }
+
+        [Required]
+        public DateOnly? DateofBirth { get; set; }
+
+        [Required]
+        public TimeOnly? TimeofBirth { get; set; }
+
+        public string? DeliveryType { get; set; }
+
+        // MEASUREMENTS
         [Column(TypeName = "decimal(5, 2)")]
         public decimal? Weight { get; set; } // in grams
 
         [Column(TypeName = "decimal(5, 2)")]
         public decimal? Length { get; set; } // in cm
 
-        [Column(TypeName = "decimal(5, 2)")] 
+        [Column(TypeName = "decimal(5, 2)")]
         public decimal? HeadCircumference { get; set; } // in cm
 
         [Column(TypeName = "decimal(5, 2)")]
@@ -44,14 +55,7 @@ namespace NatalCare.Models.Entities
         [Range(0, 12)]
         public int? APGAR { get; set; }
 
-        public string? PlaceOfBirth { get; set; }
-        public string? Address { get; set; }
 
-        [Required]
-        public DateOnly? DateofBirth { get; set; }
-
-        [Required]
-        public TimeOnly? TimeofBirth { get; set; }
 
         // Foreign Key and Auditing Information
         public DateTime? Created_At { get; set; }
@@ -83,5 +87,30 @@ namespace NatalCare.Models.Entities
         [ForeignKey("MotherID")]
         [ValidateNever]
         public Patients? Patient { get; set; }
+
+        public int? FatherID { get; set; }
+
+        [ForeignKey("FatherID")]
+        [ValidateNever]
+        public Spouse? Father { get; set; }
+
+
+        ////ASSISTED STAFF
+        public int? MidwifeID { get; set; }
+        [ForeignKey("MidwifeID")]
+        [ValidateNever]
+        public Staff? Midwife { get; set; }
+
+        public int? PhysicianID { get; set; }
+        [ForeignKey("PhysicianID")]
+        [ValidateNever]
+        public Staff? Physician { get; set; }
+
+        public int? StaffID { get; set; }
+        [ForeignKey("StaffID")]
+        [ValidateNever]
+        public Staff? AssisstedBy { get; set; }
+
+
     }
 }

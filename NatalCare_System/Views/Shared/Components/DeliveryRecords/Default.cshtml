@@ -1,0 +1,372 @@
+﻿@model List<NatalCare.Models.Entities.Delivery>
+
+<h6 class="px-2">Delivery Records</h6>
+<div class="d-flex justify-content-end my-3 gap-3">
+    <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#deliveryAddModal" data-patient-id="@Model.FirstOrDefault()?.PatientID">
+        <i class="fas fa-plus"></i>
+        <span>Add New Delivery Record</span>
+    </button>
+    <button id="displayDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
+        <i class="fas fa-trash"></i>
+        <span>Deleted History Record</span>
+    </button>
+</div>
+
+<div class="d-flex align-items-center gap-2">
+    <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
+</div>
+<!-- Patient Table-->
+<div class="table-responsive" style="max-height:600px;">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Case No#</th>
+                <th>Date Admitted</th>
+                <th>Date Discharged</th>
+                <th>Ward No#</th>
+                <th>Status</th>
+                <th>Baby Name</th>
+                <th>Notes</th>
+                <th class="text-center">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.CaseNo</td>
+                        <td>@item.Date_Admitted?.ToString("MMM dd yyyy h:mm tt")</td>
+                        <td>@item.Time_Admitted?.ToString("h:mm tt")</td>
+                        <td>@item.Date_Discharged</td>
+                        <td>@item.WardNumber</td>
+                        <td>@item.DeliveryStatus?.StatusName</td>
+                        <td>@item.Newborn?.FirstName @item.Newborn?.MiddleName @item.Newborn?.LastName</td>
+                        <td>@item.Notes</td>
+                        <td>
+                            <div class="d-flex align-items-center justify-content-center gap-2">
+                                <a asp-controller="Delivery" asp-action="DeliveryRecord" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-sm btn-outline-secondary">
+                                    <i class="fa-solid fa-list"></i>
+                                    <span>Records</span>
+                                </a>
+                                <button class="btn btn-sm btn-outline-primary edit-Btn" data-caseno="@item.CaseNo">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    <span>Edit</span>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger dlt-Btn" data-caseno="@item.CaseNo">
+                                    <i class="fa-solid fa-trash"></i>
+                                    <span>Delete</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="20" class="text-center">
+                        No data available.
+                    </td>
+                </tr>
+            }
+
+            <!-- No match found row -->
+            <tr class="no-record-found" style="display: none;">
+                <td colspan="30" class="text-center">No match found</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Add Prenatal Modal -->
+<div class="modal fade" id="deliveryAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Add Delivery Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="AddDeliveryForm" method="POST">
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="Date_Admitted-Add" class="control-label">Date Admitted</label>
+                            <input type="date" id="Date_Admitted-Add" name="Date_Admitted" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="Time_Admitted-Add" class="control-label">Time Admitted</label>
+                            <input type="time" id="Time_Admitted-Add" name="Time_Admitted" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="Date_Discharged-Add" class="control-label">Date Discharged</label>
+                            <input type="date" id="Date_Discharged-Add" name="Date_Discharged" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="WardNumber-Add" class="control-label">Ward No#</label>
+                            <input type="number" id="WardNumber-Add" name="WardNumber" class="form-control" placeholder="Enter Ward No#" required />
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="NotesDel-Add" class="control-label">Notes(Optional)</label>
+                            <textarea id="NotesDel-Add" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-pink">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Prenatal Modal -->
+<div class="modal fade" id="deliveryEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Edit Delivery Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="UpdateDeliveryForm" method="POST">
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <input type="hidden" id="caseNoDel-Edit" name="CaseNo" />
+                        <input type="hidden" id="patientIdDel-Edit" name="PatientID" />
+
+                        <div class="col-md-6 mb-3">
+                            <label for="Date_Admitted-Edit" class="control-label">Date Admitted</label>
+                            <input type="date" id="Date_Admitted-Edit" name="Date_Admitted" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="Time_Admitted-Edit" class="control-label">Time Admitted</label>
+                            <input type="time" id="Time_Admitted-Edit" name="Time_Admitted" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="Date_Discharged-Edit" class="control-label">Date Discharged</label>
+                            <input type="date" id="Date_Discharged-Edit" name="Date_Discharged" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="WardNumber-Edit" class="control-label">Ward No#</label>
+                            <input type="number" id="WardNumber-Edit" name="WardNumber" class="form-control" placeholder="Enter Ward No#" required />
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="NotesDel-Edit" class="control-label">Notes(Optional)</label>
+                            <textarea id="NotesDel-Edit" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>       
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Deleted History Modal -->
+<div class="modal fade" id="deletedPreModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger"><i class="fa-solid fa-trash"></i> Deleted Delivery Records</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="deletedListContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var patID = document.getElementById('patID').value;
+    // Reset the form when the modal is hidden
+    $('#prenatalAddModal').on('hidden.bs.modal', function () {
+        var modal = $(this);
+        // Reset the form fields after the modal is hidden
+        modal.find('form')[0].reset();
+    });
+
+    $("#AddPrenatalForm").on("submit", function (e) {
+        e.preventDefault();
+        AddPrenatal();
+    });
+
+    $("#UpdatePrenatalForm").on("submit", function (e) {
+        e.preventDefault();
+        UpdatePrenatal();
+    });
+
+    $(".edit-Btn").on("click", function (e) {
+        var caseNo = $(this).data('caseno');
+        EditPrenatal(caseNo);
+    });
+        
+    $(".dlt-Btn").on("click", function (e) {
+        var caseNo = $(this).data('caseno');
+        DeletePrenatal(caseNo);
+    });
+
+    $('#displayDeletedHistoryBtn').on('click', function () {
+        LoadDeletedHistoryPrenatal();
+    });
+
+    function LoadDeletedHistoryPrenatal() {
+        $.ajax({
+            url: '@Url.Action("DisplayDeletedPrenatal", "Prenatal")',
+            type: 'GET',
+            data: { patientId: patID },
+            success: function (result) {
+                $("#deletedListContainer").html(result);
+                $('#deletedPreModal').modal('show');
+            },
+            error: function () {
+                console.error("Failed to load patients data.");
+            }
+        });
+    }
+
+    // Update Prenatal Record
+    function UpdatePrenatal() {
+        var formData = $("#UpdatePrenatalForm").serialize();  
+        $.ajax({
+            url: '@Url.Action("UpdatePrenatalRecord", "Prenatal")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                if (result.isSuccess) {
+                    $('#prenatalEditModal').modal('hide');
+                    toastr.success(result.message)
+                    LoadPrenatalComponent();
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                toastr.error('An error occurred while updating the prenatal record.');
+                console.error('Error:', err);
+            }
+        });
+    }
+    //Edit Prenatal
+    function EditPrenatal(caseNo){
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("EditPrenatalRecord", "Prenatal")',
+            data: { caseNo: caseNo },
+            success: function (result) {
+                var item = result.item;
+                if (result && result.isSuccess == true){
+                    $("#caseNo-Edit").val(item.caseNo);
+                    $("#patientId-Edit").val(item.patientID);
+                    $("#Gravida-Edit").val(item.gravida);
+                    $("#Para-Edit").val(item.para);
+                    $("#Abortion-Edit").val(item.abortion);
+                    $("#StillBirth-Edit").val(item.stillBirth);
+                    $("#LMP-Edit").val(item.lmp ? item.lmp.split('T')[0] : '');
+                    $("#EDC-Edit").val(item.edc ? item.edc.split('T')[0] : '');
+                    $("#DateVisit-Edit").val(item.dateVisit);
+                    $("#HRCODE-Edit").val(item.hrcode);
+                    $("#Notes-Edit").val(item.notes);
+                    //Show Modal
+                    $('#prenatalEditModal').modal('show');
+                }else{
+                    toastr.error(result.message || 'Unable to load prenatal record.');
+                }
+            },
+            error: function () {
+                toastr.error('An error occurred while loading the prenatal record.');
+                console.log('Unable to get the data.');
+            }
+        })
+    }
+    //Delete Prenatal
+    function DeletePrenatal(caseNo) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this, but you can see this on deleted history!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("DeletePrenatalRecord", "Prenatal")',
+                    data: { caseNo: caseNo },
+                    success: function (result) {
+                        if (result.isSuccess) {
+                            toastr.success(result.message)
+                            LoadPrenatalComponent();
+                        } else {
+                            toastr.error(result.message);
+                        }
+                    },
+                    error: function () {
+                        console.log('Unable to get the data.');
+                    }
+                })
+            }
+        });
+    }
+    //Add Prenatal
+    function AddPrenatal() {
+        var patientId = $("#patID").val();
+        var formData = $('#AddPrenatalForm').serializeArray();
+        formData.push({ name: 'patientID', value: patientId });
+
+        $.ajax({
+            url: '@Url.Action("AddPrenatalRecord", "Prenatal")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                if (result.isSuccess) {
+                    toastr.success(result.message)
+                    LoadPrenatalComponent();
+                    $('#prenatalAddModal').modal('hide');
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                console.error('Error:', err);
+            }
+        });
+    }
+    //Load All Records
+    function LoadPrenatalComponent() {
+        $.ajax({
+            url: '@Url.Action("PrenatalRecords", "Prenatal")',
+            data: { patientId: patID },
+            success: function (result) {
+                $('#prenatal').html(result);
+            },
+            error: function () {
+                toastr.error("Failed to reload the Prenatal records.");
+            }
+        });
+    }
+
+</script>

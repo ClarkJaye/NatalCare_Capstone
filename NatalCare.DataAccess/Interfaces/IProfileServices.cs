@@ -1,4 +1,5 @@
 ﻿using NatalCare.Models.Entities;
+using static NatalCare.DataAccess.Response.ServiceResponses;
 
 namespace NatalCare.DataAccess.Interfaces
 {
@@ -11,5 +12,14 @@ namespace NatalCare.DataAccess.Interfaces
         Task<Role> GetProfileById(string profileId);
 
         Task<bool> UpdateProfile(Role profile, string userId);
+
+        //STAFF
+        Task<List<Staff>> GetAllStaff();
+        Task<CommonResponse> DeleteStaff(int id);
+        Task<bool> CreateStaff(Staff staff);
+        Task<Staff> GetStaffById(int id);
+        Task<bool> UpdateStaff(Staff staff);
+
+
     }
 }

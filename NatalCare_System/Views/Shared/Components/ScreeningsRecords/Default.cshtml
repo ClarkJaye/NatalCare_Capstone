@@ -90,7 +90,7 @@
 
 <!-- Add Screening Modal -->
 <div class="modal fade" id="ScreeningAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-pink">
                 <h5 class="modal-title">Add Newborn Screening Record</h5>
@@ -121,7 +121,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="FilterCardNoSN-Add" class="control-label">Filter Card No</label>
-                            <input type="number" id="FilterCardNoSN-Add" name="FilterCardNo" class="form-control" required />
+                            <input id="FilterCardNoSN-Add" name="FilterCardNo" class="form-control" required placeholder="Enter filter card no#"/>
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -141,7 +141,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="PlaceOfCollectionSN-Add" class="control-label">Place of Collection</label>
-                            <input id="PlaceOfCollectionSN-Add" name="PlaceOfCollection" class="form-control" />
+                            <input id="PlaceOfCollectionSN-Add" name="PlaceOfCollection" class="form-control" placeholder="Enter place collection"/>
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -191,10 +191,8 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="staffSN-Add" class="control-label">Select Encharged Staff</label>
-                            <select id="staffSN-Add" class="form-select" name="StaffID" required>
-                                <option disabled selected>select encharged staff</option>
-                            </select>
+                            <label for="practitioner-Add" class="control-label">Attending Practitioner</label>
+                            <input id="practitioner-Add" name="AttendingPractitioner" class="form-control" placeholder="Enter attenting practitioner" />
                         </div>
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
@@ -212,7 +210,7 @@
 
 <!-- Edit Hearing Modal -->
 <div class="modal fade" id="ScreeningEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-pink">
                 <h5 class="modal-title">Edit Screening Record</h5>
@@ -336,7 +334,7 @@
 
 <!-- Details Hearing Modal -->
 <div class="modal fade" id="ScreeningDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-pink">
                 <h5 class="modal-title">Detail Screening Record</h5>
@@ -589,16 +587,16 @@
                     $("#NotesHR-Edit").val(item.notes);
 
                     $('#newbornBbSN-Edit').empty().append('<option disabled selected>select newborn baby</option>');
-                    $('#staffSN-Edit').empty().append('<option disabled selected>select encharged staff</option>');
-                    staff.forEach(function (data) {
-                        $('#staffSN-Edit').append(
-                            $('<option>', {
-                                value: data.id,
-                                text: data.staffName,
-                                selected: item.staffID === data.id
-                            })
-                        );
-                    }); 
+                    // $('#staffSN-Edit').empty().append('<option disabled selected>select encharged staff</option>');
+                    // staff.forEach(function (data) {
+                    //     $('#staffSN-Edit').append(
+                    //         $('<option>', {
+                    //             value: data.id,
+                    //             text: data.staffName,
+                    //             selected: item.staffID === data.id
+                    //         })
+                    //     );
+                    // }); 
                     newborn.forEach(function (data) {
                         $('#newbornBbSN-Edit').append(
                             $('<option>', {
@@ -641,15 +639,15 @@
                     $("#hearingResult-Detail").val(item.hearingResult);
                     $("#NotesHR-Detail").val(item.notes);
                     
-                    staff.forEach(function (data) {
-                        $('#staff-Detail').append(
-                            $('<option>', {
-                                value: data.id,
-                                text: data.staffName,
-                                selected: item.staffID === data.id
-                            })
-                        );
-                    });
+                    // staff.forEach(function (data) {
+                    //     $('#staff-Detail').append(
+                    //         $('<option>', {
+                    //             value: data.id,
+                    //             text: data.staffName,
+                    //             selected: item.staffID === data.id
+                    //         })
+                    //     );
+                    // });
                     newborn.forEach(function (data) {
                         $('#newbornBb-Detail').append(
                             $('<option>', {
@@ -715,15 +713,15 @@
                     var newborn = result.item.newborn;
                     var staff = result.item.staff;
                     $('#newbornBbSN-Add').empty().append('<option disabled selected>select newborn baby</option>');
-                    $('#staffSN-Add').empty().append('<option disabled selected>select encharged staff</option>');
-                    staff.forEach(function (item) {
-                        $('#staffSN-Add').append(
-                            $('<option>', {
-                                value: item.id,
-                                text: item.staffName
-                            })
-                        );
-                    });
+                    // $('#staffSN-Add').empty().append('<option disabled selected>select encharged staff</option>');
+                    // staff.forEach(function (item) {
+                    //     $('#staffSN-Add').append(
+                    //         $('<option>', {
+                    //             value: item.id,
+                    //             text: item.staffName
+                    //         })
+                    //     );
+                    // });
                     newborn.forEach(function (item) {
                         $('#newbornBbSN-Add').append(
                             $('<option>', {

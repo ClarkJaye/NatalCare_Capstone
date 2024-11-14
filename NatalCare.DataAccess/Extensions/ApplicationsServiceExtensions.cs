@@ -28,6 +28,8 @@ namespace NatalCare.DataAccess.Extensions
             services.AddScoped<IServicesOperationServices, ServicesOperationServices>();
             // Register Newborn
             services.AddScoped<INewbornServices, NewbornServices>();
+            // Register SelectList 
+            services.AddScoped<ISelectListServices, SelectListServices>();
 
             // Register Newborn
             services.AddScoped<IBillingServices, BillingServices>();

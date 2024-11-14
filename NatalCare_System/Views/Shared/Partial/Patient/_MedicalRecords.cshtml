@@ -32,6 +32,11 @@
 
                 <!-- Delivery Tab -->
                 <div class="tab-pane fade" id="delivery" role="tabpanel">
+                    @await Component.InvokeAsync("DeliveryRecords", new { patientId = Model.PatientID })
+                </div>
+
+
+@*                 <div class="tab-pane fade" id="delivery" role="tabpanel">
                     <h6 class="px-2">Delivery Records</h6>
                     <div class="d-flex justify-content-end my-3 gap-3">
                         <a asp-controller="" asp-action="" class="btn btn-sm btn-pink">
@@ -87,7 +92,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> *@
 
               @*   <!-- Family Planning Tab -->
                 <div class="tab-pane fade" id="family-planning" role="tabpanel">

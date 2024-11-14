@@ -10,174 +10,239 @@
 <partial name="Partial/_Navbar" />
 
 
-<div class="mx-5">
-    <div class="card card-selected w-75 mx-auto mt-5">
-        <div class="card-header card-header-selected d-flex justify-content-between align-items-center bg-pink">
-            <h5 class="card-title my-2">Add Newborn Baby</h5>
-        </div>
-        <div class="card-body m-4 pt-0">
-            <form asp-controller="Newborn" asp-action="Create">
-                <div class="row form-group">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                    <!--Mother Side-->
-                    <h5 class="card-title mb-3"> Baby Information</h5>
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="FirstName" class="control-label">Baby Name</label>
-                        <input asp-for="FirstName" class="form-control" placeholder="Enter Firstname (e.g, juan)" required />
-                        <span asp-validation-for="FirstName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="MiddleName" class="control-label">Newborn Middle Name</label>
-                        <input asp-for="MiddleName" class="form-control" placeholder="Enter Middlename (e.g, dela)" />
-                        <span asp-validation-for="MiddleName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="LastName" class="control-label">Newborn Last Name</label>
-                        <input asp-for="LastName" class="form-control" placeholder="Enter Lastname (e.g, cruz)" required />
-                        <span asp-validation-for="LastName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="DateofBirth" class="control-label"></label>
-                        <input asp-for="DateofBirth" class="form-control" type="date" required />
-                        <span asp-validation-for="DateofBirth" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="TimeofBirth" class="control-label"></label>
-                        <input asp-for="TimeofBirth" class="form-control" type="time" required />
-                        <span asp-validation-for="TimeofBirth" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="PlaceOfBirth" class="control-label">Place of Birth</label>
-                        <input asp-for="PlaceOfBirth" class="form-control" placeholder="Enter place of birth (e.g., Street, City, Province)" required />
-                        <span asp-validation-for="PlaceOfBirth" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="Address" class="control-label">Address</label>
-                        <input asp-for="Address" class="form-control" placeholder="Enter full address (e.g., Street, Barangay, City)" required />
-                        <span asp-validation-for="Address" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="Gender" class="control-label"></label>
-                        <select asp-for="Gender" class="form-select" required>
-                            <option disabled selected>select gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                        <span asp-validation-for="Gender" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="Weight" class="control-label">Weight</label>
-                        <input asp-for="Weight" class="form-control" placeholder="Enter weight in grams" required />
-                        <span asp-validation-for="Weight" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="Length" class="control-label">Length</label>
-                        <input asp-for="Length" class="form-control" placeholder="Enter length (cm or in)" required />
-                        <span asp-validation-for="Length" class="text-danger"></span>
-                    </div>
-
-               
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="HeadCircumference" class="control-label">Head</label>
-                        <input asp-for="HeadCircumference" class="form-control" placeholder="Enter head circumference (cm)" required />
-                        <span asp-validation-for="HeadCircumference" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="ChestCircumference" class="control-label">Chest</label>
-                        <input asp-for="ChestCircumference" class="form-control" placeholder="Enter chest circumference (cm)" required />
-                        <span asp-validation-for="ChestCircumference" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="MidArmCircumference" class="control-label">Chest</label>
-                        <input asp-for="MidArmCircumference" class="form-control" placeholder="Enter mid-arm circumference (cm)" required />
-                        <span asp-validation-for="MidArmCircumference" class="text-danger"></span>
-                    </div>
-
-                 
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="Temp" class="control-label">Temperature</label>
-                        <input asp-for="Temp" class="form-control" placeholder="Enter temperature (e.g, 37.5 °C)" required />
-                        <span asp-validation-for="Temp" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="APGAR" class="control-label">APGAR</label>
-                        <input asp-for="APGAR" class="form-control" placeholder="Enter APGAR score From 0 to 12" required />
-                        <span asp-validation-for="APGAR" class="text-danger"></span>
-                    </div>
-
-
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="Medication" class="control-label">Medication</label>
-                        <input asp-for="Medication" class="form-control" placeholder="Enter Medication" required />
-                        <span asp-validation-for="Medication" class="text-danger"></span>
-                    </div>
-
-                    <hr class="my-4" />
-
-                    <!--Mother Side-->
-                    <div class="d-flex align-items-center justify-content-between">
-                        <h5 class="card-title my-3 mb-3">Mother Information</h5>
-
-                        <div class="d-flex align-items-center gap-2">
-                            <button type="button" id="searchPtBtn" class="btn btn-sm btn-outline-secondary">
-                                <i class="fas fa-search"></i>
-                                <span>Search Mother</span>
-                            </button>
-
-                            <button type="button" id="clearBtn" class="btn btn-sm btn-outline-danger">
-                                <i class="fas fa-cancel"></i>
-                                <span>Clear</span>
-                            </button>
-                        </div>
-
-                    </div>
-                    
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="MotherID" class="control-label">Mother ID</label>
-                        <input asp-for="MotherID" class="form-control text-uppercase" placeholder="Enter (e.g., PT0001, PT0002 ...)" required readonly />
-                        <span asp-validation-for="MotherID" class="text-danger"></span>
-                    </div>
-
-
-                    <div class="form-group col-md-4 mb-3">
-                        <label for="Patient_FirstName" class="control-label">Mother First Name</label>
-                        <input id="Patient_FirstName" class="form-control" placeholder="Enter First Name" readonly />
-                    </div>
-
-                    <div class="form-group col-md-4 mb-3">
-                        <label for="Patient_MiddleName" class="control-label">Mother First Name</label>
-                        <input id="Patient_MiddleName" class="form-control" placeholder="Enter Middle Name" readonly />
-                    </div>
-
-                    <div class="form-group col-md-4 mb-3">
-                        <label for="Patient_LastName" class="control-label">Mother Last Name</label>
-                        <input id="Patient_LastName" class="form-control" placeholder="Enter Last Name" readonly />
-                    </div>
-
-                    <div class="form-group col-12 mt-3 mb-3">
-                        <div class="d-flex align-items-center justify-content-end gap-3">
-                            <button class="btn btn-pink" type="submit">
-                                <i class="fas fa-save"></i>
-                                <span>Save</span>
-                            </button>
-                            <a class="btn btn-outline-secondary" asp-controller="Newborn" asp-action="Index">
-                                <i class="fas fa-undo"></i>
-                                <span>Back to List</span>
-                            </a>
-                        </div>
-                    </div>
+<div class="card card-selected w-75 mx-auto mt-5">
+    <div class="card-header card-header-selected d-flex justify-content-between align-items-center bg-pink">
+        <h5 class="card-title my-2">Add Newborn Baby</h5>
+    </div>
+    <div class="card-body m-4 pt-0">
+        <form asp-controller="Newborn" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <!--Mother Side-->
+                <h5 class="card-title mb-3"> Baby Information</h5>
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="FirstName" class="control-label">Baby Name</label>
+                    <input asp-for="FirstName" class="form-control" placeholder="Enter Firstname (e.g, juan)" required />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
-            </form>
-        </div>
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="MiddleName" class="control-label">Newborn Middle Name</label>
+                    <input asp-for="MiddleName" class="form-control" placeholder="Enter Middlename (e.g, dela)" />
+                    <span asp-validation-for="MiddleName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="LastName" class="control-label">Newborn Last Name</label>
+                    <input asp-for="LastName" class="form-control" placeholder="Enter Lastname (e.g, cruz)" required />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="DateofBirth" class="control-label"></label>
+                    <input asp-for="DateofBirth" class="form-control" type="date" required />
+                    <span asp-validation-for="DateofBirth" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="TimeofBirth" class="control-label"></label>
+                    <input asp-for="TimeofBirth" class="form-control" type="time" required />
+                    <span asp-validation-for="TimeofBirth" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="PlaceOfBirth" class="control-label">Place of Birth</label>
+                    <input asp-for="PlaceOfBirth" class="form-control" placeholder="Enter place of birth (e.g., Street, City, Province)" required />
+                    <span asp-validation-for="PlaceOfBirth" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="Address" class="control-label">Address</label>
+                    <input asp-for="Address" class="form-control" placeholder="Enter full address (e.g., Street, Barangay, City)" required />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="Gender" class="control-label"></label>
+                    <select asp-for="Gender" class="form-select" required>
+                        <option disabled selected>select gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Others">Others</option>
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+            </div>
+
+            <hr class="my-3" />
+
+            <!-- Measurements -->
+            <h5 class="card-title mb-3">Measurements</h5>
+            <div class="row">
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="Weight" class="control-label">Weight</label>
+                    <input asp-for="Weight" class="form-control" placeholder="Enter weight (grams)" required />
+                    <span asp-validation-for="Weight" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="Length" class="control-label">Length</label>
+                    <input asp-for="Length" class="form-control" placeholder="Enter length (cm)" required />
+                    <span asp-validation-for="Length" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="HeadCircumference" class="control-label">Head</label>
+                    <input asp-for="HeadCircumference" class="form-control" placeholder="Enter head circumference (cm)" required />
+                    <span asp-validation-for="HeadCircumference" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="ChestCircumference" class="control-label">Chest</label>
+                    <input asp-for="ChestCircumference" class="form-control" placeholder="Enter chest circumference (cm)" required />
+                    <span asp-validation-for="ChestCircumference" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="MidArmCircumference" class="control-label">Chest</label>
+                    <input asp-for="MidArmCircumference" class="form-control" placeholder="Enter mid-arm circumference (cm)" required />
+                    <span asp-validation-for="MidArmCircumference" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="Temp" class="control-label">Temperature</label>
+                    <input asp-for="Temp" class="form-control" placeholder="Enter temperature (37.5)" required />
+                    <span asp-validation-for="Temp" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="APGAR" class="control-label">APGAR</label>
+                    <input asp-for="APGAR" class="form-control" placeholder="Enter APGAR score From 0 to 12" required />
+                    <span asp-validation-for="APGAR" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="Medication" class="control-label">Medication</label>
+                    <input asp-for="Medication" class="form-control" placeholder="Enter Medication" required />
+                    <span asp-validation-for="Medication" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="DeliveryType" class="control-label">Delivery Method</label>
+                    <select asp-for="DeliveryType" class="form-select" required>
+                        <option disabled selected>select delivery method</option>
+                        <option value="spontaneous">Spontaneous Vaginal</option>
+                        <option value="assisted">Assisted Vaginal</option>
+                        <option value="breech">Breech</option>
+                        <option value="cesarean">Cesarean Section (C-Section)</option>
+                        <option value="VBAC">Vaginal Birth After Cesarean (VBAC)</option>
+                        <option value="Instrumental">Instrumental</option>
+                    </select>
+                    <span asp-validation-for="DeliveryType" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="MidwifeID" class="control-label">Midwife</label>
+                    <select asp-for="MidwifeID" class="form-select" asp-items="ViewBag.midwifeList">
+                        <option value="" class="text-muted" selected>select midwife</option>
+                    </select>
+                    <span asp-validation-for="MidwifeID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="StaffID" class="control-label">Assisted By</label>
+                    <select asp-for="StaffID" class="form-select" asp-items="ViewBag.staffList">
+                        <option value="" class="text-muted" selected>select Assisted by</option>
+                    </select>
+                    <span asp-validation-for="StaffID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="PhysicianID" class="control-label">Physician</label>
+                    <select asp-for="PhysicianID" class="form-select" asp-items="ViewBag.physicianList">
+                        <option value="" class="text-muted" selected>select physician</option>
+                    </select>
+                    <span asp-validation-for="PhysicianID" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <hr class="my-4" />
+
+            <!--Parents Side-->
+            <div class="row">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h5 class="card-title my-3 mb-3">Parents Information</h5>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" id="searchPtBtn" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-search"></i>
+                            <span>Search Mother</span>
+                        </button>
+
+                        <button type="button" id="clearBtn" class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-cancel"></i>
+                            <span>Clear</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="form-group col-md-4 mb-3" hidden>
+                    <label asp-for="MotherID" class="control-label">Mother ID</label>
+                    <input asp-for="MotherID" class="form-control text-uppercase" placeholder="Enter (e.g., PT0001, PT0002 ...)" required readonly />
+                    <span asp-validation-for="MotherID" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4 mb-3" hidden>
+                    <label asp-for="FatherID" class="control-label">Father ID</label>
+                    <input asp-for="FatherID" class="form-control text-uppercase" placeholder="Enter Father ID" required readonly />
+                    <span asp-validation-for="FatherID" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_FirstName" class="control-label">Mother First Name</label>
+                    <input id="Patient_FirstName" class="form-control" placeholder="Enter First Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_MiddleName" class="control-label">Mother First Name</label>
+                    <input id="Patient_MiddleName" class="form-control" placeholder="Enter Middle Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3 mb-5">
+                    <label for="Patient_LastName" class="control-label">Mother Last Name</label>
+                    <input id="Patient_LastName" class="form-control" placeholder="Enter Last Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Father_FirstName" class="control-label">Father First Name</label>
+                    <input id="Father_FirstName" class="form-control" placeholder="Enter First Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Father_MiddleName" class="control-label">Father First Name</label>
+                    <input id="Father_MiddleName" class="form-control" placeholder="Enter Middle Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Father_LastName" class="control-label">Father Last Name</label>
+                    <input id="Father_LastName" class="form-control" placeholder="Enter Last Name" readonly />
+                </div>
+            </div>
+
+
+            <div class="form-group col-12 mt-3 mb-3">
+                <div class="d-flex align-items-center justify-content-end gap-3">
+                    <button class="btn btn-pink" type="submit">
+                        <i class="fas fa-save"></i>
+                        <span>Save</span>
+                    </button>
+                    <a class="btn btn-outline-secondary" asp-controller="Newborn" asp-action="Index">
+                        <i class="fas fa-undo"></i>
+                        <span>Back to List</span>
+                    </a>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -210,9 +275,13 @@
             });
             $('#clearBtn').on('click', function () {
                 $("#MotherID").val("").attr("placeholder", "Enter (e.g., PT0001, PT0002 ...)");
+                $("#FatherID").val("").attr("placeholder", "Enter Father");
                 $("#Patient_FirstName").val("").attr("placeholder", "Enter First Name");
                 $("#Patient_MiddleName").val("").attr("placeholder", "Enter Middle Name");
                 $("#Patient_LastName").val("").attr("placeholder", "Enter Last Name");
+                $("#Father_FirstName").val("").attr("placeholder", "Enter First Name");
+                $("#Father_MiddleName").val("").attr("placeholder", "Enter Middle Name");
+                $("#Father_LastName").val("").attr("placeholder", "Enter Last Name");
             });
 
             $('#patientsListContainer').on('click', "#patientSelectBtn", function () {
@@ -221,11 +290,14 @@
                 LoadMotherDetails(value);
             });
 
-            // $('#patientsListContainer').on('click', "#patientSelectTR", function () {
-            //     var value = $(this).data("patid");
-            //     value.toUpperCase();
-            //     LoadMotherDetails(value);
-            // });
+            // Add form submission validation for MotherID
+            $("form").on("submit", function (e) {
+                var motherID = $("#MotherID").val().trim();
+                if (motherID === "") {
+                    e.preventDefault(); 
+                    alert("Please select a mother for the newborn.");
+                }
+            });
 
         });
 
@@ -255,12 +327,19 @@
                         $("#Patient_FirstName").val(item.firstname);
                         $("#Patient_MiddleName").val(item.middlename);
                         $("#Patient_LastName").val(item.lastname);
-                        toastr.success('Mother Found!');
+                        $("#FatherID").val(item.fatherId);
+                        $("#Father_FirstName").val(item.fFirstname);
+                        $("#Father_MiddleName").val(item.fMiddlename);
+                        $("#Father_LastName").val(item.fLastname);
+                        toastr.success('Mother selected!');
                     } else {
                         $("#MotherID").val(item.message);
                         $("#Patient_FirstName").val(item.message);
                         $("#Patient_MiddleName").val(item.message);
                         $("#Patient_LastName").val(item.message);
+                        $("#Father_FirstName").val(item.fFirstname);
+                        $("#Father_MiddleName").val(item.fMiddlename);
+                        $("#Father_LastName").val(item.fLastname);
                         toastr.error('Mother Not Found!');
                     }
                     $('#searchMotherModal').modal('hide');

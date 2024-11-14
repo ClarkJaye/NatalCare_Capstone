@@ -8,12 +8,12 @@ using NatalCare.Models.ViewModel.Patient;
 namespace NatalCare_System.Controllers
 {
     [Authorize]
-    public class PrenatalController : BaseController<PrenatalController>
+    public class DeliveryController : BaseController<DeliveryController>
     {
         private readonly IPatientServices patientServices;
         private readonly IServicesOperationServices serviceServices;
 
-        public PrenatalController(IPatientServices patientServices, IServicesOperationServices serviceServices)
+        public DeliveryController(IPatientServices patientServices, IServicesOperationServices serviceServices)
         {
             this.patientServices = patientServices;
             this.serviceServices = serviceServices;
@@ -44,14 +44,14 @@ namespace NatalCare_System.Controllers
                 return Json(new { IsSuccess = false, Message = "An error occurred in         public async Task<IActionResult> PrenatalFormRecords(string patientId)\r\n." });
             }
         }
-        public IActionResult PrenatalRecords(string patientId)
+        public IActionResult DeliveryRecords(string patientId)
         {
-            return ViewComponent("PrenatalRecords", new { patientId = patientId });
+            return ViewComponent("deliveryrecords", new { patientId = patientId });
         }
         //ADD 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddPrenatalRecord(Prenatal model, string patientID)
+        public async Task<JsonResult> AddDeliveryRecord(Delivery model, string patientID)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace NatalCare_System.Controllers
                 if (ModelState.IsValid)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await serviceServices.AddPrenatalRecordAsync(model, patientID, userId);
+                    var result = await serviceServices.AddDeliveryRecordAsync(model, patientID, userId);
                     return Json(result);
                 }
                 return Json(new { IsSuccess = false, Message = "Add Record failed!" });
@@ -69,7 +69,7 @@ namespace NatalCare_System.Controllers
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"Error occurred while adding prenatal record for Patient ID: {model.PatientID}");
-                return Json(new { IsSuccess = false, Message = "An error occurred in AddPrenatalRecord." });
+                return Json(new { IsSuccess = false, Message = "An error occurred in AddDeliveryRecord." });
             }
         }
         // DELETE 

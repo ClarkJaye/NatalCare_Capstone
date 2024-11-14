@@ -23,6 +23,8 @@ namespace NatalCare.DataAccess.data
 
 
         //Services
+        public DbSet<Delivery> Delivery { get; set; }
+        public DbSet<DeliveryStatus> DeliveryStatus { get; set; }
         public DbSet<Prenatal> Prenatal { get; set; }
         public DbSet<PrenatalVisit> PrenatalVisit { get; set; }
         public DbSet<FamilyPlanning> FamilyPlanning { get; set; }
@@ -110,7 +112,8 @@ namespace NatalCare.DataAccess.data
               new Modules { ModuleId = 9, ModuleTitle = "Natality Reports", CategoryId = 4, StatusCode = "AC" },
               new Modules { ModuleId = 10, ModuleTitle = "Invoice Reports", CategoryId = 4, StatusCode = "AC" },
               new Modules { ModuleId = 11, ModuleTitle = "Profiles", CategoryId = 5, StatusCode = "AC" },
-              new Modules { ModuleId = 12, ModuleTitle = "Users", CategoryId = 5, StatusCode = "AC" }
+              new Modules { ModuleId = 12, ModuleTitle = "Users", CategoryId = 5, StatusCode = "AC" },
+              new Modules { ModuleId = 13, ModuleTitle = "Staff", CategoryId = 5, StatusCode = "AC" }
             );
             modelBuilder.Entity<Role_Access>().HasData(
              new Role_Access { RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c", ModuleId = 1, OpenAccess = "Y" },
@@ -124,7 +127,8 @@ namespace NatalCare.DataAccess.data
              new Role_Access { RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c", ModuleId = 9, OpenAccess = "Y" },
              new Role_Access { RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c", ModuleId = 10, OpenAccess = "Y" },
              new Role_Access { RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c", ModuleId = 11, OpenAccess = "Y" },
-             new Role_Access { RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c", ModuleId = 12, OpenAccess = "Y" }
+             new Role_Access { RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c", ModuleId = 12, OpenAccess = "Y" },
+             new Role_Access { RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c", ModuleId = 13, OpenAccess = "Y" }
            );
 
             modelBuilder.Entity<Patients>().HasData(
@@ -157,27 +161,35 @@ namespace NatalCare.DataAccess.data
              new Spouse
              {
                  SpouseId = 1,
-                 FirstName = "Erina",
-                 MiddleName = "Nakiri",
+                 FirstName = "Yukihira",
+                 MiddleName = "Dela",
                  LastName = "Souma",
                  Gender = "Female",
                  Address = "Tipolo, Mandaue City Cebu ",
-                 Occupation = "Fashion Designer",
+                 Occupation = "Enginneer",
                  Birthdate = new DateOnly(1899, 01, 04),
              }
            );
 
             modelBuilder.Entity<RoleStaff>().HasData(
-             new RoleStaff { Id = 1, RoleName = "Staff" },
-             new RoleStaff { Id = 2, RoleName = "Midwife" },
-             new RoleStaff { Id = 3, RoleName = "Physician" }
+                 new RoleStaff { Id = 1, RoleName = "Staff" },
+                 new RoleStaff { Id = 2, RoleName = "Midwife" },
+                 new RoleStaff { Id = 3, RoleName = "Physician" },
+                 new RoleStaff { Id = 4, RoleName = "Nurse" },
+                 new RoleStaff { Id = 5, RoleName = "Doctor" }
             );
             modelBuilder.Entity<Staff>().HasData(
-                 new Staff { Id = 1, StaffName = "Shane", RoleId = 1, StatusCode = "AC" },
-                 new Staff { Id = 2, StaffName = "Jane", RoleId = 2, StatusCode = "AC" },
-                 new Staff { Id = 3, StaffName = "Liza", RoleId = 3, StatusCode = "AC" }
+                 new Staff { Id = 1, FirstName = "Shane", MiddleName = "Dela", LastName = "Cruz", RoleId = 1 },
+                 new Staff { Id = 2, FirstName = "Jane", MiddleName = "Salvi", LastName = "Salvador", RoleId = 2 },
+                 new Staff { Id = 3, FirstName = "Liza", MiddleName = "Aries", LastName = "Ariesgado", RoleId = 3 }
             );
 
+            modelBuilder.Entity<DeliveryStatus>().HasData(
+                new DeliveryStatus { Id = 1, StatusName = "In-Labor" },
+                new DeliveryStatus { Id = 2, StatusName = "Pospartum" },
+                new DeliveryStatus { Id = 3, StatusName = "Discharged" },
+                new DeliveryStatus { Id = 4, StatusName = "Referral" }
+            );
 
             // For Junction 
             modelBuilder.Entity<Role_Access>()
@@ -199,6 +211,7 @@ namespace NatalCare.DataAccess.data
                 typeof(Newborn),
                 typeof(Modules),
                 typeof(Category),
+                typeof(Delivery),
                 typeof(Prenatal),
                 typeof(PrenatalVisit),
                 typeof(NewbornHearing),
@@ -236,6 +249,12 @@ namespace NatalCare.DataAccess.data
                 .HasColumnType("decimal(18, 2)");
 
             // Constraints
+            modelBuilder.Entity<Delivery>()
+               .HasOne(p => p.Prenatal)
+               .WithMany()
+               .HasForeignKey(p => p.CaseNo)
+               .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<PrenatalVisit>()
                 .HasOne(p => p.PrenatalCase)
                 .WithMany()

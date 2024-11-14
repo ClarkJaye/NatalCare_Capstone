@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace NatalCare.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Inital : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -89,6 +89,28 @@ namespace NatalCare.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Staff",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Staff", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Staff_RoleStaff_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "RoleStaff",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -142,32 +164,6 @@ namespace NatalCare.DataAccess.Migrations
                     table.PrimaryKey("PK_Category", x => x.CategoryId);
                     table.ForeignKey(
                         name: "FK_Category_Status_StatusCode",
-                        column: x => x.StatusCode,
-                        principalTable: "Status",
-                        principalColumn: "StatusCode");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Staff",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StaffName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    StatusCode = table.Column<string>(type: "nvarchar(2)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Staff", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Staff_RoleStaff_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "RoleStaff",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Staff_Status_StatusCode",
                         column: x => x.StatusCode,
                         principalTable: "Status",
                         principalColumn: "StatusCode");
@@ -444,6 +440,11 @@ namespace NatalCare.DataAccess.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PlaceOfBirth = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateofBirth = table.Column<DateOnly>(type: "date", nullable: false),
+                    TimeofBirth = table.Column<TimeOnly>(type: "time", nullable: false),
+                    DeliveryType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Weight = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
                     Length = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
                     HeadCircumference = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
@@ -452,16 +453,16 @@ namespace NatalCare.DataAccess.Migrations
                     Temp = table.Column<decimal>(type: "decimal(4,1)", nullable: true),
                     Medication = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     APGAR = table.Column<int>(type: "int", nullable: true),
-                    PlaceOfBirth = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateofBirth = table.Column<DateOnly>(type: "date", nullable: false),
-                    TimeofBirth = table.Column<TimeOnly>(type: "time", nullable: false),
                     Created_At = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "GETDATE()"),
                     Created_By = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Updated_At = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Updated_By = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     StatusCode = table.Column<string>(type: "nvarchar(2)", nullable: true),
-                    MotherID = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    MotherID = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    FatherID = table.Column<int>(type: "int", nullable: true),
+                    MidwifeID = table.Column<int>(type: "int", nullable: true),
+                    PhysicianID = table.Column<int>(type: "int", nullable: true),
+                    StaffID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -481,6 +482,26 @@ namespace NatalCare.DataAccess.Migrations
                         column: x => x.MotherID,
                         principalTable: "Patients",
                         principalColumn: "PatientID");
+                    table.ForeignKey(
+                        name: "FK_Newborn_Spouse_FatherID",
+                        column: x => x.FatherID,
+                        principalTable: "Spouse",
+                        principalColumn: "SpouseId");
+                    table.ForeignKey(
+                        name: "FK_Newborn_Staff_MidwifeID",
+                        column: x => x.MidwifeID,
+                        principalTable: "Staff",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Newborn_Staff_PhysicianID",
+                        column: x => x.PhysicianID,
+                        principalTable: "Staff",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Newborn_Staff_StaffID",
+                        column: x => x.StaffID,
+                        principalTable: "Staff",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Newborn_Status_StatusCode",
                         column: x => x.StatusCode,
@@ -718,9 +739,9 @@ namespace NatalCare.DataAccess.Migrations
                     DataSampleSent = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Courier = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TrackingNubmer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AttendingPractitioner = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Remarks = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StaffID = table.Column<int>(type: "int", nullable: false),
                     NewbornID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PatientID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Created_At = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -753,12 +774,6 @@ namespace NatalCare.DataAccess.Migrations
                         column: x => x.PatientID,
                         principalTable: "Patients",
                         principalColumn: "PatientID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_NewbornScreening_Staff_StaffID",
-                        column: x => x.StaffID,
-                        principalTable: "Staff",
-                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_NewbornScreening_Status_StatusCode",
@@ -862,22 +877,24 @@ namespace NatalCare.DataAccess.Migrations
                 {
                     { 1, "Staff" },
                     { 2, "Midwife" },
-                    { 3, "Physician" }
+                    { 3, "Physician" },
+                    { 4, "Nurse" },
+                    { 5, "Doctor" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Spouse",
                 columns: new[] { "SpouseId", "Address", "Birthdate", "FirstName", "Gender", "LastName", "MiddleName", "Occupation" },
-                values: new object[] { 1, "Tipolo, Mandaue City Cebu ", new DateOnly(1899, 1, 4), "Erina", "Female", "Souma", "Nakiri", "Fashion Designer" });
+                values: new object[] { 1, "Tipolo, Mandaue City Cebu ", new DateOnly(1899, 1, 4), "Yukihira", "Female", "Souma", "Dela", "Enginneer" });
 
             migrationBuilder.InsertData(
                 table: "Status",
                 columns: new[] { "StatusCode", "Created_At", "StatusName" },
                 values: new object[,]
                 {
-                    { "AC", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2850), "ACTIVE" },
-                    { "DL", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2854), "DELETE" },
-                    { "IN", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2853), "INACTTIVE" }
+                    { "AC", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4128), "ACTIVE" },
+                    { "DL", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4132), "DELETE" },
+                    { "IN", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4131), "INACTTIVE" }
                 });
 
             migrationBuilder.InsertData(
@@ -890,45 +907,46 @@ namespace NatalCare.DataAccess.Migrations
                 columns: new[] { "CategoryId", "CategoryName", "Created_At", "StatusCode" },
                 values: new object[,]
                 {
-                    { 1, "Masters", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2869), "AC" },
-                    { 2, "Patient Management", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2871), "AC" },
-                    { 3, "Billing & Payement", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2872), "AC" },
-                    { 4, "Reports", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2872), "AC" },
-                    { 5, "Maintenance", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2873), "AC" }
+                    { 1, "Masters", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4145), "AC" },
+                    { 2, "Patient Management", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4147), "AC" },
+                    { 3, "Billing & Payement", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4148), "AC" },
+                    { 4, "Reports", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4149), "AC" },
+                    { 5, "Maintenance", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4150), "AC" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Staff",
-                columns: new[] { "Id", "RoleId", "StaffName", "StatusCode" },
+                columns: new[] { "Id", "FirstName", "LastName", "MiddleName", "RoleId" },
                 values: new object[,]
                 {
-                    { 1, 1, "Shane", "AC" },
-                    { 2, 2, "Jane", "AC" },
-                    { 3, 3, "Liza", "AC" }
+                    { 1, "Shane", "Cruz", "Dela", 1 },
+                    { 2, "Jane", "Salvador", "Salvi", 2 },
+                    { 3, "Liza", "Ariesgado", "Aries", 3 }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Created_At", "Description", "Discriminator", "Name", "NormalizedName", "Created_By", "Updated_By", "Updated_At" },
-                values: new object[] { "18ab63db-22b1-4656-93e8-6240c08c988c", null, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2807), "CRUD Anything", "Role", "Admin", "ADMIN", "223e5845-f58c-493f-b6b4-46ff3b18a332", null, null });
+                values: new object[] { "18ab63db-22b1-4656-93e8-6240c08c988c", null, new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4082), "CRUD Anything", "Role", "Admin", "ADMIN", "223e5845-f58c-493f-b6b4-46ff3b18a332", null, null });
 
             migrationBuilder.InsertData(
                 table: "Module",
                 columns: new[] { "ModuleId", "CategoryId", "Created_At", "ModuleTitle", "StatusCode" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2888), "Dashboard", "AC" },
-                    { 2, 2, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2890), "Patient Records", "AC" },
-                    { 3, 2, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2891), "Newborn Records", "AC" },
-                    { 4, 2, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2892), "Admission / In-Patient", "AC" },
-                    { 5, 2, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2893), "Out-Patient (OPD)", "AC" },
-                    { 6, 2, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2894), "Refferal Patient", "AC" },
-                    { 7, 3, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2894), "Invoice List", "AC" },
-                    { 8, 3, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2895), "Generate Invoice", "AC" },
-                    { 9, 4, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2896), "Natality Reports", "AC" },
-                    { 10, 4, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2897), "Invoice Reports", "AC" },
-                    { 11, 5, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2897), "Profiles", "AC" },
-                    { 12, 5, new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2898), "Users", "AC" }
+                    { 1, 1, new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4164), "Dashboard", "AC" },
+                    { 2, 2, new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4166), "Patient Records", "AC" },
+                    { 3, 2, new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4167), "Newborn Records", "AC" },
+                    { 4, 2, new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4168), "Admission / In-Patient", "AC" },
+                    { 5, 2, new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4168), "Out-Patient (OPD)", "AC" },
+                    { 6, 2, new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4169), "Refferal Patient", "AC" },
+                    { 7, 3, new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4170), "Invoice List", "AC" },
+                    { 8, 3, new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4171), "Generate Invoice", "AC" },
+                    { 9, 4, new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4172), "Natality Reports", "AC" },
+                    { 10, 4, new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4172), "Invoice Reports", "AC" },
+                    { 11, 5, new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4173), "Profiles", "AC" },
+                    { 12, 5, new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4174), "Users", "AC" },
+                    { 13, 5, new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4175), "Staff", "AC" }
                 });
 
             migrationBuilder.InsertData(
@@ -946,18 +964,19 @@ namespace NatalCare.DataAccess.Migrations
                 columns: new[] { "ModuleId", "RoleId", "Created_At", "OpenAccess" },
                 values: new object[,]
                 {
-                    { 1, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2915), "Y" },
-                    { 2, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2917), "Y" },
-                    { 3, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2919), "Y" },
-                    { 4, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2919), "Y" },
-                    { 5, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2920), "Y" },
-                    { 6, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2921), "Y" },
-                    { 7, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2922), "Y" },
-                    { 8, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2922), "Y" },
-                    { 9, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2923), "Y" },
-                    { 10, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2924), "Y" },
-                    { 11, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2925), "Y" },
-                    { 12, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 13, 11, 38, 49, 301, DateTimeKind.Local).AddTicks(2946), "Y" }
+                    { 1, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4192), "Y" },
+                    { 2, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4194), "Y" },
+                    { 3, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4195), "Y" },
+                    { 4, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4196), "Y" },
+                    { 5, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4196), "Y" },
+                    { 6, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4197), "Y" },
+                    { 7, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4198), "Y" },
+                    { 8, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4198), "Y" },
+                    { 9, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4199), "Y" },
+                    { 10, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4200), "Y" },
+                    { 11, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4200), "Y" },
+                    { 12, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4201), "Y" },
+                    { 13, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 11, 14, 10, 6, 43, 359, DateTimeKind.Local).AddTicks(4202), "Y" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -1060,9 +1079,29 @@ namespace NatalCare.DataAccess.Migrations
                 column: "Created_By");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Newborn_FatherID",
+                table: "Newborn",
+                column: "FatherID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Newborn_MidwifeID",
+                table: "Newborn",
+                column: "MidwifeID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Newborn_MotherID",
                 table: "Newborn",
                 column: "MotherID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Newborn_PhysicianID",
+                table: "Newborn",
+                column: "PhysicianID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Newborn_StaffID",
+                table: "Newborn",
+                column: "StaffID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Newborn_StatusCode",
@@ -1113,11 +1152,6 @@ namespace NatalCare.DataAccess.Migrations
                 name: "IX_NewbornScreening_PatientID",
                 table: "NewbornScreening",
                 column: "PatientID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NewbornScreening_StaffID",
-                table: "NewbornScreening",
-                column: "StaffID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_NewbornScreening_StatusCode",
@@ -1233,11 +1267,6 @@ namespace NatalCare.DataAccess.Migrations
                 name: "IX_Staff_RoleId",
                 table: "Staff",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Staff_StatusCode",
-                table: "Staff",
-                column: "StatusCode");
         }
 
         /// <inheritdoc />
@@ -1289,9 +1318,6 @@ namespace NatalCare.DataAccess.Migrations
                 name: "Newborn");
 
             migrationBuilder.DropTable(
-                name: "Staff");
-
-            migrationBuilder.DropTable(
                 name: "Payments");
 
             migrationBuilder.DropTable(
@@ -1307,13 +1333,16 @@ namespace NatalCare.DataAccess.Migrations
                 name: "Services");
 
             migrationBuilder.DropTable(
-                name: "RoleStaff");
+                name: "Staff");
 
             migrationBuilder.DropTable(
                 name: "Patients");
 
             migrationBuilder.DropTable(
                 name: "Category");
+
+            migrationBuilder.DropTable(
+                name: "RoleStaff");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

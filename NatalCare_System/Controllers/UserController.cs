@@ -28,7 +28,7 @@ namespace NatalCare_System.Controllers
         public async Task<IActionResult> Index()
         {
             // Retrieve all users
-            var users = await _userManager.Users.ToListAsync();
+            var users = await _userManager.Users.Include(a => a.Status).ToListAsync();
 
             // Create a list to hold users along with their roles
             var userRolesViewModel = new List<UserRolesViewModel>();

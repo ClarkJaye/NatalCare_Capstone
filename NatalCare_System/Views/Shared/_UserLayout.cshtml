@@ -212,15 +212,13 @@
                             </a>
                         </li>
                         <div id="maintenanceMenu" class="collapse @(ViewContext.RouteData.Values["controller"]?.ToString() == "User"
+                        || ViewContext.RouteData.Values["controller"]?.ToString() == "Staff"
                         || ViewContext.RouteData.Values["controller"]?.ToString() == "Profiles"
                         || ViewContext.RouteData.Values["controller"]?.ToString() == "ProfileAccess" ? "show" : "")">
-                            @* && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "show" : "")"> *@
                             <ul>
                                 @if (accessibleModules.Any(m => m.ModuleId == 11 && m.OpenAccess == "Y"))
                                 {
-                                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Profiles" ? "active" : "")">
-                                        @*|| ViewContext.RouteData.Values["controller"]?.ToString() == "ProfileAccess"
-                                        && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"> *@
+                                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Profiles" || ViewContext.RouteData.Values["controller"]?.ToString() == "ProfileAccess" ? "active" : "")">
                                         <a asp-controller="Profiles" asp-action="Index">
                                             <i class="fa-solid fa-id-badge"></i>
                                             <span class="text">Profiles</span>
@@ -230,10 +228,18 @@
                                 @if (accessibleModules.Any(m => m.ModuleId == 12 && m.OpenAccess == "Y"))
                                 {
                                     <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "User" ? "active" : "")">
-                                        @* && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"> *@
                                         <a asp-controller="User" asp-action="Index">
                                             <i class="fa-solid fa-users"></i>
                                             <span class="text">Users</span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (accessibleModules.Any(m => m.ModuleId == 12 && m.OpenAccess == "Y"))
+                                {
+                                    <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Staff" ? "active" : "")">
+                                        <a asp-controller="Staff" asp-action="Index">
+                                            <i class="fa-solid fa-user-tie"></i>
+                                            <span class="text">Staff</span>
                                         </a>
                                     </li>
                                 }
@@ -324,6 +330,7 @@
             // });
             // toggleSidebarOnResize();
             // window.addEventListener('resize', toggleSidebarOnResize);
+
 
             function applyStoredSidebarState() {
                 const sidebarState = localStorage.getItem('sidebarState');

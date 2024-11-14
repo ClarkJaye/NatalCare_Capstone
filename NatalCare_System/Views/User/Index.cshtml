@@ -10,33 +10,30 @@
 <!-- NAVBAR -->
 <partial name="Partial/_Navbar" />
 
-<div class="mx-4">
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title m-0">Users List</h5>
-        </div>
-        <div class="card-body">
-            <div class="mb-4 mt-2 d-flex align-items-center justify-content-start" style="padding: 0 12px;">
-                <a class="btn btn-sm btn-pink d-flex align-items-center gap-2" asp-controller="User" asp-action="Create">
-                    <i class='fas fa-user-plus' style="font-size: 18px;"></i>
-                    <strong>Add New Users</strong>
-                </a>
-            </div>
 
+<div class="mx-4">
+    <div class="mb-3 mt-2 d-flex align-items-center justify-content-start gap-3">
+        <a class="btn btn-sm btn-pink d-flex align-items-center gap-2" asp-controller="User" asp-action="Create">
+            <i class='fas fa-user-plus' style="font-size: 18px;"></i>
+            <strong>Add New Users</strong>
+        </a>
+    </div>
+    <div class="card shadow-sm card-selected">
+        <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-striped table-datatable">
+                <table class="table table-hover table-striped table-datatable">
                     <thead>
                         <tr>
                             <th>Firstname</th>
                             <th>Middlename</th>
                             <th>Lastname</th>
                             <th>Email</th>
-                            <th>Age</th>
-                            <th>Address</th>
+                            @*                             <th>Age</th>
+                            <th>Address</th> *@
                             <th>Date of Birth</th>
                             <th>Gender</th>
                             <th>Status</th>
-                            <th>Roles</th> 
+                            <th>Roles</th>
                             <th>Date Added</th>
                             <th class="text-center">Action</th>
                         </tr>
@@ -49,36 +46,38 @@
                                 <td>@userRoles.User.MiddleName</td>
                                 <td>@userRoles.User.LastName</td>
                                 <td>@userRoles.User.Email</td>
-                                <td>
-                                    @{
-                                        if (userRoles.User.Birthdate.HasValue)
-                                        {
-                                            var birthYear = userRoles.User.Birthdate.Value.Year;
-                                            var currentYear = DateTime.Now.Year;
-                                            var age = currentYear - birthYear;
-                                            @age
-                                        }
-                                        else
-                                        {
-                                            @:N/A
-                                        }
-                                    }
-                                </td>
-                                <td>@userRoles.User.Address</td>
+                                @*   <td>
+                            @{
+                            if (userRoles.User.Birthdate.HasValue)
+                            {
+                            var birthYear = userRoles.User.Birthdate.Value.Year;
+                            var currentYear = DateTime.Now.Year;
+                            var age = currentYear - birthYear;
+                            @age
+                            }
+                            else
+                            {
+                            @:N/A
+                            }
+                            }
+                            </td>
+                            <td>@userRoles.User.Address</td> *@
                                 <td>@userRoles.User.Birthdate</td>
                                 <td>@userRoles.User.Gender</td>
                                 <td>
                                     @if (userRoles.User.StatusCode == "AC")
                                     {
-                                        <span class="badge text-success">@userRoles.User.StatusCode</span>
-                                    }else{
-                                        <span class="badge text-danger">@userRoles.User.StatusCode</span>
+                                        <span class="badge text-success">@userRoles.User.Status?.StatusName</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge text-danger">@userRoles.User.Status?.StatusName</span>
                                     }
                                 </td>
                                 <td>
                                     @foreach (var role in userRoles.Roles)
                                     {
-                                        if(role.ToLower() == "admin")
+                                        if (role.ToLower() == "admin")
                                         {
                                             <span class="badge bg-success">
                                                 @role
@@ -86,11 +85,11 @@
                                         }
                                         else
                                         {
-                                            <span class="badge bg-info text-dark">@role</span> 
+                                            <span class="badge bg-info text-dark">@role</span>
                                         }
                                     }
                                 </td>
-                                <td>@userRoles.User.Created_At</td> 
+                                <td>@userRoles.User.Created_At?.ToString("MMM dd yy hh:mm tt")</td>
                                 <td>
                                     <div class="d-flex align-items-center justify-content-center gap-2">
                                         <a class="detail-Btn btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-action="Details" asp-route-id="@userRoles.User.Id">

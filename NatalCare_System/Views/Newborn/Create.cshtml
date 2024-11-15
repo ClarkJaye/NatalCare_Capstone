@@ -130,11 +130,24 @@
                     <select asp-for="DeliveryType" class="form-select" required>
                         <option disabled selected>select delivery method</option>
                         <option value="spontaneous">Spontaneous Vaginal</option>
-                        <option value="assisted">Assisted Vaginal</option>
-                        <option value="breech">Breech</option>
                         <option value="cesarean">Cesarean Section (C-Section)</option>
+                        <option value="assisted">Assisted Vaginal</option>
                         <option value="VBAC">Vaginal Birth After Cesarean (VBAC)</option>
                         <option value="Instrumental">Instrumental</option>
+                    </select>
+                    <span asp-validation-for="DeliveryType" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="DeliveryPresentation" class="control-label">Delivery Presentation</label>
+                    <select asp-for="DeliveryPresentation" class="form-select" required>
+                        <option disabled selected>select delivery presentation</option>
+                        <option value="vertex">Vertex (Cephalic) </option>
+                        <option value="breech">Breech</option>
+                        <option value="transverse">Transverse Lie</option>
+                        <option value="face">Face Presentation</option>
+                        <option value="brow">Brow Presentation</option>
                     </select>
                     <span asp-validation-for="DeliveryType" class="text-danger"></span>
                 </div>
@@ -213,17 +226,17 @@
                     <input id="Patient_LastName" class="form-control" placeholder="Enter Last Name" readonly />
                 </div>
 
-                <div class="form-group col-md-4 mb-3">
+                <div class="form-group col-md-4 mb-3 ffName">
                     <label for="Father_FirstName" class="control-label">Father First Name</label>
                     <input id="Father_FirstName" class="form-control" placeholder="Enter First Name" readonly />
                 </div>
 
-                <div class="form-group col-md-4 mb-3">
+                <div class="form-group col-md-4 mb-3 fmName">
                     <label for="Father_MiddleName" class="control-label">Father First Name</label>
                     <input id="Father_MiddleName" class="form-control" placeholder="Enter Middle Name" readonly />
                 </div>
 
-                <div class="form-group col-md-4 mb-3">
+                <div class="form-group col-md-4 mb-3 flName">
                     <label for="Father_LastName" class="control-label">Father Last Name</label>
                     <input id="Father_LastName" class="form-control" placeholder="Enter Last Name" readonly />
                 </div>
@@ -328,21 +341,29 @@
                         $("#Patient_MiddleName").val(item.middlename);
                         $("#Patient_LastName").val(item.lastname);
                         $("#FatherID").val(item.fatherId);
-                        $("#Father_FirstName").val(item.fFirstname).show();
-                        $("#Father_MiddleName").val(item.fMiddlename).show();
-                        $("#Father_LastName").val(item.fLastname).show();
+                        // Hide father details if fatherId is null
+                        if (item.fFirstname === null && item.fMiddlename === null && item.fLastname === null) {
+                            $(".ffName").hide();
+                            $(".fmName").hide();
+                            $(".flName").hide();
+                        } else {
+                            $("#Father_FirstName").val(item.fFirstname);
+                            $("#Father_MiddleName").val(item.fMiddlename);
+                            $("#Father_LastName").val(item.fLastname);
+
+                            $(".ffName").val(item.fFirstname).show();
+                            $(".fmName").val(item.fMiddlename).show();
+                            $(".flName").val(item.fLastname).show();
+                        }
                         toastr.success('Mother selected!');
                     } else {
                         $("#MotherID").val(item.message);
                         $("#Patient_FirstName").val(item.message);
                         $("#Patient_MiddleName").val(item.message);
                         $("#Patient_LastName").val(item.message);
-                        // Hide father details if fatherId is null
-                        if (item.fatherId === null) {
-                            $("#Father_FirstName").hide();
-                            $("#Father_MiddleName").hide();
-                            $("#Father_LastName").hide();
-                        }
+                        $("#Father_FirstName").val(item.message);
+                        $("#Father_MiddleName").val(item.message);
+                        $("#Father_LastName").val(item.message);
                         toastr.error('Mother Not Found!');
                     }
                     $('#searchMotherModal').modal('hide');

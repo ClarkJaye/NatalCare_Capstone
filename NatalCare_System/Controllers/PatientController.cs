@@ -175,18 +175,18 @@ namespace NatalCare_System.Controllers
             }
         }
 
-        // DELETE Spouse
-        [HttpDelete]
-        public async Task<JsonResult> DeleteSpouse(int spouseId)
+        // Clear Spouse
+        [HttpPost]
+        public async Task<JsonResult> ClearSpouse(int spouseId)
         {
             try
             {
                 if (spouseId > 0)
                 {
-                    var result = await patientServices.DeleteSpouse(spouseId);
+                    var result = await patientServices.ClearSpouse(spouseId);
                     return Json(new { isSuccess = result.IsSuccess, message = result.Message });
                 }
-                return Json(new { isSuccess = false, message = "Invalid Spouse ID." });
+                return Json(new { isSuccess = true, message = "Spouse already cleared." });
             }
             catch (Exception ex)
             {

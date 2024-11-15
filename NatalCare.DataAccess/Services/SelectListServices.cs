@@ -19,7 +19,7 @@ public class SelectListServices : ISelectListServices
         var staffWithFullNames = roles.Select(s => new
         {
             s.NewbornID,
-            FullName = $"{s.LastName}, {(s.MiddleName ?? "")} {s.FirstName}".Trim()
+            FullName = $"{s.LastName}, {(s.FirstName ?? "")} {s.MiddleName}".Trim()
         }).ToList();
 
         return new SelectList(staffWithFullNames, "NewbornID", "FullName");
@@ -43,7 +43,7 @@ public class SelectListServices : ISelectListServices
         var staffWithFullNames = roles.Select(s => new
         {
             s.Id,
-            FullName = $"{s.LastName}, {(s.MiddleName ?? "")} {s.FirstName}".Trim()
+            FullName = $"{s.LastName}, {(s.FirstName ?? "")} {s.MiddleName}".Trim()
         }).ToList();
 
         return new SelectList(staffWithFullNames, "Id", "FullName");
@@ -55,7 +55,7 @@ public class SelectListServices : ISelectListServices
         var staffWithFullNames = roles.Select(s => new
         {
             s.Id,
-            FullName = $"{s.LastName}, {(s.MiddleName ?? "")} {s.FirstName}".Trim()
+            FullName = $"{s.LastName}, {(s.FirstName ?? "")} {s.MiddleName}".Trim()
         }).ToList();
 
         return new SelectList(staffWithFullNames, "Id", "FullName");
@@ -67,7 +67,7 @@ public class SelectListServices : ISelectListServices
         var staffWithFullNames = roles.Select(s => new
         {
             s.Id,
-            FullName = $"{s.LastName}, {(s.MiddleName ?? "")} {s.FirstName}".Trim()
+            FullName = $"{s.LastName}, {(s.FirstName ?? "")} {s.MiddleName}".Trim()
         }).ToList();
         return new SelectList(staffWithFullNames, "Id", "FullName");
     }
@@ -77,7 +77,7 @@ public class SelectListServices : ISelectListServices
         var staffWithFullNames = roles.Select(s => new
         {
             s.Id,
-            FullName = $"{s.LastName}, {(s.MiddleName ?? "")} {s.FirstName}".Trim()
+            FullName = $"{s.LastName}, {(s.FirstName ?? "")} {s.MiddleName}".Trim()
         }).ToList();
         return new SelectList(staffWithFullNames, "Id", "FullName");
     }
@@ -88,7 +88,7 @@ public class SelectListServices : ISelectListServices
         var staffWithFullNames = roles.Select(s => new
         {
             s.Id,
-            FullName = $"{s.LastName}, {(s.MiddleName ?? "")} {s.FirstName}".Trim()
+            FullName = $"{s.LastName}, {(s.FirstName ?? "")} {s.MiddleName}".Trim()
         }).ToList();
         return new SelectList(staffWithFullNames, "Id", "FullName");
     }
@@ -99,7 +99,7 @@ public class SelectListServices : ISelectListServices
         var staffWithFullNames = roles.Select(s => new
         {
             s.Id,
-            FullName = $"{s.LastName}, {(s.MiddleName ?? "")} {s.FirstName}".Trim()
+            FullName = $"{s.LastName}, {(s.FirstName ?? "")} {s.MiddleName}".Trim()
         }).ToList();
         return new SelectList(staffWithFullNames, "Id", "FullName");
     }

@@ -6,7 +6,7 @@
         <i class="fas fa-plus"></i>
         <span>Add New Delivery Record</span>
     </button>
-    <button id="displayDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
+    <button id="displayDeletedDelHistoryBtn" class="btn btn-sm btn-outline-secondary">
         <i class="fas fa-trash"></i>
         <span>Deleted History Record</span>
     </button>
@@ -40,28 +40,24 @@
                         <td>@item.CaseNo</td>
                         <td>@item.Date_Admitted?.ToString("MMM dd yyyy")</td>
                         <td>@item.Time_Admitted?.ToString("h:mm tt")</td>
-                        <td>@item.Date_Discharged?.ToString("MMM dd yyyy h:mm tt")</td>
+                        <td>@item.Date_Discharged?.ToString("MMM dd yyyy")</td>
                         <td>@item.WardNumber</td>
                         <td>
-                            @if (item.DeliveryStatusID == 1 || item.DeliveryStatusID == 2)
-                            {
-                                <span class="badge bg-pink">@item.DeliveryStatus?.StatusName</span>
-                            }
-                            else if(item.DeliveryStatusID == 4)
-                            {
-                                <span class="badge bg-secondary">@item.DeliveryStatus?.StatusName</span>
-                            }
-                            else if (item.DeliveryStatusID == 5)
-                            {
-                                <span class="badge bg-info text-dark">@item.DeliveryStatus?.StatusName</span>
-                            }
-                            else
-                            {
+                            @if (item.DeliveryStatusID == 1)
+                            {   //Active
                                 <span class="badge bg-success">@item.DeliveryStatus?.StatusName</span>
+                            }
+                            else if (item.DeliveryStatusID == 2)
+                            {   //Discharge
+                                <span class="badge bg-pink ">@item.DeliveryStatus?.StatusName</span>
+                            }
+                            else if (item.DeliveryStatusID == 3)
+                            {   // Reffered
+                                <span class="badge bg-info text-dark">@item.DeliveryStatus?.StatusName</span>
                             }
                         </td>
                         <td>@item.Newborn?.FirstName @item.Newborn?.MiddleName @item.Newborn?.LastName</td>
-                        <td>@item.Notes</td>
+                        <td style="max-width: 200px; word-wrap: break-word;">@item.Notes</td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
                                 <a asp-controller="Delivery" asp-action="DeliveryRecord" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-sm btn-outline-secondary">
@@ -206,24 +202,21 @@
                         </div>
 
                         <div class="form-group col-md-6 mb-4">
-                            <label for="PrenatalDel-Edit" class="control-label">Prenatal Case Record</label>
-                            <select id="PrenatalDel-Edit" class="form-select" name="PrenatalID" asp-items="ViewBag.prenatalList">
-                                <option value="" class="text-muted" selected>select prenatal record</option>
+                            <label for="prenatalDel-Edit" class="control-label">Prenatal Case Record</label>
+                            <select id="prenatalDel-Edit" class="form-select" name="PrenatalID">
                             </select>
                         </div>
 
 
                         <div class="form-group col-md-6 mb-4">
-                            <label for="NewbornID-Edit" class="control-label">Newborn Baby</label>
-                            <select id="NewbornID-Edit" class="form-select" name="NewbornID" asp-items="ViewBag.newbornList">
-                                <option value="" class="text-muted" selected>select newborn baby</option>
+                            <label for="newbornDel-Edit" class="control-label">Newborn Baby</label>
+                            <select id="newbornDel-Edit" class="form-select" name="NewbornID">
                             </select>
                         </div>
 
                         <div class="form-group col-md-6 mb-4">
                             <label for="statusDel-Edit" class="control-label">Status</label>
-                            <select id="statusDel-Edit" class="form-select" name="DeliveryStatusID" asp-items="ViewBag.dlstatusList" required>
-                                <option value="" class="text-muted" selected>select status</option>
+                            <select id="statusDel-Edit" class="form-select" name="DeliveryStatusID" required>
                             </select>
                         </div>
 
@@ -246,7 +239,7 @@
 </div>
 
 <!-- Deleted History Modal -->
-<div class="modal fade" id="deletedPreModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="deletedDeliveryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -254,7 +247,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div id="deletedListContainer"></div>
+                <div id="deletedListContainerDel"></div>
             </div>
         </div>
     </div>
@@ -274,84 +267,102 @@
         AddDelivery();
     });
 
-    $("#UpdatePrenatalForm").on("submit", function (e) {
+    $("#UpdateDeliveryForm").on("submit", function (e) {
         e.preventDefault();
-        UpdatePrenatal();
+        UpdateDelivery();
     });
 
     $(".edit-Btn").on("click", function (e) {
         var caseNo = $(this).data('caseno');
-        EditPrenatal(caseNo);
+        EditDelivery(caseNo);
     });
         
     $(".dlt-Btn").on("click", function (e) {
         var caseNo = $(this).data('caseno');
-        DeletePrenatal(caseNo);
+        DeleteDelivery(caseNo);
     });
 
-    $('#displayDeletedHistoryBtn').on('click', function () {
-        LoadDeletedHistoryPrenatal();
+    $('#displayDeletedDelHistoryBtn').on('click', function () {
+        LoadDeletedHistoryDelivery();
     });
 
-    function LoadDeletedHistoryPrenatal() {
-        $.ajax({
-            url: '@Url.Action("DisplayDeletedPrenatal", "Prenatal")',
-            type: 'GET',
-            data: { patientId: patID },
-            success: function (result) {
-                $("#deletedListContainer").html(result);
-                $('#deletedPreModal').modal('show');
-            },
-            error: function () {
-                console.error("Failed to load patients data.");
-            }
-        });
-    }
 
-    // Update Prenatal Record
-    function UpdatePrenatal() {
-        var formData = $("#UpdatePrenatalForm").serialize();  
+    // Update Delivery Record
+    function UpdateDelivery() {
+        var formData = $("#UpdateDeliveryForm").serialize();  
         $.ajax({
-            url: '@Url.Action("UpdatePrenatalRecord", "Prenatal")',
+            url: '@Url.Action("UpdateDeliveryRecord", "Delivery")',
             type: 'POST',
             data: formData,
             success: function (result) {
                 if (result.isSuccess) {
-                    $('#prenatalEditModal').modal('hide');
+                    $('#deliveryEditModal').modal('hide');
                     toastr.success(result.message)
-                    LoadPrenatalComponent();
+                    LoadDeliveryComponent();
                 } else {
                     toastr.error(result.message);
                 }
             },
             error: function (err) {
-                toastr.error('An error occurred while updating the prenatal record.');
+                toastr.error('An error occurred while updating the delivery record.');
                 console.error('Error:', err);
             }
         });
     }
-    //Edit Prenatal
-    function EditPrenatal(caseNo){
+    //Edit Delivery
+    function EditDelivery(caseNo){
         $.ajax({
             type: 'GET',
-            url: '@Url.Action("EditPrenatalRecord", "Prenatal")',
+            url: '@Url.Action("EditDeliveryRecord", "Delivery")',
             data: { caseNo: caseNo },
             success: function (result) {
-                var item = result.item;
+                var item = result.item.data;
+                var newborn = result.item.newborn;
+                var prenatal = result.item.prenatal;
+                var status = result.item.deliveryStatus;
+
                 if (result && result.isSuccess == true){
-                    $("#caseNo-Edit").val(item.caseNo);
-                    $("#patientId-Edit").val(item.patientID);
-                    $("#Gravida-Edit").val(item.gravida);
-                    $("#Para-Edit").val(item.para);
-                    $("#Abortion-Edit").val(item.abortion);
-                    $("#StillBirth-Edit").val(item.stillBirth);
-                    $("#LMP-Edit").val(item.lmp ? item.lmp.split('T')[0] : '');
-                    $("#EDC-Edit").val(item.edc ? item.edc.split('T')[0] : '');
-                    $("#DateVisit-Edit").val(item.dateVisit);
-                    $("#HRCODE-Edit").val(item.hrcode);
-                    $("#Notes-Edit").val(item.notes);
+                    $("#caseNoDel-Edit").val(item.caseNo);
+                    $("#patientIdDel-Edit").val(item.patientId);
+                    $("#Date_Admitted-Edit").val(item.date_admitted ? item.date_admitted.split('T')[0] : '');
+                    $("#Time_Admitted-Edit").val(item.time_admitted);
+                    $("#Date_Discharged-Edit").val(item.date_discharged ? item.date_discharged.split('T')[0] : '');
+                    $("#WardNumber-Edit").val(item.wardNo);
+
+                    $("#prenatalDel-Edit").empty().append('<option value="" selected>select prenatal record</option>');
+                    prenatal.forEach(function (data) {
+                        $('#prenatalDel-Edit').append(
+                            $('<option>', {
+                                value: data.caseNo,
+                                text: data.caseNo,
+                                selected: item.prenatalId === data.caseNo
+                            })
+                        );
+                    });
+                    $("#newbornDel-Edit").empty().append('<option value="" selected>select newborn baby</option>');
+                    newborn.forEach(function (data) {
+                        $('#newbornDel-Edit').append(
+                            $('<option>', {
+                                value: data.id,
+                                text: data.firstname + " " + data.middlename + " " + data.lastname + " - " + data.birthdate,
+                                selected: item.newbornId === data.id
+                            })
+                        );
+                    });
+                    $("#statusDel-Edit").empty().append('<option value="" disabled selected>select status</option>');
+                    status.forEach(function (data) {
+                        $('#statusDel-Edit').append(
+                            $('<option>', {
+                                value: data.id,
+                                text: data.statusName,
+                                selected: item.statusId === data.id
+                            })
+                        );
+                    });
+
+                    $("#NotesDel-Edit").val(item.notes);
                     //Show Modal
-                    $('#prenatalEditModal').modal('show');
+                    $('#deliveryEditModal').modal('show');
                 }else{
                     toastr.error(result.message || 'Unable to load prenatal record.');
                 }
@@ -362,8 +373,8 @@
             }
         })
     }
-    //Delete Prenatal
-    function DeletePrenatal(caseNo) {
+    //Delete Delivery
+    function DeleteDelivery(caseNo) {
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this, but you can see this on deleted history!",
@@ -381,7 +392,7 @@
                     success: function (result) {
                         if (result.isSuccess) {
                             toastr.success(result.message)
-                            LoadPrenatalComponent();
+                            LoadDeliveryComponent();
                         } else {
                             toastr.error(result.message);
                         }
@@ -393,7 +404,7 @@
             }
         });
     }
-    //Add Prenatal
+    //Add Delivery
     function AddDelivery() {
         var patientId = $("#patID").val();
         var formData = $('#AddDeliveryForm').serializeArray();
@@ -430,5 +441,19 @@
             }
         });
     }
-
+    //Load All Deleted Records
+    function LoadDeletedHistoryDelivery() {
+        $.ajax({
+            url: '@Url.Action("DisplayDeletedDelivery", "Delivery")',
+            type: 'GET',
+            data: { patientId: patID },
+            success: function (result) {
+                $("#deletedListContainerDel").html(result);
+                $('#deletedDeliveryModal').modal('show');
+            },
+            error: function () {
+                console.error("Failed to load patients data.");
+            }
+        });
+    }
 </script>

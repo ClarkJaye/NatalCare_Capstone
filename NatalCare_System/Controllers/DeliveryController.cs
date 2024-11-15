@@ -4,6 +4,7 @@ using NatalCare.DataAccess.Extensions;
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.Models.Entities;
 using NatalCare.Models.ViewModel.Patient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NatalCare_System.Controllers
 {
@@ -24,30 +25,9 @@ namespace NatalCare_System.Controllers
                 return View();
         }
 
-        //------ PRENATAL ------//
-        //Records
-        public async Task<IActionResult> PrenatalFormRecords(string prenatalId)
-        {
-            try
-            {
-                if (prenatalId != null)
-                {
-                    var userId = GetCurrentUserId();
-                    var result = await serviceServices.GetPrenatalFormRecordAsync(prenatalId);
-                    return Json(result);
-                }
-                return Json(new { IsSuccess = false, Message = "Fetching Record failed!" });
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, $"Error occurred while getting prenatal visit detailed record for Patient");
-                return Json(new { IsSuccess = false, Message = "An error occurred in         public async Task<IActionResult> PrenatalFormRecords(string patientId)\r\n." });
-            }
-        }
-
         public IActionResult DeliveryRecords(string patientId)
         {
-            return ViewComponent("deliveryrecords", new { patientId = patientId });
+            return ViewComponent("DeliveryRecords", new { patientId = patientId });
         }
         //ADD 
         [HttpPost]
@@ -92,7 +72,7 @@ namespace NatalCare_System.Controllers
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"Error occurred while deleting delivery record for Patient");
-                return Json(new { IsSuccess = false, Message = "An error occurred in DeleteDeliveryRecord." });
+                return Json(new { IsSuccess = false, Message = "An error occurred in Delete Delivery Record." });
             }
         }
         // GET/EDIT 
@@ -112,7 +92,7 @@ namespace NatalCare_System.Controllers
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"Error occurred while Edit delivery record for Patient");
-                return Json(new { IsSuccess = false, Message = "An error occurred in EditDeliveryRecord." });
+                return Json(new { IsSuccess = false, Message = "An error occurred in Edit Delivery Record." });
             }
         }
         // UPDATE
@@ -136,19 +116,20 @@ namespace NatalCare_System.Controllers
             }
         }
 
-     
+
         //Display Deleted records
+        [HttpGet]
         public async Task<IActionResult> DisplayDeletedDelivery(string patientId)
         {
-            var records = await serviceServices.GetDeletedPrenatalRecords(patientId);
-            return View(records ?? new List<Prenatal>());
+            var records = await serviceServices.GetDeletedDeliveryRecords(patientId);
+            return View(records ?? new List<Delivery>());
         }
       
         //Retrieved Record
-        public async Task<IActionResult> RetrievePrenatalRecord(string caseno)
+        public async Task<IActionResult> RetrieveDeliveryRecord(string caseno)
         {
             var userId = GetCurrentUserId();
-            var result = await serviceServices.RetrievedPrenetalAync(caseno, userId);
+            var result = await serviceServices.RetrievedDeliveryAync(caseno, userId);
             return Json(result);
 
         }

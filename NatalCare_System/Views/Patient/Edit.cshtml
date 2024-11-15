@@ -72,12 +72,6 @@
                         <span asp-validation-for="Occupation" class="text-danger"></span>
                     </div>
 
-                    @*     <div class="form-group col-md-4 mb-4">
-                    <label asp-for="CivilStatus" class="control-label">Civil Status</label>
-                    <input asp-for="CivilStatus" class="form-control" placeholder="e.g, single, married, ..." required />
-                    <span asp-validation-for="CivilStatus" class="text-danger"></span>
-                    </div> *@
-
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="CivilStatus" class="control-label">Civil Status</label>
                         <select asp-for="CivilStatus" class="form-select" required>
@@ -237,17 +231,17 @@
             $('#HasPhilHealth').on('change', togglePhilHealthSection);
 
             $("#clearBtn").on('click', function(){
-                DeleteSpouse();
+                ClearSpouse();
             })
 
         });
 
-        function DeleteSpouse(){
+        function ClearSpouse(){
             var spouseId = $("#SpouseId").val();
 
             $.ajax({
-                type: 'DELETE',
-                url: '@Url.Action("DeleteSpouse", "Patient")',
+                type: 'POST',
+                url: '@Url.Action("ClearSpouse", "Patient")',
                 data: { spouseId: spouseId },
                 success: function (result) {
                     if (result.isSuccess) {
@@ -270,7 +264,8 @@
             $("#Spouse_LastName").val("").attr("placeholder", "Enter Last Name");
             $("#Spouse_Birthdate").val("");
             $("#Spouse_Address").val("").attr("placeholder", "Enter Address");
-            $("#Spouse_Gender").val("");
+            $("#Spouse_Gender").empty();
+            $("#Spouse_Gender").append("<option disabled selected>select gender</option><option value='male'>Male</option><option value='female'>Female</option><option value='others'>Others</option>")
             $("#Spouse_Occupation").val("").attr("placeholder", "Enter Occupation");
         }
 

@@ -371,6 +371,7 @@ ul#patientManagementMenu {
 }
 .table tbody td {
     font-size: 14px;
+    vertical-align: middle;
 }
 .dt-search {
     margin-bottom: 1rem;

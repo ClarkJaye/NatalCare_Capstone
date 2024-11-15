@@ -2,8 +2,6 @@
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.DataAccess.Repository.IRepository;
 using NatalCare.Models.Entities;
-using System.Collections.Concurrent;
-using System.Diagnostics.Metrics;
 using static NatalCare.DataAccess.Response.ServiceResponses;
 
 namespace NatalCare.DataAccess.Services
@@ -666,9 +664,18 @@ namespace NatalCare.DataAccess.Services
         }
 
         // Delivery
+        public async Task<List<Delivery>> GetDeletedDeliveryRecords(string patientId)
+        {
+            var record = await unitOfWork.Repository<Delivery>().GetAllAsync(p => p.PatientID == patientId && p.StatusCode == "DL", includeProperties: "Newborn,DeliveryStatus");
+            if (!record.Any())
+            {
+                return new List<Delivery>();
+            }
+            return record.ToList();
+        }
         public async Task<List<Delivery>> GetDeliveryRecords(string patientId)
         {
-            var record = await unitOfWork.Repository<Delivery>().GetAllAsync(p => p.PatientID == patientId && p.StatusCode == "AC");
+            var record = await unitOfWork.Repository<Delivery>().GetAllAsync(p => p.PatientID == patientId && p.StatusCode == "AC", includeProperties: "Newborn,DeliveryStatus");
             if (!record.Any())
             {
                 return new List<Delivery>();
@@ -705,7 +712,51 @@ namespace NatalCare.DataAccess.Services
             if (item == null)
                 return new GeneralResponse(false, item, "Delivery record not existing.");
 
-            return new GeneralResponse(true, item, "Delivery record fetched successfully!.");
+            var prenatal = await unitOfWork.Repository<Prenatal>()
+                                          .AsQueryable()
+                                          .Where(a => a.PatientID == item.PatientID)
+                                          .Select(a => new
+                                          {
+                                              caseNo = a.CaseNo,
+                                          })
+                                          .ToListAsync();
+
+            var newborn = await unitOfWork.Repository<Newborn>()
+                                           .AsQueryable()
+                                           .Where(a => a.MotherID == item.PatientID)
+                                           .Select(a => new
+                                           {
+                                               id = a.NewbornID,
+                                               firstname = a.FirstName,
+                                               middlename = a.MiddleName,
+                                               lastname = a.LastName,
+                                               birthdate = a.DateofBirth,
+                                           })
+                                           .ToListAsync();
+
+            var deliveryStatus = await unitOfWork.Repository<DeliveryStatus>()
+                                           .AsQueryable()
+                                           .Select(a => new
+                                           {
+                                               id = a.Id,
+                                               statusName = a.StatusName,
+                                           })
+                                           .ToListAsync();
+            var data = new
+            {
+                caseNo = item.CaseNo,
+                patientId = item.PatientID,
+                date_admitted = item.Date_Admitted,
+                time_admitted = item.Time_Admitted,
+                date_discharged = item.Date_Discharged,
+                wardNo = item.WardNumber,
+                prenatalId = item.PrenatalID,
+                newbornId = item.NewbornID,
+                statusId = item.DeliveryStatusID,
+                notes = item.Notes,
+            };
+
+            return new GeneralResponse(true, new { data, prenatal, newborn, deliveryStatus }, "Delivery record fetched successfully!.");
         }
         public async Task<CommonResponse> UpdateDeliveryRecordAsync(Delivery delivery, string userId)
         {
@@ -715,7 +766,13 @@ namespace NatalCare.DataAccess.Services
                 return new CommonResponse(false, "Delivery record not found.");
 
             // Update the existing record fields
-           
+            existingRecord.Date_Admitted = delivery.Date_Admitted;
+            existingRecord.Time_Admitted = delivery.Time_Admitted;
+            existingRecord.Date_Discharged = delivery.Date_Discharged;
+            existingRecord.WardNumber = delivery.WardNumber;
+            existingRecord.PrenatalID = delivery.PrenatalID;
+            existingRecord.NewbornID = delivery.NewbornID;
+            existingRecord.DeliveryStatusID = delivery.DeliveryStatusID;
             existingRecord.Notes = delivery.Notes;
             existingRecord.Updated_At = DateTime.UtcNow;
             existingRecord.DLUpdatedBy = userId;
@@ -741,6 +798,21 @@ namespace NatalCare.DataAccess.Services
             unitOfWork.Repository<Delivery>().Update(item);
             await unitOfWork.SaveAsync();
             return new CommonResponse(true, "Delivery record deleted successfully");
+        }
+        public async Task<CommonResponse> RetrievedDeliveryAync(string caseno, string userId)
+        {
+            var record = await unitOfWork.Repository<Delivery>().GetFirstOrDefaultAsync(p => p.CaseNo == caseno);
+            if (record == null)
+            {
+                return new CommonResponse(false, "Record Not Found.");
+            }
+            record.StatusCode = "AC";
+            record.DLUpdatedBy = userId;
+            record.Updated_At = DateTime.Now;
+
+            unitOfWork.Repository<Delivery>().Update(record);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Record Retrieved Successfully.");
         }
 
 

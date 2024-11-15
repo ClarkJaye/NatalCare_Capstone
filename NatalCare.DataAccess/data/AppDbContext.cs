@@ -184,13 +184,19 @@ namespace NatalCare.DataAccess.data
                  new Staff { Id = 3, FirstName = "Liza", MiddleName = "Aries", LastName = "Ariesgado", RoleId = 3 }
             );
 
+            //modelBuilder.Entity<DeliveryStatus>().HasData(
+            //    new DeliveryStatus { Id = 1, StatusName = "Monitoring" },
+            //    new DeliveryStatus { Id = 2, StatusName = "In-Labor" },
+            //    new DeliveryStatus { Id = 3, StatusName = "Pospartum" },
+            //    new DeliveryStatus { Id = 4, StatusName = "Discharged" },
+            //    new DeliveryStatus { Id = 5, StatusName = "Referred" }
+            //);
+
             modelBuilder.Entity<DeliveryStatus>().HasData(
-                new DeliveryStatus { Id = 1, StatusName = "Monitoring" },
-                new DeliveryStatus { Id = 2, StatusName = "In-Labor" },
-                new DeliveryStatus { Id = 3, StatusName = "Pospartum" },
-                new DeliveryStatus { Id = 4, StatusName = "Discharged" },
-                new DeliveryStatus { Id = 5, StatusName = "Referred" }
-            );
+               new DeliveryStatus { Id = 1, StatusName = "Active" },
+               new DeliveryStatus { Id = 2, StatusName = "Discharged" },
+               new DeliveryStatus { Id = 3, StatusName = "Referred" }
+           );
 
             // For Junction 
             modelBuilder.Entity<Role_Access>()

@@ -102,6 +102,7 @@ namespace NatalCare.DataAccess.Services
             existingRecord.APGAR = newborn.APGAR;
             existingRecord.Medication = newborn.Medication;
             existingRecord.DeliveryType = newborn.DeliveryType;
+            existingRecord.DeliveryPresentation = newborn.DeliveryPresentation;
             existingRecord.MidwifeID = newborn.MidwifeID;
             existingRecord.StaffID = newborn.StaffID;
             existingRecord.PhysicianID = newborn.PhysicianID;

@@ -31,6 +31,7 @@ namespace NatalCare.Models.Entities
         public TimeOnly? TimeofBirth { get; set; }
 
         public string? DeliveryType { get; set; }
+        public string? DeliveryPresentation { get; set; }
 
         // MEASUREMENTS
         [Column(TypeName = "decimal(5, 2)")]

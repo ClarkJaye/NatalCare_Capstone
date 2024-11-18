@@ -4,7 +4,6 @@ using NatalCare.DataAccess.Extensions;
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.Models.Entities;
 using NatalCare.Models.ViewModel.Patient;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NatalCare_System.Controllers
 {
@@ -20,9 +19,27 @@ namespace NatalCare_System.Controllers
             this.serviceServices = serviceServices;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string patientId, string deliveryId)
         {
-                return View();
+            var patient = await patientServices.GetInformation(patientId);
+            var deliveryRecord = await serviceServices.GetPrenatalRecord(patientId, deliveryId);
+            if (deliveryRecord.CaseNo == null)
+            {
+                TempData["error"] = "No record found!";
+                if (patient.PatientID != null)
+                {
+                    return RedirectToAction("MedicalRecords", "Patient", new { id = patient.PatientID });
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            var prenatalVisitRecords = await serviceServices.GetPrenatalVisitsRecords(deliveryRecord.CaseNo, patient.PatientID);
+            var viewModel = new PatientsVM
+            {
+                Patient = patient,
+                PrenatalRecord = deliveryRecord,
+                PrenatalVisitRecords = prenatalVisitRecords,
+            };
+            return View(viewModel);
         }
 
         public IActionResult DeliveryRecords(string patientId)

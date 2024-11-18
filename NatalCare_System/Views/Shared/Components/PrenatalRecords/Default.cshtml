@@ -48,7 +48,7 @@
                         <td>@item.LMP?.ToString("MMM dd yyyy")</td>
                         <td>@item.EDC?.ToString("MMM dd yyyy")</td>
                         <td>@item.HRCODE</td>
-                        <td>@item.Notes</td>
+                        <td style="max-width: 200px; word-wrap: break-word;">@item.Notes</td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
                                 <a asp-controller="Prenatal" asp-action="PrenatalRecord" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-sm btn-outline-secondary">

@@ -1,7 +1,70 @@
-﻿@{
+﻿@using NatalCare.Models.ViewModel.Patient
+@* @model deliveryRecordVM *@
+
+@{
     ViewData["Title"] = "Delivery / Delivery Records";
     Layout = "_UserLayout";
 }
 
 <!-- NAVBAR -->
 <partial name="Partial/_Navbar" />
+
+<div class="mx-4">
+    <div class="d-flex align-items-center justify-content-start gap-3 mb-3">
+        <a asp-controller="Patient" asp-action="MedicalRecords" asp-route-id="@Model.Patient.PatientID" class="btn btn-sm btn-outline-pink">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back</span>
+        </a>
+        <h5 class="fw-bold m-0 text-capitalize">@Model.Patient.FirstName @Model.Patient.MiddleName @Model.Patient.LastName</h5>
+    </div>
+
+    <div class="card card-selected mb-5">
+        <div class="card-body">
+            <h5 class="card-title mb-4">Delivery Records</h5>
+            <!-- Tabs for Services -->
+            <ul class="nav nav-tabs" id="patientTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="clinicalSheet-tab" data-bs-toggle="tab" href="#clinicalSheet" role="tab">Clinical Face Sheet</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="obstetrical-tab" data-bs-toggle="tab" href="#obstetrical" role="tab">Obstetrical History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="maternalMonitoring-tab" data-bs-toggle="tab" href="#maternalDeliveryMonitoring" role="tab">Maternal Delivery Monitoring</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="phsycialExamination-tab" data-bs-toggle="tab" href="#physicalExamination" role="tab">Physical Examination</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="dischargement-tab" data-bs-toggle="tab" href="#dischargementForm" role="tab">Dischargement Form</a>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content mt-4">
+                <!-- Clinical Face Sheet Tab -->
+                <div class="tab-pane fade show active" id="clinicalSheet" role="tabpanel">
+                </div>
+
+                <!-- Obstetrical Tab -->
+                <div class="tab-pane fade" id="obstetrical" role="tabpanel">
+                </div>
+
+                <!-- Maternal Delivery Monitoring Tab -->
+                <div class="tab-pane fade" id="maternalDeliveryMonitoring" role="tabpanel">
+                </div>
+
+                <!-- Physical Examination Tab -->
+                <div class="tab-pane fade" id="physicalExamination" role="tabpanel">
+                </div>
+
+                <!-- Dischargement Tab -->
+                <div class="tab-pane fade" id="dischargementForm" role="tabpanel">
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+

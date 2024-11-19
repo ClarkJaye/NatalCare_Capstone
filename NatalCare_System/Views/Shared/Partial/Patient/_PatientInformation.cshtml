@@ -43,7 +43,7 @@
                 <!-- Birthdate -->
                 <div class="form-group col-md-4 mb-2">
                     <label class="form-label">Birthdate</label>
-                    <input class="form-control text-capitalize" value="@Model.Birthdate.ToString("MM/dd/yyyy")" disabled /> <!-- Adjusted to display formatted date -->
+                    <input class="form-control text-capitalize" value="@Model.Birthdate.ToString("MMM dd yyyy")" disabled /> <!-- Adjusted to display formatted date -->
                 </div>
 
                 <!-- Birth Place -->
@@ -129,7 +129,7 @@
                 </div>
                 <div class="form-group col-md-4 mb-2">
                     <label class="form-label">Birthdate</label>
-                    <input class="form-control text-capitalize" value="@Model.Spouse?.Birthdate" disabled />
+                    <input class="form-control text-capitalize" value="@Model.Spouse?.Birthdate?.ToString("MMM dd yyyy")" disabled />
                 </div>
                 <div class="form-group col-md-4 mb-2">
                     <label class="form-label">Address</label>

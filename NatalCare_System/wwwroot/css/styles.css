@@ -446,3 +446,14 @@ input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
+/* Tab Panel */
+.nav-tabs .nav-link {
+    color: var(--dark);
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--pink);
+    font-weight: bold;
+}
+

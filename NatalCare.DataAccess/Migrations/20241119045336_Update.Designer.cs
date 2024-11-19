@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NatalCare.DataAccess.data;
 
@@ -11,9 +12,11 @@ using NatalCare.DataAccess.data;
 namespace NatalCare.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241119045336_Update")]
+    partial class Update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,7 +199,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("StatusCode");
 
-                    b.ToTable("Category", (string)null);
+                    b.ToTable("Category");
 
                     b.HasData(
                         new
@@ -303,7 +306,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("StatusCode");
 
-                    b.ToTable("Delivery", (string)null);
+                    b.ToTable("Delivery");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.DeliveryStatus", b =>
@@ -320,7 +323,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DeliveryStatus", (string)null);
+                    b.ToTable("DeliveryStatus");
 
                     b.HasData(
                         new
@@ -400,7 +403,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("StatusCode");
 
-                    b.ToTable("FamilyPlanning", (string)null);
+                    b.ToTable("FamilyPlanning");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.ItemPayments", b =>
@@ -418,7 +421,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("PaymentID");
 
-                    b.ToTable("ItemPayments", (string)null);
+                    b.ToTable("ItemPayments");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.Items", b =>
@@ -441,7 +444,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasKey("ItemID");
 
-                    b.ToTable("Items", (string)null);
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.Modules", b =>
@@ -473,7 +476,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("StatusCode");
 
-                    b.ToTable("Module", (string)null);
+                    b.ToTable("Module");
 
                     b.HasData(
                         new
@@ -698,7 +701,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("StatusCode");
 
-                    b.ToTable("Newborn", (string)null);
+                    b.ToTable("Newborn");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.NewbornHearing", b =>
@@ -763,7 +766,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("StatusCode");
 
-                    b.ToTable("NewbornHearing", (string)null);
+                    b.ToTable("NewbornHearing");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.NewbornScreening", b =>
@@ -859,7 +862,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("StatusCode");
 
-                    b.ToTable("NewbornScreening", (string)null);
+                    b.ToTable("NewbornScreening");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.PatientPayments", b =>
@@ -893,7 +896,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("PaymentID");
 
-                    b.ToTable("PatientPayments", (string)null);
+                    b.ToTable("PatientPayments");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.Patients", b =>
@@ -988,7 +991,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("StatusCode");
 
-                    b.ToTable("Patients", (string)null);
+                    b.ToTable("Patients");
 
                     b.HasData(
                         new
@@ -1065,7 +1068,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("PatientUpdatedBy");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.Prenatal", b =>
@@ -1133,7 +1136,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("StatusCode");
 
-                    b.ToTable("Prenatal", (string)null);
+                    b.ToTable("Prenatal");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.PrenatalVisit", b =>
@@ -1222,7 +1225,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("StatusCode");
 
-                    b.ToTable("PrenatalVisit", (string)null);
+                    b.ToTable("PrenatalVisit");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.RoleStaff", b =>
@@ -1239,7 +1242,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoleStaff", (string)null);
+                    b.ToTable("RoleStaff");
 
                     b.HasData(
                         new
@@ -1291,7 +1294,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("Role_access", (string)null);
+                    b.ToTable("Role_access");
 
                     b.HasData(
                         new
@@ -1402,7 +1405,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("PaymentID");
 
-                    b.ToTable("ServicesPayments", (string)null);
+                    b.ToTable("ServicesPayments");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.Servicesss", b =>
@@ -1424,7 +1427,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasKey("ServiceID");
 
-                    b.ToTable("Services", (string)null);
+                    b.ToTable("Services");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.Spouse", b =>
@@ -1462,7 +1465,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasKey("SpouseId");
 
-                    b.ToTable("Spouse", (string)null);
+                    b.ToTable("Spouse");
 
                     b.HasData(
                         new
@@ -1505,7 +1508,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Staff", (string)null);
+                    b.ToTable("Staff");
 
                     b.HasData(
                         new
@@ -1551,7 +1554,7 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasKey("StatusCode");
 
-                    b.ToTable("Status", (string)null);
+                    b.ToTable("Status");
 
                     b.HasData(
                         new

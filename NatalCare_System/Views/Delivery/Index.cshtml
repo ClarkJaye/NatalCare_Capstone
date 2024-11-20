@@ -1,8 +1,8 @@
-﻿@using NatalCare.Models.ViewModel.Patient
-@* @model deliveryRecordVM *@
+﻿@* @using NatalCare.Models.ViewModel.Patient
+@model deliveryRecordVM *@
 
 @{
-    ViewData["Title"] = "Delivery / Delivery Records";
+    ViewData["Title"] = "Patients / Delivery Records";
     Layout = "_UserLayout";
 }
 
@@ -11,16 +11,16 @@
 
 <div class="mx-4">
     <div class="d-flex align-items-center justify-content-start gap-3 mb-3">
-        <a asp-controller="Patient" asp-action="MedicalRecords" asp-route-id="@Model.Patient.PatientID" class="btn btn-sm btn-outline-pink">
+        <a asp-controller="Patient" asp-action="MedicalRecords" asp-route-id="" class="btn btn-sm btn-outline-pink">
             <i class="fas fa-arrow-left"></i>
             <span>Back</span>
         </a>
-        <h5 class="fw-bold m-0 text-capitalize">@Model.Patient.FirstName @Model.Patient.MiddleName @Model.Patient.LastName</h5>
+        @* <h5 class="fw-bold m-0 text-capitalize">@Model.Patient.FirstName @Model.Patient.MiddleName @Model.Patient.LastName</h5> *@
     </div>
 
     <div class="card card-selected mb-5">
         <div class="card-body">
-            <h5 class="card-title mb-4">Delivery Records</h5>
+            <h5 class="card-title mb-4">Delivery Details</h5>
             <!-- Tabs for Services -->
             <ul class="nav nav-tabs" id="patientTabs" role="tablist">
                 <li class="nav-item">
@@ -30,7 +30,7 @@
                     <a class="nav-link" id="obstetrical-tab" data-bs-toggle="tab" href="#obstetrical" role="tab">Obstetrical History</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="maternalMonitoring-tab" data-bs-toggle="tab" href="#maternalDeliveryMonitoring" role="tab">Maternal Delivery Monitoring</a>
+                    <a class="nav-link" id="maternalMonitoring-tab" data-bs-toggle="tab" href="#maternalDeliveryMonitoring" role="tab">Delivery Monitoring</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="phsycialExamination-tab" data-bs-toggle="tab" href="#physicalExamination" role="tab">Physical Examination</a>
@@ -44,23 +44,462 @@
             <div class="tab-content mt-4">
                 <!-- Clinical Face Sheet Tab -->
                 <div class="tab-pane fade show active" id="clinicalSheet" role="tabpanel">
+                    <div class="m-4">
+                        <h6>Patient Info:</h6>
+                        <div class="row">
+                            <div class="form-group col-md-3 mb-2">
+                                <label class="form-label">Firstname</label>
+                                <input class="form-control text-capitalize" value="Jay Clark" readonly />
+                            </div>
+
+                            <div class="form-group col-md-3 mb-2">
+                                <label class="form-label">Middlename</label>
+                                <input class="form-control text-capitalize" value="Jimenez" readonly />
+                            </div>
+
+                            <div class="form-group col-md-3 mb-2">
+                                <label class="form-label">Lastname</label>
+                                <input class="form-control text-capitalize" value="Anore" readonly />
+                            </div>
+
+                            <div class="form-group col-md-3 mb-2">
+                                <label class="form-label">Ward No#</label>
+                                <input class="form-control text-capitalize" value="1" readonly />
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Obstetrical Tab -->
                 <div class="tab-pane fade" id="obstetrical" role="tabpanel">
+                    <h6 class="px-2">Obstetrical History</h6>
+                    <div class="d-flex justify-content-end my-3 gap-3">
+                        <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
+                            <i class="fas fa-plus"></i>
+                            <span>Add New</span>
+                        </button>
+                    </div>
+                    <div class="alert alert-primary" role="alert">
+                        No Data Added Yet!
+                    </div>
                 </div>
 
                 <!-- Maternal Delivery Monitoring Tab -->
                 <div class="tab-pane fade" id="maternalDeliveryMonitoring" role="tabpanel">
+                    <h6 class="px-2">Delivery Monitoring</h6>
+                    <div class="d-flex justify-content-end my-3 gap-3">
+                        <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
+                            <i class="fas fa-plus"></i>
+                            <span>Add New</span>
+                        </button>
+                    </div>
+                    <div class="alert alert-primary" role="alert">
+                        No Data Added Yet!
+                    </div>
                 </div>
 
                 <!-- Physical Examination Tab -->
                 <div class="tab-pane fade" id="physicalExamination" role="tabpanel">
+                    <h5 class="px-2 mb-3 text-center">PHYSICAL EXAMINATION</h5>
+                    <div class="d-flex justify-content-end my-3 gap-3">
+                        <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
+                            <i class="fas fa-plus"></i>
+                            <span>Add New</span>
+                        </button>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
+                            <i class="fas fa-plus"></i>
+                            <span>Edit</span>
+                        </button>
+                    </div>        
+                    <div class="container mt-4">
+                        <!-- Patient Basic Info -->
+                        <div class="row mb-5">
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Name of Patient:</h6>
+                                    <div class="border-bottom flex-grow-1">
+                                        <span class="px-2">
+                                            Jay Clark Jimenez Anore
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Age:</h6>
+                                    <div class="border-bottom flex-grow-1">
+                                        <span class="px-2">
+
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                                    <div class="border-bottom flex-grow-1">
+                                        <span class="px-2">
+                                            Tipolo, Mandaue City Cebu
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">OB History:</h6>
+                                    <div class="border-bottom flex-grow-1">
+                                        <span class="px-2">
+                                            Sample Data Test
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="divider bg-pink" />
+
+                        <!-- Physical Measurements -->
+                        <fieldset class="mb-4">
+                            <legend class="fw-bold" style="font-size:1.2rem;">Physical Measurements</legend>
+                            <div class="row">
+                                <div class="col-md-2 border-right" style="border-right: 2px solid pink;">
+                                    <label class="fw-bold">Weight:</label>
+                                    <div class="d-flex">
+                                        <div class="border-bottom flex-grow-1 pb-1">52</div>
+                                        <span class="ms-2">kg</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2" style="border-right: 2px solid pink;">
+                                    <label class="fw-bold">Height:</label>
+                                    <div class="d-flex">
+                                        <div class="border-bottom flex-grow-1 pb-1">51</div>
+                                        <span class="ms-2">m</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2" style="border-right: 2px solid pink;">
+                                    <label class="fw-bold">Blood Pressure:</label>
+                                    <div class="d-flex">
+                                        <div class="border-bottom flex-grow-1 pb-1">120/80</div>
+                                        <span class="ms-2">mmHg</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2" style="border-right: 2px solid pink;">
+                                    <label class="fw-bold">Pulse Rate:</label>
+                                    <div class="d-flex">
+                                        <div class="border-bottom flex-grow-1 pb-1">80</div>
+                                        <span class="ms-2">/min</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2" style="border-right: 2px solid pink;">
+                                    <label class="fw-bold">Respiratory Rate:</label>
+                                    <div class="d-flex">
+                                        <div class="border-bottom flex-grow-1 pb-1">20</div>
+                                        <span class="ms-2">/min</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2" style="border-right: 2px solid pink;">
+                                    <label class="fw-bold">Temperature:</label>
+                                    <div class="d-flex">
+                                        <div class="border-bottom flex-grow-1 pb-1">37.5</div>
+                                        <span class="ms-2">Celsius</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <hr class="divider bg-pink" />
+
+                        <!-- Physical Examination -->
+                        <fieldset class="mb-3">
+                            <legend class="fw-bold" style="font-size:1.2rem;">Physical Examination</legend>
+                            <div class="row">
+                                @* SKIN *@
+                                <div class="col-md-4 mb-3">
+                                    <label class="fw-bold mb-2">SKIN:</label>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="skinNormal" class="update-checkbox custom-checkbox">
+                                        <label for="skinNormal" class="form-check-label">Normal</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="skinPale" class="update-checkbox custom-checkbox">
+                                        <label for="skinPale" class="form-check-label">Pale</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="skinYellowish" class="update-checkbox custom-checkbox">
+                                        <label for="skinYellowish" class="form-check-label">Yellowish</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="skinHematoma" class="update-checkbox custom-checkbox">
+                                        <label for="skinHematoma" class="form-check-label">Hematoma</label>
+                                    </div>
+                                </div>
+                                @* CONJUNCTIVA *@
+                                <div class="col-md-4 mb-3">
+                                    <label class="fw-bold mb-2">CONJUNCTIVA:</label>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="conNormal" class="update-checkbox custom-checkbox">
+                                        <label for="conNormal" class="form-check-label">Normal</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="conPale" class="update-checkbox custom-checkbox">
+                                        <label for="conPale" class="form-check-label">Pale</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="conYellowish" class="update-checkbox custom-checkbox">
+                                        <label for="conYellowish" class="form-check-label">Yellowish</label>
+                                    </div>
+                                </div>
+                                @* NECK *@
+                                <div class="col-md-4 mb-3">
+                                    <label class="fw-bold mb-2">NECK:</label>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="neckNormal" class="update-checkbox custom-checkbox">
+                                        <label for="neckNormal" class="form-check-label">Normal</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="neckMass" class="update-checkbox custom-checkbox">
+                                        <label for="neckMass" class="form-check-label">Neck Mass</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="neckEnlage" class="update-checkbox custom-checkbox">
+                                        <label for="neckEnlage" class="form-check-label">Enlarged Lymph Nodes</label>
+                                    </div>
+                                </div>
+                                @* BREAST *@
+                                <div class="col-md-4 mb-3">
+                                    <label class="fw-bold mb-2">BREAST:</label>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="breastNormal" class="update-checkbox custom-checkbox">
+                                        <label for="breastNormal" class="form-check-label">Normal</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="breastMass" class="update-checkbox custom-checkbox">
+                                        <label for="breastMass" class="form-check-label">Mass</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="breastDischarge" class="update-checkbox custom-checkbox">
+                                        <label for="breastDischarge" class="form-check-label">Nipple Discharge</label>
+                                    </div>
+                                </div>
+                                @* ABDOMEN *@
+                                <div class="col-md-4 mb-3">
+                                    <label class="fw-bold mb-2">ABDOMEN:</label>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="abNormal" class="update-checkbox custom-checkbox">
+                                        <label for="abNormal" class="form-check-label">Normal</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="abMass" class="update-checkbox custom-checkbox">
+                                        <label for="abMass" class="form-check-label">Abdominal Mass</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="abVaricos" class="update-checkbox custom-checkbox">
+                                        <label for="abVaricos" class="form-check-label">Varicosities</label>
+                                    </div>
+                                </div>
+                                @* EXTREMETIES *@
+                                <div class="col-md-4 mb-3">
+                                    <label class="fw-bold mb-2">EXTREMETIES:</label>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="exNormal" class="update-checkbox custom-checkbox">
+                                        <label for="exNormal" class="form-check-label">Normal</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="exEdema" class="update-checkbox custom-checkbox">
+                                        <label for="exEdema" class="form-check-label">Edema</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="exVaricos" class="update-checkbox custom-checkbox">
+                                        <label for="exVaricos" class="form-check-label">Varicosities</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="NotesPE" class="control-label">Notes (Optional)</label>
+                            <textarea id="NotesPE" name="Notes" class="form-control" placeholder="Notes" rows="5"></textarea>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Dischargement Tab -->
                 <div class="tab-pane fade" id="dischargementForm" role="tabpanel">
+                    <h5 class="px-2 mb-3 text-center">DISCHARGEMENT FORM</h5>
+                    <div class="d-flex justify-content-end my-3 gap-3">
+                        <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
+                            <i class="fas fa-plus"></i>
+                            <span>Add New</span>
+                        </button>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
+                            <i class="fas fa-plus"></i>
+                            <span>Edit</span>
+                        </button>
+                    </div>
+                    <div class="container mt-4">
+                        <!-- Patient Basic Info -->
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">NAME OF PATIENT:</h6>
+                                    <div class="border-bottom flex-grow-1">
+                                        <span class="px-2">
+                                            Jay Clark Jimenez Anore
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">HOSP. NO#:</h6>
+                                    <div class="border-bottom flex-grow-1">
+                                        <span class="px-2">
+                                            
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Date & Time Admitted:</h6>
+                                    <div class="border-bottom flex-grow-1">
+                                        <span class="px-2">
+                                            November 20, 2024
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Date & Time Discharged:</h6>
+                                    <div class="border-bottom flex-grow-1">
+                                        <span class="px-2">
+                                            November 21, 2024
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>     
+                        </div>
+
+                        <hr class="divider bg-pink" />
+
+                        <div class="row mb-4">
+                            <div class="col-md-12 mb-3">
+                                <label class="fw-bold">COMPLETE DIAGNOSIS:</label>
+                                <div class="border-bottom pb-1">
+                                    <span class="px-3">
+                                        Patient is in good condition, advised to maintain proper diet and hydration, 
+                                        Patient is in good condition, advised to maintain proper diet and hydration.
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="fw-bold">MEDICATIONS:</label>
+                                <div class="border-bottom pb-1">
+                                    <span class="px-3">
+                                        Amoxixillin 500mg - 3x a day per 7 days,
+                                        Mefenamic Acid 500mg - 3x a day per 7 days,
+                                        Multivitamins + Iron 500mg - one daily for 1 iron
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="divider bg-pink" />
+
+                        <!-- Discharge & Instructions -->
+                        <fieldset class="mb-3">
+                            <legend class="fw-bold" style="font-size:1.2rem;">DISCHARGED INSTRUCTIONS:</legend>
+                            <H6 class="fw-bold">Advice & Counsel</H6>
+                            <div class="row mt-2">
+                                @* MOTHER *@
+                                <div class="col-md-6 mb-3">
+                                    <label class="fw-bold mb-2">MOTHER:</label>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="mPostpartum" class="update-checkbox custom-checkbox">
+                                        <label for="mPostpartum" class="form-check-label">Post-Partum care & hygiene</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="mNutrition" class="update-checkbox custom-checkbox">
+                                        <label for="mNutrition" class="form-check-label">Nutrition</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="mIron_Folate" class="update-checkbox custom-checkbox">
+                                        <label for="mIron_Folate" class="form-check-label">Iron/Folate</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="mbSpacing" class="update-checkbox custom-checkbox">
+                                        <label for="mbSpacing" class="form-check-label">Birth spacing & Family Planning</label>
+                                    </div>
+                                     <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="mDangersigns" class="update-checkbox custom-checkbox">
+                                        <label for="mDangersigns" class="form-check-label">Danger Signs</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="mfollowVisit" class="update-checkbox custom-checkbox">
+                                        <label for="mfollowVisit" class="form-check-label">Follow-up visits</label>
+                                    </div>
+                                </div>
+                                @* BABY *@
+                                <div class="col-md-6 mb-3">
+                                    <label class="fw-bold mb-2">BABY:</label>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="bbExclusive" class="update-checkbox custom-checkbox">
+                                        <label for="bbExclusive" class="form-check-label">Exclusive Breastfeeding</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="bbHygiene" class="update-checkbox custom-checkbox">
+                                        <label for="bbHygiene" class="form-check-label">Hygiene, Cord care and Warmth</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="bbSpecialAdvice" class="update-checkbox custom-checkbox">
+                                        <label for="bbSpecialAdvice" class="form-check-label">Special advice if low birth weight</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="bbDangersigns" class="update-checkbox custom-checkbox">
+                                        <label for="bbDangersigns" class="form-check-label">Danger Signs</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                        <input type="checkbox" id="bbfollowVisit" class="update-checkbox custom-checkbox">
+                                        <label for="bbfollowVisit" class="form-check-label">Follow-up visits</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <hr class="divider bg-pink" />
+
+                        <!-- Follow-Up and Prepared By -->
+                        <div class="row mb-4">
+                            <div class="col-md-12 mb-3">
+                                <label class="fw-bold">FOLLOW-UP MANAGEMENT:</label>
+                                <div class="border-bottom px-3">
+                                    Patient is in good condition, advised to maintain proper diet and hydration.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-4 text-center">
+                                <div class="border-bottom px-3 mx-5">Staff Member 1</div>
+                                <label class="fw-bold mt-2 d-block">Prepared By</label>
+                            </div>
+                            <div class="col-md-6 mt-4 text-center">
+                                <div class="border-bottom px-3 mx-5">Midwife Member 1</div>
+                                <label class="fw-bold mt-2 d-block">Attending Midwife</label>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
+
+
+
+
+
 
 
             </div>
@@ -68,3 +507,15 @@
     </div>
 </div>
 
+
+
+
+@*   <div class="d-flex justify-content-end my-3 gap-3">
+                        <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
+                            <i class="fas fa-plus"></i>
+                            <span>Add New</span>
+                        </button>
+                    </div>
+                    <div class="alert alert-primary" role="alert">
+                        No Data Added Yet!
+                    </div> *@

@@ -8,7 +8,7 @@ using NatalCare.DataAccess.Interfaces;
 using NatalCare.Models.DTOs;
 using NatalCare.Models.Entities;
 using NatalCare.Models.ViewModel;
-using PrinceQ.Utility;
+using NatalCare.Utility;
 
 namespace NatalCare_System.Controllers
 {

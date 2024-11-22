@@ -44,44 +44,528 @@
             <div class="tab-content mt-4">
                 <!-- Clinical Face Sheet Tab -->
                 <div class="tab-pane fade show active" id="clinicalSheet" role="tabpanel">
-                    <div class="m-4">
-                        <h6>Patient Info:</h6>
-                        <div class="row">
-                            <div class="form-group col-md-3 mb-2">
-                                <label class="form-label">Firstname</label>
-                                <input class="form-control text-capitalize" value="Jay Clark" readonly />
-                            </div>
-
-                            <div class="form-group col-md-3 mb-2">
-                                <label class="form-label">Middlename</label>
-                                <input class="form-control text-capitalize" value="Jimenez" readonly />
-                            </div>
-
-                            <div class="form-group col-md-3 mb-2">
-                                <label class="form-label">Lastname</label>
-                                <input class="form-control text-capitalize" value="Anore" readonly />
-                            </div>
-
-                            <div class="form-group col-md-3 mb-2">
-                                <label class="form-label">Ward No#</label>
-                                <input class="form-control text-capitalize" value="1" readonly />
+                    <div class="d-flex justify-content-center align-items-center flex-column ">
+                        <h5 class="px-2 mb-3 text-center fw-bold">CLINICAL FACE SHEET</h5>
+                        <div class="d-flex align-items-center">
+                            <h6 class="me-2 mb-0 fw-bold">CASE NO#:</h6>
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-2">
+                                    DLV001
+                                </span>
                             </div>
                         </div>
                     </div>
+
+                    <div class="d-flex justify-content-end my-3 gap-3 px-2">
+                      @*   <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
+                            <i class="fas fa-plus"></i>
+                            <span>Add New</span>
+                        </button> *@
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
+                            <i class="fas fa-pencil-alt"></i>
+                            <span>Edit</span>
+                        </button>
+                    </div>
+                    <div class="container mt-4">
+                        <!-- Patient Basic Info -->
+                        <div class="row mb-3">
+                            @* Patient Details *@
+                            <div class="col-md-6 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Name of Patient:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            Jay Clark Jimenez Anore
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Ward/Service:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            Tipolo, Mandaue City, Cebu
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">CONTACT NO#:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            09123456789
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Religion:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            Roman Catholic
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Occupation:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            Enginneer
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Birthdate:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            November 21, 2024
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Age:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            23
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Birthplace:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            Tipolo, Mandaue City, Cebu
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <style>
+                                @@media (min-width: 768px) {
+                                    .mcol
+                                    {
+                                        flex: 0 0 auto;
+                                        width: 12.5%!important;
+                                    }
+                                }
+                            </style>
+                            <div class="col-md-2 border py-3 mcol d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Sex:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            Female
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 border py-3 mcol d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Status:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            Single
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            @* Admission Details *@
+                            <div class="col-md-12 border py-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h6 class="me-2 mb-0 fw-bold">Admission:</h6>
+                                        <div class="d-flex align-items-center mt-3 mx-5">
+                                            <h6 class="me-2 mb-0 fw-bold">Date:</h6>
+                                            <div class="border-bottom flex-grow-1">
+                                                <span class="px-4">
+                                                    08-08-2024
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex align-items-center mt-3 mb-sm-3 mx-5">
+                                            <h6 class="me-2 mb-0 fw-bold">Time:</h6>
+                                            <div class="border-bottom flex-grow-1">
+                                                <span class="px-4">
+                                                    08-08-2024
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <h6 class="me-2 mb-0 fw-bold">Discharge:</h6>
+                                        <div class="d-flex align-items-center mt-3 mx-5">
+                                            <h6 class="me-2 mb-0 fw-bold">Date:</h6>
+                                            <div class="border-bottom flex-grow-1">
+                                                <span class="px-4">
+                                                    08-08-2024
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex align-items-center mt-3 mb-sm-3 mx-5">
+                                            <h6 class="me-2 mb-0 fw-bold">Time:</h6>
+                                            <div class="border-bottom flex-grow-1">
+                                                <span class="px-4">
+                                                    08-08-2024
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <h6 class="me-2 mb-0 fw-bold">Total # of Days:</h6>
+                                        <div class="d-flex align-items-center mt-3 mx-5">
+                                            <div class="border-bottom flex-grow-1">
+                                                <span class="px-4">
+                                                    
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                              
+                            </div>
+
+                            <div class="col-md-3 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">LMP:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            November 21, 2024
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">EDC#:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            June 21, 2025
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">AOG:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            32 Weeks
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 border py-3">
+                                <div class="d-flex align-items-center mt-3 mx-1">
+                                    <h6 class="me-2 mb-0 fw-bold">T:</h6>
+                                    <div class="border-bottom flex-grow-1">
+                                        <span class="px-2">
+                                        </span>
+                                    </div>
+
+                                    <h6 class="me-2 mb-0 fw-bold">P:</h6>
+                                    <div class="border-bottom flex-grow-1">
+                                        <span class="px-2">
+                                        </span>
+                                    </div>
+
+                                    <h6 class="me-2 mb-0 fw-bold">A:</h6>
+                                    <div class="border-bottom flex-grow-1">
+                                        <span class="px-2">
+                                        </span>
+                                    </div>
+
+                                    <h6 class="me-2 mb-0 fw-bold">L:</h6>
+                                    <div class="border-bottom flex-grow-1">
+                                        <span class="px-2">
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center mt-3 mx-1">
+                                    <h6 class="me-2 mb-0 fw-bold">G:</h6>
+                                    <div class="border-bottom flex-grow-1">
+                                        <span class="px-2">
+                                        </span>
+                                    </div>
+
+                                    <h6 class="me-2 mb-0 fw-bold">P:</h6>
+                                    <div class="border-bottom flex-grow-1">
+                                        <span class="px-2">
+                                        </span>
+                                    </div>
+
+                                    <h6 class="me-2 mb-0 fw-bold">A:</h6>
+                                    <div class="border-bottom flex-grow-1">
+                                        <span class="px-2">
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6 border py-3">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">History of Patients Condition:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            History of Patients Condition, History of Patients Condition, History of Patients Condition
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">ADMITTING:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            Patient In Labor
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">ICD-10 CODE/S:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            080,9,Z39.0,Z39.2
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 border py-3">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Final Diagnosis:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            History of Patients Condition, History of Patients Condition, History of Patients Condition
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Name Of Informant:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            Paul Cuenca
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                             <div class="col-md-6 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Relation to Patient:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            Sibling
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            Tipolo, Mandaue City, Cebu
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Contact #:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            09123456789
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 border py-3">
+                                <label class="fw-bold mb-2">Condition on Discharge:</label>
+                                <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                    <input type="checkbox" id="dRecovered" class="update-checkbox custom-checkbox">
+                                    <label for="dRecovered" class="form-check-label">RECOVERED</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                    <input type="checkbox" id="dImprov" class="update-checkbox custom-checkbox">
+                                    <label for="dImprov" class="form-check-label">IMPROVED</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                    <input type="checkbox" id="dUnimprov" class="update-checkbox custom-checkbox">
+                                    <label for="dUnimprov" class="form-check-label">UNIMPROVED</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 border py-3">
+                                <label class="fw-bold mb-2">Disposition:</label>
+                                <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                    <input type="checkbox" id="dDischarge" class="update-checkbox custom-checkbox">
+                                    <label for="dDischarge" class="form-check-label">DISCAHARGE</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                    <input type="checkbox" id="dTransfered" class="update-checkbox custom-checkbox">
+                                    <label for="dTransfered" class="form-check-label">TRASNFERRED</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                    <input type="checkbox" id="dHama" class="update-checkbox custom-checkbox">
+                                    <label for="dHama" class="form-check-label">HAMA(Home Against Medical Advice)</label>
+                                </div>
+                                <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                    <input type="checkbox" id="dAbssconded" class="update-checkbox custom-checkbox">
+                                    <label for="dAbssconded" class="form-check-label">ABSSCONDED</label>
+                                </div>
+                            </div>
+
+
+                            <!-- Midwife -->
+                            <div class="row py-3 d-flex justify-content-center">
+                                <div class="col-md-6 mt-5 text-center">
+                                    <div class="border-bottom px-3 mx-5">Midwife Member 1</div>
+                                    <label class="fw-bold mt-2 d-block">Admitting Midwife</label>
+                                    <label class="fw-bold mt-2 d-block">Printed Name & Signature</label>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <hr class="divider bg-pink" />
+                    </div>
+
                 </div>
 
                 <!-- Obstetrical Tab -->
                 <div class="tab-pane fade" id="obstetrical" role="tabpanel">
-                    <h6 class="px-2">Obstetrical History</h6>
-                    <div class="d-flex justify-content-end my-3 gap-3">
-                        <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
+                    <h6 class="px-2 mb-3 text-center fw-bold">Obstetrical History</h6>
+                    <div class="d-flex justify-content-end my-3 gap-3 px-2">
+                        @*   <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
                             <i class="fas fa-plus"></i>
                             <span>Add New</span>
+                        </button> *@
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
+                            <i class="fas fa-pencil-alt"></i>
+                            <span>Edit</span>
                         </button>
                     </div>
-                    <div class="alert alert-primary" role="alert">
-                        No Data Added Yet!
+                    <div class="container mt-4">
+                        <!-- Patient Basic Info -->
+                        <div class="row mb-3">
+                            @* Patient Details *@
+                            <div class="col-md-6 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Name of Patient:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            Jay Clark Jimenez Anore
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Ward/Service:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            Tipolo, Mandaue City, Cebu
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">CONTACT NO#:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            09123456789
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Religion:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            Roman Catholic
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 border py-3 d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="me-2 mb-0 fw-bold">Occupation:</h6>
+                                    <div class="flex-grow-1">
+                                        <span class="px-2">
+                                            Enginneer
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
 
                 <!-- Maternal Delivery Monitoring Tab -->

@@ -23,11 +23,15 @@ namespace NatalCare_System.Controllers
         public async Task<IActionResult> Index()
         {
             // Get all counts in one call
-            var (todayRecordCount, monthlyRecordCount, yearlyRecordCount) = await patientServices.GetPatientCountsAsync();
+            var (todayRecordCount, monthlyRecordCount, yearlyRecordCount, totalCount, activeCount, inActiveCount) = await patientServices.GetPatientCountsAsync();
             // Pass counts to the view using ViewBag
             ViewBag.TodayRecord = todayRecordCount;
             ViewBag.MonthlyRecord = monthlyRecordCount;
             ViewBag.YearlyRecord = yearlyRecordCount;
+
+            ViewBag.TotalRecord = totalCount;
+            ViewBag.ActiveRecord = activeCount;
+            ViewBag.InActiveRecord = inActiveCount;
             return View();
         }
         //Redirection of Each Tab

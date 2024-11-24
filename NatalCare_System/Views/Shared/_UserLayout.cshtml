@@ -86,7 +86,7 @@
                                     ViewContext.RouteData.Values["controller"]?.ToString() == "Prenatal" || ViewContext.RouteData.Values["controller"]?.ToString() == "Delivery" ? "active" : "")">
                                         <a asp-controller="Patient" asp-action="Index">
                                             <i class="fa-solid fa-folder-open"></i>
-                                            <span class="text">Patient Records</span>
+                                            <span class="text">Patients</span>
                                         </a>
                                     </li>
                                 }
@@ -95,7 +95,7 @@
                                     <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Newborn"  ? "active" : "")">
                                         <a asp-controller="Newborn" asp-action="Index">
                                             <i class="fa-solid fa-baby"></i>
-                                            <span class="text">Newborn Records</span>
+                                            <span class="text">Newborns</span>
                                         </a>
                                     </li>
                                 }

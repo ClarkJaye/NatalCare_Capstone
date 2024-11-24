@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Patients Records";
+    ViewData["NavTitle"] = "Patients Records";
     Layout = "_UserLayout";
 }
 
@@ -9,7 +10,7 @@
 <div class="mx-4">
     <div class="row">
         <!-- Totals Section -->
-        <div class="col-md-4 mb-4">
+        <div class="col-md-3 mb-4">
             <div class="card shadow py-2 card-selected">
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -34,7 +35,7 @@
             </div>
         </div>
 
-        <div class="col-md-4 mb-4">
+        <div class="col-md-3 mb-4">
             <div class="card shadow py-2 card-selected">
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -59,7 +60,7 @@
             </div>
         </div>
 
-        <div class="col-md-4 mb-4">
+        <div class="col-md-3 mb-4">
             <div class="card shadow py-2 card-selected">
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -83,6 +84,32 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card shadow py-2 card-selected">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
+                                Total Patients
+                            </div>
+                            <div class="h4 fw-bold my-3">
+                                @(ViewBag.TotalRecord ?? 0)
+                            </div>
+                            <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
+                                Active Patients <span class="h6">@(ViewBag.ActiveRecord ?? 0)</span>
+                                In-Active Patients <span class="h6">@(ViewBag.InActiveRecord ?? 0)</span>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-pink">
+                                <i class="fas fa-calendar"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="mb-4 mt-2 d-flex align-items-center justify-content-end gap-3">
@@ -93,7 +120,8 @@
 
         <button id="displayDeletedHistoryBtn" class="btn btn-outline-secondary">
             <i class="fas fa-trash"></i>
-            <span>Deleted History Records</span>
+            @* <span>Deleted History Records</span> *@
+            <span>Inactive Patients Records</span>
         </button>
     </div>
 

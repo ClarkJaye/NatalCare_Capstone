@@ -42,7 +42,7 @@ namespace NatalCare.DataAccess.Services
         public async Task<List<Patients>> GetDeletedPatients()
         {
             var patients = await unitOfWork.Repository<Patients>()
-            .GetAllAsync(p => p.StatusCode == "DL", includeProperties: "CreatedBy");
+            .GetAllAsync(p => p.StatusCode == "IN", includeProperties: "CreatedBy");
             return patients.ToList();
         }
 
@@ -186,7 +186,28 @@ namespace NatalCare.DataAccess.Services
 
 
         // HELPER
-        public async Task<(int todayCount, int monthCount, int yearCount)> GetPatientCountsAsync()
+        //public async Task<(int todayCount, int monthCount, int yearCount, int totalCount)> GetPatientCountsAsync()
+        //{
+        //    var today = DateTime.Today;
+        //    var monthStart = new DateTime(today.Year, today.Month, 1);
+        //    var yearStart = new DateTime(today.Year, 1, 1);
+
+        //    var counts = await unitOfWork.Repository<Patients>()
+        //        .AsQueryable()
+        //        .Where(n => n.Created_At >= yearStart)
+        //        .GroupBy(n => 1)
+        //        .Select(g => new
+        //        {
+        //            TodayCount = g.Count(n => n.Created_At >= today),
+        //            MonthCount = g.Count(n => n.Created_At >= monthStart),
+        //            YearCount = g.Count(),
+        //        })
+        //        .FirstOrDefaultAsync();
+
+        //    return counts != null ? (counts.TodayCount, counts.MonthCount, counts.YearCount, totalCount) : (0, 0, 0, 0);
+        //}
+
+        public async Task<(int todayCount, int monthCount, int yearCount, int TotalCount, int activeCount, int inactiveCount)> GetPatientCountsAsync()
         {
             var today = DateTime.Today;
             var monthStart = new DateTime(today.Year, today.Month, 1);
@@ -194,19 +215,28 @@ namespace NatalCare.DataAccess.Services
 
             var counts = await unitOfWork.Repository<Patients>()
                 .AsQueryable()
-                .Where(n => n.Created_At >= yearStart)
                 .GroupBy(n => 1)
                 .Select(g => new
                 {
+                    // Count of patients created today
                     TodayCount = g.Count(n => n.Created_At >= today),
+                    // Count of patients created this month
                     MonthCount = g.Count(n => n.Created_At >= monthStart),
-                    YearCount = g.Count()
+                    // Count of patients created this year
+                    YearCount = g.Count(n => n.Created_At >= yearStart),
+                    // Count of all active patients (regardless of creation date)
+                    ActiveCount = g.Count(n => n.StatusCode == "AC"),
+                    InactiveCount = g.Count(n => n.StatusCode == "IN"),
+                    TotalCount = g.Count(),
                 })
                 .FirstOrDefaultAsync();
 
-            return counts != null ? (counts.TodayCount, counts.MonthCount, counts.YearCount) : (0, 0, 0);
+            // If counts are found, return the count values, else return zeros
+            return counts != null ? (counts.TodayCount, counts.MonthCount, counts.YearCount, counts.TotalCount ,counts.ActiveCount, counts.InactiveCount) : (0, 0, 0, 0, 0, 0);
         }
-       
+
+
+
         private async Task<string> GeneratePatientID()
         {
             var lastPatient = await unitOfWork.Repository<Patients>()

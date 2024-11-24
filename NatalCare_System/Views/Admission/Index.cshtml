@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Admission Records";
+    ViewData["NavTitle"] = "Admission Records";
     Layout = "_UserLayout";
 }
 
@@ -14,16 +15,11 @@
                     <div class="row align-items-center">
                         <div class="col mr-2">
                             <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
-                                Today Admitted
+                                Total Admitted
                             </div>
                             <div class="h4 fw-bold my-3">
                                 @(ViewBag.TodayRecord ?? 0)
                             </div>
-                        </div>
-                        <div class="col-auto">
-                            <button class="btn btn-info">
-                                <i class="fas fa-clock text-white" style="font-size: 20px;"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -36,16 +32,28 @@
                     <div class="row align-items-center">
                         <div class="col mr-2">
                             <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
-                                Monthly Admitted
+                                Total In-Labor
                             </div>
                             <div class="h4 fw-bold my-3">
                                 @(ViewBag.MonthlyRecord ?? 0)
                             </div>
                         </div>
-                        <div class="col-auto">
-                            <button class="btn btn-warning">
-                                <i class="fas fa-calendar" style="font-size: 20px;"></i>
-                            </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow py-2 card-selected">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
+                                Total Pospartum Care
+                            </div>
+                            <div class="h4 fw-bold my-3">
+                                @(ViewBag.MonthlyRecord ?? 0)
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -55,7 +63,7 @@
 
     <div class="mb-4 mt-2 d-flex align-items-center justify-content-end gap-3">
         <a class="btn btn-pink d-flex align-items-center gap-2" asp-controller="Admission" asp-action="Create">
-            <i class="fas fa-baby" style="font-size: 18px;"></i>
+            <i class="fas fa-plus" style="font-size: 18px;"></i>
             <strong>Add Admit Patient</strong>
         </a>
     </div>
@@ -88,7 +96,7 @@
                                 <div class="d-flex align-items-center justify-content-center gap-2">
                                     <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Newborn" asp-action="Information" asp-route-id="">
                                         <i class="fa-solid fa-list"></i>
-                                        <span>Record</span>
+                                        <span>Details</span>
                                     </a>
                                     <button class="btn btn-sm btn-outline-danger dlt-Btn">
                                         <i class="fa-solid fa-trash"></i>

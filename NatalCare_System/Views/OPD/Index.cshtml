@@ -7,37 +7,78 @@
 <partial name="Partial/_Navbar" />
 
 <div class="mx-4">
-
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title m-0">Out-Patient(OPD) List</h5>
-            <div>
-                <a class="btn btn-sm btn-secondary d-flex align-items-center" asp-controller="Patient" asp-action="Inactive">
-                    <i class='bx bxs-trash'></i>
-                    <span>Show Temporary Deleted</span>
-                </a>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow py-2 card-selected">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
+                                Total OPD
+                            </div>
+                            <div class="h4 fw-bold my-3">
+                                @(ViewBag.TodayRecord ?? 0)
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="card-body">
-            <div class="mb-4 d-flex align-items-center ">
-                <a class="btn btn-sm btn-pink d-flex align-items-center gap-2" asp-controller="Patient" asp-action="Inactive">
-                    <i class='bx bxs-plus-circle' style="font-size: 24px;"></i>
-                    <strong>Add New</strong>
-                </a>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow py-2 card-selected">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
+                                Total In-Labor
+                            </div>
+                            <div class="h4 fw-bold my-3">
+                                @(ViewBag.MonthlyRecord ?? 0)
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div class=" table-responsive">
-                <table id="opdTable" class="table">
-                    <thead>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow py-2 card-selected">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
+                                Total Pospartum Care
+                            </div>
+                            <div class="h4 fw-bold my-3">
+                                @(ViewBag.MonthlyRecord ?? 0)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-4 mt-2 d-flex align-items-center justify-content-end gap-3">
+        <a class="btn btn-pink d-flex align-items-center gap-2" asp-controller="Admission" asp-action="Create">
+            <i class="fas fa-plus" style="font-size: 18px;"></i>
+            <strong>Add OPD Patient</strong>
+        </a>
+    </div>
+
+
+    <div class="card shadow-sm card-selected">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="newbornTable" class="table table-hover table-striped table-datatable">
+                    <thead class="border-bottom-2">
                         <tr>
                             <th>Case No</th>
-                            <th>Lastname</th>
-                            <th>Firstname</th>
-                            <th>Middlename</th>
+                            <th>Patient Name</th>
                             <th>Age</th>
-                            <th>Address</th>
-                            <th>Date of Birth</th>
+                            <th>Date & Time Admitted</th>
+                            <th>Patient Status</th>
                             <th>Date Added</th>
                             <th class="text-center">Action</th>
                         </tr>
@@ -45,31 +86,24 @@
                     <tbody>
                         <tr>
                             <td>P-01</td>
-                            <td>Pepito</td>
-                            <td>Jen</td>
-                            <td>Suarez</td>
+                            <td>Suarez Suarez Pepito</td>
                             <td>21</td>
-                            <td>Mabolo Cebu City</td>
-                            <td>05/04/2024</td>
+                            <td>Nov 22, 2024 3 PM</td>
+                            <td>In Labor</td>
                             <td>05/04/2024</td>
                             <td>
-                                <div class="d-flex align-items-center justify-content-center gap-4">
-                                    <a class="text-dark" href="#">
-                                        <i class="fa-solid fa-list" style="font-size: 24px;"></i>
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                    <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Newborn" asp-action="Information" asp-route-id="">
+                                        <i class="fa-solid fa-list"></i>
+                                        <span>Record</span>
                                     </a>
-
-                                    <a class="text-success" href="#">
-                                        <i class="fa-solid fa-pen-to-square" style="font-size: 24px;"></i>
-                                    </a>
-
-                                    <a class="text-danger" href="#">
-                                        <i class="fa-solid fa-trash-can" style="font-size: 24px;"></i>
-                                    </a>
-
+                                    <button class="btn btn-sm btn-outline-danger dlt-Btn">
+                                        <i class="fa-solid fa-trash"></i>
+                                        <span>Delete</span>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
-                       
 
                     </tbody>
                 </table>
@@ -82,36 +116,16 @@
 
 
 
-<!-- jQuery -->
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-
 
 <script>
 
     document.addEventListener("DOMContentLoaded", function () {
 
-        // Initialize DataTables
-        $('#opdTable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: false,
-            responsive: true,
-            columnDefs: [{ targets: [0, 0], orderable: false }],
-            language: {
-                paginate: {
-                    previous: "Previous", // Change "Previous"
-                    next: "Next" // Change "Next"
-                }
-            }
-        });
-
-
     });
 
 </script>
+
+
 
 
 

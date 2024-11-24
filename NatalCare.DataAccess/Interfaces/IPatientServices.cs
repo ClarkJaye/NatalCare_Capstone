@@ -19,6 +19,6 @@ namespace NatalCare.DataAccess.Interfaces
         Task<CommonResponse> RetrievedAync(string id, string userId);
 
         //ViewBag
-        Task<(int todayCount, int monthCount, int yearCount)> GetPatientCountsAsync();
+        Task<(int todayCount, int monthCount, int yearCount, int TotalCount, int activeCount, int inactiveCount)> GetPatientCountsAsync();
     }
 }

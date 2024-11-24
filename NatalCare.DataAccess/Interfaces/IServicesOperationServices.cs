@@ -58,12 +58,15 @@ namespace NatalCare.DataAccess.Interfaces
         //------ DELIVERY ------// 
         Task<List<Delivery>> GetDeletedDeliveryRecords(string patientId);
         Task<List<Delivery>> GetDeliveryRecords(string patientId);
+        Task<Delivery> GetDeliveryRecord(string patientId, string caseno);
         //CRUD
         Task<CommonResponse> AddDeliveryRecordAsync(Delivery delivery, string patientId, string userId);
         Task<CommonResponse> DeleteDeliveryRecordAsync(string caseNo, string userId);
         Task<GeneralResponse> GetDeliveryRecordAsync(string caseNo);
         Task<CommonResponse> UpdateDeliveryRecordAsync(Delivery delivery, string userId);
         Task<CommonResponse> RetrievedDeliveryAync(string caseno, string userId);
+        //CLINICAL SHEET
+        Task<ClinicalFaceSheet> GetClinicalSheetRecords(string patientId, string deliveryId);    
 
     }
 }

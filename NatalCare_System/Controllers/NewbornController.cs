@@ -137,6 +137,11 @@ namespace NatalCare_System.Controllers
             }
         }
         //INFORMATION
+        public async Task<IActionResult> MedicalRecords(string id)
+        {
+            var newborn = await newbornServices.GetGeneralInformation(id);
+            return View(newborn);
+        }
         public async Task<IActionResult> Information(string id)
         {
             try

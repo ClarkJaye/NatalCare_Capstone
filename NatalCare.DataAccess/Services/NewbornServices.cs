@@ -31,6 +31,15 @@ namespace NatalCare.DataAccess.Services
             .GetAllAsync(p => p.StatusCode == "DL", includeProperties: "CreatedBy");
             return record.ToList();
         }
+        public async Task<Newborn> GetGeneralInformation(string id)
+        {
+            var newborn = await unitOfWork.Repository<Newborn>().GetFirstOrDefaultAsync(p => p.NewbornID == id, includeProperties: "Patient");
+
+            if (newborn == null)
+                return new Newborn();
+
+            return newborn;
+        }
 
 
         public async Task<GeneralResponse> GetInformation(string id)

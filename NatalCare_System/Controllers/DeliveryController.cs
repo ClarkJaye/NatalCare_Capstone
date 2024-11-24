@@ -12,21 +12,53 @@ namespace NatalCare_System.Controllers
     {
         private readonly IPatientServices patientServices;
         private readonly IServicesOperationServices serviceServices;
+        private readonly ISelectListServices selectListServices;
 
-        public DeliveryController(IPatientServices patientServices, IServicesOperationServices serviceServices)
+
+        public DeliveryController(IPatientServices patientServices, IServicesOperationServices serviceServices, ISelectListServices selectListServices)
         {
             this.patientServices = patientServices;
             this.serviceServices = serviceServices;
+            this.selectListServices = selectListServices;
         }
 
         public async Task<IActionResult> Index(string patientId, string caseno)
         {
             var patient = await patientServices.GetInformation(patientId);
-            return View();
+            var deliveryRecord = await serviceServices.GetDeliveryRecord(patientId, caseno);
+            if (deliveryRecord.CaseNo == null)
+            {
+                TempData["error"] = "No record found!";
+                if (patient.PatientID != null)
+                {
+                    return RedirectToAction("MedicalRecords", "Patient", new { id = patient.PatientID });
+                }
+                return RedirectToAction("Index", "Patient");
+            }
+
+            var clinicalSheetRecord = await serviceServices.GetClinicalSheetRecords(patientId, deliveryRecord.CaseNo);
+
+            var viewModel = new DeliveryRecordVM
+            {
+                Patient = patient,
+                Delivery = deliveryRecord,
+            };
+            return View(viewModel);
         }
 
-        public IActionResult DeliveryRecords(string patientId)
+        //CLINICAL SHEETS 
+        public IActionResult ClinicalRecords(string patientId, string caseno)
         {
+            ViewData["DeliveryId"] = caseno;
+            return ViewComponent("ClinicalSheetRecords", new { patientId = patientId, caseno = caseno });
+        }
+
+
+        public async Task<IActionResult> DeliveryRecords(string patientId)
+        {
+            ViewData["newbornList"] = await selectListServices.GetAllNewbornSelectListAsync(patientId);
+            ViewData["prenatalList"] = await selectListServices.GetAllPrenatalSelectListAsync(patientId);
+            ViewData["dlstatusList"] = await selectListServices.GetDeliveryStatusSelectListAsync();
             return ViewComponent("DeliveryRecords", new { patientId = patientId });
         }
         //ADD 

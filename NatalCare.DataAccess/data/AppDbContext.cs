@@ -24,6 +24,7 @@ namespace NatalCare.DataAccess.data
 
         //Services
         public DbSet<Delivery> Delivery { get; set; }
+        public DbSet<ClinicalFaceSheet> ClinicalFaceSheet { get; set; }
         public DbSet<DeliveryStatus> DeliveryStatus { get; set; }
         public DbSet<Prenatal> Prenatal { get; set; }
         public DbSet<PrenatalVisit> PrenatalVisit { get; set; }
@@ -223,6 +224,7 @@ namespace NatalCare.DataAccess.data
                 typeof(PrenatalVisit),
                 typeof(NewbornHearing),
                 typeof(Payments),
+                typeof(ClinicalFaceSheet),
             };
             foreach (var entity in entitiesWithCreatedAt)
             {

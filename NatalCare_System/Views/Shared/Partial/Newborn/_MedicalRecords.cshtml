@@ -1,20 +1,13 @@
-﻿@model NatalCare.Models.Entities.Patients
+﻿@model NatalCare.Models.Entities.Newborn
 
 <div class="col-md-9">
-    <div id="medicalCard" class="card card-selected mb-5" data-patient-id="@Model.PatientID">
+    <div id="medicalCard" class="card card-selected mb-5" data-patient-id="@Model.MotherID">
         <div class="card-body">
             <h5 class="card-title mb-4">Medical Records</h5>
             <!-- Tabs for Services -->
             <ul class="nav nav-tabs" id="patientTabs" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="prenatal-tab" data-bs-toggle="tab" href="#prenatal" role="tab">Prenatal</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="delivery-tab" data-bs-toggle="tab" href="#delivery" role="tab">Delivery</a>
-                </li>
-              
-                <li class="nav-item">
-                    <a class="nav-link" id="screening-tab" data-bs-toggle="tab" href="#screening" role="tab">Newborn Screening</a>
+                    <a class="nav-link active" id="screening-tab" data-bs-toggle="tab" href="#screening" role="tab">Newborn Screening</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="hearing-tab" data-bs-toggle="tab" href="#hearing" role="tab">Newborn Hearing</a>
@@ -23,20 +16,11 @@
 
             <!-- Tab Content -->
             <div class="tab-content mt-4">
-                <!-- Prenatal Tab -->
-                <div class="tab-pane fade show active" id="prenatal" role="tabpanel">
-                </div>
-
-                <!-- Delivery Tab -->
-                <div class="tab-pane fade" id="delivery" role="tabpanel">
-                </div>
-            
-
                 <!--  Screening Tab  -->
                 <div class="tab-pane fade" id="screening" role="tabpanel">
                 </div>
 
-                <!-- Hearing Tab -->
+                <!-- Hearing Tab --> 
                 <div class="tab-pane fade" id="hearing" role="tabpanel">
                 </div>
 
@@ -56,12 +40,6 @@
             var url = ''; 
 
             switch (tabId) {
-                case '#prenatal':
-                    url = '/Prenatal/PrenatalRecords?patientId=' + patientId;
-                    break;
-                case '#delivery':
-                    url = '/Delivery/DeliveryRecords?patientId=' + patientId;
-                    break;
                 case '#screening':
                     url = '/NewbornScreening/ScreeningRecords?patientId=' + patientId;
                     break;
@@ -82,17 +60,3 @@
     });
 
 </script>
-
-
-
-
-
-
-
-@*  <li class="nav-item">
-        <a class="nav-link" id="family-planning-tab" data-bs-toggle="tab" href="#family-planning" role="tab">Family Planning</a>
-    </li> *@
-@*   <!-- Family Planning Tab -->
-    <div class="tab-pane fade" id="family-planning" role="tabpanel">
-        @await Component.InvokeAsync("FamilyPlanningRecords", new { patientId = Model.PatientID })
-    </div> *@

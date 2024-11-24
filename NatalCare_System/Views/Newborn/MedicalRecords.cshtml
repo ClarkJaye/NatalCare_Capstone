@@ -5,6 +5,7 @@
     Layout = "_UserLayout";
 }
 
+
 <!-- NAVBAR -->
 <partial name="Partial/_Navbar" />
 
@@ -42,10 +43,11 @@
 
                             <div class="mb-2">
                                 <h5 class="fw-bold m-0 text-capitalize">@Model.FirstName @Model.MiddleName @Model.LastName</h5>
-                                <span  style="font-size: 14px;">Newborn Full Name</span>
+                                <span style="font-size: 14px;">Newborn Full Name</span>
                             </div>
 
                             <div class="mb-2">
+                                <input type="hidden" id="patID" name="patientID" value="@Model.Patient?.PatientID" />
                                 <h5 class="m-0 text-capitalize">@Model.Patient?.FirstName @Model.Patient?.MiddleName @Model.Patient?.LastName</h5>
                                 <span style="font-size: 14px;">Mother Full Name</span>
                             </div>
@@ -69,7 +71,7 @@
         </div>
 
         <!-- Right Content: Patient Information Partial -->
-        <partial name="Partial/Newborn/_NewbornInformation" />
+        <partial name="Partial/Newborn/_MedicalRecords" />
     </div>
 </div>
 

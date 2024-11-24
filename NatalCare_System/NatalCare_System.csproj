@@ -21,7 +21,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Shared\Partial\Delivery\" />
     <Folder Include="wwwroot\lib\microsoft\signalr\dist\browser\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Newborn\MedicalRecords.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

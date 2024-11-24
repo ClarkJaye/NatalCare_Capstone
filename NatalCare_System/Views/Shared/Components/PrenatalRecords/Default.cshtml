@@ -51,17 +51,17 @@
                         <td style="max-width: 200px; word-wrap: break-word;">@item.Notes</td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
-                                <a asp-controller="Prenatal" asp-action="PrenatalRecord" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-sm btn-outline-secondary">
+                                <a asp-controller="Prenatal" asp-action="PrenatalRecord" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-outline-secondary">
                                     <i class="fa-solid fa-list"></i>
-                                    <span>Add Records</span>
+                                    @* <span>Add Records</span> *@
                                 </a>
-                                <button class="btn btn-sm btn-outline-primary edit-Btn" data-caseno="@item.CaseNo">
+                                <button class="btn btn-outline-primary editPre-Btn" data-caseno="@item.CaseNo">
                                     <i class="fa-solid fa-pen-to-square"></i>
-                                    <span>Edit</span>
+                                    @* <span>Edit</span> *@
                                 </button>
-                                <button class="btn btn-sm btn-outline-danger dlt-Btn" data-caseno="@item.CaseNo">
+                                <button class="btn btn-outline-danger dltPre-Btn" data-caseno="@item.CaseNo">
                                     <i class="fa-solid fa-trash"></i>
-                                    <span>Delete</span>
+                                    @* <span>Delete</span> *@
                                 </button>
                             </div>
                         </td>
@@ -262,12 +262,12 @@
         UpdatePrenatal();
     });
 
-    $(".edit-Btn").on("click", function (e) {
+    $(".editPre-Btn").on("click", function (e) {
         var caseNo = $(this).data('caseno');
         EditPrenatal(caseNo);
     });
         
-    $(".dlt-Btn").on("click", function (e) {
+    $(".dltPre-Btn").on("click", function (e) {
         var caseNo = $(this).data('caseno');
         DeletePrenatal(caseNo);
     });
@@ -413,5 +413,4 @@
             }
         });
     }
-
 </script>

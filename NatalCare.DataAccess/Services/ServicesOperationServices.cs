@@ -673,6 +673,15 @@ namespace NatalCare.DataAccess.Services
             }
             return record.ToList();
         }
+        public async Task<Delivery> GetDeliveryRecord(string patientId, string caseno)
+        {
+            var record = await unitOfWork.Repository<Delivery>().GetFirstOrDefaultAsync(p => p.PatientID == patientId && p.CaseNo == caseno);
+            if (record == null)
+            {
+                return new Delivery();
+            }
+            return record;
+        }
         public async Task<List<Delivery>> GetDeliveryRecords(string patientId)
         {
             var record = await unitOfWork.Repository<Delivery>().GetAllAsync(p => p.PatientID == patientId && p.StatusCode == "AC", includeProperties: "Newborn,DeliveryStatus");
@@ -813,6 +822,17 @@ namespace NatalCare.DataAccess.Services
             unitOfWork.Repository<Delivery>().Update(record);
             await unitOfWork.SaveAsync();
             return new CommonResponse(true, "Record Retrieved Successfully.");
+        }
+
+        //Clinical Sheets Records
+        public async Task<ClinicalFaceSheet> GetClinicalSheetRecords(string patientId, string deliveryId)
+        {
+            var record = await unitOfWork.Repository<ClinicalFaceSheet>().GetFirstOrDefaultAsync(p => p.PatientID == patientId && p.StatusCode == "AC");
+            if (record == null)
+            {
+                return new ClinicalFaceSheet();
+            }
+            return record;
         }
 
 

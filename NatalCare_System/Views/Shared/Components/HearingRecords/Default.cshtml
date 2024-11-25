@@ -2,33 +2,40 @@
 
 
 <h6 class="px-2">Newborn Hearing Records</h6>
-<div class="d-flex justify-content-end my-3 gap-3">
-    <button class="btn btn-sm btn-pink" id="addNewHRBtn" data-patient-id="@Model.FirstOrDefault()?.PatientID">
-        <i class="fas fa-plus"></i>
-        <span>Add New Hearing Record</span>
-    </button>
-    <button id="displayHRDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
-        <i class="fas fa-trash"></i>
-        <span>Deleted History Records</span>
-    </button>
-</div>
 
-<div class="d-flex align-items-center gap-2 mb-2">
+@if (ViewContext.RouteData.Values["controller"]?.ToString() != "NewbornHearing")
+{
+    <div class="d-flex justify-content-end my-3 gap-3">
+        <button class="btn btn-sm btn-pink" id="addNewHRBtn" data-patient-id="@Model.FirstOrDefault()?.PatientID">
+            <i class="fas fa-plus"></i>
+            <span>Add New Hearing Record</span>
+        </button>
+        <button id="displayHRDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-trash"></i>
+            <span>Deleted History Records</span>
+        </button>
+    </div>
+}
+
+@* <div class="d-flex align-items-center gap-2 mb-2">
     <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
-</div>
+</div> *@
 
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Case No##</th>
+                <th>Case No#</th>
                 <th>Date Visit</th>
                 <th>Baby Name</th>
                 <th>Test Date</th>
                 <th>Baby Status</th>
                 <th>Test Result</th>
                 <th>Notes</th>
-                <th class="text-center">Action</th>
+                @if (ViewContext.RouteData.Values["controller"]?.ToString() != "NewbornHearing")
+                {
+                    <th class="text-center">Action</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -44,22 +51,25 @@
                         <td>@item.BabyStatus</td>
                         <td>@item.HearingResults</td>
                         <td style="max-width: 200px; word-wrap: break-word;">@item.Notes</td>
-                        <td>
-                            <div class="d-flex align-items-center justify-content-center gap-2">
-                                <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1 detailHR-Btn" data-hearingid="@item.HearingNo">
-                                    <i class="fa-solid fa-list"></i>
-                                    <span>Details</span>
-                                </a>
-                                <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1 editHR-Btn" data-hearingid="@item.HearingNo">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    <span>Edit</span>
-                                </a>
-                                <button class="btn btn-sm btn-outline-danger dltHR-Btn" data-hearingid="@item.HearingNo">
-                                    <i class="fa-solid fa-trash"></i>
-                                    <span>Delete</span>
-                                </button>
-                            </div>
-                        </td>
+                        @if (ViewContext.RouteData.Values["controller"]?.ToString() != "NewbornHearing")
+                        {
+                            <td>
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                    <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1 detailHR-Btn" data-hearingid="@item.HearingNo">
+                                        <i class="fa-solid fa-list"></i>
+                                        <span>Details</span>
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1 editHR-Btn" data-hearingid="@item.HearingNo">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <span>Edit</span>
+                                    </a>
+                                    <button class="btn btn-sm btn-outline-danger dltHR-Btn" data-hearingid="@item.HearingNo">
+                                        <i class="fa-solid fa-trash"></i>
+                                        <span>Delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        }
                     </tr>
                 }
             }

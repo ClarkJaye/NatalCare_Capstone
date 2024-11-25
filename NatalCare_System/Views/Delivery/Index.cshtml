@@ -1,6 +1,6 @@
-﻿@using NatalCare.Models.ViewModel.Patient
+﻿@* @using NatalCare.Models.ViewModel.Patient
 @model DeliveryRecordVM
-
+ *@
 @{
     ViewData["Title"] = "Patients / Delivery Records";
     Layout = "_UserLayout";
@@ -370,7 +370,8 @@
                                         <td>strong</td>
                                         <td>Cepholic</td>
                                     </tr>
-                                    @for (var i= 0; i <= 10; i++){
+                                    @for (var i = 0; i <= 10; i++)
+                                    {
                                         <tr>
                                             <td></td>
                                             <td></td>
@@ -386,7 +387,6 @@
                                             <td></td>
                                         </tr>
                                     }
-
                                 </tbody>
                             </table>
                         </div>

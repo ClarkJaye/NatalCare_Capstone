@@ -2,20 +2,23 @@
 
 
 <h6 class="px-2">Newborn Screening Records</h6>
-<div class="d-flex justify-content-end my-3 gap-3">
-    <button class="btn btn-sm btn-pink" id="addNewSCBtn" data-patient-id="@Model.FirstOrDefault()?.PatientID">
-        <i class="fas fa-plus"></i>
-        <span>Add New Screening Record</span>
-    </button>
-    <button id="displaySNDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
-        <i class="fas fa-trash"></i>
-        <span>Deleted History Records</span>
-    </button>
-</div>
 
-<div class="d-flex align-items-center gap-2 mb-2">
+@if (ViewContext.RouteData.Values["controller"]?.ToString() != "NewbornScreening")
+{
+    <div class="d-flex justify-content-end my-3 gap-3">
+        <button class="btn btn-sm btn-pink" id="addNewSCBtn" data-patient-id="@Model.FirstOrDefault()?.PatientID">
+            <i class="fas fa-plus"></i>
+            <span>Add New Screening Record</span>
+        </button>
+        <button id="displaySNDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-trash"></i>
+            <span>Deleted History Records</span>
+        </button>
+    </div>
+}
+@* <div class="d-flex align-items-center gap-2 mb-2">
     <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
-</div>
+</div> *@
 
 <div class="table-responsive">
     <table class="table table-striped">
@@ -32,7 +35,10 @@
                 <th>Place of Collection</th>
                 <th>Screening Results</th>
                 <th>Remarks</th>
-                <th class="text-center">Action</th>
+                @if (ViewContext.RouteData.Values["controller"]?.ToString() != "NewbornScreening")
+                {
+                    <th class="text-center">Action</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -52,22 +58,25 @@
                         <td>@item.PlaceOfCollection</td>
                         <td>@item.ScreeningResults</td>
                         <td>@item.Remarks</td>
-                        <td>
-                            <div class="d-flex align-items-center justify-content-center gap-2">
-                                <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1 detailScreening-Btn" data-caseno="@item.ScreeningNo">
-                                    <i class="fa-solid fa-list"></i>
-                                    <span>Details</span>
-                                </a>
-                                <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1 editScreening-Btn" data-caseno="@item.ScreeningNo">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    <span>Edit</span>
-                                </a>
-                                <button class="btn btn-sm btn-outline-danger dltScreening-Btn" data-caseno="@item.ScreeningNo">
-                                    <i class="fa-solid fa-trash"></i>
-                                    <span>Delete</span>
-                                </button>
-                            </div>
-                        </td>
+                        @if (ViewContext.RouteData.Values["controller"]?.ToString() != "NewbornScreening")
+                        {
+                            <td>
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                    <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1 detailScreening-Btn" data-caseno="@item.ScreeningNo">
+                                        <i class="fa-solid fa-list"></i>
+                                        <span>Details</span>
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1 editScreening-Btn" data-caseno="@item.ScreeningNo">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <span>Edit</span>
+                                    </a>
+                                    <button class="btn btn-sm btn-outline-danger dltScreening-Btn" data-caseno="@item.ScreeningNo">
+                                        <i class="fa-solid fa-trash"></i>
+                                        <span>Delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        }
                     </tr>
                 }
             }

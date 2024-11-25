@@ -5,3 +5,127 @@
 
 <!-- NAVBAR -->
 <partial name="Partial/_Navbar" />
+
+<div class="mx-4">
+    <div class="row">
+        <div class="col-md-4 mb-sm-3">
+            <!-- Delivery Type Distribution (Doughnut Graph) -->
+            <div class="card h-100 p-3">
+                <h6 class="card-title">Delivery Type Distribution</h6>
+                <canvas id="doughnutGraph"></canvas>
+            </div>
+        </div>
+        <div class="col-md-4 mb-sm-3">
+            <!-- Deliveries Attended by Skilled Health Professionals (Pie Graph) -->
+            <div class="card h-100 p-3">
+                <h6 class="card-title">Deliveries Attended by Skilled Health Professionals</h6>
+                <canvas id="pieGraph"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3 mb-4">
+                <h6 class="card-title">Total No# Live Births</h6>
+                <div class="d-flex align-items-center justify-content-end gap-3">
+                    <a href="#" class="btn btn-sm btn-danger">PDF</a>
+                    <a href="#" class="btn btn-sm btn-success">Excel</a>
+                </div>
+            </div>
+
+            <div class="card p-3 mb-4">
+                <h6 class="card-title">Total No# Live Births</h6>
+                <div class="d-flex align-items-center justify-content-end gap-3">
+                    <a href="#" class="btn btn-sm btn-danger">PDF</a>
+                    <a href="#" class="btn btn-sm btn-success">Excel</a>
+                </div>
+            </div>
+
+            <div class="card p-3 mb-4">
+                <h6 class="card-title">Total No# Live Births</h6>
+                <div class="d-flex align-items-center justify-content-end gap-3">
+                    <a href="#" class="btn btn-sm btn-danger">PDF</a>
+                    <a href="#" class="btn btn-sm btn-success">Excel</a>
+                </div>
+            </div>
+
+            <div class="card p-3 mb-4">
+                <h6 class="card-title">Total No# Live Births</h6>
+                <div class="d-flex align-items-center justify-content-end gap-3">
+                    <a href="#" class="btn btn-sm btn-danger">PDF</a>
+                    <a href="#" class="btn btn-sm btn-success">Excel</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Delivery Types (Doughnut Chart)
+        const deliveryData = {
+            labels: ['Cesarean', 'Vaginal'],
+            datasets: [{
+                label: 'Delivery Type Statistics',
+                data: [80, 120], // Example data: 80 Cesarean, 120 Vaginal
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)', // Cesarean
+                    'rgba(54, 162, 235, 0.7)'  // Vaginal
+                ],
+                hoverOffset: 4
+            }]
+        };
+        const deliveryConfig = {
+            type: 'doughnut',
+            data: deliveryData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: false,
+                        text: 'Delivery Type Distribution'
+                    }
+                }
+            }
+        };
+        new Chart(document.getElementById('doughnutGraph'), deliveryConfig);
+
+        // Skilled Health Professionals (Pie Chart)
+        const skilledData = {
+            labels: ['Physician', 'Nurse', 'Midwife'],
+            datasets: [{
+                label: 'Skilled Health Professionals',
+                data: [60, 40, 100], // Example data
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.7)', // Physician
+                    'rgba(153, 102, 255, 0.7)', // Nurse
+                    'rgba(255, 159, 64, 0.7)'   // Midwife
+                ],
+                hoverOffset: 4
+            }]
+        };
+        const skilledConfig = {
+            type: 'pie',
+            data: skilledData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: false,
+                        text: 'Deliveries Attended by Skilled Health Professionals'
+                    }
+                }
+            }
+        };
+        new Chart(document.getElementById('pieGraph'), skilledConfig);
+    });
+</script>

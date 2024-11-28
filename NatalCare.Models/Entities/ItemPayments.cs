@@ -18,5 +18,7 @@ namespace NatalCare.Models.Entities
 
         public int? Quantity { get; set; }
 
+        public decimal? PhilHealthCovered { get; set; }
+
     }
 }

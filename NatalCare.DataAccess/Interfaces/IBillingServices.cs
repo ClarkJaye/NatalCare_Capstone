@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NatalCare.Models.DTOs;
+using NatalCare.Models.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +15,13 @@ namespace NatalCare.DataAccess.Interfaces
 
         Task<CommonResponse> createServices(string itemName, string description, decimal price);
 
+        Task<SearchResultResponse> searchPatient(string patientName);
+
+        Task<List<Items>> allItems();
+
+        Task<List<Servicesss>> allServices();
+
+        Task<CommonResponse> createInvoice(BillingDTO billingDTO);
 
     }
 

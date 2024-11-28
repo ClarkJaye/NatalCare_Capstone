@@ -5,17 +5,17 @@ namespace NatalCare_System.ViewComponents
 {
     public class PatientsRecordsViewComponent : ViewComponent
     {
-        private readonly IPatientServices patientServices;
+        private readonly IBillingServices billingServices;
 
-        public PatientsRecordsViewComponent(IPatientServices patientServices)
+        public PatientsRecordsViewComponent(IBillingServices billingServices)
         {
-            this.patientServices = patientServices;
+            this.billingServices = billingServices;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
-        {
-            var records = await patientServices.GetPatients();
-            return View(records);
-        }
+        //public async Task<IViewComponentResult> InvokeAsync()
+        //{
+        //    var records = await billingServices.GetRecords();
+        //    return View(records);
+        //}
     }
 }

@@ -1,7 +1,17 @@
-﻿@{
+﻿
+
+@{
     ViewData["Title"] = "Invoice List";
     Layout = "_UserLayout";
 }
 
 <!-- NAVBAR -->
 <partial name="Partial/_Navbar" />
+
+<div class="mx-4">
+    <div class="card shadow-sm card-selected">
+        <div class="card-body" id="">
+@*             @await Component.InvokeAsync("InvoiceRecords") *@
+        </div>
+    </div>
+</div>

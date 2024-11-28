@@ -675,6 +675,7 @@ namespace NatalCare.DataAccess.Services
             }
             return record.ToList();
         }
+
         public async Task<CommonResponse> AddDeliveryRecordAsync(Delivery delivery, string patientId, string userId)
         {
             if (delivery == null)

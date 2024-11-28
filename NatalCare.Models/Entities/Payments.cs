@@ -11,12 +11,13 @@ namespace NatalCare.Models.Entities
         [Required]
         public int? PaymentID { get; set; }
         public decimal? Total_Amount { get; set; }
+        public decimal? Final_Amount { get; set; }
         [Required]
         public string? Payment_Status { get; set; }
         public decimal? Discount { get; set; }
         public decimal? PhilHealth_Deduction { get; set; }
-       
 
+        public string? Notes { get; set; }
 
         // Foreign Key
         [Required]
@@ -33,6 +34,7 @@ namespace NatalCare.Models.Entities
         public User? CreatedBy { get; set; }
 
         public DateTime? Updated_At { get; set; }
+
         [Column("Updated_By")]
         public string? PatientUpdatedBy { get; set; }
         [ForeignKey("PatientUpdatedBy")]

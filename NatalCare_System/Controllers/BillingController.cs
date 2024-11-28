@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 using NatalCare.DataAccess.Interfaces;
+using NatalCare.Models.DTOs;
 
 namespace NatalCare_System.Controllers
 {
@@ -8,9 +9,11 @@ namespace NatalCare_System.Controllers
     {
 
         private readonly IBillingServices _billing;
+        private readonly ISelectListServices selectListServices;
 
-        public BillingController(IBillingServices billing) { 
+        public BillingController(IBillingServices billing, ISelectListServices selectListServices) { 
             _billing = billing;
+            this.selectListServices = selectListServices;
         }
 
         public IActionResult Index()
@@ -23,7 +26,16 @@ namespace NatalCare_System.Controllers
             return View();
         }
 
-        public IActionResult GenerateInvoice()
+        public async Task<IActionResult> GenerateInvoice()
+        {
+            ViewData["staffList"] = await selectListServices.GetAllStaffSelectListAsync();
+
+            BillingDTO billingDTO = new BillingDTO();
+
+            return View(billingDTO);
+        }
+
+        public IActionResult PrintInvoice()
         {
             return View();
         }
@@ -61,6 +73,63 @@ namespace NatalCare_System.Controllers
             }
 
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PatientSearchResult(string patientName)
+        {
+
+            var (result, list) = await _billing.searchPatient(patientName);
+
+            if (result)
+            {
+                return Json(list);
+            }
+            else
+            {
+                return Json(null);
+            }
+        }
+
+
+
+        
+        [HttpPost]
+        public async Task<IActionResult> CreateInvoice(BillingDTO billingDTO, string action)
+        {
+            var (result, message) = await _billing.createInvoice(billingDTO);
+
+            if (result)
+            {        
+                if (action == "MakePayment")
+                {
+                    return RedirectToAction(nameof(PrintInvoice));
+                }
+                else if (action == "SaveAndPayLater")
+                {
+                    return RedirectToAction(nameof(InvoiceList));
+                }
+            }
+            return RedirectToAction(nameof(Index));
+
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> AllItems()
+        {
+            var allItems = await _billing.allItems();
+
+            return Json(allItems);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AllServices()
+        {
+            var allServices = await _billing.allServices();
+
+            return Json(allServices);
         }
 
     }

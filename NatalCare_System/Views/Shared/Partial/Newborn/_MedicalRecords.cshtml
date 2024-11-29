@@ -18,10 +18,12 @@
             <div class="tab-content mt-4">
                 <!--  Screening Tab  -->
                 <div class="tab-pane fade show active" id="screening" role="tabpanel">
+                    @await Component.InvokeAsync("ScreeningsRecords", new { patientId = Model.MotherID })
                 </div>
 
                 <!-- Hearing Tab --> 
                 <div class="tab-pane fade" id="hearing" role="tabpanel">
+                    @await Component.InvokeAsync("HearingRecords", new { patientId = Model.MotherID })
                 </div>
 
             </div>
@@ -29,7 +31,7 @@
     </div>
 </div>
 
-<script>
+@* <script>
     $(document).ready(function () {
         // Retrieve patientId from the card's data attribute
         var patientId = $('#medicalCard').data('patient-id');
@@ -59,4 +61,4 @@
         $('a[data-bs-toggle="tab"].active').trigger('shown.bs.tab');
     });
 
-</script>
+</script> *@

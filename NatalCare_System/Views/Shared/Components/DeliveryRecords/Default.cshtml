@@ -15,6 +15,7 @@
 @* <div class="d-flex align-items-center gap-2 mb-2">
     <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
 </div> *@
+
 <!-- Patient Table-->
 <div class="table-responsive" style="max-height:600px;">
     <table class="table table-striped">
@@ -25,7 +26,7 @@
                 <th>Time Admitted</th>
                 <th>Date Discharged</th>
                 <th>Ward No#</th>
-                <th>Status</th>
+                <th>Patient Status</th>
                 <th>Baby Name</th>
                 <th>Notes</th>
                 <th class="text-center">Action</th>
@@ -60,17 +61,14 @@
                         <td style="max-width: 200px; word-wrap: break-word;">@item.Notes</td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
-                                <a asp-controller="Delivery" asp-action="Index" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-sm btn-outline-secondary">
-                                    <i class="fa-solid fa-list"></i>
-                                    <span>Records</span>
+                                <a asp-controller="Delivery" asp-action="Index" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-outline-secondary">
+                                    <i class="fa-solid fa-folder-open"></i>
                                 </a>
-                                <button class="btn btn-sm btn-outline-primary edit-Btn" data-caseno="@item.CaseNo">
+                                <button class="btn btn-outline-primary edit-Btn" data-caseno="@item.CaseNo">
                                     <i class="fa-solid fa-pen-to-square"></i>
-                                    <span>Edit</span>
                                 </button>
-                                <button class="btn btn-sm btn-outline-danger dlt-Btn" data-caseno="@item.CaseNo">
+                                <button class="btn btn-outline-danger dlt-Btn" data-caseno="@item.CaseNo">
                                     <i class="fa-solid fa-trash"></i>
-                                    <span>Delete</span>
                                 </button>
                             </div>
                         </td>

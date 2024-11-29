@@ -11,7 +11,7 @@ namespace NatalCare_System.Controllers
     {
         private readonly IProfileAccessServices profileAccessServices;
 
-        public ProfileAccessController(IProfileAccessServices profileAccessServices)
+        public ProfileAccessController(IProfileAccessServices profileAccessServices, IModuleAccessServices moduleAccessServices) : base(moduleAccessServices)
         {
             this.profileAccessServices = profileAccessServices;
         }

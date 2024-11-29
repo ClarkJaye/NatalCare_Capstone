@@ -1,18 +1,31 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NatalCare.DataAccess.Interfaces;
 
 namespace NatalCare_System.Controllers
 {
     [Authorize]
     public class ReportsController : BaseController<ReportsController>
     {
-        public IActionResult Natality()
+        public ReportsController(IModuleAccessServices moduleAccessServices)
+         : base(moduleAccessServices)
         {
+        }
+        public async Task<IActionResult> Natality()
+        {
+            if (!await CheckAccessAsync(9)) // Natality Reports
+            {
+                return RedirectToDashboard();
+            }
             return View();
         }
 
-        public IActionResult Invoices()
+        public async Task<IActionResult> Invoices()
         {
+            if (!await CheckAccessAsync(10)) // Payment Reports
+            {
+                return RedirectToDashboard();
+            }
             return View();
         }
 

@@ -12,13 +12,18 @@ namespace NatalCare_System.Controllers
         private readonly INewbornServices newbornServices;
         private readonly ISelectListServices selectListServices;
 
-        public NewbornController(INewbornServices newbornServices, ISelectListServices selectListServices)
+        public NewbornController(INewbornServices newbornServices, ISelectListServices selectListServices, IModuleAccessServices moduleAccessServices)
+            : base(moduleAccessServices)
         {
             this.newbornServices = newbornServices;
             this.selectListServices = selectListServices;
         }
         public async Task<IActionResult> Index()
         {
+            if (!await CheckAccessAsync(3))
+            {
+                return RedirectToDashboard();
+            }
             var (todayRecordCount, monthlyRecordCount, yearlyRecordCount) = await newbornServices.GetNewbornCountsAsync();
             ViewBag.TodayRecord = todayRecordCount;
             ViewBag.MonthlyRecord = monthlyRecordCount;

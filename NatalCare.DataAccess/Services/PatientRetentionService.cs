@@ -17,7 +17,7 @@ public class PatientRetentionService : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             await CheckAndInactivateOldPatients();
-            await Task.Delay(TimeSpan.FromHours(24), stoppingToken); // Run every minute
+            await Task.Delay(TimeSpan.FromHours(1), stoppingToken); // Run every hour
         }
     }
 

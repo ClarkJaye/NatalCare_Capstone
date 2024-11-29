@@ -13,7 +13,8 @@ namespace NatalCare_System.Controllers
         private readonly IServicesOperationServices serviceServices;
         private readonly ISelectListServices selectListServices;
 
-        public PatientController(IPatientServices patientServices, IServicesOperationServices serviceServices, ISelectListServices selectListServices)
+        public PatientController(IPatientServices patientServices, IServicesOperationServices serviceServices, ISelectListServices selectListServices, IModuleAccessServices moduleAccessServices)
+            : base(moduleAccessServices)
         {
             this.patientServices = patientServices;
             this.serviceServices = serviceServices;
@@ -22,6 +23,10 @@ namespace NatalCare_System.Controllers
 
         public async Task<IActionResult> Index()
         {
+            if (!await CheckAccessAsync(2))
+            {
+               return RedirectToDashboard();
+            }
             // Get all counts in one call
             var (todayRecordCount, monthlyRecordCount, yearlyRecordCount, totalCount, activeCount, inActiveCount) = await patientServices.GetPatientCountsAsync();
             // Pass counts to the view using ViewBag

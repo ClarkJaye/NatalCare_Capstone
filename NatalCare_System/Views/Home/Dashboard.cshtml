@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Dashboard";
+    ViewData["NavTitle"] = "Dashboard";
     Layout = "_UserLayout";
 }
 
@@ -79,7 +80,7 @@
         <h6>Recent Patient</h6>
         <div class="p-2">
 
-            <table class="table table-striped" style="max-height: 600px;">
+            <table class="table table-hover table-striped" style="max-height: 600px;">
                 <thead>
                     <tr>
                         <th>Patent No#</th>
@@ -95,7 +96,7 @@
                 <tbody>
                     @foreach (var patient in Model)
                     {
-                        <tr>
+                        <tr class="align-middle patient-row" data-url="@Url.Action("Information", "Patient", new { id = patient.PatientID })" style="cursor: pointer;">
                             <td>@patient.PatientID</td>
                             <td>@patient.FirstName</td>
                             <td>@patient.MiddleName</td>
@@ -138,7 +139,13 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-
+    // Make rows clickable
+    $('.patient-row').on('click', function (e) {
+        // Prevent navigation when clicking inside buttons or links
+        if (!$(e.target).closest('a, button').length) {
+            window.location.href = $(this).data('url');
+        }
+    });
 
 
     // Line Graph for Patients Statistics

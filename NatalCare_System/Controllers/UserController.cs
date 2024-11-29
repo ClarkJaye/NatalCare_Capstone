@@ -18,7 +18,8 @@ namespace NatalCare_System.Controllers
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
 
-        public UserController(UserManager<User> userManager, RoleManager<Role> roleManager)
+        public UserController(UserManager<User> userManager, RoleManager<Role> roleManager, IModuleAccessServices moduleAccessServices)
+            : base(moduleAccessServices)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -27,6 +28,10 @@ namespace NatalCare_System.Controllers
         // GET: /User/Index
         public async Task<IActionResult> Index()
         {
+            if (!await CheckAccessAsync(12))
+            {
+                return RedirectToDashboard();
+            }
             // Retrieve all users
             var users = await _userManager.Users.Include(a => a.Status).ToListAsync();
 

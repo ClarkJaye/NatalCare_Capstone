@@ -52,17 +52,15 @@
                         <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
                                 <a asp-controller="Prenatal" asp-action="PrenatalRecord" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-outline-secondary">
-                                    <i class="fa-solid fa-list"></i>
-                                    @* <span>Add Records</span> *@
+                                    @* <i class="fa-solid fa-list"></i> *@
+                                    <i class="fa-solid fa-folder-open"></i>
                                 </a>
                                 <button class="btn btn-outline-primary editPre-Btn" data-caseno="@item.CaseNo">
                                     <i class="fa-solid fa-pen-to-square"></i>
-                                    @* <span>Edit</span> *@
                                 </button>
-               @*                  <button class="btn btn-outline-danger dltPre-Btn" data-caseno="@item.CaseNo">
+                                <button class="btn btn-outline-danger dltPre-Btn" data-caseno="@item.CaseNo">
                                     <i class="fa-solid fa-trash"></i>
-                                    <span>Delete</span>
-                                </button> *@
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -99,22 +97,22 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="Gravida-Add" class="control-label">GRAVIDA</label>
-                            <input id="Gravida-Add" name="Gravida" class="form-control" placeholder="Enter number of Gravida" required />
+                            <input type="number" id="Gravida-Add" name="Gravida" class="form-control" placeholder="Enter number of Gravida" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="Para-Add" class="control-label">PARA</label>
-                            <input id="Para-Add" name="Para" class="form-control" placeholder="Enter number of Para" required />
+                            <input type="number" id="Para-Add" name="Para" class="form-control" placeholder="Enter number of Para" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="Abortion-Add" class="control-label">ABORTION</label>
-                            <input id="Abortion-Add" name="Abortion" class="form-control" placeholder="Enter number of Abortion" required />
+                            <input type="number" id="Abortion-Add" name="Abortion" class="form-control" placeholder="Enter number of Abortion" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="StillBirth-Add" class="control-label">STILL BIRTH</label>
-                            <input id="StillBirth-Add" name="StillBirth" class="form-control" placeholder="Enter number of Still Birth" required />
+                            <input type="number" id="StillBirth-Add" name="StillBirth" class="form-control" placeholder="Enter number of Still Birth" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -134,7 +132,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="HRCODE" class="control-label">H.R. Code</label>
-                            <input id="HRCODE-Add" name="HRCODE" class="form-control" placeholder="Enter H.R Code"required />
+                            <input id="HRCODE-Add" name="HRCODE" class="form-control" placeholder="Enter H.R Code" required />
                         </div>
 
                         <div class="col-md-12 mb-3">

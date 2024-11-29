@@ -454,7 +454,7 @@ namespace NatalCare.DataAccess.Services
                 return new GeneralResponse(false, null, "Case No cannot found!");
 
             // Validation checks: Ensure CaseNo is unique if needed.
-            var item = await unitOfWork.Repository<NewbornHearing>().GetFirstOrDefaultAsync(x => x.HearingNo == caseNo, includeProperties: "Newborn,Staff");
+            var item = await unitOfWork.Repository<NewbornHearing>().GetFirstOrDefaultAsync(x => x.HearingNo == caseNo, includeProperties: "Newborn");
             if (item == null)
                 return new GeneralResponse(false, item, "Record not existing.");
 
@@ -481,7 +481,7 @@ namespace NatalCare.DataAccess.Services
                 babyStatus = item.BabyStatus,
                 hearingResult = item.HearingResults,
                 notes = item.Notes,
-                practitioner = item.AttendingPractioner,
+                practitioner = item.AttendingPractitioner,
                 patientId = item.PatientID
             };
 
@@ -501,7 +501,7 @@ namespace NatalCare.DataAccess.Services
             existingRecord.BabyStatus = item.BabyStatus;
             existingRecord.HearingResults = item.HearingResults;
             existingRecord.Notes = item.Notes;
-            existingRecord.AttendingPractioner = item.AttendingPractioner;
+            existingRecord.AttendingPractitioner = item.AttendingPractitioner;
             existingRecord.Updated_At = DateTime.UtcNow;
             existingRecord.HearingUpdatedBy = userId;
 
@@ -567,7 +567,7 @@ namespace NatalCare.DataAccess.Services
                 return new GeneralResponse(false, null, "Case No cannot found!");
 
             // Validation checks: Ensure CaseNo is unique if needed.
-            var item = await unitOfWork.Repository<NewbornScreening>().GetFirstOrDefaultAsync(x => x.ScreeningNo == caseNo, includeProperties: "Newborn,Staff");
+            var item = await unitOfWork.Repository<NewbornScreening>().GetFirstOrDefaultAsync(x => x.ScreeningNo == caseNo, includeProperties: "Newborn");
             if (item == null)
                 return new GeneralResponse(false, item, "Record not existing.");
 
@@ -603,6 +603,7 @@ namespace NatalCare.DataAccess.Services
                 courier = item.Courier,
                 trackingNubmer = item.TrackingNubmer,
                 remarks = item.Remarks,
+                screeningResults = item.ScreeningResults,
                 notes = item.Notes,
                 newbornID = item.NewbornID,
                 attendingPractitioner = item.AttendingPractitioner,

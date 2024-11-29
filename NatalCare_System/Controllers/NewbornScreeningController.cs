@@ -13,7 +13,7 @@ namespace NatalCare_System.Controllers
         private readonly IPatientServices patientServices;
         private readonly IServicesOperationServices serviceServices;
 
-        public NewbornScreeningController(IPatientServices patientServices, IServicesOperationServices serviceServices)
+        public NewbornScreeningController(IPatientServices patientServices, IServicesOperationServices serviceServices, IModuleAccessServices moduleAccessServices) : base(moduleAccessServices)
         {
             this.patientServices = patientServices;
             this.serviceServices = serviceServices;

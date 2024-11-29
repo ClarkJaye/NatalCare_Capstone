@@ -1,9 +1,8 @@
 ﻿@model List<NatalCare.Models.Entities.NewbornHearing>
 
-
 <h6 class="px-2">Newborn Hearing Records</h6>
 
-@if (ViewContext.RouteData.Values["controller"]?.ToString() != "NewbornHearing")
+@if (ViewContext.RouteData.Values["controller"]?.ToString() != "Newborn")
 {
     <div class="d-flex justify-content-end my-3 gap-3">
         <button class="btn btn-sm btn-pink" id="addNewHRBtn" data-patient-id="@Model.FirstOrDefault()?.PatientID">
@@ -30,12 +29,9 @@
                 <th>Baby Name</th>
                 <th>Test Date</th>
                 <th>Baby Status</th>
-                <th>Test Result</th>
+                <th>Hearing Result</th>
                 <th>Notes</th>
-                @if (ViewContext.RouteData.Values["controller"]?.ToString() != "NewbornHearing")
-                {
-                    <th class="text-center">Action</th>
-                }
+                <th class="text-center">ACTION</th>
             </tr>
         </thead>
         <tbody>
@@ -51,23 +47,27 @@
                         <td>@item.BabyStatus</td>
                         <td>@item.HearingResults</td>
                         <td style="max-width: 200px; word-wrap: break-word;">@item.Notes</td>
-                        @if (ViewContext.RouteData.Values["controller"]?.ToString() != "NewbornHearing")
+                        @if (ViewContext.RouteData.Values["controller"]?.ToString() != "Newborn")
                         {
                             <td>
                                 <div class="d-flex align-items-center justify-content-center gap-2">
-                                    <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1 detailHR-Btn" data-hearingid="@item.HearingNo">
+                                    <a class="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-1 detailHR-Btn" data-hearingid="@item.HearingNo">
                                         <i class="fa-solid fa-list"></i>
-                                        <span>Details</span>
                                     </a>
-                                    <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1 editHR-Btn" data-hearingid="@item.HearingNo">
+                                    <a class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-1 editHR-Btn" data-hearingid="@item.HearingNo">
                                         <i class="fa-solid fa-pen-to-square"></i>
-                                        <span>Edit</span>
                                     </a>
-                                    <button class="btn btn-sm btn-outline-danger dltHR-Btn" data-hearingid="@item.HearingNo">
+                                    <button class="btn btn-outline-danger dltHR-Btn" data-hearingid="@item.HearingNo">
                                         <i class="fa-solid fa-trash"></i>
-                                        <span>Delete</span>
                                     </button>
                                 </div>
+                            </td>
+                        }else
+                        {
+                            <td>
+                                <a class="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-1 detailHR-Btn" data-hearingid="@item.HearingNo">
+                                    <i class="fa-solid fa-list"></i>
+                                </a>
                             </td>
                         }
                     </tr>
@@ -127,7 +127,7 @@
 
                         <div class="col-md-12 mb-3">
                             <label for="hearingResult-Add" class="control-label">Hearing Result</label>
-                            <textarea id="hearingResult-Add" name="HearingResult" class="form-control" placeholder="Enter the result" rows="3"></textarea>
+                            <textarea id="hearingResult-Add" name="HearingResults" class="form-control" placeholder="Enter the result" rows="3"></textarea>
                         </div>
 
                         <div class="col-md-12 mb-3">
@@ -137,11 +137,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="practitionerHR-Add" class="control-label">Attending Practitioner</label>
-                            <input id="practitionerHR-Add" name="AttendingPractioner" class="form-control" required />
-
-                          @*   <select id="staff-Add" class="form-select" name="StaffID" required>
-                                <option disabled selected>select encharged staff</option>
-                            </select> *@
+                            <input id="practitionerHR-Add" name="AttendingPractitioner" class="form-control" placeholder="Enter Attending Practitioner" required />
                         </div>
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
@@ -277,13 +273,16 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="practitionerHR-Detail" class="control-label">Attending Practitioner</label>
-                            <input id="practitionerHR-Detail" name="AttendingPractitioner" class="form-control" required />
+                            <input id="practitionerHR-Detail" name="AttendingPractitioner" class="form-control" disabled />
                         </div>
 
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
                             <div class="d-flex align-items-center gap-2">
-                                <button type="submit" class="btn btn-pink">Print</button>
+                                <button class="btn btn-success" type="button">
+                                    <i class="fas fa-save"></i>
+                                    <span>Print</span>
+                                </button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
@@ -396,8 +395,9 @@
             data: { caseNo: caseNo },
             success: function (response) {
                 if (response && response.isSuccess) {
+                    console.log(response);
                     var item = response.item.result;
-                    var newborn = result.item.newborn;
+                    var newborn = response.item.newborn;
 
                     // Set values for editable fields
                     $("#caseNoHR-Edit").val(item.hearingNo);
@@ -407,7 +407,7 @@
                     $("#babyStatus-Edit").val(item.babyStatus);
                     $("#hearingResult-Edit").val(item.hearingResult);
                     $("#NotesHR-Edit").val(item.notes);
-                    $("#practitionerHR-Edit").val(item.attendingPractioner);
+                    $("#practitionerHR-Edit").val(item.practitioner);
 
                     
                     $('#newbornBb-Edit').empty().append('<option disabled selected>select newborn baby</option>');
@@ -441,7 +441,7 @@
             success: function (response) {
                 if (response && response.isSuccess) {
                     var item = response.item.result;
-                    var newborn = result.item.newborn;
+                    var newborn = response.item.newborn;
 
                     // Set values for editable fields
                     $("#caseNoHR-Detail").val(item.hearingNo);
@@ -451,7 +451,7 @@
                     $("#babyStatus-Detail").val(item.babyStatus);
                     $("#hearingResult-Detail").val(item.hearingResult);
                     $("#NotesHR-Detail").val(item.notes);
-                    $("#practitionerHR-Detail").val(item.attendingPractioner);
+                    $("#practitionerHR-Detail").val(item.practitioner);
                     
                     newborn.forEach(function (data) {
                         $('#newbornBb-Detail').append(
@@ -544,7 +544,7 @@
 
         // Validate newborn and staff selection
         var newbornSelected = $('#newbornBb-Add').val();
-        var staffSelected = $('#staff-Add').val();
+        // var staffSelected = $('#staff-Add').val();
 
         if (!newbornSelected) {
             alert("Please select a newborn baby.");

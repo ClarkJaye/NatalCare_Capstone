@@ -13,7 +13,7 @@
 		<div aria-label="breadcrumb" class="px-4" style="margin-top: 14px;">
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a asp-controller="Home" asp-action="Dashboard">Home</a></li>
-				<li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+				<li class="breadcrumb-item active" aria-current="page">@ViewData["NavTitle"]</li>
 			</ol>
 		</div>
 	</div>
@@ -26,17 +26,35 @@
 					<i class="fa-solid fa-plus"></i>
 					<span>Shortcuts</span>
 				</a>
-				<ul class="dropdown-menu" aria-labelledby="shortcutDropdown">
+				<ul class="dropdown-menu" aria-labelledby="shortcutDropdown" id="shortcutDropdownMenu">
 					<li>
 						<a asp-controller="Patient" asp-action="Create" class="dropdown-item d-flex align-items-center gap-2">
-							<i class="fa-solid fa-user-plus"></i>
-							<span>Add Patient</span>
+							<i class="fa-solid fa-plus"></i>
+							<span>Add New Patient</span>
 						</a>
 					</li>
 					<li>
 						<a asp-controller="Newborn" asp-action="Create" class="dropdown-item d-flex align-items-center gap-2">
-							<i class="fa-solid fa-baby-carriage"></i>
-							<span>Add Newborn</span>
+							<i class="fa-solid fa-plus"></i>
+							<span>Add New Newborn</span>
+						</a>
+					</li>
+					<li>
+						<a asp-controller="Admission" asp-action="Create" class="dropdown-item d-flex align-items-center gap-2">
+							<i class="fa-solid fa-plus"></i>
+							<span>Add New Admission</span>
+						</a>
+					</li>
+					<li>
+						<a asp-controller="User" asp-action="Create" class="dropdown-item d-flex align-items-center gap-2">
+							<i class="fa-solid fa-plus"></i>
+							<span>Add New User</span>
+						</a>
+					</li>
+					<li>
+						<a asp-controller="Staff" asp-action="Create" class="dropdown-item d-flex align-items-center gap-2">
+							<i class="fa-solid fa-plus"></i>
+							<span>Add New Staff</span>
 						</a>
 					</li>
 				</ul>

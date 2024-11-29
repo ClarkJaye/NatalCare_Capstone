@@ -3,7 +3,7 @@
 
 <h6 class="px-2">Newborn Screening Records</h6>
 
-@if (ViewContext.RouteData.Values["controller"]?.ToString() != "NewbornScreening")
+@if (ViewContext.RouteData.Values["controller"]?.ToString() != "Newborn")
 {
     <div class="d-flex justify-content-end my-3 gap-3">
         <button class="btn btn-sm btn-pink" id="addNewSCBtn" data-patient-id="@Model.FirstOrDefault()?.PatientID">
@@ -35,10 +35,7 @@
                 <th>Place of Collection</th>
                 <th>Screening Results</th>
                 <th>Remarks</th>
-                @if (ViewContext.RouteData.Values["controller"]?.ToString() != "NewbornScreening")
-                {
-                    <th class="text-center">Action</th>
-                }
+                <th class="text-center">ACTION</th>
             </tr>
         </thead>
         <tbody>
@@ -58,23 +55,28 @@
                         <td>@item.PlaceOfCollection</td>
                         <td>@item.ScreeningResults</td>
                         <td>@item.Remarks</td>
-                        @if (ViewContext.RouteData.Values["controller"]?.ToString() != "NewbornScreening")
+                        @if (ViewContext.RouteData.Values["controller"]?.ToString() != "Newborn")
                         {
                             <td>
                                 <div class="d-flex align-items-center justify-content-center gap-2">
-                                    <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1 detailScreening-Btn" data-caseno="@item.ScreeningNo">
+                                    <a class="btn btn-outline-secondary detailScreening-Btn" data-caseno="@item.ScreeningNo">
                                         <i class="fa-solid fa-list"></i>
-                                        <span>Details</span>
                                     </a>
-                                    <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1 editScreening-Btn" data-caseno="@item.ScreeningNo">
+                                    <a class="btn btn-outline-primary editScreening-Btn" data-caseno="@item.ScreeningNo">
                                         <i class="fa-solid fa-pen-to-square"></i>
-                                        <span>Edit</span>
                                     </a>
-                                    <button class="btn btn-sm btn-outline-danger dltScreening-Btn" data-caseno="@item.ScreeningNo">
+                                    <button class="btn btn-outline-danger dltScreening-Btn" data-caseno="@item.ScreeningNo">
                                         <i class="fa-solid fa-trash"></i>
-                                        <span>Delete</span>
                                     </button>
                                 </div>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <a class="btn btn-outline-secondary detailScreening-Btn" data-caseno="@item.ScreeningNo">
+                                    <i class="fa-solid fa-list"></i>
+                                </a>
                             </td>
                         }
                     </tr>
@@ -166,7 +168,7 @@
                       
                         <div class="col-md-6 mb-3">
                             <label for="BabyStatusSN-Add" class="control-label">Baby Status</label>
-                            <input id="BabyStatusSN-Add" name="BabyStatus" class="form-control" placeholder="Enter baby status" />
+                            <input id="BabyStatusSN-Add" name="BabyStatus" class="form-control" placeholder="Enter baby status" required/>
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -181,7 +183,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="TrackingNubmerSN-Add" class="control-label">Tracking Nubmer</label>
-                            <input id="TrackingNubmerSN-Add" name="TrackingNubmer" class="form-control" placeholder="Enter tracking number" />
+                            <input id="TrackingNubmerSN-Add" name="TrackingNubmer" class="form-control" placeholder="Enter tracking number" required />
                         </div>
 
                         <div class="col-md-12 mb-3">
@@ -257,7 +259,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="TypeOfSampleSN-Edit" class="control-label">Tyoe of Sample</label>
-                            <input id="TypeOfSampleSN-Edit" name="TypeOfSample" class="form-control" placeholder="Enter type of sample"/>
+                            <input id="TypeOfSampleSN-Edit" name="TypeOfSample" class="form-control" placeholder="Enter type of sample" />
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -288,7 +290,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="BabyStatusSN-Edit" class="control-label">Baby Status</label>
-                            <input id="BabyStatusSN-Edit" name="BabyStatus" class="form-control" placeholder="Enter baby status" />
+                            <input id="BabyStatusSN-Edit" name="BabyStatus" class="form-control" placeholder="Enter baby status" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -303,12 +305,12 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="TrackingNubmerSN-Edit" class="control-label">Tracking Nubmer</label>
-                            <input id="TrackingNubmerSN-Edit" name="TrackingNubmer" class="form-control" placeholder="Enter tracking number" />
+                            <input id="TrackingNubmerSN-Edit" name="TrackingNubmer" class="form-control" placeholder="Enter tracking number" required />
                         </div>
 
                         <div class="col-md-12 mb-3">
                             <label for="ScreeningResultsSN-Edit" class="control-label">Screening Results</label>
-                            <textarea id="ScreeningResultsSN-Edit" name="ScreeningResults" class="form-control" placeholder="Enter remarks" rows="3"></textarea>
+                            <textarea id="ScreeningResultsSN-Edit" name="ScreeningResults" class="form-control" placeholder="Enter screening result" rows="3"></textarea>
                         </div>
 
                         <div class="col-md-12 mb-3">
@@ -322,10 +324,8 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="staffSN-Edit" class="control-label">Select Encharged Staff</label>
-                            <select id="staffSN-Edit" class="form-select" name="StaffID" required>
-                                <option disabled selected>select encharged staff</option>
-                            </select>
+                            <label for="practitioner-Edit" class="control-label">Attending Practitioner</label>
+                            <input id="practitioner-Edit" name="AttendingPractitioner" class="form-control" placeholder="Enter attenting practitioner" />
                         </div>
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
@@ -422,7 +422,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="CourierSN-Detail" class="control-label">Courier</label>
-                            <input id="CourierSN-Detail" name="Courier" class="form-control" placeholder="Enter data sample sent" />
+                            <input id="CourierSN-Detail" name="Courier" class="form-control" placeholder="Enter data sample sent" disabled />
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -432,7 +432,7 @@
 
                         <div class="col-md-12 mb-3">
                             <label for="ScreeningResultsSN-Detail" class="control-label">Screening Results</label>
-                            <textarea id="ScreeningResultsSN-Detail" name="ScreeningResults" class="form-control" placeholder="Enter remarks" rows="3"></textarea>
+                            <textarea id="ScreeningResultsSN-Detail" name="ScreeningResults" class="form-control" placeholder="Enter screening results" rows="3" disabled></textarea>
                         </div>
 
                         <div class="col-md-12 mb-3">
@@ -446,16 +446,17 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="staffSN-Detail" class="control-label">Select Encharged Staff</label>
-                            <select id="staffSN-Detail" class="form-select" name="StaffID" disabled>
-                                <option disabled selected>select encharged staff</option>
-                            </select>
+                            <label for="practitioner-Detail" class="control-label">Attending Practitioner</label>
+                            <input id="practitioner-Detail" name="AttendingPractitioner" class="form-control" disabled />
                         </div>
 
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
                             <div class="d-flex align-items-center gap-2">
-                                <button type="submit" class="btn btn-pink">Print</button>
+                                <button class="btn btn-success" type="button">
+                                    <i class="fas fa-save"></i>
+                                    <span>Print</span>
+                                </button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
@@ -540,7 +541,7 @@
         });
     }
 
-    // Update Hearing Record
+    // Update Screening Record
     function UpdateScreening() {
         var formData = $("#UpdateScreeningForm").serialize();
         $.ajax({
@@ -562,7 +563,7 @@
             }
         });
     }
-    // Edit Hearing Record
+    // Edit Screening Record
     function EditScreening(caseNo) {
         $.ajax({
             type: 'GET',
@@ -570,11 +571,9 @@
             data: { caseNo: caseNo },
             success: function (response) {
                 if (response && response.isSuccess) {
-                    console.log(response)
                     var item = response.item.result;
-                    var staff = response.item.staff;
                     var newborn = response.item.newborn;
-
+                    console.log(response)
                     // Set values for editable fields
                     $("#caseNoSN-Edit").val(item.screeningNo);
                     $("#patientIDSN-Edit").val(item.patientId);
@@ -587,15 +586,15 @@
                     $("#PlaceOfCollectionSN-Edit").val(item.placeOfCollection);
                     $("#FeedingSN-Edit").val(item.feeding);
                     $("#SpecimenSN-Edit").val(item.specimen);
-                    $("#babyStatusSN-Edit").val(item.babyStatus);
+                    $("#BabyStatusSN-Edit").val(item.babyStatus);
                     $("#DataSampleSent-Edit").val(item.dataSampleSent);
                     $("#CourierSN-Edit").val(item.courier);
                     $("#TrackingNubmerSN-Edit").val(item.trackingNubmer);
-                    $("#ScreeningResultsSN-Edit").val(item.ScreeningResults);
+                    $("#ScreeningResultsSN-Edit").val(item.screeningResults);
                     $("#RemarksSN-Edit").val(item.remarks);
                     $("#NotesHR-Edit").val(item.notes);
+                    $("#practitioner-Edit").val(item.attendingPractitioner);
 
-                    $('#newbornBbSN-Edit').empty().append('<option disabled selected>select newborn baby</option>');
                     // $('#staffSN-Edit').empty().append('<option disabled selected>select encharged staff</option>');
                     // staff.forEach(function (data) {
                     //     $('#staffSN-Edit').append(
@@ -606,6 +605,8 @@
                     //         })
                     //     );
                     // }); 
+                    
+                    $('#newbornBbSN-Edit').empty().append('<option disabled selected>select newborn baby</option>');
                     newborn.forEach(function (data) {
                         $('#newbornBbSN-Edit').append(
                             $('<option>', {
@@ -628,57 +629,48 @@
     }
 
     // Edit Hearing Record
-    function DetailHR(caseNo) {
+    function DetailScreening(caseNo) {
         $.ajax({
             type: 'GET',
-            url: '@Url.Action("GetHRRecord", "NewbornHearing")',
+            url: '@Url.Action("GetScreeningRecord", "NewbornScreening")',
             data: { caseNo: caseNo },
             success: function (response) {
                 if (response && response.isSuccess) {
                     var item = response.item.result;
-                    var staff = response.item.staff;
-                    var newborn = response.item.newborn;
-
                     // Set values for editable fields
-                    $("#caseNoHR-Detail").val(item.hearingNo);
-                    $("#patientID-Detail").val(item.patientId);
-                    $("#DateVisitHR-Detail").val(item.dateVisit);
-                    $("#testDate-Detail").val(item.testDate);
-                    $("#babyStatus-Detail").val(item.babyStatus);
-                    $("#hearingResult-Detail").val(item.hearingResult);
+                    $("#caseNoSN-Detail").val(item.screeningNo);
+                    $("#patientIDSN-Detail").val(item.patientId);
+                    $("#DateVisitSN-Detail").val(item.dateVisit);
+                    $("#DateRegistrationSN-Detail").val(item.dateRegistration);
+                    $("#FilterCardNoSN-Detail").val(item.filterCardNo);
+                    $("#TypeOfSampleSN-Detail").val(item.typeOfSample);
+                    $("#DateOfCollectionSN-Detail").val(item.dateOfCollection);
+                    $("#TimeOfCollectionSN-Detail").val(item.timeOfCollection);
+                    $("#PlaceOfCollectionSN-Detail").val(item.placeOfCollection);
+                    $("#FeedingSN-Detail").val(item.feeding);
+                    $("#SpecimenSN-Detail").val(item.specimen);
+                    $("#BabyStatusSN-Detail").val(item.babyStatus);
+                    $("#DataSampleSent-Detail").val(item.dataSampleSent);
+                    $("#CourierSN-Detail").val(item.courier);
+                    $("#TrackingNubmerSN-Detail").val(item.trackingNubmer);
+                    $("#ScreeningResultsSN-Detail").val(item.screeningResults);
+                    $("#RemarksSN-Detail").val(item.remarks);
                     $("#NotesHR-Detail").val(item.notes);
-                    
-                    // staff.forEach(function (data) {
-                    //     $('#staff-Detail').append(
-                    //         $('<option>', {
-                    //             value: data.id,
-                    //             text: data.staffName,
-                    //             selected: item.staffID === data.id
-                    //         })
-                    //     );
-                    // });
-                    newborn.forEach(function (data) {
-                        $('#newbornBb-Detail').append(
-                            $('<option>', {
-                                value: data.id,
-                                text: data.firstname + " " + data.middlename + " " + data.lastname + " - " + data.birthdate,
-                                selected: item.newbornID === data.id
-                            })
-                        );
-                    });
-                    // Show Edit Modal
-                    $('#HRDetailModal').modal('show');
+                    $("#practitioner-Detail").val(item.attendingPractitioner);
+
+                    // Show Edit Modal  
+                    $('#ScreeningDetailModal').modal('show');
                 } else {
-                    toastr.error(response.message || 'Unable to load hearing record.');
+                    toastr.error(response.message || 'Unable to load screening record.');
                 }
             },
             error: function () {
-                toastr.error('An error occurred while loading the hearing record.');
+                toastr.error('An error occurred while loading the screening record.');
             }
         });
     }
 
-    //Delete Hearing
+    //Delete Screening
     function DeleteScreening(caseNo) {
         Swal.fire({
             title: "Are you sure?",
@@ -718,19 +710,8 @@
             data: { id: patID },
             success: function (result) {
                 if (result.isSuccess) {
-                    console.log(result)
                     var newborn = result.item.newborn;
-                    var staff = result.item.staff;
                     $('#newbornBbSN-Add').empty().append('<option disabled selected>select newborn baby</option>');
-                    // $('#staffSN-Add').empty().append('<option disabled selected>select encharged staff</option>');
-                    // staff.forEach(function (item) {
-                    //     $('#staffSN-Add').append(
-                    //         $('<option>', {
-                    //             value: item.id,
-                    //             text: item.staffName
-                    //         })
-                    //     );
-                    // });
                     newborn.forEach(function (item) {
                         $('#newbornBbSN-Add').append(
                             $('<option>', {
@@ -760,7 +741,6 @@
             type: 'POST',
             data: formData,
             success: function (result) {
-                console.log(result)
                 if (result.isSuccess) {
                     toastr.success(result.message)
                     LoadScreeningComponent();
@@ -780,6 +760,7 @@
             }
         });
     }
+
     //Load All Records
     function LoadScreeningComponent() {
         var patientId = $("#patID").val();

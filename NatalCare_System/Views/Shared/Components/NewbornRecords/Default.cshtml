@@ -15,7 +15,7 @@
                 <th>Mother Full Name</th>
                 <th>Date Added</th>
                 <th>Added By</th>
-                <th class="text-center">Action</th>
+                <th class="text-center">ACTION</th>
             </tr>
         </thead>
         <tbody>
@@ -43,14 +43,14 @@
                     <td>@item.CreatedBy?.FirstName @item.CreatedBy?.LastName</td>
                     <td class="text-center">
                         <div class="d-flex align-items-center justify-content-center gap-2">
-                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Newborn" asp-action="Information" asp-route-id="@item.NewbornID">
+                            <a class="btn btn-sm btn-outline-secondary" asp-controller="Newborn" asp-action="Information" asp-route-id="@item.NewbornID" title="View Records">
                                 <i class="fa-solid fa-list"></i>
                                 <span>Record</span>
                             </a>
-                            <button class="btn btn-sm btn-outline-danger dlt-Btn" data-nbid="@item.NewbornID">
+                           @*  <button class="btn btn-sm btn-outline-danger dlt-Btn" data-nbid="@item.NewbornID">
                                 <i class="fa-solid fa-trash"></i>
                                 <span>Delete</span>
-                            </button>
+                            </button> *@
                         </div>
                     </td>
                 </tr>

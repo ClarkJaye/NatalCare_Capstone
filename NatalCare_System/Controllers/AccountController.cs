@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NatalCare.DataAccess.Extensions;
+using NatalCare.DataAccess.Interfaces;
 using NatalCare.Models.DTOs;
 using NatalCare.Models.Entities;
 using NatalCare.Models.ViewModel;
@@ -16,7 +17,7 @@ namespace NatalCare_System.Controllers
         private readonly RoleManager<Role> _roleManager;
         private readonly UserManager<User> _userManager;
 
-        public AccountController(SignInManager<User> signInManager, UserManager<User> userManager, RoleManager<Role> roleManager)
+        public  AccountController(SignInManager<User> signInManager, UserManager<User> userManager, RoleManager<Role> roleManager, IModuleAccessServices moduleAccessServices) : base(moduleAccessServices)
         {
             _signInManager = signInManager;
             _userManager = userManager;

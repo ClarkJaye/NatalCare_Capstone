@@ -10,7 +10,8 @@ namespace NatalCare_System.Controllers
     public class HomeController : BaseController<HomeController>
     {
         private readonly IPatientServices patientServices;
-        public HomeController(IPatientServices patientServices)
+        public HomeController(IPatientServices patientServices, IModuleAccessServices moduleAccessServices)
+            : base(moduleAccessServices)
         {
             this.patientServices = patientServices;
         }

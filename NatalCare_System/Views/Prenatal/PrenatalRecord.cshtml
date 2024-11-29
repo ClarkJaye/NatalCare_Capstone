@@ -2,7 +2,8 @@
 @model PatientsVM
 
 @{
-    ViewData["Title"] = "Patient / Prenatal Visit Record";
+    ViewData["Title"] = "Prenatal Visit Record";
+    ViewData["NavTitle"] = "Patient / Prenatal Visit Record";
     Layout = "_UserLayout";
 }
 
@@ -56,6 +57,7 @@
                         <tr>
                             <th>Date Visit</th>
                             <th>AOG Week</th>
+                            <th>Total Month</th>
                             <th>Weight</th>
                             <th>BP</th>
                             <th>FH</th>
@@ -75,7 +77,24 @@
                             {
                                 <tr>
                                     <td>@item.DateVisit?.ToString("MMM dd yyyy h:mm tt")</td>
-                                    <td>@item.AOGWeek</td>
+                                    <td>@item.AOGWeek Weeks</td>
+                                    <td>
+                                        @{
+                                            // Attempt to parse the string AOGWeek to a numeric value
+                                            decimal aogWeekValue;
+                                            if (decimal.TryParse(item.AOGWeek, out aogWeekValue))
+                                            {
+                                                // Calculate months by dividing weeks by 4
+                                                @($"{Math.Round(aogWeekValue / 4, 1)} Months")
+                                            }
+                                            else
+                                            {
+                                                // Handle cases where parsing fails
+                                                @("Invalid AOG Week")
+                                            }
+                                        }
+                                    </td>
+
                                     <td>@item.Weight</td>
                                     <td>@item.BP</td>
                                     <td>@item.FH</td>
@@ -83,7 +102,7 @@
                                     <td>@item.Temp</td>
                                     <td>@item.CR</td>
                                     <td>@item.RR</td>
-                                    <td>@item.PhysicalAssessment</td>
+                                    <td style="max-width: 300px; word-wrap: break-word;">@item.PhysicalAssessment</td>
                                     <td>
                                         <div class="d-flex align-items-center justify-content-center gap-2">
                                             <a class="detail-Btn btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" data-caseno="@item.CaseNo">
@@ -94,10 +113,10 @@
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                                 <span>Edit</span>
                                             </a>
-                                            <a class="dlt-Btn btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center gap-1" data-caseno="@item.CaseNo">
+                                           @*  <a class="dlt-Btn btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center gap-1" data-caseno="@item.CaseNo">
                                                 <i class="fa-solid fa-trash"></i>
                                                 <span>Delete</span>
-                                            </a>
+                                            </a> *@
                                         </div>
                                     </td>
                                 </tr>
@@ -176,13 +195,13 @@
                         </div>
 
                         <div class="col-md-3 mb-3">
-                            <label for="DateVisit-Form" class="control-label">DateVisit</label>
-                            <input type="datetime-local" id="DateVisit-Form" name="DateVisit" class="form-control bg-white" readonly />
+                            <label for="HRCODE-Form" class="control-label">H.R. Code</label>
+                            <input id="HRCODE-Form" name="HRCODE" class="form-control bg-white" readonly />
                         </div>
 
                         <div class="col-md-3 mb-3">
-                            <label for="HRCODE-Form" class="control-label">H.R. Code</label>
-                            <input id="HRCODE-Form" name="HRCODE" class="form-control bg-white" readonly />
+                            <label for="DateVisit-Form" class="control-label">DateVisit</label>
+                            <input type="datetime-local" id="DateVisit-Form" name="DateVisit" class="form-control bg-white" readonly />
                         </div>
 
                         <hr class="my-2 " />
@@ -221,7 +240,6 @@
                                     <span>Print</span>
                                 </button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                    <i class="fas fa-arrow-left me-1"></i>
                                     <span>Close</span>
                                 </button>
                             </div>
@@ -247,12 +265,12 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="AOGWeek-Add" class="control-label">AOG Week</label>
-                            <input id="AOGWeek-Add" name="AOGWeek" class="form-control" placeholder="Enter AOG Week" required />
+                            <input type="number" id="AOGWeek-Add" name="AOGWeek" class="form-control" placeholder="Enter AOG Week" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="Weight-Add" class="control-label">Weight</label>
-                            <input id="Weight-Add" name="Weight" class="form-control" placeholder="Enter Weight" required />
+                            <input id="Weight-Add" name="Weight" class="form-control" placeholder="Enter Weight " required />
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -333,7 +351,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="AOGWeek-edit" class="control-label">AOG Week</label>
-                            <input id="AOGWeek-edit" name="AOGWeek" class="form-control" placeholder="Enter AOG Week" required />
+                            <input type="number" id="AOGWeek-edit" name="AOGWeek" class="form-control" placeholder="Enter AOG Week" required />
                         </div>
 
                         <div class="col-md-6 mb-3">

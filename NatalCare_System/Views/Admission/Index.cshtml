@@ -75,32 +75,42 @@
                 <table id="newbornTable" class="table table-hover table-striped table-datatable">
                     <thead class="border-bottom-2">
                         <tr>
-                            <th>Case No</th>
+                            <th>Patient No#</th>
                             <th>Patient Name</th>
-                            <th>Age</th>
                             <th>Date & Time Admitted</th>
+                            <th>Date & Time Discharge</th>
+                            <th>Ward No#</th>
                             <th>Patient Status</th>
-                            <th>Date Added</th>
+                            <th>Notes</th>
+                            <th>Added By</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>P-01</td>
+                        <tr style="cursor: pointer;">
+                            <th>PT001</th>
                             <td>Suarez Suarez Pepito</td>
-                            <td>21</td>
                             <td>Nov 22, 2024 3 PM</td>
-                            <td>In Labor</td>
-                            <td>05/04/2024</td>
+                            <td>Nov 23, 2024 3 PM</td>
+                            <td>WARD 2</td>
+                            <td>
+                                <span class="badge bg-success">In Labor</span>
+                            </td>
+                            <td>Sample  Sample</td>
+                            <td>Pdeuciano</td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-center gap-2">
-                                    <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Newborn" asp-action="Information" asp-route-id="">
+                                    <a class="btn btn-outline-secondary" asp-controller="" asp-action="" asp-route-id="">
                                         <i class="fa-solid fa-list"></i>
-                                        <span>Details</span>
+                                        @* <span>Details</span> *@
                                     </a>
-                                    <button class="btn btn-sm btn-outline-danger dlt-Btn">
+                                    <a class="btn btn-outline-primary" asp-controller="" asp-action="" asp-route-id="">
+                                        <i class="fa-solid fa-pencil"></i>
+                                        @* <span>Details</span> *@
+                                    </a>
+                                    <button class="btn btn-outline-danger dlt-Btn">
                                         <i class="fa-solid fa-trash"></i>
-                                        <span>Delete</span>
+                                        @* <span>Delete</span> *@
                                     </button>
                                 </div>
                             </td>

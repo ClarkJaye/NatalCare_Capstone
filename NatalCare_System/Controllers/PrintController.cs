@@ -9,7 +9,7 @@ namespace NatalCare_System.Controllers
     {
         private readonly IPatientServices patientServices;
 
-        public PrintController(IPatientServices patientServices)
+        public PrintController(IPatientServices patientServices, IModuleAccessServices moduleAccessServices) : base(moduleAccessServices)
         {
             this.patientServices = patientServices;
         }

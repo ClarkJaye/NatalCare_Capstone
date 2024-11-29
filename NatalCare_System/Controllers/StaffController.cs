@@ -14,7 +14,7 @@ namespace NatalCare_System.Controllers
         private readonly IProfileServices profileServices;
         private readonly ISelectListServices selectListServices;
 
-        public StaffController(IProfileServices profileServices, ISelectListServices selectListServices)
+        public StaffController(IProfileServices profileServices, ISelectListServices selectListServices, IModuleAccessServices moduleAccessServices) : base(moduleAccessServices)
         {
             this.profileServices = profileServices;
             this.selectListServices = selectListServices;
@@ -22,6 +22,11 @@ namespace NatalCare_System.Controllers
 
         public async Task<IActionResult> Index()
         {
+            if (!await CheckAccessAsync(13))
+            {
+                return RedirectToDashboard();
+            }
+
             var response = await profileServices.GetAllStaff();
             if (response.Count > 0)
             {

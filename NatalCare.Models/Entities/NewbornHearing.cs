@@ -15,7 +15,7 @@ namespace NatalCare.Models.Entities
         public DateOnly? TestDate{ get; set; }
         public string? Notes { get; set; }
         public string? BabyStatus { get; set; }
-        public string? AttendingPractioner { get; set; }
+        public string? AttendingPractitioner { get; set; }
         
         [Required]
         public string? NewbornID { get; set; }

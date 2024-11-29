@@ -15,7 +15,8 @@ namespace NatalCare_System.Controllers
         private readonly ISelectListServices selectListServices;
 
 
-        public DeliveryController(IPatientServices patientServices, IServicesOperationServices serviceServices, ISelectListServices selectListServices)
+        public DeliveryController(IPatientServices patientServices, IServicesOperationServices serviceServices, ISelectListServices selectListServices, IModuleAccessServices moduleAccessServices)
+            : base(moduleAccessServices)
         {
             this.patientServices = patientServices;
             this.serviceServices = serviceServices;

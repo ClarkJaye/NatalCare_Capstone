@@ -19,7 +19,7 @@
         <form asp-controller="Newborn" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row">
-                <!--Mother Side-->
+                <!--Newborn Side-->
                 <h5 class="card-title mb-3"> Baby Information</h5>
                 <div class="form-group col-md-4 mb-3">
                     <label asp-for="FirstName" class="control-label">Baby Name</label>
@@ -251,7 +251,7 @@
                         <span>Save</span>
                     </button>
                     <a class="btn btn-outline-secondary" asp-controller="Newborn" asp-action="Index">
-                        <i class="fas fa-undo"></i>
+                        <i class="fas fa-arrow-left me-1"></i>
                         <span>Back to List</span>
                     </a>
                 </div>

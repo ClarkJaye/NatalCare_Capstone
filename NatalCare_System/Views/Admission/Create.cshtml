@@ -1,0 +1,333 @@
+﻿@model NatalCare.Models.Entities.Delivery
+
+
+@{
+    ViewData["Title"] = "Add Admission";
+    ViewData["NavTitle"] = "Add Admission";
+    Layout = "_UserLayout";
+}
+
+@{
+
+}
+
+<!-- NAVBAR -->
+<partial name="Partial/_Navbar" />
+
+
+<div class="card card-selected w-75 mx-auto mt-5">
+    <div class="card-header card-header-selected d-flex justify-content-between align-items-center bg-pink">
+        <h5 class="card-title my-2">Patient Admission</h5>
+    </div>
+    <div class="card-body m-4 pt-0">
+        <form asp-controller="Newborn" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <!--Parents Side-->
+            <div class="row">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h5 class="card-title my-3 mb-3">Patient's Information</h5>
+
+                    @if (ViewBag.triggerPatID == null){
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" id="searchPtBtn" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-search"></i>
+                                <span>Select Patient</span>
+                            </button>
+
+                            <button type="button" id="clearBtn" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-cancel"></i>
+                                <span>Clear</span>
+                            </button>
+                        </div>
+                    }
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="PatientID" class="control-label">Patient ID</label>
+                    <input asp-for="PatientID" value="@ViewBag?.triggerPatID" class="form-control text-uppercase" placeholder="Select patient (e.g., PT0001, PT0002 ...)" required readonly />
+                    <span asp-validation-for="PatientID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_FirstName" class="control-label">Patient First Name</label>
+                    <input id="Patient_FirstName" class="form-control" placeholder="Enter First Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_MiddleName" class="control-label">Patient First Name</label>
+                    <input id="Patient_MiddleName" class="form-control" placeholder="Enter Middle Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_LastName" class="control-label">Patient Last Name </label>
+                    <input id="Patient_LastName" class="form-control" placeholder="Enter Last Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_Birthdate" class="control-label">Patient BirthDate</label>
+                    <input id="Patient_Birthdate" class="form-control" placeholder="Enter Birthdate" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_Address" class="control-label">Patient Address</label>
+                    <input id="Patient_Address" class="form-control" placeholder="Enter Address" readonly />
+                </div>
+            </div>
+
+            <hr class="my-3" />
+
+            <!-- Prenatal Case-->
+            <h5 class="card-title mb-3">Prenatal Details</h5>
+            <div class="row">
+                <div class="form-group col-md-4 mb-3" hidden>
+                    <label asp-for="PrenatalID" class="control-label">Prenatal ID</label>
+                    <input asp-for="PrenatalID" class="form-control text-uppercase" placeholder="Enter (e.g., PT0001, PT0002 ...)" required readonly />
+                    <span asp-validation-for="PrenatalID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_FirstName" class="control-label">Patient First Name</label>
+                    <input id="Patient_FirstName" class="form-control" placeholder="Enter First Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_MiddleName" class="control-label">Patient First Name</label>
+                    <input id="Patient_MiddleName" class="form-control" placeholder="Enter Middle Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_LastName" class="control-label">Patient Last Name </label>
+                    <input id="Patient_LastName" class="form-control" placeholder="Enter Last Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_Birthdate" class="control-label">Patient BirthDate</label>
+                    <input id="Patient_Birthdate" class="form-control" placeholder="Enter Birthdate" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_Address" class="control-label">Patient Address</label>
+                    <input id="Patient_Address" class="form-control" placeholder="Enter Address" readonly />
+                </div>
+            </div>
+
+            <hr class="my-3" />
+
+            <!-- Admission -->
+            <h5 class="card-title mb-3">Admission Details</h5>
+            <div class="row">
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="Date_Admitted" class="control-label">Date Admitted</label>
+                    <input type="date" asp-for="Date_Admitted" class="form-control" required />
+                    <span asp-validation-for="Date_Admitted" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="Time_Admitted" class="control-label">Time Admitted</label>
+                    <input type="time" asp-for="Time_Admitted" class="form-control" required />
+                    <span asp-validation-for="Time_Admitted" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="WardNumber" class="control-label">Ward #</label>
+                    <input asp-for="WardNumber" class="form-control" placeholder="Enter Ward Number" required />
+                    <span asp-validation-for="WardNumber" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="DeliveryStatus" class="control-label"></label>
+                    <select asp-for="DeliveryStatus" class="form-select" asp-items="@ViewBag.deliveryStatus" required>
+                        <option disabled selected>select status</option>
+                    </select>
+                    <span asp-validation-for="DeliveryStatus" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="PrenatalID" class="control-label">Prenatal Case Record</label>
+                    <select asp-for="PrenatalID" class="form-select" name="PrenatalID" >
+                        <option value="" class="text-muted" selected>select prenatal record</option>
+                    </select>
+                    <span asp-validation-for="PrenatalID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3" id="referralReasonSection" style="display:none;">
+                    <label asp-for="ReferralReason" class="control-label">Reason For Referral</label>
+                    <input asp-for="ReferralReason" class="form-control" placeholder="Enter Reason for Referral" required />
+                    <span asp-validation-for="ReferralReason" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3" id="referralToSection" style="display:none;">
+                    <label asp-for="ReferredTo" class="control-label">Referred to</label>
+                    <input asp-for="ReferredTo" class="form-control" placeholder="Enter Hospital Referred" required />
+                    <span asp-validation-for="ReferredTo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="Notes" class="control-label">Notes (optional)</label>
+                    <textarea asp-for="Notes" class="form-control" placeholder="Enter notes" rows="3"></textarea>
+                    <span asp-validation-for="Notes" class="text-danger"></span>
+                </div>  
+            </div>
+
+            <div class="form-group col-12 mt-3 mb-3">
+                <div class="d-flex align-items-center justify-content-end gap-3">
+                    <button class="btn btn-pink" type="submit">
+                        <i class="fas fa-save"></i> 
+                        <span>Save</span>
+                    </button>
+                    @if (ViewBag.triggerPatID == null)
+                    {
+                        <a class="btn btn-outline-secondary" asp-controller="Admission" asp-action="Index">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            <span>Back to List</span>
+                        </a>
+                    }else{
+                        <a class="btn btn-outline-secondary" asp-controller="Patient" asp-action="MedicalRecords" asp-route-id="@ViewBag.triggerPatID">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            <span>Back to Patient</span>
+                        </a>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<!-- Search Mother Modal -->
+<div class="modal fade" id="searchMotherModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Search Mother</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="patientsListContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/toastr/toastr.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const referralSelected = document.getElementById('DeliveryStatus');
+            const RefReasonSection = document.getElementById('referralReasonSection');
+            const RefToSection = document.getElementById('referralToSection');
+
+            referralSelected.addEventListener('change', function () {
+                if (referralSelected.value == 4) {
+                    RefReasonSection.style.display = 'block';
+                    RefToSection.style.display = 'block';
+                } else {
+                    RefReasonSection.style.display = 'none';
+                    RefToSection.style.display = 'none';
+                }
+            });
+
+            $('#searchPtBtn').on('click', function () {
+                loadPatientssPartialView()
+            });
+            // Load Patient Detail If the PatientID is not null
+            if ($("#PatientID").val()) {
+                var id = $("#PatientID").val();
+                LoadPatientDetails(id);
+            }
+            $('#clearBtn').on('click', function () {
+                $("form input, form select, form textarea").removeClass("bg-white");
+                $("#PatientID").val("").attr("placeholder", "Enter (e.g., PT0001, PT0002 ...)");
+                $("#FatherID").val("").attr("placeholder", "Enter Father");
+                $("#Patient_FirstName").val("").attr("placeholder", "Enter First Name");
+                $("#Patient_MiddleName").val("").attr("placeholder", "Enter Middle Name");
+                $("#Patient_LastName").val("").attr("placeholder", "Enter Last Name");
+                $("#Patient_Address").val("").attr("placeholder", "Enter Address");
+                $("#Patient_Birthdate").val("");
+            });
+
+            $('#patientsListContainer').on('click', "#patientSelectBtn", function () {
+                var value = $(this).data("patientid");
+                value.toUpperCase();
+                LoadPatientDetails(value);
+            });
+
+            $('#patientsListContainer').on('click', "#patientSelectTR", function () {
+                var value = $(this).data("patid");
+                value.toUpperCase();
+                LoadPatientDetails(value);
+            });
+
+            // Add form submission validation for Pateint Id
+            $("form").on("submit", function (e) {
+                var patientId = $("#PatientID").val().trim();
+                console.log(patientId)
+                if (patientId === "") {
+                    e.preventDefault(); 
+                    alert("Please select a patient for the admission.");
+                }
+            });
+
+        });
+
+        function loadPatientssPartialView() {
+            $.ajax({
+                url: '@Url.Action("DisplayPatients", "Patient")',
+                type: 'GET',
+                success: function (result) {
+                    $("#patientsListContainer").html(result);
+                    $('#searchMotherModal').modal('show');
+                },
+                error: function () {
+                    console.error("Failed to load patients data.");
+                }
+            });
+        }
+
+
+
+        function LoadPatientDetails(value) {
+            $.ajax({
+                url: '@Url.Action("GetPatientDetails", "Patient")',
+                type: 'GET',
+                data: { patientId: value },
+                success: function (data) {
+                    if (data && data.isSuccess) {
+                        console.log(data)
+                        var item = data.item;
+                        $("#PatientID").val(item.id);
+                        $("#Patient_FirstName").val(item.firstname);
+                        $("#Patient_MiddleName").val(item.middlename);
+                        $("#Patient_LastName").val(item.lastname);
+                        $("#Patient_Address").val(item.address);
+                        $("#Patient_Birthdate").val(item.birthdate);
+                        // toastr.success('Patient selected!');
+
+                        // Apply the bg-white class to all inputs in the form
+                        $("form input, form select, form textarea").addClass("bg-white");
+                    } else {
+                        $("#PatientID").val(item.message);
+                        $("#Patient_FirstName").val(item.message);
+                        $("#Patient_MiddleName").val(item.message);
+                        $("#Patient_LastName").val(item.message);
+                        $("#Patient_Address").val(item.message);
+                        $("#Patient_Birthdate").val(item.message);
+                        toastr.error('Patient Not Found!');
+                    }
+                    $('#searchMotherModal').modal('hide');
+                },
+                error: function () {
+                    console.error("Error retrieving patient details.");
+                }
+            });
+        }
+    </script>
+}
+
+
+
+

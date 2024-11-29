@@ -22,7 +22,7 @@
         <tbody>
             @foreach (var patient in Model)
             {
-                <tr data-patid="@patient.PatientID" class="align-middle" id="patientSelectTR" style="cursor: pointer;">
+                <tr data-patid="@patient.PatientID" id="patientSelectTR" style="cursor: pointer;">
                     <td>@patient.PatientID</td>
                     <td>@patient.FirstName</td>
                     <td>@patient.MiddleName</td>

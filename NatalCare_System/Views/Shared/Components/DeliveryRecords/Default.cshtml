@@ -1,7 +1,18 @@
 ﻿@model List<NatalCare.Models.Entities.Delivery>
 
+@{
+    var patientId = ViewBag.patientId;
+}
+
 <h6 class="px-2">Delivery Records</h6>
 <div class="d-flex justify-content-end my-3 gap-3">
+    <a class="btn btn-pink" asp-controller="Admission" asp-action="Create" asp-route-id="@patientId">
+        <i class="fas fa-plus"></i>
+        <span>Admit Patient</span>
+    </a>
+</div>
+
+@* <div class="d-flex justify-content-end my-3 gap-3">
     <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
         <i class="fas fa-plus"></i>
         <span>Add New Delivery Record</span>
@@ -10,7 +21,7 @@
         <i class="fas fa-trash"></i>
         <span>Deleted History Record</span>
     </button>
-</div>
+</div> *@
 
 @* <div class="d-flex align-items-center gap-2 mb-2">
     <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
@@ -22,13 +33,13 @@
         <thead>
             <tr>
                 <th>Case No#</th>
-                <th>Date Admitted</th>
-                <th>Time Admitted</th>
-                <th>Date Discharged</th>
+                <th>Patient Name</th>
+                <th>Date & Time Admitted</th>
+                <th>Date & Time Discharge</th>
                 <th>Ward No#</th>
                 <th>Patient Status</th>
-                <th>Baby Name</th>
                 <th>Notes</th>
+                @* <th>Added By</th> *@
                 <th class="text-center">Action</th>
             </tr>
         </thead>
@@ -39,9 +50,8 @@
                 {
                     <tr>
                         <td>@item.CaseNo</td>
-                        <td>@item.Date_Admitted?.ToString("MMM dd yyyy")</td>
-                        <td>@item.Time_Admitted?.ToString("h:mm tt")</td>
-                        <td>@item.Date_Discharged?.ToString("MMM dd yyyy")</td>
+                        <td>@item.Date_Admitted.ToString("MMM dd yyyy") @item.Time_Admitted.ToString("h:mm tt")</td>
+                        <td>@item.Date_Discharged?.ToString("MMM dd yyyy") @item.Time_Discharged?.ToString("h:mm tt")</td>
                         <td>@item.WardNumber</td>
                         <td>
                             @if (item.DeliveryStatusID == 1)
@@ -57,12 +67,14 @@
                                 <span class="badge bg-info text-dark">@item.DeliveryStatus?.StatusName</span>
                             }
                         </td>
-                        <td>@item.Newborn?.FirstName @item.Newborn?.MiddleName @item.Newborn?.LastName</td>
                         <td style="max-width: 200px; word-wrap: break-word;">@item.Notes</td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
                                 <a asp-controller="Delivery" asp-action="Index" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-outline-secondary">
                                     <i class="fa-solid fa-folder-open"></i>
+                                </a>
+                                <a class="btn btn-outline-secondary" asp-controller="" asp-action="" asp-route-id="">
+                                    <i class="fa-solid fa-list"></i>
                                 </a>
                                 <button class="btn btn-outline-primary edit-Btn" data-caseno="@item.CaseNo">
                                     <i class="fa-solid fa-pen-to-square"></i>

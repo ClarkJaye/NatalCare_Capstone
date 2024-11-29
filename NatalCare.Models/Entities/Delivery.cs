@@ -10,12 +10,17 @@ namespace NatalCare.Models.Entities
         [Key]
         [Required]
         public string? CaseNo { get; set; }
-        public DateOnly? Date_Admitted { get; set; }
-        public TimeOnly? Time_Admitted { get; set; }
+        [Required]
+        public DateOnly Date_Admitted { get; set; }
+        [Required]
+        public TimeOnly Time_Admitted { get; set; }
         public DateOnly? Date_Discharged { get; set; }
+        public TimeOnly? Time_Discharged { get; set; }
         public int? WardNumber { get; set; }
         public string? Notes { get; set; }
-        
+        public string? ReferralReason { get; set; }
+        public string? ReferredTo { get; set; }
+
         // Foreign Key
         public int? DeliveryStatusID { get; set; }
         [ForeignKey("DeliveryStatusID")]

@@ -14,6 +14,7 @@ namespace NatalCare_System.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(string patientId)
         {
+            ViewData["patientId"] = patientId;
             var records = await serviceServices.GetDeliveryRecords(patientId);
             return View(records);
         }

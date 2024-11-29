@@ -194,9 +194,10 @@ namespace NatalCare.DataAccess.data
             //);
 
             modelBuilder.Entity<DeliveryStatus>().HasData(
-               new DeliveryStatus { Id = 1, StatusName = "Active" },
-               new DeliveryStatus { Id = 2, StatusName = "Discharged" },
-               new DeliveryStatus { Id = 3, StatusName = "Referred" }
+               new DeliveryStatus { Id = 1, StatusName = "In-Labor" },
+               new DeliveryStatus { Id = 2, StatusName = "PostPartum" },
+               new DeliveryStatus { Id = 3, StatusName = "Discharged" },
+               new DeliveryStatus { Id = 4, StatusName = "Referred" }
            );
 
             // For Junction 

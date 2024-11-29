@@ -7,9 +7,12 @@ namespace NatalCare_System.Controllers
     [Authorize]
     public class AdmissionController : BaseController<AdmissionController>
     {
-        public AdmissionController(IModuleAccessServices moduleAccessServices)
+        private readonly ISelectListServices selectListServices;
+
+        public AdmissionController(ISelectListServices selectListServices, IModuleAccessServices moduleAccessServices)
            : base(moduleAccessServices)
         {
+            this.selectListServices = selectListServices;
         }
         public async Task<IActionResult> Index()
         {
@@ -17,6 +20,24 @@ namespace NatalCare_System.Controllers
             {
                 RedirectToDashboard();
             }
+            return View();
+        }
+
+        public async Task<IActionResult> Create(string id)
+        {
+            if (!await CheckAccessAsync(4))
+            {
+                RedirectToDashboard();
+            }
+            ViewData["triggerPatID"] = id;
+            ViewData["deliveryStatus"] = await selectListServices.GetDeliveryStatusSelectListAsync();
+            //ViewData["prenatalList"] = await selectListServices .GetAllPrenatalSelectListAsync(id);
+
+            if (id != null)
+            {
+
+            }
+
             return View();
         }
 

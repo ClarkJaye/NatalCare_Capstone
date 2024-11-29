@@ -246,6 +246,29 @@ namespace NatalCare_System.Controllers
             return Json(new { isSuccess = false, Message = "Mother not found." } );
 
         }
+
+        //Detail Patient
+        [HttpGet]
+        public async Task<IActionResult> GetPatientDetails(string patientId)
+        {
+            var data = await patientServices.GetInformation(patientId);
+
+            if (data.PatientID != null)
+            {
+                var motherData = new
+                {
+                    id = data.PatientID,
+                    firstname = data.FirstName,
+                    middlename = data.MiddleName,
+                    lastname = data.LastName,
+                    address = data.Address,
+                    birthdate = data.Birthdate,
+                };
+                return Json(new { isSuccess = true, item = motherData });
+            }
+            return Json(new { isSuccess = false, Message = "Mother not found." });
+
+        }
         //Get All Deleted Patient
         public async Task<IActionResult> DisplayDeletedPatient()
         {

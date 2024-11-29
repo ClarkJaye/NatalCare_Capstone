@@ -12,12 +12,14 @@
         <div class="col-md-4 mb-4">
             <div class="card shadow py-2 card-selected">
                 <div class="card-body">
-                    <div class="row align-items-center">
+                    <div class="row">
                         <div class="col mr-2">
                             <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
                                 Total Admitted
                             </div>
-                            <div class="h4 fw-bold my-3">
+                        </div>
+                        <div class="col-auto align-items-center" style="padding-right:2rem;">
+                            <div class="h1">
                                 @(ViewBag.TodayRecord ?? 0)
                             </div>
                         </div>
@@ -29,13 +31,15 @@
         <div class="col-md-4 mb-4">
             <div class="card shadow py-2 card-selected">
                 <div class="card-body">
-                    <div class="row align-items-center">
+                    <div class="row">
                         <div class="col mr-2">
                             <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
                                 Total In-Labor
                             </div>
-                            <div class="h4 fw-bold my-3">
-                                @(ViewBag.MonthlyRecord ?? 0)
+                        </div>
+                        <div class="col-auto align-items-center" style="padding-right:2rem;">
+                            <div class="h1">
+                                @(ViewBag.TodayRecord ?? 0)
                             </div>
                         </div>
                     </div>
@@ -46,13 +50,15 @@
         <div class="col-md-4 mb-4">
             <div class="card shadow py-2 card-selected">
                 <div class="card-body">
-                    <div class="row align-items-center">
+                    <div class="row">
                         <div class="col mr-2">
                             <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
                                 Total Pospartum Care
-                            </div>
-                            <div class="h4 fw-bold my-3">
-                                @(ViewBag.MonthlyRecord ?? 0)
+                            </div>  
+                        </div>
+                        <div class="col-auto align-items-center" style="padding-right:2rem;">
+                            <div class="h1">
+                                @(ViewBag.TodayRecord ?? 0)
                             </div>
                         </div>
                     </div>
@@ -62,7 +68,7 @@
     </div>
 
     <div class="mb-4 mt-2 d-flex align-items-center justify-content-end gap-3">
-        <a class="btn btn-pink d-flex align-items-center gap-2" asp-controller="Admission" asp-action="Create">
+        <a class="btn btn-pink " asp-controller="Admission" asp-action="Create">
             <i class="fas fa-plus" style="font-size: 18px;"></i>
             <strong>Add Admit Patient</strong>
         </a>

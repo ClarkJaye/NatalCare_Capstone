@@ -109,13 +109,154 @@
 
 
 
-
+@media print {
+    .printDiv1In1Div1 h1 {
+        color: #ff456e; /* Adjust this if needed */
+    }
+}
 
 
 /*PRINT*/
 .out{
     width:100%;
     height:100vh;
-    border:1px solid black;
 
+    display:flex;
+    flex-direction:column;
+}
+
+
+.printDiv1{
+    width:100%;
+    height:25%;
+    display:flex;
+    flex-direction:row;
+}
+.printDiv1In1 {
+    width: 45%;
+    height: 100%;
+    display:flex;
+    flex-direction:column;
+}
+.printDiv1In1Div1 {
+    width: 100%;
+    height: 40%;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+}
+.printDiv1In1Div1 h1{
+    font-family: 'Garet', sans-serif;
+    font-weight:900;
+    color: #ff456e; 
+    margin-right:2%;
+}
+
+.printDiv1In1Div2 {
+    width: 100%;
+    height: 60%;
+    border: 1px solid #7777;
+    display: flex;
+    flex-direction: column;
+}
+.printDiv1In1Div2Div1 {
+    height: 33%;
+    width: 100%;
+    display:flex;
+    flex-direction:row;
+}
+.printDiv1In1Div2Div1Div1 {
+    height: 100%;
+    width: 40%;
+    border: 1px solid #7777;
+
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+}
+.printDiv1In1Div2Div1Div2 {
+    height: 100%;
+    width: 60%;
+    border: 1px solid #7777;
+
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+}
+
+
+
+.printDiv1In1Div2Div2 {
+    height: 33%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+
+
+
+.printDiv1In1Div2Div3 {
+    height: 33%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+
+
+
+
+.printDiv1In2 {
+    width: 55%;
+    height: 100%;
+    border: 1px solid yellow;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.printDiv2 {
+    width: 100%;
+    height: 45%;
+    border: 1px solid green;
+}
+
+
+
+
+
+
+
+.printDiv3 {
+    width: 100%;
+    height: 30%;
+    display: flex;
+    flex-direction: row;
+}
+
+.printDiv3In1 {
+    width: 50%;
+    height: 100%;
+    border: 1px solid red;
+}
+.printDiv3In2 {
+    width: 50%;
+    height: 100%;
+    border: 1px solid blue;
 }

@@ -23,6 +23,7 @@ namespace NatalCare.DataAccess.Interfaces
 
         Task<CommonResponse> createInvoice(BillingDTO billingDTO);
 
+        Task<List<Payments>> GetPayments();
     }
 
 

@@ -6,16 +6,16 @@ namespace NatalCare_System.ViewComponents
 
     public class InvoiceRecordsViewComponent : ViewComponent
     {
-        private readonly IServicesOperationServices serviceServices;
+        private readonly IBillingServices serviceServices;
 
-        public InvoiceRecordsViewComponent(IServicesOperationServices serviceServices)
+        public InvoiceRecordsViewComponent(IBillingServices serviceServices)
         {
             this.serviceServices = serviceServices;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(string patientId)
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var records = await serviceServices.GetDeliveryRecords(patientId);
+            var records = await serviceServices.GetPayments();
             return View(records);
         }
     }

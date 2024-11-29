@@ -15,7 +15,6 @@ namespace NatalCare.DataAccess.Services
     {
 
         private readonly IAppUnitOfWork _unitOfWork;
-
         private readonly UserManager<User> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -25,6 +24,15 @@ namespace NatalCare.DataAccess.Services
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
         }
+
+        public async Task<List<Payments>> GetPayments()
+        {
+
+            var payments = await _unitOfWork.Repository<Payments>().AsQueryable().Include(a => a.Patient).ToListAsync();
+
+            return payments;
+        }
+
 
         public Task<List<Items>> allItems()
         {
@@ -148,6 +156,8 @@ namespace NatalCare.DataAccess.Services
 
             return new CommonResponse(true, "Service Added Successfully");
         }
+
+
 
         public async Task<SearchResultResponse> searchPatient(string patientName)
         {

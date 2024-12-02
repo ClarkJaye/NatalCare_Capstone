@@ -19,12 +19,19 @@ namespace NatalCare.Models.Entities
 
         public string? Notes { get; set; }
 
+        public DateOnly? BillDate { get; set; }
+
+        public DateOnly? DueDate { get; set; }
+
         // Foreign Key
         [Required]
         public string? PatientID { get; set; }
         [ForeignKey("PatientID")]
         [ValidateNever]
         public Patients? Patient { get; set; }
+
+
+
 
         public DateTime? Created_At { get; set; }
         [Column("Created_By")]
@@ -40,5 +47,11 @@ namespace NatalCare.Models.Entities
         [ForeignKey("PatientUpdatedBy")]
         [ValidateNever]
         public User? UpdatedBy { get; set; }
+
+
+        public int? StaffID { get; set; }
+        [ForeignKey("StaffID")]
+        [ValidateNever]
+        public Staff? Staff { get; set; }
     }
 }

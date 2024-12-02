@@ -35,10 +35,7 @@ namespace NatalCare_System.Controllers
             return View(billingDTO);
         }
 
-        public IActionResult PrintInvoice()
-        {
-            return View();
-        }
+
 
         [HttpPost]
         public async Task<IActionResult> AddItem(string itemName, string description, decimal price)
@@ -97,13 +94,13 @@ namespace NatalCare_System.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateInvoice(BillingDTO billingDTO, string action)
         {
-            var (result, message) = await _billing.createInvoice(billingDTO);
+            var (result, invoiceNumber) = await _billing.createInvoice(billingDTO);
 
             if (result)
             {        
                 if (action == "MakePayment")
                 {
-                    return RedirectToAction(nameof(PrintInvoice));
+                    return RedirectToAction(nameof(PrintInvoice), new { invoiceNumber });
                 }
                 else if (action == "SaveAndPayLater")
                 {
@@ -112,6 +109,13 @@ namespace NatalCare_System.Controllers
             }
             return RedirectToAction(nameof(Index));
 
+        }
+
+        public async Task<IActionResult> PrintInvoice(int? invoiceNumber)
+        {
+            var model = await _billing.PaymentVM(invoiceNumber);
+
+            return View(model);
         }
 
 

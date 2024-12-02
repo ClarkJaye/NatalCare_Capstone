@@ -8,7 +8,7 @@ using static NatalCare.DataAccess.Response.ServiceResponses;
 
 namespace NatalCare.DataAccess.Services
 {
-    internal class ServicesOperationServices : IServicesOperationServices
+    public class ServicesOperationServices : IServicesOperationServices
     {
         private readonly IAppUnitOfWork unitOfWork;
 

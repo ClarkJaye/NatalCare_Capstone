@@ -2,6 +2,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NatalCare.DataAccess.data;
 using NatalCare.DataAccess.Extensions;
+using NatalCare.DataAccess.Interfaces;
+using NatalCare.DataAccess.Repositories;
+using NatalCare.DataAccess.Repository;
+using NatalCare.DataAccess.Repository.IRepository;
+using NatalCare.DataAccess.Services;
+using NatalCare.Models.DTOs.VM;
 using NatalCare.Models.Entities;
 using PrinceQ.DataAccess.Hubs;
 using Serilog;
@@ -33,6 +39,27 @@ builder.Services.AddIdentity<User, Role>(options =>
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
+
+
+//builder.Services.AddScoped<IModuleAccessServices, ModuleAccessServices>();
+//// Register Identity
+//builder.Services.AddScoped<IIdentityUnitOfWork, IdentityUnitOfWork>();
+//// Register Unit of Work
+//builder.Services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
+//// Register Patient 
+//builder.Services.AddScoped<IPatientServices, PatientServices>();
+//// Register Profile
+//builder.Services.AddScoped<IProfileServices, ProfileServices>();
+//// Register Profile Access
+//builder.Services.AddScoped<IProfileAccessServices, ProfileAccessServices>();
+//// Register Services CRUD Operations
+//builder.Services.AddScoped<IServicesOperationServices, ServicesOperationServices>();
+//// Register Newborn
+//builder.Services.AddScoped<INewbornServices, NewbornServices>();
+//// Register SelectList 
+//builder.Services.AddScoped<ISelectListServices, SelectListServices>();
+
+//builder.Services.AddScoped<IBillingServices, BillingServices>();
 
 // Configure SecurityStampValidatorOptions for idle timeout
 builder.Services.Configure<SecurityStampValidatorOptions>(options =>

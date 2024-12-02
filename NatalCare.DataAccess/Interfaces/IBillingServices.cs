@@ -1,4 +1,5 @@
 ﻿using NatalCare.Models.DTOs;
+using NatalCare.Models.DTOs.VM;
 using NatalCare.Models.Entities;
 using System;
 using System.Collections.Generic;
@@ -21,10 +22,11 @@ namespace NatalCare.DataAccess.Interfaces
 
         Task<List<Servicesss>> allServices();
 
-        Task<CommonResponse> createInvoice(BillingDTO billingDTO);
+        Task<PrintInvoiceResponse> createInvoice(BillingDTO billingDTO);
 
         Task<List<Payments>> GetPayments();
+
+        Task<PrintDTO> PaymentVM(int? invoiceNumber);
+
     }
-
-
 }

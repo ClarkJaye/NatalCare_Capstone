@@ -1,11 +1,14 @@
-﻿<link rel="stylesheet" href="~/css/billing.css" asp-append-version="true" />
+﻿@model NatalCare.Models.DTOs.VM.PrintDTO
+
+<link rel="stylesheet" href="~/css/billing.css" asp-append-version="true" />
 <link href="https://fonts.googleapis.com/css2?family=Garet:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="out">
     <div class="printDiv1">
 
         <div class="printDiv1In1">
-         
+
             <div class="printDiv1In1Div1">
                 <img src="/img/a.png" style="height:auto; width:70px;" />
                 <img src="/img/paanakantopLogo.png" style="height:auto; width:250px;" />
@@ -15,31 +18,31 @@
                 <div class="printDiv1In1Div2Div1">
 
                     <div class="printDiv1In1Div2Div1Div1">
-                        <p style="margin-bottom:0;">Invoice No :</p>
-              
+                        <p style="margin:0;">Invoice No :</p>
+
                     </div>
                     <div class="printDiv1In1Div2Div1Div2">
-                        <p style="margin-bottom:0;">1</p>
+                        <p style="margin:0;">@Model.Payments.PaymentID</p>
                     </div>
 
 
                 </div>
                 <div class="printDiv1In1Div2Div2">
                     <div class="printDiv1In1Div2Div1Div1">
-                        <p style="margin-bottom:0;">Invoice Date :</p>
+                        <p style="margin:0;">Invoice Date :</p>
 
                     </div>
                     <div class="printDiv1In1Div2Div1Div2">
-                        <p style="margin-bottom:0;">November 18, 2024</p>
+                        <p style="margin:0;">@(Model.Payments.BillDate?.ToString() ?? "N/A")</p>
                     </div>
                 </div>
                 <div class="printDiv1In1Div2Div3">
                     <div class="printDiv1In1Div2Div1Div1">
-                        <p style="margin-bottom:0;">Due Date :</p>
+                        <p style="margin:0;">Due Date :</p>
 
                     </div>
                     <div class="printDiv1In1Div2Div1Div2">
-                        <p style="margin-bottom:0;">November 28, 2024</p>
+                        <p style="margin:0;">@(Model.Payments.DueDate?.ToString() ?? "N/A")</p>
                     </div>
                 </div>
             </div>
@@ -48,52 +51,134 @@
 
         <div class="printDiv1In2">
             <div class="printDiv1In1Div1">
-                <h1>INVOICE</h1>
+                <h1 style="font-size:50px;">INVOICE</h1>
             </div>
 
             <div class="printDiv1In1Div2">
-                <div class="printDiv1In1Div2Div1">
+                <div class="printDiv1In1Div2Div1" style="height: 100%;">
 
                     <div class="printDiv1In1Div2Div1Div1">
-                        <p style="margin-bottom:0;">Invoice No :</p>
+                        <p style="margin-bottom:0;">Invoice To :</p>
 
                     </div>
                     <div class="printDiv1In1Div2Div1Div2">
-                        <p style="margin-bottom:0;">1</p>
+                        <p style="margin:0; font-weight: bold;">@Model.Payments.Patient.FirstName @(Model.Payments.Patient.MiddleName ?? "") @Model.Payments.Patient.LastName</p>
+                        <p style="margin:0;">@(Model.Payments.Patient.MobileNumber ?? "N/A")</p>
+                        <p style="margin:0; text-align:center;">@(Model.Payments.Patient.Address?? "N/A")</p>
                     </div>
-
 
                 </div>
-                <div class="printDiv1In1Div2Div2">
-                    <div class="printDiv1In1Div2Div1Div1">
-                        <p style="margin-bottom:0;">Invoice Date :</p>
 
-                    </div>
-                    <div class="printDiv1In1Div2Div1Div2">
-                        <p style="margin-bottom:0;">November 18, 2024</p>
-                    </div>
-                </div>
-                <div class="printDiv1In1Div2Div3">
-                    <div class="printDiv1In1Div2Div1Div1">
-                        <p style="margin-bottom:0;">Due Date :</p>
-
-                    </div>
-                    <div class="printDiv1In1Div2Div1Div2">
-                        <p style="margin-bottom:0;">November 28, 2024</p>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
     <div class="printDiv2">
+        <div class="printDiv2Div1">
+            <table class="printTable">
+                <thead style="text-align:center;">
+                    <tr>
+                        <th>ITEMS/SERVICES</th>
+                        <th>QUANTITY</th>
+                        <th>PRICE</th>
+                        <th>PhilHealth Covered</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody class="printTbody">
+                    <tr>
+                        <td>prenatal</td>
+                        <td>5</td>
+                        <td>200</td>
+                        <td>500</td>
+                        <td>500</td>
+                    </tr>
+                    <tr>
+                        <td>prenatal</td>
+                        <td>5</td>
+                        <td>200</td>
+                        <td>500</td>
+                        <td>500</td>
+                    </tr>
+                    <tr>
+                        <td>prenatal</td>
+                        <td>5</td>
+                        <td>200</td>
+                        <td>500</td>
+                        <td>500</td>
+                    </tr>
+                    <tr>
+                        <td>prenatal</td>
+                        <td>5</td>
+                        <td>200</td>
+                        <td>500</td>
+                        <td>500</td>
+                    </tr>
 
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="printDiv3">
         <div class="printDiv3In1">
+            <div class="printDiv3In1Div1">
+                <div class="printDiv3In2Div1Div1" style="background-color: white; color: black; align-items:flex-start;">
+                    <p style="margin:0;">Current Balance:</p>
+                    <p style="margin:0;">Invoice Generated By:</p>
+                    <p style="margin:0;">Notes:</p>
+                </div>
+                <div class="printDiv3In2Div1Div2" style="border: none;">
+                    <p style="margin:0; border: none">20%</p>
+                    <p style="margin:0; border: none">@Model.Payments.Staff.FirstName @(Model.Payments.Staff.MiddleName ?? "") @Model.Payments.Staff.LastName</p>
+                    <p style="margin:0; border: none"></p>
+                </div>
+            </div>
+            <div class="printDiv3In1Div2">
+                <p style="margin: 0;" id="printNotes"> @(Model.Payments.Notes ?? "None") </p>
+            </div>
+            <div class="printDiv3In1Div3">
 
+                <img src="/img/logo_footerSide.png" style="height:auto; width:70px;" />
+                <h2 style="line-height:80%; margin:0; font-weight:bolder; margin-right:3rem;">Paanakan Sa <br /> Mandaue</h2>
+
+            </div>
         </div>
         <div class="printDiv3In2">
-
+            <div class="printDiv3In2Div1">
+                <div class="printDiv3In2Div1Div1">
+                    <p style="margin:0; ">Sub Total:</p>
+                    <p style="margin:0;">Discount:</p>
+                    <p style="margin:0;">PhilHealth Total:</p>
+                    <p style="margin:0;">Total Payment:</p>
+                </div>
+                <div class="printDiv3In2Div1Div2">
+                    <p style="margin:0;">@Model.Payments.Total_Amount</p>
+                    <p style="margin:0;">@(Model.Payments.Discount)</p>
+                    <p style="margin:0;">@(Model.Payments.PhilHealth_Deduction)</p>
+                    <p style="margin:0;">@Model.Payments.Final_Amount</p>
+                </div>
+            </div>
+            <div class="printDiv3In2Div2">
+                <div class="printDiv3In2Div2Div1">
+                    <div class="printDiv3In2Div2Div1Div1" style="align-items: flex-end;">
+                        <div class="phoneIcon"><i class="fa fa-phone phoneIcon1" aria-hidden="true"></i></div><p style="margin:0; margin-bottom:.5rem; margin-left:.5rem;">123456789</p>
+                    </div>
+                    <div class="printDiv3In2Div2Div1Div2" style="align-items:center;">
+                        <div class="phoneIcon"><i class="fa fa-user phoneIcon2" aria-hidden="true"></i></div><p style="margin:0; margin-left:.5rem;">lisa@gmail.com</p>
+                    </div>
+                </div>
+                <div class="printDiv3In2Div2Div2">
+                    <div class="printDiv3In2Div2Div1Div1" style="align-items: flex-end;">
+                        <div class="phoneIcon"><i class="fa fa-commenting phoneIcon3" aria-hidden="true"></i></div><p style="margin:0; margin-bottom:.5rem; margin-left:.5rem;">paanakansamandaue</p>
+                    </div>
+                    <div class="printDiv3In2Div2Div1Div2" style="align-items: center">
+                        <div class="phoneIcon"><i class="fa fa-map-marker phoneIcon4" aria-hidden="true"></i></div> <p style="font-size: 10px; margin:0; margin-left:.5rem;">123 Anywhere St. Any City.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+    window.print();
+</script>

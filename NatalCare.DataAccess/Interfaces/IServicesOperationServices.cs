@@ -14,6 +14,7 @@ namespace NatalCare.DataAccess.Interfaces
         Task<CommonResponse> AddPrenatalRecordAsync(Prenatal prenatal, string patientId, string userId);
         Task<CommonResponse> DeletePrenatalRecordAsync(string caseNo, string userId);
         Task<GeneralResponse> GetPrenatalRecordAsync(string caseNo);
+        Task<Prenatal> GetPrenatalInformation(string caseNo);
         Task<CommonResponse> UpdatePrenatalRecordAsync(Prenatal prenatal, string userId);
 
         //------ PRENATAL VISIT ------//
@@ -66,7 +67,18 @@ namespace NatalCare.DataAccess.Interfaces
         Task<CommonResponse> UpdateDeliveryRecordAsync(Delivery delivery, string userId);
         Task<CommonResponse> RetrievedDeliveryAync(string caseno, string userId);
         //CLINICAL SHEET
-        Task<ClinicalFaceSheet> GetClinicalSheetRecords(string patientId, string deliveryId);    
+        Task<ClinicalFaceSheet> GetClinicalSheetRecords(string patientId, string deliveryId);
 
+
+
+        //ADMISSION
+        Task<Delivery> GetAdmittedDeliveryRecord(string caseno);
+        Task<CommonResponse> AddAdmissionDelivery(Delivery data, string userId);
+        Task<CommonResponse> UpdateAdmissionDelivery(Delivery data, string userId);
+        Task<List<Delivery>> GetAllDeliveryRecords();
+
+
+        //OPD 
+        Task<List<OpdVisit>> GetAllOPDRecords();
     }
 }

@@ -8,7 +8,6 @@ namespace NatalCare.Models.Entities
     public class Delivery : BaseEntity
     {
         [Key]
-        [Required]
         public string? CaseNo { get; set; }
         [Required]
         public DateOnly Date_Admitted { get; set; }
@@ -16,12 +15,20 @@ namespace NatalCare.Models.Entities
         public TimeOnly Time_Admitted { get; set; }
         public DateOnly? Date_Discharged { get; set; }
         public TimeOnly? Time_Discharged { get; set; }
-        public int? WardNumber { get; set; }
         public string? Notes { get; set; }
-        public string? ReferralReason { get; set; }
-        public string? ReferredTo { get; set; }
 
         // Foreign Key
+        public int? WardNumber { get; set; }
+        [ForeignKey("WardNumber")]
+        [ValidateNever]
+        public Ward? Wards { get; set; }
+
+        public int? BedNumber { get; set; }
+        [ForeignKey("BedNumber")]
+        [ValidateNever]
+        public Bed? Beds { get; set; }
+
+
         public int? DeliveryStatusID { get; set; }
         [ForeignKey("DeliveryStatusID")]
         [ValidateNever]

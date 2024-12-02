@@ -4,9 +4,10 @@
     Layout = null;
 }
 
-<div class="table-responsive">
-    <table id="deletedPrenetalTable" class="table table-hover table-striped">
-        <thead class="border-bottom-2">
+
+<div class="table-responsive" style="max-height:600px;">
+    <table id="DisplayPrenatalTable" class="table table-striped">
+        <thead>
             <tr>
                 <th>Case No#</th>
                 <th>Date Visit</th>
@@ -34,11 +35,11 @@
                     <td>@item.LMP?.ToString("MMM dd yyyy")</td>
                     <td>@item.EDC?.ToString("MMM dd yyyy")</td>
                     <td>@item.HRCODE</td>
-                    <td>@item.Notes</td>
+                    <td style="max-width: 200px; word-wrap: break-word;">@item.Notes</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-pink retreiveBtn" data-caseno="@item.CaseNo">
-                            <i class="fa-solid fa-undo"></i>
-                            <span>Retrieve</span>
+                        <button class="btn btn-sm btn-outline-pink" id="prenatalSelectBtn" data-caseid="@item.CaseNo">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Select</span>
                         </button>
                     </td>
                 </tr>
@@ -50,7 +51,7 @@
 
 <script>
     // Initialize DataTables
-    $('#deletedListContainer #deletedPrenetalTable').DataTable({
+    $('#prenatalListContainer #DisplayPrenatalTable').DataTable({
         paging: true,
         lengthChange: true,
         searching: true,
@@ -58,7 +59,7 @@
         lengthMenu: [10, 20, 50, 100],
         language: {
             search: "_INPUT_",
-            searchPlaceholder: "Search record..."
+            searchPlaceholder: "Search prenatal..."
         },
         language: {
             paginate: {
@@ -73,31 +74,6 @@
             { orderable: false, targets: -1 }
         ]
     });
-
-    $(".retreiveBtn").on("click", function () {
-        var caseno = $(this).data('caseno');
-        retrieveRecord(caseno);
-    });
-
-    function retrieveRecord(caseno) {
-        $.ajax({
-            url: '@Url.Action("RetrievePrenatalRecord", "Prenatal")',
-            type: 'POST',
-            data: { caseno: caseno },
-            success: function (result) {
-                if (result.isSuccess) {
-                    toastr.success(result.message)
-                    LoadPrenatalComponent();
-                    $('#deletedPreModal').modal('hide');
-                } else {
-                    toastr.error(result.message);
-                }
-            },
-            error: function () {
-                console.error("Failed to load patients data.");
-            }
-        });
-    }
 </script>
 
 

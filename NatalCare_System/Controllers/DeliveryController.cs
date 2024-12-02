@@ -47,6 +47,7 @@ namespace NatalCare_System.Controllers
             return View(viewModel);
         }
 
+
         //CLINICAL SHEETS 
         public IActionResult ClinicalRecords(string patientId, string caseno)
         {

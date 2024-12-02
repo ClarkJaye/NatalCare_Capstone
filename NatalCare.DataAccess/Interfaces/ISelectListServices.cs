@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using NatalCare.Models.Entities;
+using static NatalCare.DataAccess.Response.ServiceResponses;
 
 namespace NatalCare.DataAccess.Interfaces
 {
@@ -12,8 +14,10 @@ namespace NatalCare.DataAccess.Interfaces
         Task<SelectList> GetRoleStaffSelectListAsync();
         //Status Code 
         Task<SelectList> GetStatusCodeSelectListAsync();
-        // Delivery Status 
+        // Delivery Status Excluding Referr
         Task<SelectList> GetDeliveryStatusSelectListAsync();
+        // Delivery Status Including Referral
+        Task<SelectList> GetDeliveryStatusSelectListAsyncExceptReferral();
         //All Staff Role
         Task<SelectList> GetAllStaffSelectListAsync();
         //Staff 
@@ -26,6 +30,15 @@ namespace NatalCare.DataAccess.Interfaces
         Task<SelectList> GetNurseSelectListAsync();
         //Doctor 
         Task<SelectList> GetDoctorSelectListAsync();
+        //Wards 
+        Task<SelectList> GetWardsSelectListAsync();
+        //Beds 
+        Task<SelectList> GetBedsSelectListAsync(int? wardId);
+        //Bed Selected
+        Task<SelectList> GetAllBedSelectListAsync(int? wardId);
+
+
+
 
     }
 }

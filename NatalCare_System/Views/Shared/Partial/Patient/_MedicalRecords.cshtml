@@ -49,7 +49,6 @@
     $(document).ready(function () {
         // Retrieve patientId from the card's data attribute
         var patientId = $('#medicalCard').data('patient-id');
-        console.log(patientId)
         // Listen for tab changes
         $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
             var tabId = $(e.target).attr('href'); // Get the tab pane ID

@@ -16,7 +16,7 @@ namespace NatalCare_System.Controllers
         {
             if (!await CheckAccessAsync(7)) // Invoice List
             {
-                return RedirectToDashboard();
+                return RedirectTo();
             }
 
             return View();
@@ -26,7 +26,7 @@ namespace NatalCare_System.Controllers
         {
             if (!await CheckAccessAsync(7)) // Invoice List
             {
-                return RedirectToDashboard();
+                return RedirectTo();
             }
 
             return View();
@@ -36,7 +36,7 @@ namespace NatalCare_System.Controllers
         {
             if (!await CheckAccessAsync(8)) // Gnerate Invoice
             {
-                return RedirectToDashboard();
+                return RedirectTo();
             }
 
             return View();

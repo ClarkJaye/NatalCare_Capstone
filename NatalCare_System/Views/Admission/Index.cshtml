@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<NatalCare.Models.Entities.Delivery>
+
+@{
     ViewData["Title"] = "Admission Records";
     ViewData["NavTitle"] = "Admission Records";
     Layout = "_UserLayout";
@@ -20,7 +22,7 @@
                         </div>
                         <div class="col-auto align-items-center" style="padding-right:2rem;">
                             <div class="h1">
-                                @(ViewBag.TodayRecord ?? 0)
+                                @(ViewBag.TotalAdmitted ?? 0)
                             </div>
                         </div>
                     </div>
@@ -39,7 +41,7 @@
                         </div>
                         <div class="col-auto align-items-center" style="padding-right:2rem;">
                             <div class="h1">
-                                @(ViewBag.TodayRecord ?? 0)
+                                @(ViewBag.TotalInLabor ?? 0)
                             </div>
                         </div>
                     </div>
@@ -58,7 +60,7 @@
                         </div>
                         <div class="col-auto align-items-center" style="padding-right:2rem;">
                             <div class="h1">
-                                @(ViewBag.TodayRecord ?? 0)
+                                @(ViewBag.TotalPospartum ?? 0)
                             </div>
                         </div>
                     </div>
@@ -74,7 +76,6 @@
         </a>
     </div>
 
-
     <div class="card shadow-sm card-selected">
         <div class="card-body">
             <div class="table-responsive">
@@ -86,6 +87,7 @@
                             <th>Date & Time Admitted</th>
                             <th>Date & Time Discharge</th>
                             <th>Ward No#</th>
+                            <th>Bed No#</th>
                             <th>Patient Status</th>
                             <th>Notes</th>
                             <th>Added By</th>
@@ -93,34 +95,50 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr style="cursor: pointer;">
-                            <th>PT001</th>
-                            <td>Suarez Suarez Pepito</td>
-                            <td>Nov 22, 2024 3 PM</td>
-                            <td>Nov 23, 2024 3 PM</td>
-                            <td>WARD 2</td>
-                            <td>
-                                <span class="badge bg-success">In Labor</span>
-                            </td>
-                            <td>Sample  Sample</td>
-                            <td>Pdeuciano</td>
-                            <td>
-                                <div class="d-flex align-items-center justify-content-center gap-2">
-                                    <a class="btn btn-outline-secondary" asp-controller="" asp-action="" asp-route-id="">
-                                        <i class="fa-solid fa-list"></i>
-                                        @* <span>Details</span> *@
-                                    </a>
-                                    <a class="btn btn-outline-primary" asp-controller="" asp-action="" asp-route-id="">
-                                        <i class="fa-solid fa-pencil"></i>
-                                        @* <span>Details</span> *@
-                                    </a>
-                                    <button class="btn btn-outline-danger dlt-Btn">
-                                        <i class="fa-solid fa-trash"></i>
-                                        @* <span>Delete</span> *@
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <th>@item.PatientID</th>
+                                <td>@item.Patient?.FirstName @item.Patient?.MiddleName @item.Patient?.LastName</td>
+                                <td>@item.Date_Admitted.ToString("MMM dd yyyy") @item.Time_Admitted</td>
+                                <td>@item.Date_Discharged @item.Time_Discharged</td>
+                                <td>@item.Wards?.WardNo</td>
+                                <td>@item.Beds?.BedNo</td>
+                                <td>
+                                    @if (item.DeliveryStatusID == 1)
+                                    {   //In Labor
+                                        <span class="badge bg-success">@item.DeliveryStatus?.StatusName</span>
+                                    }
+                                    else if (item.DeliveryStatusID == 2)
+                                    {   //PostPartum
+                                        <span class="badge bg-warning">@item.DeliveryStatus?.StatusName</span>
+                                    }
+                                    else if (item.DeliveryStatusID == 3)
+                                    {   // Discharged
+                                        <span class="badge bg-danger">@item.DeliveryStatus?.StatusName</span>
+                                    }
+                                    else if (item.DeliveryStatusID == 4)
+                                    {   // Reffered
+                                        <span class="badge bg-info text-dark">@item.DeliveryStatus?.StatusName</span>
+                                    }
+                                </td>
+                                <td>@item.Notes</td>
+                                <td>@item.CreatedBy?.FirstName @item.CreatedBy?.MiddleName @item.CreatedBy?.LastName</td>
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                        <a class="btn btn-outline-secondary" asp-controller="" asp-action="" asp-route-id="@item.CaseNo">
+                                            <i class="fa-solid fa-list"></i>
+                                        </a>
+                                        <a class="btn btn-outline-primary" asp-controller="Admission" asp-action="Edit" asp-route-id="@item.CaseNo">
+                                            <i class="fa-solid fa-pencil"></i>
+                                        </a>
+                                       @*  <button class="btn btn-outline-danger dlt-Btn">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button> *@
+                                    </div>
+                                </td>
+                            </tr>
+                        }
 
                     </tbody>
                 </table>
@@ -128,20 +146,7 @@
 
         </div>
     </div>
-
 </div>
-
-
-
-
-<script>
-
-    document.addEventListener("DOMContentLoaded", function () {
-
-    });
-
-</script>
-
 
 
 

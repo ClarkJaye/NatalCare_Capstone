@@ -49,5 +49,10 @@ namespace NatalCare.Models.Entities
         [ForeignKey("StatusCode")]
         [ValidateNever]
         public Status? Status { get; set; }
+
+
+        //Triggerable for OPD
+        public int PrenatalVisitTotal { get; set; }
+
     }
 }

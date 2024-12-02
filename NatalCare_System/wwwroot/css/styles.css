@@ -369,6 +369,7 @@ ul#patientManagementMenu {
     color: var(--dark) !important;
     font-size: 14px;
 }
+
 .table tbody td,
 .table tbody th {
     font-size: 14px;

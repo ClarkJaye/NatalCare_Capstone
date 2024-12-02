@@ -33,13 +33,13 @@
         <thead>
             <tr>
                 <th>Case No#</th>
-                <th>Patient Name</th>
                 <th>Date & Time Admitted</th>
                 <th>Date & Time Discharge</th>
                 <th>Ward No#</th>
+                <th>Bed No#</th>
                 <th>Patient Status</th>
                 <th>Notes</th>
-                @* <th>Added By</th> *@
+                <th>Added By</th>
                 <th class="text-center">Action</th>
             </tr>
         </thead>
@@ -52,25 +52,31 @@
                         <td>@item.CaseNo</td>
                         <td>@item.Date_Admitted.ToString("MMM dd yyyy") @item.Time_Admitted.ToString("h:mm tt")</td>
                         <td>@item.Date_Discharged?.ToString("MMM dd yyyy") @item.Time_Discharged?.ToString("h:mm tt")</td>
-                        <td>@item.WardNumber</td>
+                        <td>@item.Wards.WardNo</td>
+                        <td>@item.Beds.BedNo</td>
                         <td>
                             @if (item.DeliveryStatusID == 1)
-                            {   //Active
+                            {   //In Labor
                                 <span class="badge bg-success">@item.DeliveryStatus?.StatusName</span>
                             }
                             else if (item.DeliveryStatusID == 2)
-                            {   //Discharge
-                                <span class="badge bg-pink ">@item.DeliveryStatus?.StatusName</span>
+                            {   //PostPartum
+                                <span class="badge bg-warning">@item.DeliveryStatus?.StatusName</span>
                             }
                             else if (item.DeliveryStatusID == 3)
+                            {   // Discharged
+                                <span class="badge bg-danger">@item.DeliveryStatus?.StatusName</span>
+                            }
+                            else if (item.DeliveryStatusID == 4)
                             {   // Reffered
                                 <span class="badge bg-info text-dark">@item.DeliveryStatus?.StatusName</span>
                             }
                         </td>
                         <td style="max-width: 200px; word-wrap: break-word;">@item.Notes</td>
+                        <td>@item.CreatedBy?.FirstName @item.CreatedBy?.MiddleName @item.CreatedBy?.LastName</td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
-                                <a asp-controller="Delivery" asp-action="Index" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-outline-secondary">
+@*                                 <a asp-controller="Delivery" asp-action="Index" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-outline-secondary">
                                     <i class="fa-solid fa-folder-open"></i>
                                 </a>
                                 <a class="btn btn-outline-secondary" asp-controller="" asp-action="" asp-route-id="">
@@ -81,7 +87,19 @@
                                 </button>
                                 <button class="btn btn-outline-danger dlt-Btn" data-caseno="@item.CaseNo">
                                     <i class="fa-solid fa-trash"></i>
-                                </button>
+                                </button> *@
+                                
+                                
+                                <a asp-controller="Delivery" asp-action="Index" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-outline-secondary">
+                                    <i class="fa-solid fa-folder-open"></i>
+                                </a>
+                                <a class="btn btn-outline-secondary" asp-controller="" asp-action="" asp-route-id="">
+                                    <i class="fa-solid fa-list"></i>
+                                </a>
+                                <a class="btn btn-outline-primary" asp-controller="Admission" asp-action="Edit" asp-route-id="@item.CaseNo" asp-route-patid="@item.PatientID">
+                                    <i class="fa-solid fa-pencil"></i>
+                                </a>
+                               
                             </div>
                         </td>
                     </tr>

@@ -54,7 +54,7 @@
 
 
 
-        protected IActionResult RedirectToDashboard()
+        protected IActionResult RedirectTo()
             {
                 return RedirectToAction("Login", "Account");
             }

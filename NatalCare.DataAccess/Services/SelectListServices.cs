@@ -2,6 +2,7 @@
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.DataAccess.Repository.IRepository;
 using NatalCare.Models.Entities;
+using static NatalCare.DataAccess.Response.ServiceResponses;
 
 public class SelectListServices : ISelectListServices
 {
@@ -123,6 +124,29 @@ public class SelectListServices : ISelectListServices
         return new SelectList(status, "Id", "StatusName");
     }
 
+    public async Task<SelectList> GetDeliveryStatusSelectListAsyncExceptReferral()
+    {
+        var status = await unitOfWork.Repository<DeliveryStatus>().GetAllAsync(x=> x.Id != 4);
+        return new SelectList(status, "Id", "StatusName");
+    }
+
+    public async Task<SelectList> GetWardsSelectListAsync()
+    {
+        var status = await unitOfWork.Repository<Ward>().GetAllAsync();
+        return new SelectList(status, "Id", "WardNo");
+    }
+
+    public async Task<SelectList> GetBedsSelectListAsync(int? wardId)
+    {
+        var status = await unitOfWork.Repository<Bed>().GetAllAsync(x => x.IsUsed == false && x.WardID == wardId);
+        return new SelectList(status, "Id", "BedNo");
+    }
+
+    public async Task<SelectList> GetAllBedSelectListAsync(int? wardId)
+    {
+        var status = await unitOfWork.Repository<Bed>().GetAllAsync(x => x.WardID == wardId);
+        return new SelectList(status, "Id", "BedNo");
+    }
 
 
 

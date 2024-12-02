@@ -61,11 +61,24 @@ namespace NatalCare.DataAccess.Services
                 return new CommonResponse(false, "Prenatal record already exists.");
 
             // Generate a new CaseNo for the record.
-            prenatal.CaseNo = GeneratePrenatalID();
+            prenatal.CaseNo = await GeneratePrenatalID();
             prenatal.PatientID = patientId;
             prenatal.Created_At = DateTime.Now;
             prenatal.StatusCode = "AC";
             prenatal.PrenatalCreatedBy = userId;
+            prenatal.PrenatalVisitTotal = 0;
+
+            if (prenatal.PrenatalVisitTotal == 0)
+            {
+                OpdVisit opd = new OpdVisit();
+                opd.ReasonForVisit = "Prenatal Check up";
+                opd.DateVisit = prenatal.DateVisit;
+                opd.PatientID = prenatal.PatientID;
+                opd.Created_At = prenatal.Created_At;
+                opd.OPDCreatedBy = userId;
+                opd.StatusCode = "AC";
+                unitOfWork.Repository<OpdVisit>().Add(opd);
+            }
 
             unitOfWork.Repository<Prenatal>().Add(prenatal);
             await unitOfWork.SaveAsync();
@@ -82,6 +95,15 @@ namespace NatalCare.DataAccess.Services
                 return new GeneralResponse(false, item, "Prenatal record not existing.");
 
             return new GeneralResponse(true, item, "Prenatal record fetched successfully!.");
+        }
+        public async Task<Prenatal> GetPrenatalInformation(string id)
+        {
+            var prenatal = await unitOfWork.Repository<Prenatal>().GetFirstOrDefaultAsync(p => p.CaseNo == id);
+
+            if (prenatal == null)
+                return new Prenatal();
+
+            return prenatal;
         }
         public async Task<CommonResponse> UpdatePrenatalRecordAsync(Prenatal prenatal, string userId)
         {
@@ -176,6 +198,20 @@ namespace NatalCare.DataAccess.Services
             if (await unitOfWork.Repository<PrenatalVisit>().AnyAsync(x => x.PrenatalVisitID == prenatalvisit.PrenatalVisitID))
                 return new CommonResponse(false, "Record already exists.");
 
+            var prenaalMain = await unitOfWork.Repository<Prenatal>().GetFirstOrDefaultAsync(x => x.CaseNo == prenatalvisit.CaseNo);
+            if(prenaalMain != null)
+            {
+                prenaalMain.PrenatalVisitTotal += 1 ;
+                OpdVisit opd = new OpdVisit();
+                opd.ReasonForVisit = "Prenatal Check up";
+                opd.DateVisit = prenaalMain.DateVisit;
+                opd.PatientID = prenaalMain.PatientID;
+                opd.Created_At = prenaalMain.Created_At;
+                opd.OPDCreatedBy = userId;
+                opd.StatusCode = "AC";
+                unitOfWork.Repository<OpdVisit>().Add(opd);
+            }
+            
             // Generate a new CaseNo for the record.
             prenatalvisit.CaseNo = caseNo;
             prenatalvisit.PatientID = patientId;
@@ -277,11 +313,23 @@ namespace NatalCare.DataAccess.Services
                 return new CommonResponse(false, "Record already exists.");
 
             // Generate a new CaseNo for the record.
-            fp.CaseNo = GenerateFPID();
+            fp.CaseNo = await GenerateFPID();
             fp.PatientID = patientId;
             fp.Created_At = DateTime.Now;
             fp.StatusCode = "AC";
             fp.FPCreatedBy = userId;
+
+            if (fp.CaseNo != null)
+            {
+                OpdVisit opd = new OpdVisit();
+                opd.ReasonForVisit = "Newborn Screening";
+                opd.DateVisit = fp.DateVisit;
+                opd.PatientID = fp.PatientID;
+                opd.Created_At = fp.Created_At;
+                opd.OPDCreatedBy = userId;
+                opd.StatusCode = "AC";
+                unitOfWork.Repository<OpdVisit>().Add(opd);
+            }
 
             unitOfWork.Repository<FamilyPlanning>().Add(fp);
             await unitOfWork.SaveAsync();
@@ -420,11 +468,23 @@ namespace NatalCare.DataAccess.Services
                 return new CommonResponse(false, "Newborn Hearing record already exists.");
 
             // Generate a new CaseNo for the record.
-            item.HearingNo = GenerateHearingID();
+            item.HearingNo = await GenerateHearingID();
             item.PatientID = patientId;
             item.Created_At = DateTime.Now;
             item.StatusCode = "AC";
             item.HearingCreatedBy = userId;
+
+            if (item.HearingNo != null)
+            {
+                OpdVisit opd = new OpdVisit();
+                opd.ReasonForVisit = "Newborn Hearing";
+                opd.DateVisit = item.DateVisit;
+                opd.PatientID = item.PatientID;
+                opd.Created_At = item.Created_At;
+                opd.OPDCreatedBy = userId;
+                opd.StatusCode = "AC";
+                unitOfWork.Repository<OpdVisit>().Add(opd);
+            }
 
             unitOfWork.Repository<NewbornHearing>().Add(item);
             await unitOfWork.SaveAsync();
@@ -551,13 +611,25 @@ namespace NatalCare.DataAccess.Services
                 return new CommonResponse(false, "Newborn Screening ecord already exists.");
 
             // Generate a new CaseNo for the record.
-            item.ScreeningNo = GenerateScreeningID();
+            item.ScreeningNo = await GenerateScreeningID();
             item.PatientID = patientId;
             item.Created_At = DateTime.Now;
             item.StatusCode = "AC";
             item.ScreeningCreatedBy = userId;
-
             unitOfWork.Repository<NewbornScreening>().Add(item);
+
+            if(item.ScreeningNo != null)
+            {
+                OpdVisit opd = new OpdVisit();
+                opd.ReasonForVisit = "Newborn Screening";
+                opd.DateVisit = item.DateVisit;
+                opd.PatientID = item.PatientID;
+                opd.Created_At = item.Created_At;
+                opd.OPDCreatedBy = userId;
+                opd.StatusCode = "AC";
+                unitOfWork.Repository<OpdVisit>().Add(opd);
+            }
+
             await unitOfWork.SaveAsync();
             return new CommonResponse(true, "Newborn Screening record added successfully");
         }
@@ -685,7 +757,7 @@ namespace NatalCare.DataAccess.Services
         }
         public async Task<List<Delivery>> GetDeliveryRecords(string patientId)
         {
-            var record = await unitOfWork.Repository<Delivery>().GetAllAsync(p => p.PatientID == patientId && p.StatusCode == "AC", includeProperties: "Newborn,DeliveryStatus");
+            var record = await unitOfWork.Repository<Delivery>().GetAllAsync(p => p.PatientID == patientId && p.StatusCode == "AC", includeProperties: "Newborn,DeliveryStatus,CreatedBy,Wards,Beds");
             if (!record.Any())
             {
                 return new List<Delivery>();
@@ -702,7 +774,7 @@ namespace NatalCare.DataAccess.Services
                 return new CommonResponse(false, "Delivery record already exists.");
 
             // Generate a new CaseNo for the record.
-            delivery.CaseNo = GenerateDeliveryID();
+            delivery.CaseNo = await GenerateDeliveryID();
             delivery.PatientID = patientId;
             delivery.Created_At = DateTime.Now;
             delivery.StatusCode = "AC";
@@ -825,6 +897,141 @@ namespace NatalCare.DataAccess.Services
             return new CommonResponse(true, "Record Retrieved Successfully.");
         }
 
+
+
+        //ADMISSION PART
+        public async Task<List<Delivery>> GetAllDeliveryRecords()
+        {
+            var record = await unitOfWork.Repository<Delivery>().GetAllAsync(p => p.StatusCode == "AC", includeProperties: "Patient,Newborn,DeliveryStatus,Wards,Beds");
+            return record.ToList();
+        }
+        public async Task<Delivery> GetAdmittedDeliveryRecord(string caseno)
+        {
+            var record = await unitOfWork.Repository<Delivery>().GetFirstOrDefaultAsync(p => p.CaseNo == caseno);
+            if (record == null)
+            {
+                return new Delivery();
+            }
+            return record;
+        }
+
+        public async Task<CommonResponse> AddAdmissionDelivery(Delivery data, string userId)
+        {
+            if (data == null)
+                return new CommonResponse(false, "Delivery cannot be null.");
+
+            // Validation checks
+            if (await unitOfWork.Repository<Delivery>().AnyAsync(x => x.CaseNo == data.CaseNo))
+                return new CommonResponse(false, "Delivery already exists!");
+
+            // Generate a new PatientID
+            data.CaseNo = await GenerateDeliveryID();
+            data.Created_At = DateTime.Now;
+            data.StatusCode = "AC";
+            data.DLCreatedBy = userId;
+
+            var patient = await unitOfWork.Repository<Patients>().GetFirstOrDefaultAsync(x => x.PatientID == data.PatientID);
+
+            if(patient != null)
+            {
+                patient.StatusCode = "AD";
+                unitOfWork.Repository<Patients>().Update(patient);
+            }
+
+
+            if (data.BedNumber != null)
+            {
+                var bed = await unitOfWork.Repository<Bed>().GetFirstOrDefaultAsync(x=> x.Id == data.BedNumber);
+                if(bed != null)
+                {
+                    bed.IsUsed = true;
+                    bed.PatientID = data.PatientID;
+                    unitOfWork.Repository<Bed>().Update(bed);
+                }
+            }
+
+            unitOfWork.Repository<Delivery>().Add(data);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Delivery Successfully Created!");
+        }
+
+        public async Task<CommonResponse> UpdateAdmissionDelivery(Delivery item, string userId)
+        {
+            var existingRecord = await unitOfWork.Repository<Delivery>().GetFirstOrDefaultAsync(p => p.CaseNo == item.CaseNo);
+
+            if (existingRecord == null)
+                return new CommonResponse(false, "Record not found.");
+
+            if (existingRecord.BedNumber != item.BedNumber)
+            {
+                var prevbed = await unitOfWork.Repository<Bed>().GetFirstOrDefaultAsync(x => x.Id == existingRecord.BedNumber);
+                if (prevbed != null)
+                {
+                    prevbed.IsUsed = false;
+                    prevbed.PatientID = null;
+                    unitOfWork.Repository<Bed>().Update(prevbed);
+                    await unitOfWork.SaveAsync();
+                }
+
+                var bed = await unitOfWork.Repository<Bed>().GetFirstOrDefaultAsync(x => x.Id == item.BedNumber);
+                if (bed != null)
+                {
+                    bed.IsUsed = true;
+                    bed.PatientID = item.PatientID;
+                    unitOfWork.Repository<Bed>().Update(bed);
+                    await unitOfWork.SaveAsync();
+                }
+            }
+            // Update the existing record fields
+            existingRecord.Date_Admitted = item.Date_Admitted;
+            existingRecord.Time_Admitted = item.Time_Admitted;
+            existingRecord.Date_Discharged = item.Date_Discharged;
+            existingRecord.Time_Discharged = item.Time_Discharged;
+            existingRecord.WardNumber = item.WardNumber;
+            existingRecord.BedNumber = item.BedNumber;
+            existingRecord.DeliveryStatusID = item.DeliveryStatusID;
+            existingRecord.PrenatalID = item.PrenatalID;
+            existingRecord.NewbornID = item.NewbornID;
+            existingRecord.PatientID = item.PatientID;
+            existingRecord.Notes = item.Notes;
+            existingRecord.Updated_At = DateTime.UtcNow;
+            existingRecord.DLUpdatedBy = userId;
+
+            if(item.DeliveryStatusID == 3)
+            {
+                var patient = await unitOfWork.Repository<Patients>().GetFirstOrDefaultAsync(x => x.PatientID == item.PatientID);
+                if(patient != null)
+                {
+                    patient.StatusCode = "AC";
+                    unitOfWork.Repository<Patients>().Update(patient);
+                }
+            }
+            else if (item.DeliveryStatusID != 3)
+            {
+                var patient = await unitOfWork.Repository<Patients>().GetFirstOrDefaultAsync(x => x.PatientID == item.PatientID);
+                if (patient != null)
+                {
+                    patient.StatusCode = "AD";
+                    unitOfWork.Repository<Patients>().Update(patient);
+                }
+            }
+            unitOfWork.Repository<Delivery>().Update(existingRecord);
+
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Record updated successfully.");
+        }
+
+
+
+        //OPD PART
+        public async Task<List<OpdVisit>> GetAllOPDRecords()
+        {
+            var record = await unitOfWork.Repository<OpdVisit>().GetAllAsync(p => p.StatusCode == "AC", includeProperties: "Patient");
+            return record.ToList();
+        }
+
+
+
         //Clinical Sheets Records
         public async Task<ClinicalFaceSheet> GetClinicalSheetRecords(string patientId, string deliveryId)
         {
@@ -838,31 +1045,32 @@ namespace NatalCare.DataAccess.Services
 
 
 
+
         //Generation of ID's
         // Delivery
-        private string GenerateDeliveryID()
+        private async Task<string> GenerateDeliveryID()
         {
-            var lastPrenatal = unitOfWork.Repository<Delivery>()
+            var lastItem = await unitOfWork.Repository<Delivery>()
                 .AsQueryable()
                 .OrderByDescending(p => p.CaseNo)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             int newIdNumber = 1;
 
-            if (lastPrenatal != null && lastPrenatal.CaseNo != null)
+            if (lastItem != null && lastItem.CaseNo != null)
             {
-                string numericPart = lastPrenatal.CaseNo.Substring(3);
+                string numericPart = lastItem.CaseNo.Substring(2);
                 newIdNumber = int.Parse(numericPart) + 1;
             }
-            return $"DLV{newIdNumber:D4}"; // Formats as PRE0001, PRE0010, etc.
+            return $"AD{newIdNumber:D4}"; // Formats as AD0001, ADE0010, etc.
         }
         // Prenatal
-        private string GeneratePrenatalID()
+        private async Task<string> GeneratePrenatalID()
         {
-            var lastPrenatal = unitOfWork.Repository<Prenatal>()
+            var lastPrenatal = await unitOfWork.Repository<Prenatal>()
                 .AsQueryable()
                 .OrderByDescending(p => p.CaseNo)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             int newIdNumber = 1;
 
@@ -874,12 +1082,12 @@ namespace NatalCare.DataAccess.Services
             return $"PRE{newIdNumber:D4}"; // Formats as PRE0001, PRE0010, etc.
         }
         // Family Planning
-        private string GenerateFPID()
+        private async Task<string> GenerateFPID()
         {
-            var lastRecord = unitOfWork.Repository<FamilyPlanning>()
+            var lastRecord = await unitOfWork.Repository<FamilyPlanning>()
                 .AsQueryable()
                 .OrderByDescending(p => p.CaseNo)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             int newIdNumber = 1;
 
@@ -891,12 +1099,12 @@ namespace NatalCare.DataAccess.Services
             return $"FP{newIdNumber:D4}"; // Formats as FP0001, FP0010, etc.
         }
         // Family Planning
-        private string GenerateHearingID()
+        private async Task<string> GenerateHearingID()
         {
-            var lastRecord = unitOfWork.Repository<NewbornHearing>()
+            var lastRecord = await unitOfWork.Repository<NewbornHearing>()
                 .AsQueryable()
                 .OrderByDescending(p => p.HearingNo)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             int newIdNumber = 1;
 
@@ -908,12 +1116,12 @@ namespace NatalCare.DataAccess.Services
             return $"HR{newIdNumber:D4}"; // Formats as HR0001, HR0010, etc.
         }
         // Newborn Screening
-        private string GenerateScreeningID()
+        private async Task<string> GenerateScreeningID()
         {
-            var lastRecord = unitOfWork.Repository<NewbornScreening>()
+            var lastRecord = await unitOfWork.Repository<NewbornScreening>()
                 .AsQueryable()
                 .OrderByDescending(p => p.ScreeningNo)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             int newIdNumber = 1;
 

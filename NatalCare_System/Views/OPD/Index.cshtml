@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<NatalCare.Models.Entities.OpdVisit>
+
+@{
     ViewData["Title"] = "Out-Patient (OPD) Records";
     ViewData["NavTitle"] = "Out-Patient (OPD) Records";
     Layout = "_UserLayout";
@@ -27,14 +29,6 @@
         </div>
     </div>
 
-@*     <div class="mb-4 mt-2 d-flex align-items-center justify-content-end gap-3">
-        <a class="btn btn-pink d-flex align-items-center gap-2" asp-controller="Admission" asp-action="Create">
-            <i class="fas fa-plus" style="font-size: 18px;"></i>
-            <strong>Add OPD Patient</strong>
-        </a>
-    </div> *@
-
-
     <div class="card shadow-sm card-selected">
         <div class="card-body">
             <div class="table-responsive">
@@ -51,22 +45,39 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr style="cursor:pointer;">
-                            <th>PT001</th>
-                            <td>Suarez Suarez Pepito</td>
-                            <td>21</td>
-                            <td>Nov 22, 2024 3 PM</td>
-                            <td>Prenatal</td>
-                            <td>Lisa Pedenciado</td>
-                            <td>
-                                <div class="d-flex align-items-center justify-content-center gap-2">
-                                    <a class="btn btn-sm btn-outline-secondary" asp-controller="" asp-action="" asp-route-id="">
-                                        <i class="fa-solid fa-list"></i>
-                                        <span>Details</span>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
+                        @foreach (var item in Model)
+                        {
+                            <tr style="cursor:pointer;">
+                                <th>@item.PatientID</th>
+                                <td>@item.Patient?.FirstName @item.Patient?.MiddleName @item.Patient?.LastName</td>
+                                <td>
+                                    @{
+                                        if (item.Patient?.Birthdate != null)
+                                        {
+                                            var birthYear = item.Patient.Birthdate.Value.Year;
+                                            var currentYear = DateTime.Now.Year;
+                                            var age = currentYear - birthYear;
+                                            <text>@age years old</text>
+                                        }
+                                        else
+                                        {
+                                            @:N/A
+                                        }
+                                    }   
+                                </td>
+                                <td>@item.DateVisit?.ToString("MMM dd, yyyy hh:mm tt")</td>
+                                <td>@item.ReasonForVisit</td>
+                                <td>@item.CreatedBy?.FirstName @item.CreatedBy?.MiddleName @item.CreatedBy?.LastName</td>
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                        <a class="btn btn-sm btn-outline-secondary" asp-controller="" asp-action="" asp-route-id="">
+                                            <i class="fa-solid fa-list"></i>
+                                            <span>Details</span>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
 
                     </tbody>
                 </table>

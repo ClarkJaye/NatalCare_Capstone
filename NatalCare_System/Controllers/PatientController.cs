@@ -25,7 +25,7 @@ namespace NatalCare_System.Controllers
         {
             if (!await CheckAccessAsync(2))
             {
-               return RedirectToDashboard();
+               return RedirectTo();
             }
             // Get all counts in one call
             var (todayRecordCount, monthlyRecordCount, yearlyRecordCount, totalCount, activeCount, inActiveCount) = await patientServices.GetPatientCountsAsync();

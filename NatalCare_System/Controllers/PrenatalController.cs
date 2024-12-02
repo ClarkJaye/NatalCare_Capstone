@@ -25,6 +25,58 @@ namespace NatalCare_System.Controllers
         }
 
         //------ PRENATAL ------//
+
+        //Get All Prenatal for Patient In Modal
+        public async Task<IActionResult> DisplayPrenatal(string patientId)
+        {
+            var records = await serviceServices.GetPrenatalRecords(patientId);
+            return View(records ?? new List<Prenatal>());
+        }
+        // GET Prenatal record 
+        //Detail Patient
+        [HttpGet]
+        public async Task<IActionResult> GetPrenatalDetails(string caseNo)
+        {
+            var data = await serviceServices.GetPrenatalInformation(caseNo);
+
+            if (data.CaseNo != null)
+            {
+                var prenatalData = new
+                {
+                    caseNo = data.CaseNo,
+                    dateVisit = data.DateVisit,
+                    gravida = data.Gravida,
+                    para = data.Para,
+                    abortion = data.Abortion,
+                    stillBirth = data.StillBirth,
+                    lmp = data.LMP,
+                    edc = data.EDC,
+                    hrCode = data.HRCODE,
+                    notes = data.Notes,
+                };
+                return Json(new { isSuccess = true, item = prenatalData });
+            }
+            return Json(new { isSuccess = false, Message = "Prenatal not found." });
+
+        }
+        [HttpGet]
+        public async Task<JsonResult> GetPrenatalRecord(string caseNo)
+        {
+            try
+            {
+                if (caseNo != null)
+                {
+                    var result = await serviceServices.GetPrenatalRecordAsync(caseNo);
+                    return Json(result);
+                }
+                return Json(new { IsSuccess = false, Message = "Fetching Record failed!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while Edit prenatal record for Patient");
+                return Json(new { IsSuccess = false, Message = "An error occurred in EditPrenatalRecord." });
+            }
+        }
         //Records
         public async Task<IActionResult> PrenatalFormRecords(string prenatalId)
         {

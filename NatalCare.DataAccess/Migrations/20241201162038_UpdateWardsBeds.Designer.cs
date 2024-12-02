@@ -12,8 +12,8 @@ using NatalCare.DataAccess.data;
 namespace NatalCare.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241123022615_UpdateTAbless")]
-    partial class UpdateTAbless
+    [Migration("20241201162038_UpdateWardsBeds")]
+    partial class UpdateWardsBeds
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -174,6 +174,108 @@ namespace NatalCare.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("NatalCare.Models.Entities.Bed", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BedNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PatientID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("WardID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PatientID");
+
+                    b.HasIndex("WardID");
+
+                    b.ToTable("Beds");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BedNo = "Bed 1",
+                            IsAvailable = false,
+                            WardID = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BedNo = "Bed 2",
+                            IsAvailable = false,
+                            WardID = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BedNo = "Bed 3",
+                            IsAvailable = false,
+                            WardID = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            BedNo = "Bed 4",
+                            IsAvailable = false,
+                            WardID = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            BedNo = "Bed 5",
+                            IsAvailable = false,
+                            WardID = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            BedNo = "Bed 1",
+                            IsAvailable = false,
+                            WardID = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            BedNo = "Bed 2",
+                            IsAvailable = false,
+                            WardID = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            BedNo = "Bed 3",
+                            IsAvailable = false,
+                            WardID = 2
+                        },
+                        new
+                        {
+                            Id = 9,
+                            BedNo = "Bed 4",
+                            IsAvailable = false,
+                            WardID = 2
+                        },
+                        new
+                        {
+                            Id = 10,
+                            BedNo = "Bed 5",
+                            IsAvailable = false,
+                            WardID = 2
+                        });
+                });
+
             modelBuilder.Entity("NatalCare.Models.Entities.Category", b =>
                 {
                     b.Property<int>("CategoryId")
@@ -206,35 +308,35 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             CategoryId = 1,
                             CategoryName = "Masters",
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8883),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8872),
                             StatusCode = "AC"
                         },
                         new
                         {
                             CategoryId = 2,
                             CategoryName = "Patient Management",
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8887),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8876),
                             StatusCode = "AC"
                         },
                         new
                         {
                             CategoryId = 3,
                             CategoryName = "Billing & Payement",
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8889),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8878),
                             StatusCode = "AC"
                         },
                         new
                         {
                             CategoryId = 4,
                             CategoryName = "Reports",
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8891),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8880),
                             StatusCode = "AC"
                         },
                         new
                         {
                             CategoryId = 5,
                             CategoryName = "Maintenance",
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8892),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8881),
                             StatusCode = "AC"
                         });
                 });
@@ -392,6 +494,9 @@ namespace NatalCare.DataAccess.Migrations
                     b.Property<string>("CaseNo")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int?>("BedNumber")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("Created_At")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -405,7 +510,7 @@ namespace NatalCare.DataAccess.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("Updated_By");
 
-                    b.Property<DateOnly?>("Date_Admitted")
+                    b.Property<DateOnly>("Date_Admitted")
                         .HasColumnType("date");
 
                     b.Property<DateOnly?>("Date_Discharged")
@@ -429,7 +534,10 @@ namespace NatalCare.DataAccess.Migrations
                     b.Property<string>("StatusCode")
                         .HasColumnType("nvarchar(2)");
 
-                    b.Property<TimeOnly?>("Time_Admitted")
+                    b.Property<TimeOnly>("Time_Admitted")
+                        .HasColumnType("time");
+
+                    b.Property<TimeOnly?>("Time_Discharged")
                         .HasColumnType("time");
 
                     b.Property<DateTime?>("Updated_At")
@@ -439,6 +547,8 @@ namespace NatalCare.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CaseNo");
+
+                    b.HasIndex("BedNumber");
 
                     b.HasIndex("DLCreatedBy");
 
@@ -453,6 +563,8 @@ namespace NatalCare.DataAccess.Migrations
                     b.HasIndex("PrenatalID");
 
                     b.HasIndex("StatusCode");
+
+                    b.HasIndex("WardNumber");
 
                     b.ToTable("Delivery");
                 });
@@ -477,16 +589,21 @@ namespace NatalCare.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            StatusName = "Active"
+                            StatusName = "In-Labor"
                         },
                         new
                         {
                             Id = 2,
-                            StatusName = "Discharged"
+                            StatusName = "PostPartum"
                         },
                         new
                         {
                             Id = 3,
+                            StatusName = "Discharged"
+                        },
+                        new
+                        {
+                            Id = 4,
                             StatusName = "Referred"
                         });
                 });
@@ -631,7 +748,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 1,
                             CategoryId = 1,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8943),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8941),
                             ModuleTitle = "Dashboard",
                             StatusCode = "AC"
                         },
@@ -639,7 +756,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 2,
                             CategoryId = 2,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8948),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8946),
                             ModuleTitle = "Patient Records",
                             StatusCode = "AC"
                         },
@@ -647,7 +764,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 3,
                             CategoryId = 2,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8951),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8948),
                             ModuleTitle = "Newborn Records",
                             StatusCode = "AC"
                         },
@@ -655,7 +772,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 4,
                             CategoryId = 2,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8953),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8949),
                             ModuleTitle = "Admission / In-Patient",
                             StatusCode = "AC"
                         },
@@ -663,7 +780,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 5,
                             CategoryId = 2,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8954),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8951),
                             ModuleTitle = "Out-Patient (OPD)",
                             StatusCode = "AC"
                         },
@@ -671,7 +788,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 6,
                             CategoryId = 2,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8957),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8953),
                             ModuleTitle = "Refferal Patient",
                             StatusCode = "AC"
                         },
@@ -679,7 +796,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 7,
                             CategoryId = 3,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8958),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8954),
                             ModuleTitle = "Invoice List",
                             StatusCode = "AC"
                         },
@@ -687,7 +804,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 8,
                             CategoryId = 3,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8960),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8956),
                             ModuleTitle = "Generate Invoice",
                             StatusCode = "AC"
                         },
@@ -695,7 +812,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 9,
                             CategoryId = 4,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8962),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8961),
                             ModuleTitle = "Natality Reports",
                             StatusCode = "AC"
                         },
@@ -703,7 +820,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 10,
                             CategoryId = 4,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8964),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8963),
                             ModuleTitle = "Invoice Reports",
                             StatusCode = "AC"
                         },
@@ -711,7 +828,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 11,
                             CategoryId = 5,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8966),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8964),
                             ModuleTitle = "Profiles",
                             StatusCode = "AC"
                         },
@@ -719,7 +836,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 12,
                             CategoryId = 5,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8968),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8966),
                             ModuleTitle = "Users",
                             StatusCode = "AC"
                         },
@@ -727,7 +844,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 13,
                             CategoryId = 5,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8970),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8967),
                             ModuleTitle = "Staff",
                             StatusCode = "AC"
                         });
@@ -857,7 +974,7 @@ namespace NatalCare.DataAccess.Migrations
                     b.Property<string>("HearingNo")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AttendingPractioner")
+                    b.Property<string>("AttendingPractitioner")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BabyStatus")
@@ -1449,91 +1566,91 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 1,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(9040),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(9038),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 2,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(9045),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(9042),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 3,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(9047),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(9044),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 4,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(9050),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(9045),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 5,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(9051),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(9047),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 6,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(9053),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(9048),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 7,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(9055),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(9049),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 8,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(9065),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(9060),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 9,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(9084),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(9077),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 10,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(9086),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(9079),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 11,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(9087),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(9081),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 12,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(9089),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(9082),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 13,
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(9090),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(9084),
                             OpenAccess = "Y"
                         });
                 });
@@ -1708,19 +1825,19 @@ namespace NatalCare.DataAccess.Migrations
                         new
                         {
                             StatusCode = "AC",
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8821),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8575),
                             StatusName = "ACTIVE"
                         },
                         new
                         {
                             StatusCode = "IN",
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8830),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8582),
                             StatusName = "INACTTIVE"
                         },
                         new
                         {
                             StatusCode = "DL",
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8831),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8583),
                             StatusName = "DELETE"
                         });
                 });
@@ -1851,6 +1968,35 @@ namespace NatalCare.DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("NatalCare.Models.Entities.Ward", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("WardNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Wards");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            WardNo = "Ward 1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            WardNo = "Ward 2"
+                        });
+                });
+
             modelBuilder.Entity("NatalCare.Models.Entities.Role", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
@@ -1887,7 +2033,7 @@ namespace NatalCare.DataAccess.Migrations
                             Id = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            Created_At = new DateTime(2024, 11, 23, 10, 26, 13, 915, DateTimeKind.Local).AddTicks(8649),
+                            Created_At = new DateTime(2024, 12, 2, 0, 20, 36, 623, DateTimeKind.Local).AddTicks(8346),
                             Description = "CRUD Anything",
                             RoleCreatedBy = "223e5845-f58c-493f-b6b4-46ff3b18a332"
                         });
@@ -1944,6 +2090,21 @@ namespace NatalCare.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("NatalCare.Models.Entities.Bed", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.Patients", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientID");
+
+                    b.HasOne("NatalCare.Models.Entities.Ward", "Wards")
+                        .WithMany()
+                        .HasForeignKey("WardID");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Wards");
+                });
+
             modelBuilder.Entity("NatalCare.Models.Entities.Category", b =>
                 {
                     b.HasOne("NatalCare.Models.Entities.Status", "Status")
@@ -1998,6 +2159,10 @@ namespace NatalCare.DataAccess.Migrations
 
             modelBuilder.Entity("NatalCare.Models.Entities.Delivery", b =>
                 {
+                    b.HasOne("NatalCare.Models.Entities.Bed", "Beds")
+                        .WithMany()
+                        .HasForeignKey("BedNumber");
+
                     b.HasOne("NatalCare.Models.Entities.User", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("DLCreatedBy");
@@ -2027,6 +2192,12 @@ namespace NatalCare.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("StatusCode");
 
+                    b.HasOne("NatalCare.Models.Entities.Ward", "Wards")
+                        .WithMany()
+                        .HasForeignKey("WardNumber");
+
+                    b.Navigation("Beds");
+
                     b.Navigation("CreatedBy");
 
                     b.Navigation("DeliveryStatus");
@@ -2040,6 +2211,8 @@ namespace NatalCare.DataAccess.Migrations
                     b.Navigation("Status");
 
                     b.Navigation("UpdatedBy");
+
+                    b.Navigation("Wards");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.FamilyPlanning", b =>

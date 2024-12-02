@@ -15,7 +15,7 @@ namespace NatalCare_System.Controllers
         {
             if (!await CheckAccessAsync(9)) // Natality Reports
             {
-                return RedirectToDashboard();
+                return RedirectTo();
             }
             return View();
         }
@@ -24,7 +24,7 @@ namespace NatalCare_System.Controllers
         {
             if (!await CheckAccessAsync(10)) // Payment Reports
             {
-                return RedirectToDashboard();
+                return RedirectTo();
             }
             return View();
         }

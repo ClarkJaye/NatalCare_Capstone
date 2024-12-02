@@ -2,8 +2,8 @@
 
 
 @{
-    ViewData["Title"] = "Add Admission";
-    ViewData["NavTitle"] = "Add Admission";
+    ViewData["Title"] = "Edit Admission";
+    ViewData["NavTitle"] = "Edit Admission";
     Layout = "_UserLayout";
 }
 
@@ -28,34 +28,22 @@
 
 <div class="card card-selected w-75 mx-auto mt-5">
     <div class="card-header card-header-selected d-flex justify-content-between align-items-center bg-pink">
-        <h5 class="card-title my-2">Add Patient Admission</h5>
+        <h5 class="card-title my-2">Edit Patient Admission</h5>
     </div>
     <div class="card-body m-4 pt-0">
-        <form asp-controller="Admission" asp-action="Create">
+        <form asp-controller="Admission" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="CaseNo" class="form-control" hidden />
+
             <!--Parents Side-->
             <div class="row">
                 <div class="d-flex align-items-center justify-content-between">
                     <h5 class="card-title my-3 mb-3">Patient's Information</h5>
-
-                    @if (ViewBag.triggerPatID == null){
-                        <div class="d-flex align-items-center gap-2">
-                            <button type="button" id="searchPtBtn" class="btn btn-sm btn-outline-secondary">
-                                <i class="fas fa-search"></i>
-                                <span>Select Patient</span>
-                            </button>
-
-                            <button type="button" id="clearBtn" class="btn btn-sm btn-outline-danger">
-                                <i class="fas fa-cancel"></i>
-                                <span>Clear</span>
-                            </button>
-                        </div>
-                    }
                 </div>
 
                 <div class="form-group col-md-4 mb-3">
                     <label asp-for="PatientID" class="control-label">Patient No#</label>
-                    <input asp-for="PatientID" value="@ViewBag?.triggerPatID" class="form-control text-uppercase" placeholder="Select patient (e.g., PT0001, PT0002 ...)" readonly />
+                    <input asp-for="PatientID" class="form-control text-uppercase" placeholder="Select patient (e.g., PT0001, PT0002 ...)" readonly />
                     <span asp-validation-for="PatientID" class="text-danger"></span>
                 </div>
 
@@ -110,20 +98,20 @@
                 </div>
 
                 <div class="form-group col-md-12 my-4" id="prenatalSection" style="display: none;">
-                   <table class="table table-striped">
-                       <thead>
-                           <tr>
-                               <th>Case No#</th>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Case No#</th>
                                 <th>Date Visit</th>
                                 <th>Gravida</th>
                                 <th>Para</th>
                                 <th>Abortion</th>
                                 <th>Still Birth</th>
-                               <th>LMP</th>
+                                <th>LMP</th>
                                 <th>EDC</th>
                                 <th>H.R Code</th>
-                           </tr>
-                       </thead>
+                            </tr>
+                        </thead>
                         <tbody>
                             <tr id="preSelect" class="preSelect">
                                 <td id="pre_caseno"></td>
@@ -137,8 +125,8 @@
                                 <td id="pre_hrcode"></td>
                             </tr>
                         </tbody>
-                   </table>
-                        
+                    </table>
+
                 </div>
             </div>
             <div class="mx-2 my-4" id="prenatalMessageSection">
@@ -152,25 +140,39 @@
             <!-- Admission -->
             <h5 class="card-title mb-3">Admission Details</h5>
             <div class="row">
-                <div class="form-group col-md-4 mb-3">
+                <div class="form-group col-md-4 mb-4">
                     <label asp-for="Date_Admitted" class="control-label">Date Admitted</label>
                     <input type="date" asp-for="Date_Admitted" class="form-control" required />
                     <span asp-validation-for="Date_Admitted" class="text-danger"></span>
                 </div>
 
-                <div class="form-group col-md-4 mb-3">
+                <div class="form-group col-md-4 mb-4">
                     <label asp-for="Time_Admitted" class="control-label">Time Admitted</label>
                     <input type="time" asp-for="Time_Admitted" class="form-control" required />
                     <span asp-validation-for="Time_Admitted" class="text-danger"></span>
                 </div>
 
-                <div class="form-group col-md-4 mb-3">
+                <div class="form-group col-md-4 mb-4">
                     <label asp-for="DeliveryStatusID" class="control-label"></label>
                     <select asp-for="DeliveryStatusID" class="form-select" asp-items="@ViewBag?.deliveryStatus" required>
                         <option value="" selected>select status</option>
                     </select>
                     <span asp-validation-for="DeliveryStatusID" class="text-danger"></span>
                 </div>
+
+                <div class="form-group col-md-4 mb-4">
+                    <label asp-for="Date_Discharged" class="control-label">Date Discharged</label>
+                    <input type="date" asp-for="Date_Discharged" class="form-control"  />
+                    <span asp-validation-for="Date_Discharged" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-4">
+                    <label asp-for="Time_Discharged" class="control-label">Time Discharged</label>
+                    <input type="time" asp-for="Time_Discharged" class="form-control"  />
+                    <span asp-validation-for="Time_Discharged" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4 mb-4"></div>
+
 
                 <div class="form-group col-md-4 mb-3">
                     <label asp-for="WardNumber" class="control-label">Ward No#</label>
@@ -180,9 +182,11 @@
                     <span asp-validation-for="WardNumber" class="text-danger"></span>
                 </div>
 
+                <!-- Bed Number -->
                 <div class="form-group col-md-4 mb-3">
                     <label asp-for="BedNumber" class="control-label">Bed No#</label>
-                    <select asp-for="BedNumber" class="form-select">
+                    <input asp-for="BedNumber" class="form-control" hidden/>
+                    <select class="form-select" id="bedNumber">
                         <option value="" class="text-muted" selected>select bed number</option>
                     </select>
                     <span asp-validation-for="BedNumber" class="text-danger"></span>
@@ -192,13 +196,13 @@
                     <label asp-for="Notes" class="control-label">Notes (optional)</label>
                     <textarea asp-for="Notes" class="form-control" placeholder="Enter notes" rows="3"></textarea>
                     <span asp-validation-for="Notes" class="text-danger"></span>
-                </div>  
+                </div>
             </div>
 
             <div class="form-group col-12 mt-3 mb-3">
                 <div class="d-flex align-items-center justify-content-end gap-3">
                     <button class="btn btn-pink" type="submit">
-                        <i class="fas fa-save"></i> 
+                        <i class="fas fa-save"></i>
                         <span>Save</span>
                     </button>
                     @if (ViewBag?.triggerPatID == null)
@@ -207,7 +211,9 @@
                             <i class="fas fa-arrow-left me-1"></i>
                             <span>Back to List</span>
                         </a>
-                    }else{
+                    }
+                    else
+                    {
                         <a class="btn btn-outline-secondary" asp-controller="Patient" asp-action="MedicalRecords" asp-route-id="@ViewBag?.triggerPatID">
                             <i class="fas fa-arrow-left me-1"></i>
                             <span>Back to Patient</span>
@@ -272,33 +278,85 @@
                LoadBedList(value);
            });
 
-            function LoadBedList(value) {
+            $('#bedNumber').on('change', function () {
+               var value = $(this).val();
+                $('#BedNumber').val(value)
+            });
+
+           if($('#WardNumber').val()){
+                var value = $('#WardNumber').val();
+                LoadBedList(value);
+           }
+            if($('#BedNumber').val()){
+                var value = $('#WardNumber').val();
+                LoadBedSelected(value);
+           }
+
+           function LoadBedList(value) {
+                var patId = $("#PatientID").val();
+
                 $.ajax({
                     url: '@Url.Action("GetBedNumber", "Admission")',
                     type: 'GET',
-                    data: { wardId: value },
+                    data: { wardId: value, patId: patId },
                     success: function (result) {
-                        console.log(result)
                         if (result.isSuccess) {
                             var data = result.item;
-                            $('#BedNumber').empty().append('<option selected>select bed number</option>');
+                            $('#bedNumber').empty().append('<option selected>select bed number</option>');
                             data.forEach(function (item) {
-                                $('#BedNumber').append(
+                                $('#bedNumber').append(
                                     $('<option>', {
                                         value: item.id,
                                         text: item.bedNo
                                     })
                                 );
                             });
-                        } else {
-                            toastr.error(result.message);
-                        }
+                        } 
                     },
                     error: function (err) {
                         console.error('Error:', err);
                     }
                 });
            }
+
+            function LoadBedSelected(value) {
+                var patId = $("#PatientID").val();
+
+                $.ajax({
+                    url: '@Url.Action("GetBedNumberorEdit", "Admission")',
+                    type: 'GET',
+                    data: { wardId: value },
+                    success: function (result) {
+                        if (result.isSuccess) {
+                            var data = result.item;
+                            // Clear and add default option
+                            $('#bedNumber').empty().append('<option value="" selected>select bed number</option>');
+                            // Populate dropdown
+                            data.forEach(function (item) {
+                                let optionText = item.bedNo; 
+                                // Modify text or properties based on conditions
+                                if (item.isUsed === true && item.patientID.toUpperCase() === patId.toUpperCase()) {
+                                    optionText += ' - currently selected';
+                                    $('#bedNumber').append(
+                                        $('<option>', { value: item.id, text: optionText, class: "bg-pink", selected: true })
+                                    );
+                                } else if (item.isUsed === true) {
+                                    $('#bedNumber').append(
+                                        $('<option>', { value: item.id, text: optionText + ' - unavailable', disabled: true })
+                                    );
+                                } else {
+                                    $('#bedNumber').append(
+                                        $('<option>', { value: item.id, text: optionText + ' - available' })
+                                    );
+                                }
+                            });
+                        }
+                    },
+                    error: function (err) {
+                        console.error('Error:', err);
+                    }
+                });
+            }
 
 
             $('#searchPtBtn').on('click', function () {
@@ -318,8 +376,15 @@
                 var id = $("#PatientID").val();
                 LoadPatientDetails(id);
             }
+
+             if ($("#PrenatalID").val()) {
+                var id = $("#PrenatalID").val();
+                LoadPrenatalDetails(id);
+            }
+
             $('#clearBtn').on('click', function () {
                 $("form input, form select, form textarea").removeClass("bg-white");
+                $("#BedNumber").addClass("readonly");
                 $("#PatientID").val("").attr("placeholder", "Enter (e.g., PT0001, PT0002 ...)");
                 $("#FatherID").val("").attr("placeholder", "Enter Father");
                 $("#Patient_FirstName").val("").attr("placeholder", "Enter First Name");
@@ -328,7 +393,7 @@
                 $("#Patient_Address").val("").attr("placeholder", "Enter Address");
                 $("#Patient_Birthdate").val("");
             });
-            
+
             $('#clearPreBtn').on('click', function () {
                 const prenatalSection = document.getElementById('prenatalSection');
                 const messageSection = document.getElementById('prenatalMessageSection');
@@ -354,7 +419,7 @@
                 value.toUpperCase();
                 LoadPatientDetails(value);
             });
-
+            //For click the Table row
             $('#patientsListContainer').on('click', "#patientSelectTR", function () {
                 var value = $(this).data("patid");
                 value.toUpperCase();
@@ -416,8 +481,9 @@
                 data: { patientId: value },
                 success: function (data) {
                     if (data && data.isSuccess) {
+                        console.log(data)
                         var item = data.item;
-                        $("#PatientID").val(item.id);
+                        $("#PatientID").val(item.id);   
                         $("#Patient_FirstName").val(item.firstname);
                         $("#Patient_MiddleName").val(item.middlename);
                         $("#Patient_LastName").val(item.lastname);
@@ -427,6 +493,7 @@
 
                         // Apply the bg-white class to all inputs in the form
                         $("form input, form select, form textarea").addClass("bg-white");
+                        $("#BedNumber").addClass("readonly");
                     } else {
                         $("#PatientID").val(item.message);
                         $("#Patient_FirstName").val(item.message);
@@ -472,7 +539,7 @@
 
                         // Add and remove the blink effect
                         prenatalSelect.classList.remove('preSelectBlink');
-                        void prenatalSelect.offsetWidth; 
+                        void prenatalSelect.offsetWidth;
                         prenatalSelect.classList.add('preSelectBlink');
 
                         toastr.success('Prenatal selected!');

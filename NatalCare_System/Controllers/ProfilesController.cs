@@ -21,7 +21,7 @@ namespace NatalCare_System.Controllers
         {
             if (!await CheckAccessAsync(11))
             {
-                return RedirectToDashboard();
+                return RedirectTo();
             }
 
             var response = await profileServices.GetProfiles();

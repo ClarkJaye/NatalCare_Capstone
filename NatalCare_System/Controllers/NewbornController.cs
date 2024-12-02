@@ -22,7 +22,7 @@ namespace NatalCare_System.Controllers
         {
             if (!await CheckAccessAsync(3))
             {
-                return RedirectToDashboard();
+                return RedirectTo();
             }
             var (todayRecordCount, monthlyRecordCount, yearlyRecordCount) = await newbornServices.GetNewbornCountsAsync();
             ViewBag.TodayRecord = todayRecordCount;

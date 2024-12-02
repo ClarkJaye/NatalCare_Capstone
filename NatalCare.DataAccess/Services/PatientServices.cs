@@ -36,7 +36,8 @@ namespace NatalCare.DataAccess.Services
         public async Task<List<Patients>> GetPatients()
         {
             var patients = await unitOfWork.Repository<Patients>()
-            .GetAllAsync(p => p.StatusCode == "AC", includeProperties: "CreatedBy");
+            .GetAllAsync(includeProperties: "CreatedBy,Status");
+            //.GetAllAsync(p => p.StatusCode == "AC", includeProperties: "CreatedBy,Status");
             return patients.ToList();
         }
         public async Task<List<Patients>> GetDeletedPatients()

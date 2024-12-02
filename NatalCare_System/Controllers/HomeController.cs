@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.Models;
+using NatalCare.Utility;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace NatalCare_System.Controllers
 {

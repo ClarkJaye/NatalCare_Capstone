@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NatalCare.DataAccess.Extensions;
@@ -28,7 +29,7 @@ namespace NatalCare_System.Controllers
 			return View();
 		}
 
-		public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login()
         {
             if (User.Identity!.IsAuthenticated)
             {
@@ -64,6 +65,8 @@ namespace NatalCare_System.Controllers
                 ModelState.AddModelError("", "User is locked out. Try again after 5 minutes.");
                 return View(model);
             }
+            //var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, isPersistent: false, lockoutOnFailure: true);
+
             var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: true);
             if (result.Succeeded)
             {

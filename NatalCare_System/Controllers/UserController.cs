@@ -30,7 +30,7 @@ namespace NatalCare_System.Controllers
         {
             if (!await CheckAccessAsync(12))
             {
-                return RedirectToDashboard();
+                return RedirectTo();
             }
             // Retrieve all users
             var users = await _userManager.Users.Include(a => a.Status).ToListAsync();

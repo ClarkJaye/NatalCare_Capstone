@@ -5,6 +5,8 @@
     <h5 class="px-2 mb-3 text-center fw-bold">PHYSICAL EXAMINATION</h5>
     <div class="d-flex align-items-center">
         <h6 class="me-2 mb-0 fw-bold">CASE NO#:</h6>
+        <input type="hidden" id="delID" name="CaseNo" value="@ViewBag.DeliveryId" />
+
         <div class="border-bottom flex-grow-1">
             <span class="px-2 h6">
                 @ViewBag.DeliveryId
@@ -14,14 +16,16 @@
 </div>
 
 <div class="d-flex justify-content-end my-3 gap-3 px-2">
-    @if (Model == null || Model.CaseNo == null){
-        <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
+    @if (Model == null || Model.CaseNo == null)
+    {
+        <button id="addNewPEBtn" class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#PEAddModal">
             <i class="fas fa-plus"></i>
             <span>Add New</span>
         </button>
     }
-    else{
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
+    else
+    {
+        <button id="editPEBtn" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#PEEditModal">
             <i class="fas fa-pencil-alt"></i>
             <span>Edit</span>
         </button>
@@ -34,9 +38,10 @@
         No Physical Examination Added Yet!
     </div>
 }
-else{
+else
+{
     <div class="container mt-4">
-        <!-- Patient Basic Info -->
+        @* Patient Basic Info  *@
         <div class="row mb-5">
             <div class="col-md-6 mb-3">
                 <div class="d-flex align-items-center">
@@ -85,7 +90,7 @@ else{
 
         <hr class="divider bg-pink" />
 
-        <!-- Physical Measurements -->
+        @* Physical Measurements  *@
         <fieldset class="mb-4">
             <legend class="fw-bold" style="font-size:1.2rem;">Physical Measurements</legend>
             <div class="row">
@@ -136,7 +141,7 @@ else{
 
         <hr class="divider bg-pink" />
 
-        <!-- Physical Examination -->
+        @* Physical Examination  *@
         <fieldset class="mb-3">
             <legend class="fw-bold" style="font-size:1.2rem;">Physical Examination</legend>
             <div class="row">
@@ -251,8 +256,8 @@ else{
 }
 
 
-<!-- Add Modal -->
-<div class="modal fade" id="deliveryAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+@* Add Modal  *@
+<div class="modal fade" id="PEAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-pink">
@@ -262,69 +267,182 @@ else{
             <div class="modal-body">
                 <form id="AddPEForm" method="POST">
                     @Html.AntiForgeryToken()
-                    <div class="row">
 
+                    <div class="row">
+                        @* Weight  *@
                         <div class="col-md-6 mb-3">
                             <label for="Weight-Add" class="control-label">Weight</label>
-                            <input type="number" id="Weight-Add" name="Weight" class="form-control" placeholder="Eneter Weight" />
+                            <input type="number" id="Weight-Add" name="Weight" class="form-control" placeholder="Enter Weight in kg" />
                         </div>
 
+                        @* Height  *@
                         <div class="col-md-6 mb-3">
-                            <label for="Height-Add" class="control-label">Weight</label>
-                            <input type="text" id="Height-Add" name="Height" class="form-control" placeholder="Enter Height" />
+                            <label for="Height-Add" class="control-label">Height</label>
+                            <input type="number" id="Height-Add" name="Height" class="form-control" placeholder="Enter Height in meter" />
                         </div>
 
+                        @* Blood Pressure  *@
                         <div class="col-md-6 mb-3">
                             <label for="BP-Add" class="control-label">Blood Pressure</label>
-                            <input type="text" id="BP-Add" name="BP" class="form-control" placeholder="Enter Blood Pressure" />
+                            <input type="text" id="BP-Add" name="BP" class="form-control" placeholder="Enter Blood Pressure (e.g, 120/160)" />
                         </div>
 
+                        @* Pulse Rate  *@
                         <div class="col-md-6 mb-3">
-                            <label for="PulseRate-Add" class="control-label">Pusle Rate</label>
-                            <input type="number" id="PulseRate-Add" name="PulseRate" class="form-control" placeholder="Enter Pulse Rate" />
+                            <label for="PulseRate-Add" class="control-label">Pulse Rate</label>
+                            <input type="number" id="PulseRate-Add" name="PulseRate" class="form-control" placeholder="Enter Pulse Rate (beat /Min)" />
                         </div>
 
+                        @* Respiratory Rate  *@
                         <div class="col-md-6 mb-3">
-                            <label for="RespiratoryRate-Add" class="control-label">Pusle Rate</label>
-                            <input type="number" id="RespiratoryRate-Add" name="RespiratoryRate" class="form-control" placeholder="Enter Respiratory Rate" />
+                            <label for="RespiratoryRate-Add" class="control-label">Respiratory Rate</label>
+                            <input type="number" id="RespiratoryRate-Add" name="RespiratoryRate" class="form-control" placeholder="Enter Respiratory Rate ( /Min )" />
                         </div>
 
+                        @* Temperature  *@
                         <div class="col-md-6 mb-3">
-                            <label for="Temperature-Add" class="control-label">Pusle Rate</label>
-                            <input type="number" id="Temperature-Add" name="Temperature" class="form-control" placeholder="Enter Temperature" />
+                            <label for="Temperature-Add" class="control-label">Temperature</label>
+                            <input type="number" id="Temperature-Add" name="Temperature" class="form-control" placeholder="Enter Temperature (e.g., 37.5, 38, ...)" step="0.1" />
                         </div>
 
+                        @* Skin  *@
                         <div class="col-md-6 mb-3">
-                            <label for="Skin-Add" class="control-label">Select Newborn</label>
-                            <select id="newbornBb-Add" class="form-select" name="NewbornID" required>
-                                <option disabled selected>select newborn baby</option>
-                            </select>
+                            <label class="control-label fw-bold">SKIN</label>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Skin_Normal" value="false" />
+                                <input type="checkbox" id="Skin_Normal-Add" name="Skin_Normal" class="custom-checkbox" value="true"/>
+                                <label for="Skin_Normal-Add" class="form-check-label">Normal</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Skin_Pale" value="false" />
+                                <input type="checkbox" id="Skin_Pale-Add" name="Skin_Pale" class="custom-checkbox" value="true"/>
+                                <label for="Skin_Pale-Add" class="form-check-label">Pale</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Skin_Yellowish" value="false" />
+                                <input type="checkbox" id="Skin_Yellowish-Add" name="Skin_Yellowish" class="custom-checkbox" value="true"/>
+                                <label for="Skin_Yellowish-Add" class="form-check-label">Yellowish</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Skin_Hematoma" value="false" />
+                                <input type="checkbox" id="Skin_Hematoma-Add" name="Skin_Hematoma" class="custom-checkbox" value="true"/>
+                                <label for="Skin_Hematoma-Add" class="form-check-label">Hematoma</label>
+                            </div>
                         </div>
 
+                        @* Breast  *@
+                        <div class="col-md-6 mb-3">
+                            <label class="control-label fw-bold">BREAST</label>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Breast_Normal" value="false" />
+                                <input type="checkbox" id="Breast_Normal-Add" name="Breast_Normal" class="custom-checkbox" value="true"/>
+                                <label for="Breast_Normal-Add" class="form-check-label">Normal</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Breast_Mass" value="false" />
+                                <input type="checkbox" id="Breast_Mass-Add" name="Breast_Mass" class="custom-checkbox" value="true"/>
+                                <label for="Breast_Mass-Add" class="form-check-label">Mass</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Breast_NippleDischarged" value="false" />
+                                <input type="checkbox" id="Breast_NippleDischarged-Add" name="Breast_NippleDischarged" class="custom-checkbox" value="true"/>
+                                <label for="Breast_NippleDischarged-Add" class="form-check-label">Nipple Discharged</label>
+                            </div>
+                        </div>
 
+                        @* Conjunctive  *@
+                        <div class="col-md-6 mb-3">
+                            <label class="control-label fw-bold">CONJUNCTIVE</label>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Conjunctive_Normal" value="false" />
+                                <input type="checkbox" id="Conjunctive_Normal-Add" name="Conjunctive_Normal" class="custom-checkbox" value="true"/>
+                                <label for="Conjunctive_Normal-Add" class="form-check-label">Normal</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Conjunctive_Pale" value="false" />
+                                <input type="checkbox" id="Conjunctive_Pale-Add" name="Conjunctive_Pale" class="custom-checkbox" value="true"/>
+                                <label for="Conjunctive_Pale-Add" class="form-check-label">Pale</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Conjunctive_YW" value="false" />
+                                <input type="checkbox" id="Conjunctive_YW-Add" name="Conjunctive_YW" class="custom-checkbox" value="true"/>
+                                <label for="Conjunctive_YW-Add" class="form-check-label">Yellowish</label>
+                            </div>
+                        </div>
 
+                        @* Abdomen  *@
+                        <div class="col-md-6 mb-3">
+                            <label class="control-label fw-bold">ABDOMEN</label>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Abdomen_Normal" value="false" />
+                                <input type="checkbox" id="Abdomen_Normal-Add" name="Abdomen_Normal" class="custom-checkbox" value="true"/>
+                                <label for="Abdomen_Normal-Add" class="form-check-label">Normal</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Abdomen_Mass" value="false" />
+                                <input type="checkbox" id="Abdomen_Mass-Add" name="Abdomen_Mass" class="custom-checkbox" value="true"/>
+                                <label for="Abdomen_Mass-Add" class="form-check-label">Mass</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Abdomen_Varicosities" value="false" />
+                                <input type="checkbox" id="Abdomen_Varicosities-Add" name="Abdomen_Varicosities" class="custom-checkbox" value="true"/>
+                                <label for="Abdomen_Varicosities-Add" class="form-check-label">Varicosities</label>
+                            </div>
+                        </div>
 
+                        @* Neck  *@
+                        <div class="col-md-6 mb-3">
+                            <label class="control-label fw-bold">NECK</label>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Neck_Normal" value="false" />
+                                <input type="checkbox" id="Neck_Normal-Add" name="Neck_Normal" class="custom-checkbox" value="true"/>
+                                <label for="Neck_Normal-Add" class="form-check-label">Normal</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Neck_Mass" value="false" />
+                                <input type="checkbox" id="Neck_Mass-Add" name="Neck_Mass" class="custom-checkbox" value="true"/>
+                                <label for="Neck_Mass-Add" class="form-check-label">Mass</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Neck_EnlargedLymphNodes" value="false" />
+                                <input type="checkbox" id="Neck_EnlargedLymphNodes-Add" name="Neck_EnlargedLymphNodes" class="custom-checkbox" value="true"/>
+                                <label for="Neck_EnlargedLymphNodes-Add" class="form-check-label">Enlarged Lymph Nodes</label>
+                            </div>
+                        </div>
 
+                        @* Extremeties  *@
+                        <div class="col-md-6 mb-3">
+                            <label class="control-label fw-bold">EXTREMETIES</label>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Extremities_Normal" value="false" />
+                                <input type="checkbox" id="Extremities_Normal-Add" name="Extremities_Normal" class="custom-checkbox" value="true" />
+                                <label for="Extremities_Normal-Add" class="form-check-label">Normal</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Extremities_Edema" value="false" />
+                                <input type="checkbox" id="Extremities_Edema-Add" name="Extremities_Edema" class="custom-checkbox" value="true"/>
+                                <label for="Extremities_Edema-Add" class="form-check-label">Edema</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2">
+                                <input type="hidden" name="Extremities_Varicosities" value="false" />
+                                <input type="checkbox" id="Extremities_Varicosities-Add" name="Extremities_Varicosities" class="custom-checkbox" value="true"/>
+                                <label for="Extremities_Varicosities-Add" class="form-check-label">Varicosities</label>
+                            </div>
+                        </div>
 
-
-
-
-
-
-
-
-
-
+                        @* OB History  *@
                         <div class="col-md-12 mb-3">
                             <label for="OBHistory-Add" class="control-label">OB History</label>
-                            <textarea id="OBHistory-Add" name="OBHistory" class="form-control" placeholder="Enter OB history" rows="3"></textarea>
+                            <textarea id="OBHistory-Add" name="OBHistory" class="form-control" placeholder="Enter OB History" rows="3"></textarea>
                         </div>
 
+                        @* Notes *@
                         <div class="col-md-12 mb-3">
-                            <label for="NotesHR-Add" class="control-label">Notes(Optional)</label>
-                            <textarea id="NotesHR-Add" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
+                            <label for="Notes-Add" class="control-label">Notes (Optional)</label>
+                            <textarea id="Notes-Add" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
                         </div>
 
+                        @* Submit and Close Buttons *@
                         <div class="col-12 mt-3 d-flex justify-content-end">
                             <div class="d-flex align-items-center gap-2">
                                 <button type="submit" class="btn btn-pink">Save</button>
@@ -332,8 +450,65 @@ else{
                             </div>
                         </div>
                     </div>
+
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+
+
+<script>
+    var patID = document.getElementById('patID').value;
+    var delID = document.getElementById('delID').value;
+
+
+    $("#AddPEForm").on("submit", function (e) {
+         e.preventDefault();
+         AddPhysicalExamination();
+     });
+
+
+
+
+    //Add Prenatal
+    function AddPhysicalExamination() {
+        var formData = $('#AddPEForm').serializeArray();
+        formData.push({ name: 'patientID', value: patID });
+        formData.push({ name: 'deliveryID', value: delID});
+
+        $.ajax({
+            url: '@Url.Action("AddPEForm", "Delivery")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                if (result.isSuccess) {
+                    toastr.success(result.message)
+                    LoadPEComponent();
+                    $('#PEAddModal').modal('hide');
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                console.error('Error:', err);
+            }
+        });
+    }
+
+
+    //Load All Records
+    function LoadPEComponent() {
+        $.ajax({
+            url: '@Url.Action("PERecords", "Delivery")',
+            data: { patientId: patID, caseno: delID },
+            success: function (result) {
+                $('#physicalExamination').html(result);
+            },
+            error: function () {
+                toastr.error("Failed to reload the physical examination records.");
+            }
+        });
+    }
+</script>

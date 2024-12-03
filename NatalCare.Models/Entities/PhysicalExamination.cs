@@ -33,6 +33,7 @@ namespace NatalCare.Models.Entities
         public bool Abdomen_Normal { get; set; } = false;
         public bool Abdomen_Mass { get; set; } = false;
         public bool Abdomen_Varicosities { get; set; } = false;
+        public bool Neck_Normal { get; set; } = false;
         public bool Neck_Mass { get; set; } = false;
         public bool Neck_EnlargedLymphNodes { get; set; } = false;
         public bool Extremities_Normal { get; set; } = false;

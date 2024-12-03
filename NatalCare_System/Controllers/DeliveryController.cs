@@ -61,6 +61,28 @@ namespace NatalCare_System.Controllers
             ViewData["DeliveryId"] = caseno;
             return ViewComponent("PhysicalExaminationRecords");
         }
+        //ADD 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddPEForm(PhysicalExamination model, string patientID, string deliveryID)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var userId = GetCurrentUserId();
+                    var result = await serviceServices.AddPERecordAsync(model, patientID, userId, deliveryID);
+                    return Json(result);
+                }
+                return Json(new { IsSuccess = false, Message = "Add Record failed!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while adding record for Patient ID: {model.PatientID}");
+                return Json(new { IsSuccess = false, Message = "An error occurred in AddHRRecord." });
+            }
+        }
+
 
         //OBSTETRICAL HISTORY
         public IActionResult ObstetricalRecords(string patientId, string caseno)

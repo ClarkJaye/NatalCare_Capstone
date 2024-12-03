@@ -1085,6 +1085,23 @@ namespace NatalCare.DataAccess.Services
             }
             return record;
         }
+        public async Task<CommonResponse> AddPERecordAsync(PhysicalExamination item, string patientId, string userId,string deliveryId)
+        {
+            // Validation checks: Ensure CaseNo is unique if needed.
+            if (await unitOfWork.Repository<PhysicalExamination>().AnyAsync(x => x.CaseNo == item.CaseNo))
+                return new CommonResponse(false, "Physical examination record already exists.");
+
+            item.PatientID = patientId;
+            item.CaseNo = deliveryId;
+            item.Created_At = DateTime.Now;
+            item.PECreatedBy = userId;
+            item.StatusCode = "AC";
+
+            unitOfWork.Repository<PhysicalExamination>().Add(item);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Physical examination added successfully");
+        }
+
 
         //Obstetrical Records
         public async Task<Obstetrical> GetObstetricalRecords(string patientId, string deliveryId)

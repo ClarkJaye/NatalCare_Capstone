@@ -70,6 +70,9 @@ namespace NatalCare.DataAccess.Interfaces
 
         //PHYSICAL EXAMINATION
         Task<PhysicalExamination> GetPhysicalExaminationRecords(string patientId, string deliveryId);
+        Task<CommonResponse> AddPERecordAsync(PhysicalExamination item, string patientId, string userId, string deliveryId);
+
+
 
         //OBSTETRICAL
         Task<Obstetrical> GetObstetricalRecords(string patientId, string deliveryId);

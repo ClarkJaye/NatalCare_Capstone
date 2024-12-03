@@ -66,9 +66,24 @@ namespace NatalCare.DataAccess.Interfaces
         Task<GeneralResponse> GetDeliveryRecordAsync(string caseNo);
         Task<CommonResponse> UpdateDeliveryRecordAsync(Delivery delivery, string userId);
         Task<CommonResponse> RetrievedDeliveryAync(string caseno, string userId);
+
+
+        //PHYSICAL EXAMINATION
+        Task<PhysicalExamination> GetPhysicalExaminationRecords(string patientId, string deliveryId);
+
+        //OBSTETRICAL
+        Task<Obstetrical> GetObstetricalRecords(string patientId, string deliveryId);
+
+        //MATERNAL MONITORING
+        //Task<Obstetrical> GetMaternalMonitoringRecords(string patientId, string deliveryId);
+
         //CLINICAL SHEET
         Task<ClinicalFaceSheet> GetClinicalSheetRecords(string patientId, string deliveryId);
 
+        //DISCHARGEMENT FORM
+        Task<DischargementForm> GetDischargementRecords(string patientId, string deliveryId);
+
+        
 
 
         //ADMISSION
@@ -80,5 +95,8 @@ namespace NatalCare.DataAccess.Interfaces
 
         //OPD 
         Task<List<OpdVisit>> GetAllOPDRecords();
+        Task<OpdVisit> GetOPDRecord(int id);
+        Task<GeneralResponse> GetOPDDataRecord(int id);
+
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.Models.Entities;
+using NatalCare.Models.ViewModel.Patient;
 
 namespace NatalCare_System.Controllers
 {
@@ -26,21 +27,16 @@ namespace NatalCare_System.Controllers
                 return RedirectTo();
             }
 
-            // Get all counts in one call
-            var (totalCount, todayRecord) = await countservices.GetOPDCountsAsync();
+            var (todayRecordCount, monthlyRecordCount, yearlyRecordCount, totalCount) = await countservices.GetOPDCountsAsync();
             // Pass counts to the view using ViewBag
-            ViewBag.TodayRecord = todayRecord;
+            ViewBag.TodayRecord = todayRecordCount;
+            ViewBag.MonthlyRecord = monthlyRecordCount;
+            ViewBag.YearlyRecord = yearlyRecordCount;
+            ViewBag.TotalRecord = totalCount;
 
             var records = await serviceServices.GetAllOPDRecords();
             return View(records ?? new List<OpdVisit>());
         }
-
-
-        public IActionResult Information()
-        {
-            return View();
-        }
-
 
     }
 }

@@ -11,7 +11,7 @@
 
 <div class="mx-4">
     <div class="row">
-        <div class="col-md-4 mb-4">
+        <div class="col-md-3 mb-4">
             <div class="card shadow py-2 card-selected">
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -23,18 +23,87 @@
                                 @(ViewBag.TodayRecord ?? 0)
                             </div>
                         </div>
+                        <div class="col-auto">
+                            <button class="btn btn-info">
+                                <i class="fas fa-clock text-white"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col-md-3 mb-4">
+            <div class="card shadow py-2 card-selected">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
+                                Montly OPD Visit
+                            </div>
+                            <div class="h4 fw-bold my-3">
+                                @(ViewBag.MonthlyRecord ?? 0)
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-warning">
+                                <i class="fas fa-calendar"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card shadow py-2 card-selected">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
+                                Yearly OPD Visit
+                            </div>
+                            <div class="h4 fw-bold my-3">
+                                @(ViewBag.YearlyRecord ?? 0)
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-success">
+                                <i class="fas fa-calendar"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* <div class="col-md-3 mb-4">
+            <div class="card shadow py-2 card-selected">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
+                                Total OPD Visit
+                            </div>
+                            <div class="h4 fw-bold my-3">
+                                @(ViewBag.TotalRecord ?? 0)
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-pink">
+                                <i class="fas fa-calendar"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> *@
     </div>
 
-    <div class="card shadow-sm card-selected">
+    <div class="card shadow-sm card-selected mt-2">
         <div class="card-body">
             <div class="table-responsive">
                 <table id="newbornTable" class="table table-hover table-striped table-datatable">
                     <thead class="border-bottom-2">
                         <tr>
+                            <th>Profile</th>
                             <th>Patient No#</th>
                             <th>Patient Name</th>
                             <th>Age</th>
@@ -47,7 +116,11 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr style="cursor:pointer;">
+                            <tr>
+                                <td>
+                                    <img src="~/profile/@(item.Patient?.Gender?.ToLower() == "female" ? "woman.png" : "man.png")"
+                                         width="50" height="50" alt="Profile" class="img-fluid rounded-circle" />
+                                </td>
                                 <th>@item.PatientID</th>
                                 <td>@item.Patient?.FirstName @item.Patient?.MiddleName @item.Patient?.LastName</td>
                                 <td>
@@ -70,9 +143,8 @@
                                 <td>@item.CreatedBy?.FirstName @item.CreatedBy?.MiddleName @item.CreatedBy?.LastName</td>
                                 <td>
                                     <div class="d-flex align-items-center justify-content-center gap-2">
-                                        <a class="btn btn-sm btn-outline-secondary" asp-controller="" asp-action="" asp-route-id="">
+                                        <a class="btn btn-outline-secondary medical-records-link" asp-controller="Patient" asp-action="MedicalRecords" asp-route-id="@item.PatientID" data-purpose="@item.ReasonForVisit">
                                             <i class="fa-solid fa-list"></i>
-                                            <span>Details</span>
                                         </a>
                                     </div>
                                 </td>
@@ -92,11 +164,28 @@
 
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Attach a click event to the medical records link
+        document.querySelectorAll('.medical-records-link').forEach(function (link) {
+            link.addEventListener('click', function () {
+                // Get the ReasonForVisit value
+                var reasonForVisit = this.getAttribute('data-purpose');
 
-    document.addEventListener("DOMContentLoaded", function () {
+                // Map ReasonForVisit to corresponding tab IDs
+                var tabMapping = {
+                    'Prenatal Check up': '#prenatal',
+                    'Newborn Hearing': '#hearing',
+                    'Newborn Screening': '#screening'
+                };
 
+                // Determine the tab to activate
+                var activeTab = tabMapping[reasonForVisit] || '#prenatal'; // Default to Prenatal
+
+                // Store the active tab in localStorage
+                localStorage.setItem('activeTab', activeTab);
+            });
+        });
     });
-
 </script>
 
 

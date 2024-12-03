@@ -11,6 +11,8 @@ namespace NatalCare.Models.Entities
         public int Id { get; set; }
         public DateTime? DateVisit { get; set; }
         public string? ReasonForVisit { get; set; }
+        public string? ServiceID { get; set; }
+
 
         public string? PatientID { get; set; }
         [ForeignKey("PatientID")]

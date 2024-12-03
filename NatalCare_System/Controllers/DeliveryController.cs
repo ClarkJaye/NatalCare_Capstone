@@ -37,8 +37,6 @@ namespace NatalCare_System.Controllers
                 return RedirectToAction("Index", "Patient");
             }
 
-            var clinicalSheetRecord = await serviceServices.GetClinicalSheetRecords(patientId, deliveryRecord.CaseNo);
-
             var viewModel = new DeliveryRecordVM
             {
                 Patient = patient,
@@ -47,15 +45,7 @@ namespace NatalCare_System.Controllers
             return View(viewModel);
         }
 
-
-        //CLINICAL SHEETS 
-        public IActionResult ClinicalRecords(string patientId, string caseno)
-        {
-            ViewData["DeliveryId"] = caseno;
-            return ViewComponent("ClinicalSheetRecords", new { patientId = patientId, caseno = caseno });
-        }
-
-
+        // DELIVERY OR ADMISSION RECRDS 
         public async Task<IActionResult> DeliveryRecords(string patientId)
         {
             ViewData["newbornList"] = await selectListServices.GetAllNewbornSelectListAsync(patientId);
@@ -63,6 +53,70 @@ namespace NatalCare_System.Controllers
             ViewData["dlstatusList"] = await selectListServices.GetDeliveryStatusSelectListAsync();
             return ViewComponent("DeliveryRecords", new { patientId = patientId });
         }
+
+
+        //PHYSICAL EXAMINAION
+        public IActionResult PERecords(string patientId, string caseno)
+        {
+            ViewData["DeliveryId"] = caseno;
+            return ViewComponent("PhysicalExaminationRecords");
+        }
+
+        //OBSTETRICAL HISTORY
+        public IActionResult ObstetricalRecords(string patientId, string caseno)
+        {
+            ViewData["DeliveryId"] = caseno;
+            return ViewComponent("ObstetricalRecordsViewComponent");
+        }
+
+        //MATERNAL DELIVERY MONITORING
+        public IActionResult MaternalMonitoringRecords(string patientId, string caseno)
+        {
+            ViewData["DeliveryId"] = caseno;
+            return ViewComponent("MaternalMonitoringRecordsViewComponent");
+        }
+
+        //CLINICAL SHEETS 
+        public IActionResult ClinicalRecords(string patientId, string caseno)
+        {
+            ViewData["DeliveryId"] = caseno;
+            return ViewComponent("ClinicalSheetRecords");
+        }
+
+
+        //CLINICAL SHEETS 
+        public IActionResult DischargmentRecord(string patientId, string caseno)
+        {
+            ViewData["DeliveryId"] = caseno;
+            return ViewComponent("DischargementRecords");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //ADD 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -158,7 +212,7 @@ namespace NatalCare_System.Controllers
             var records = await serviceServices.GetDeletedDeliveryRecords(patientId);
             return View(records ?? new List<Delivery>());
         }
-      
+
         //Retrieved Record
         public async Task<IActionResult> RetrieveDeliveryRecord(string caseno)
         {

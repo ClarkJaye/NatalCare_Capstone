@@ -5,7 +5,7 @@ using NatalCare.DataAccess.Entities;
 
 namespace NatalCare.Models.Entities
 {
-    public class DischargemenForm : BaseEntity
+    public class DischargementForm : BaseEntity
     {
         [Key]
         public int Id { get; set; }

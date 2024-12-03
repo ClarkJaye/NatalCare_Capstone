@@ -10,12 +10,14 @@ namespace NatalCare.Models.Entities
         [Key]
         public int Id { get; set; }
         public string? OBHistory { get; set; }
-        [Column(TypeName = "decimal(5, 2)")]
+        [Column(TypeName = "decimal(5, 2)")] 
         public decimal? Weight { get; set; }
         public string? Height { get; set; }
         public string? BP { get; set; }
-        public string? PulseRate { get; set; }
-        public string? RespiratoryRate { get; set; }
+        [Column(TypeName = "decimal(5, 2)")]
+        public decimal? PulseRate { get; set; }
+        [Column(TypeName = "decimal(5, 2)")]
+        public decimal? RespiratoryRate { get; set; }
         [Column(TypeName = "decimal(4, 1)")]
         public decimal? Temperature { get; set; }
         public bool Skin_Normal { get; set; } = false;
@@ -41,7 +43,7 @@ namespace NatalCare.Models.Entities
 
         // Foreign Key
         [Required]
-        public string? DeliveryId { get; set; }
+        public string? CaseNo { get; set; }
         [ForeignKey("CaseNo")]
         public Delivery? Delivery { get; set; }
 

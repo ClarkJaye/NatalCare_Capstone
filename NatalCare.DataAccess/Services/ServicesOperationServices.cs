@@ -72,6 +72,7 @@ namespace NatalCare.DataAccess.Services
             {
                 OpdVisit opd = new OpdVisit();
                 opd.ReasonForVisit = "Prenatal Check up";
+                opd.ServiceID = prenatal.CaseNo;
                 opd.DateVisit = prenatal.DateVisit;
                 opd.PatientID = prenatal.PatientID;
                 opd.Created_At = prenatal.Created_At;
@@ -198,15 +199,16 @@ namespace NatalCare.DataAccess.Services
             if (await unitOfWork.Repository<PrenatalVisit>().AnyAsync(x => x.PrenatalVisitID == prenatalvisit.PrenatalVisitID))
                 return new CommonResponse(false, "Record already exists.");
 
-            var prenaalMain = await unitOfWork.Repository<Prenatal>().GetFirstOrDefaultAsync(x => x.CaseNo == prenatalvisit.CaseNo);
-            if(prenaalMain != null)
+            var prenatalalMain = await unitOfWork.Repository<Prenatal>().GetFirstOrDefaultAsync(x => x.CaseNo == prenatalvisit.CaseNo);
+            if(prenatalalMain != null)
             {
-                prenaalMain.PrenatalVisitTotal += 1 ;
+                prenatalalMain.PrenatalVisitTotal += 1 ;
                 OpdVisit opd = new OpdVisit();
                 opd.ReasonForVisit = "Prenatal Check up";
-                opd.DateVisit = prenaalMain.DateVisit;
-                opd.PatientID = prenaalMain.PatientID;
-                opd.Created_At = prenaalMain.Created_At;
+                opd.ServiceID = prenatalalMain.CaseNo;
+                opd.DateVisit = prenatalalMain.DateVisit;
+                opd.PatientID = prenatalalMain.PatientID;
+                opd.Created_At = prenatalalMain.Created_At;
                 opd.OPDCreatedBy = userId;
                 opd.StatusCode = "AC";
                 unitOfWork.Repository<OpdVisit>().Add(opd);
@@ -478,6 +480,7 @@ namespace NatalCare.DataAccess.Services
             {
                 OpdVisit opd = new OpdVisit();
                 opd.ReasonForVisit = "Newborn Hearing";
+                opd.ServiceID = item.HearingNo;
                 opd.DateVisit = item.DateVisit;
                 opd.PatientID = item.PatientID;
                 opd.Created_At = item.Created_At;
@@ -622,6 +625,7 @@ namespace NatalCare.DataAccess.Services
             {
                 OpdVisit opd = new OpdVisit();
                 opd.ReasonForVisit = "Newborn Screening";
+                opd.ServiceID = item.ScreeningNo;
                 opd.DateVisit = item.DateVisit;
                 opd.PatientID = item.PatientID;
                 opd.Created_At = item.Created_At;
@@ -1029,7 +1033,69 @@ namespace NatalCare.DataAccess.Services
             var record = await unitOfWork.Repository<OpdVisit>().GetAllAsync(p => p.StatusCode == "AC", includeProperties: "Patient");
             return record.ToList();
         }
+        public async Task<OpdVisit> GetOPDRecord(int id)
+        {
+            var item = await unitOfWork.Repository<OpdVisit>().GetFirstOrDefaultAsync(x => x.Id == id);
 
+            if (item == null)
+                return new OpdVisit();
+            return item;
+        }
+        public async Task<GeneralResponse> GetOPDDataRecord(int id)
+        {
+            var item = await unitOfWork.Repository<OpdVisit>().GetFirstOrDefaultAsync(x => x.Id == id);
+            if (item == null)
+                return new GeneralResponse(false, null, "OPD record not found.");
+
+            object data = null; // Initialize a variable to store additional data
+
+            // Check the reason for the visit and retrieve relevant data
+            switch (item.ReasonForVisit?.ToLower())
+            {
+                case "newborn hearing":
+                    data = await unitOfWork.Repository<NewbornHearing>().GetFirstOrDefaultAsync(x => x.HearingNo == item.ServiceID);
+                    break;
+
+                case "newborn screening":
+                    data = await unitOfWork.Repository<NewbornScreening>().GetFirstOrDefaultAsync(x => x.ScreeningNo == item.ServiceID);
+                    break;
+
+                case "prenatal check up":
+                    data = await unitOfWork.Repository<Prenatal>().GetFirstOrDefaultAsync(x => x.CaseNo == item.ServiceID);
+                    break;
+
+                default:
+                    return new GeneralResponse(false, data, "No specific service data found.");
+            }
+
+            return new GeneralResponse(true, data , "service data retrieved successfully.");
+        }
+
+
+
+
+
+        //Physical Examination Records
+        public async Task<PhysicalExamination> GetPhysicalExaminationRecords(string patientId, string deliveryId)
+        {
+            var record = await unitOfWork.Repository<PhysicalExamination>().GetFirstOrDefaultAsync(p => p.PatientID == patientId && p.StatusCode == "AC");
+            if (record == null)
+            {
+                return new PhysicalExamination();
+            }
+            return record;
+        }
+
+        //Obstetrical Records
+        public async Task<Obstetrical> GetObstetricalRecords(string patientId, string deliveryId)
+        {
+            var record = await unitOfWork.Repository<Obstetrical>().GetFirstOrDefaultAsync(p => p.PatientID == patientId && p.StatusCode == "AC");
+            if (record == null)
+            {
+                return new Obstetrical();
+            }
+            return record;
+        }
 
 
         //Clinical Sheets Records
@@ -1042,6 +1108,41 @@ namespace NatalCare.DataAccess.Services
             }
             return record;
         }
+
+
+        //Dischagement Form Records
+        public async Task<DischargementForm> GetDischargementRecords(string patientId, string deliveryId)
+        {
+            var record = await unitOfWork.Repository<DischargementForm>().GetFirstOrDefaultAsync(p => p.PatientID == patientId && p.StatusCode == "AC");
+            if (record == null)
+            {
+                return new DischargementForm();
+            }
+            return record;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

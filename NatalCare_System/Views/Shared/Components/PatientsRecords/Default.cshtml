@@ -21,7 +21,8 @@
         <tbody>
             @foreach (var patient in Model)
             {
-                <tr class="align-middle patient-row" data-url="@Url.Action("Information", "Patient", new { id = patient.PatientID })" style="cursor: pointer;">
+                @* <tr class="align-middle patient-row" data-url="@Url.Action("Information", "Patient", new { id = patient.PatientID })" style="cursor: pointer;"> *@
+                <tr>
                     <td>
                         <img src="~/profile/@(patient.Gender?.ToLower() == "female" ? "woman.png" : "man.png")"
                              width="50" height="50" alt="Profile" class="img-fluid rounded-circle" />

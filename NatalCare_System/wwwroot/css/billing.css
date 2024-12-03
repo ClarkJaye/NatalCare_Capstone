@@ -473,3 +473,12 @@
         color: white;
     }
 }
+
+#invoiceContainer tbody tr td {
+    text-align: center;
+}
+
+
+#invoiceTable thead tr th{
+    text-align:center;
+}

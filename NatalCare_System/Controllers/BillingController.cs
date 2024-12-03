@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 using NatalCare.DataAccess.Interfaces;
+using NatalCare.DataAccess.Services;
 using NatalCare.Models.DTOs;
 
 namespace NatalCare_System.Controllers
@@ -26,13 +27,16 @@ namespace NatalCare_System.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GenerateInvoice()
+
+
+        public async Task<IActionResult> GenerateInvoice(int? id)
         {
             ViewData["staffList"] = await selectListServices.GetAllStaffSelectListAsync();
 
-            BillingDTO billingDTO = new BillingDTO();
+            var model = await _billing.generateInvoiceModel(id);
 
-            return View(billingDTO);
+            return View(model);
+            
         }
 
 
@@ -94,13 +98,13 @@ namespace NatalCare_System.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateInvoice(BillingDTO billingDTO, string action)
         {
-            var (result, invoiceNumber) = await _billing.createInvoice(billingDTO);
+            var (result, id) = await _billing.createInvoice(billingDTO);
 
             if (result)
             {        
                 if (action == "MakePayment")
                 {
-                    return RedirectToAction(nameof(PrintInvoice), new { invoiceNumber });
+                    return RedirectToAction(nameof(PrintInvoice), new { id });
                 }
                 else if (action == "SaveAndPayLater")
                 {
@@ -111,9 +115,9 @@ namespace NatalCare_System.Controllers
 
         }
 
-        public async Task<IActionResult> PrintInvoice(int? invoiceNumber)
+        public async Task<IActionResult> PrintInvoice(int? id)
         {
-            var model = await _billing.PaymentVM(invoiceNumber);
+            var model = await _billing.PaymentVM(id);
 
             return View(model);
         }
@@ -134,6 +138,32 @@ namespace NatalCare_System.Controllers
             var allServices = await _billing.allServices();
 
             return Json(allServices);
+        }
+
+        [HttpDelete]
+        public async Task<JsonResult> DeletePayment(int paymentId)
+        {
+            try
+            {
+                if (paymentId != null)
+                {
+
+                    var (result, message) = await _billing.deleyePayment(paymentId);
+
+                    if (result)
+                    {
+                        return Json(message);
+
+                    }
+
+                }
+                return Json(new { IsSuccess = false, Message = "Delete Payment failed!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while deleting family planning record for Patient");
+                return Json(new { IsSuccess = false, Message = "An error occurred in DeleteFPRecord." });
+            }
         }
 
     }

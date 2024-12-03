@@ -8,6 +8,11 @@
 <!-- NAVBAR -->
 <partial name="Partial/_Navbar" />
 
+<a class="btn btn-pink mx-4 mb-4 mt-2 gap-2" asp-controller="Billing" asp-action="GenerateInvoice">
+    <i class="fa-solid fa-file-invoice mr-2" style="font-size: 18px; margin-right:.5rem;"></i>
+    <strong>Add New Invoice</strong>
+</a>
+
 <div class="mx-4">
     <div class="card shadow-sm card-selected">
         <div class="card-body" id="invoiceContainer">

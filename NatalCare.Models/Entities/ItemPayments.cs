@@ -14,7 +14,7 @@ namespace NatalCare.Models.Entities
         public int? PaymentID { get; set; }
         [ValidateNever]
         [ForeignKey("PaymentID")]
-        public Modules? Module { get; set; }
+        public Payments? Payments { get; set; }
 
         public int? Quantity { get; set; }
 

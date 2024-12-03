@@ -29,12 +29,18 @@ namespace NatalCare.DataAccess.Services
             this.db = db;   
         }
 
-        public async Task<List<Payments>> GetPayments()
+        public async Task<InvoiceListDTO> GetPayments()
         {
 
             var payments = await _unitOfWork.Repository<Payments>().AsQueryable().Include(a => a.Patient).Include(a => a.Staff).Include(a => a.CreatedBy).ToListAsync();
 
-            return payments;
+            var patientPayments = await _unitOfWork.Repository<PatientPayments>().AsQueryable().Include(a => a.Patients).Include(a => a.Payments).ToListAsync();
+
+            return new InvoiceListDTO
+            {
+                Payments = payments,
+                PatientPayments = patientPayments
+            };
         }
 
 
@@ -319,13 +325,11 @@ namespace NatalCare.DataAccess.Services
 
         public async Task<PrintDTO> PaymentVM(int? invoiceNumber)
         {
-            // Validate invoiceNumber
             if (!invoiceNumber.HasValue)
             {
-                return null; // or throw an exception
+                return null; 
             }
 
-            // Fetch payment with related entities
             var payment =  _unitOfWork.Repository<Payments>()
                 .AsQueryable()
                 .Include(a => a.Patient)
@@ -333,33 +337,121 @@ namespace NatalCare.DataAccess.Services
                 .Include(a => a.Staff)
                 .FirstOrDefault(a => a.PaymentID == invoiceNumber);
 
-            // Check if payment exists
             if (payment == null)
             {
-                return null; // or handle the case where no payment is found
+                return null; 
             }
 
-            // Fetch related item payments asynchronously
             var items =  _unitOfWork.Repository<ItemPayments>()
                 .AsQueryable()
-                .Include(a => a.Items) // Ensure this includes the related Items
+                .Include(a => a.Items) 
                 .Where(a => a.PaymentID == invoiceNumber)
                 .ToList();
 
-            // Fetch related service payments asynchronously
+    
             var services =  _unitOfWork.Repository<ServicesPayment>()
                 .AsQueryable()
                 .Include(a => a.Services)
                 .Where(a => a.PaymentID == invoiceNumber)
                 .ToList();
 
-            // Create and return PrintDTO with fetched data
+
+            var patientPayments = _unitOfWork.Repository<PatientPayments>()
+                .AsQueryable()
+                .Include(a => a.Patients)
+                .Where(a => a.PaymentID == invoiceNumber)
+                .ToList();
+
+    
             return new PrintDTO
             {
                 Payments = payment,
-                Items = items, // No need to call ToList() again as items is already a List
-                Services = services // Correct property name to match standard spelling
+                Items = items, 
+                Services = services,
+                Patients = patientPayments
             };
+        }
+
+
+
+        public async Task<CommonResponse> deleyePayment(int paymentId)
+        {
+            var payment = await _unitOfWork.Repository<Payments>().AsQueryable().FirstOrDefaultAsync(a => a.PaymentID == paymentId);
+
+            _unitOfWork.Repository<Payments>().Remove(payment);
+            await _unitOfWork.Complete();
+
+            return new CommonResponse(true, "Payment Sucessfully Deleted!");
+        }
+
+        public async Task<BillingAndPrintVM> generateInvoiceModel(int? id)
+        {
+
+            if (id == null)
+            {
+
+
+                BillingDTO billingDTO = new BillingDTO();
+
+                return new BillingAndPrintVM
+                {
+                    BillingDTO = billingDTO,
+                    PrintDTO = null,
+                };
+
+            }
+            else
+            {
+
+                var payment = _unitOfWork.Repository<Payments>()
+                .AsQueryable()
+                .Include(a => a.Patient)
+                .Include(a => a.CreatedBy)
+                .Include(a => a.Staff)
+                .FirstOrDefault(a => a.PaymentID == id);
+
+                if (payment == null)
+                {
+                    return null;
+                }
+
+                var items = _unitOfWork.Repository<ItemPayments>()
+                    .AsQueryable()
+                    .Include(a => a.Items)
+                    .Where(a => a.PaymentID == id)
+                    .ToList();
+
+
+                var services = _unitOfWork.Repository<ServicesPayment>()
+                    .AsQueryable()
+                    .Include(a => a.Services)
+                    .Where(a => a.PaymentID == id)
+                    .ToList();
+
+
+                var patientPayments = _unitOfWork.Repository<PatientPayments>()
+                    .AsQueryable()
+                    .Include(a => a.Patients)
+                    .Where(a => a.PaymentID == id)
+                    .ToList();
+
+                BillingDTO billingDTO = new BillingDTO();
+
+                PrintDTO printDTO = new PrintDTO
+                {
+                    Payments = payment,
+                    Items = items,
+                    Services = services,
+                    Patients = patientPayments
+                };
+
+                return new BillingAndPrintVM
+                {
+                    BillingDTO = billingDTO,
+                    PrintDTO = printDTO,
+                };
+            }
+           
         }
 
 

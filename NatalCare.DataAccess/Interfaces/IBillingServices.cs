@@ -24,9 +24,14 @@ namespace NatalCare.DataAccess.Interfaces
 
         Task<PrintInvoiceResponse> createInvoice(BillingDTO billingDTO);
 
-        Task<List<Payments>> GetPayments();
+        Task<InvoiceListDTO> GetPayments();
 
         Task<PrintDTO> PaymentVM(int? invoiceNumber);
+
+        Task<BillingAndPrintVM> generateInvoiceModel(int? id);
+
+        Task<CommonResponse> deleyePayment(int paymentId);
+
 
     }
 }

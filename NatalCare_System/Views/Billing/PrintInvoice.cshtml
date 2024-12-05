@@ -51,7 +51,7 @@
 
                     </div>
                     <div class="printDiv1In1Div2Div1Div2">
-                        <p style="margin:0;">@(Model.Payments.BillDate?.ToString("dd/MM/yyyy") ?? "N/A")</p>
+                        <p style="margin:0;">@(Model.Payments.BillDate.Value.ToString("MMMM d, yyyy") ?? "N/A")</p>
                     </div>
                 </div>
                 <div class="printDiv1In1Div2Div3">
@@ -60,7 +60,7 @@
 
                     </div>
                     <div class="printDiv1In1Div2Div1Div2">
-                        <p style="margin:0;">@(Model.Payments.DueDate?.ToString("dd/MM/yyyy") ?? "N/A")</p>
+                        <p style="margin:0;">@(Model.Payments.DueDate.Value.ToString("MMMM d, yyyy") ?? "N/A")</p>
                     </div>
                 </div>
             </div>
@@ -163,15 +163,15 @@
             <div class="printDiv3In2Div1">
                 <div class="printDiv3In2Div1Div1">
                     <p style="margin:0; ">Sub Total:</p>
-                    <p style="margin:0;">Discount:</p>
                     <p style="margin:0;">PhilHealth Total:</p>
+                    <p style="margin:0;">Discount:</p>
                     <p style="margin:0;">Total Payment:</p>
                 </div>
                 <div class="printDiv3In2Div1Div2">
                     <p style="margin:0;">₱ @Model.Payments.Total_Amount</p>
-                    <p style="margin:0;">₱ @(Model.Payments.Discount ?? 0) %</p>
                     <p style="margin:0;">₱ @(Model.Payments.PhilHealth_Deduction)</p>
-                    <p style="margin:0;">₱ @Model.Payments.Final_Amount</p>
+                    <p style="margin:0;">₱ @(Model.Payments.Discount ?? 0) %</p>
+                    <p style="margin:0; font-weight:bold;">₱ @Model.Payments.Final_Amount</p>
                 </div>
             </div>
             <div class="printDiv3In2Div2">

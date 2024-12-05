@@ -10,6 +10,6 @@ namespace NatalCare.DataAccess.Response
 
         public record class PrintInvoiceResponse(bool IsSuccess, int? InvoiceNumber);
 
-
+        public record class ChartDataResponse(bool ByMonth, object? value);
     }
 }

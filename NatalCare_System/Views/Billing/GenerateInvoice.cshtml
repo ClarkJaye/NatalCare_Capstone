@@ -38,6 +38,7 @@
     }
 </style>
 <!-- NAVBAR -->
+
 <partial name="Partial/_Navbar" />
 
 <div class="mx-5">
@@ -45,7 +46,7 @@
         <div class="card-header d-flex justify-content-between align-items-center bg-pink">
             @if (Model.PrintDTO != null)
             {
-                <h5 class="card-title my-2">INVOICE DETAILS</h5>
+                <h5 class="card-title my-2" id="invoiceHeader">INVOICE DETAILS</h5>
             }
             else
             {
@@ -53,7 +54,7 @@
             }
         </div>
         <div class="card-body m-4">
-            <form controller="Billing" action="CreateInvoice" method="POST"> 
+            <form asp-controller="Billing" asp-action="CreateInvoice" method="POST">
                 <div class="row form-group" style="position:relative;">
                     <div validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -63,11 +64,13 @@
 
                         @if (Model.PrintDTO != null)
                         {
-                            <input type="hidden" asp-for="BillingDTO.PatientName" name="PatientName" id="patientIdHidden" value="@Model.PrintDTO.Payments.Patient.PatientID" />
+                            <input type="hidden" asp-for="BillingDTO.PatientName" name="BillingDTO.PatientName" id="patientIdHidden" value="@Model.PrintDTO.Payments.Patient.PatientID" />
+
+                            <input type="hidden" asp-for="BillingDTO.paymentID" name="BillingDTO.paymentID"  value="@Model.PrintDTO.Payments.PaymentID" />
                         }
                         else
                         {
-                            <input type="hidden" asp-for="BillingDTO.PatientName" name="PatientName" id="patientIdHidden" />
+                            <input type="hidden" asp-for="BillingDTO.PatientName" name="BillingDTO.PatientName" id="patientIdHidden" />
 
                         }
                         
@@ -88,7 +91,7 @@
 </ul>
                     <div class="form-group col-md-4 mb-3">
                         <label for="MiddleName" class="control-label">Staff Name</label>
-                        <select asp-for="BillingDTO.StaffName" class="form-control" asp-items="ViewBag.staffList" name="StaffName" id="staffName" disabled>
+                        <select asp-for="BillingDTO.StaffName" class="form-control" asp-items="ViewBag.staffList" name="BillingDTO.StaffName" id="staffName">
                         </select>
 
                         @if (staffId != 0)
@@ -96,6 +99,7 @@
                             <script>
                                 $(document).ready(function () {
                                     $("#staffName").val('@staffId');
+                                    $("#staffName").prop("disabled", true);
                                 });
                             </script>
                         }
@@ -106,7 +110,7 @@
 
                     <div class="form-group col-md-4 mb-3">
                         <label for="billDate" class="control-label">Bill Date</label>
-                        <input asp-for="BillingDTO.BillDate" class="form-control" type="date" name="BillDate" id="billDate" disabled/>
+                        <input asp-for="BillingDTO.BillDate" class="form-control" type="date" name="BillingDTO.BillDate" id="billDate" />
 
                         @if (billDate.HasValue) 
                         {
@@ -114,7 +118,8 @@
                                 $(document).ready(function () {
                            
                                     var dateValue = '@billDate.Value.ToString("yyyy-MM-dd")';
-                                    $("#billDate").val(dateValue); 
+                                    $("#billDate").val(dateValue);
+                                    $("#billDate").prop("disabled", true);
 
                                 });
                             </script>
@@ -125,7 +130,7 @@
 
                     <div class="form-group col-md-4 mb-3">
                         <label for="Birthdate" class="control-label">Due Date</label>
-                        <input asp-for="BillingDTO.DueDate" class="form-control" type="date" name="DueDate" id="dueDate" disabled />
+                        <input asp-for="BillingDTO.DueDate" class="form-control" type="date" name="BillingDTO.DueDate" id="dueDate" />
 
                         @if (dueDate.HasValue) 
                         {
@@ -134,6 +139,8 @@
                                    
                                     var dateValue = '@dueDate.Value.ToString("yyyy-MM-dd")';
                                     $("#dueDate").val(dateValue);
+                                    $("#dueDate").prop("disabled", true);
+
                                 });
                             </script>
                         }
@@ -151,7 +158,7 @@
                                 <i class="fas fa-plus"></i>
                                 <span>Add Item</span>
                             </button>
-                            <button class="btn btn-pink addItem" data-bs-toggle="modal" data-bs-target="#addServicesModal">
+                            <button class="btn btn-pink addServices" data-bs-toggle="modal" data-bs-target="#addServicesModal">
                                 <i class="fas fa-plus"></i>
                                 <span>Add Services</span>
                             </button>
@@ -182,6 +189,23 @@
                                 @* AJAX *@
                                 @if (Model.PrintDTO != null)
                                 {
+                                    <script>
+                                        $(document).ready(function () {
+
+                                            $("#isDiscounted").prop("disabled", true);
+
+
+                                            $(".addRow").prop("disabled", true);
+                                            $(".addItem").prop("disabled", true);
+                                            $(".addServices").prop("disabled", true);
+
+                                            $("tbody tr input").prop("disabled", true);
+                                            $("tbody tr select").prop("disabled", true);
+                                            $("tbody tr button").prop("disabled", true);
+
+                                        });
+                                    </script>
+
                                     if (Model.PrintDTO.Items.Count > 0)
                                     {
 
@@ -194,12 +218,13 @@
                                                 <td class="row-number">@rowCount</td>
 
                                                 <td style="display:flex; flex-direction:row; justify-content:space-evenly; align-items:center;" class="button-container">
-                                                    <select class="form-control selectServices valid" style="width: 100%; text-align:center;" name="Services[@ServiceCount].ServiceName" aria-invalid="false" id="serviceNameSelect_@servicesCount">
+
+                                                    <select class="form-control selectServices valid" style="width: 100%; text-align:center;" name="BillingDTO.Services[@ServiceCount].ServiceName" aria-invalid="false" id="serviceNameSelect_@rowCount">
 
                                                         <option class="optionTag" value="">SELECT SERVICE</option> 
                                                         @foreach (var serviceOption in Model.PrintDTO.Services.Distinct()) 
                                                         {
-                                                            <option class="optionTag" value="@serviceOption.Services.ServiceName" data-price="@serviceOption.Services.Price" data-name="@serviceOption.Services.ServiceName" data-desc="@serviceOption.Services.Description">
+                                                            <option class="optionTag" value="@serviceOption.Services.ServiceName" data-price="@((int)serviceOption.Services.Price)" data-name="@serviceOption.Services.ServiceName" data-desc="@serviceOption.Services.Description">
                                                                 @serviceOption.Services.ServiceName
                                                             </option>
                                                         }
@@ -214,7 +239,7 @@
                                                 </td>
 
                                                 <td>
-                                                    <input list="numberList" id="quantity" class="w-100 text-center form-control" type="number" name="Services[@ServiceCount].Quantity" value="@service.Quantity">
+                                                    <input list="numberList" id="quantity" class="w-100 text-center form-control" type="number" name="BillingDTO.Services[@ServiceCount].Quantity" value="@service.Quantity">
                                                     <datalist id="numberList">
                                                         <option value="1">
                                                         </option>
@@ -229,12 +254,15 @@
                                                     </datalist>
                                                 </td>
                                                 <td>₱<span id="price">@service?.Services?.Price</span>
-                                                    <input type="hidden" id="pricehidden" name="Services[@ServiceCount].Price" value="@service?.Services?.Price"></td>
+                                                    <input type="hidden" id="pricehidden" name="BillingDTO.Services[@ServiceCount].Price" value="@service?.Services?.Price">
+                                                </td>
 
                                                 <td>₱<span id="amount">@(((service.Services?.Price ?? 0) * (service.Quantity ?? 0)) - (service.PhilhealthCovered ?? 0))</span>
-                                                    <input type="hidden" id="amounthidden" name="Services[@ServiceCount].Amount" value="0.00"><input type="hidden" id="amountSubTotal" value=""></td>
+                                                    <input type="hidden" id="amounthidden" name="BillingDTO.Services[@ServiceCount].Amount" value="0.00">
+                                                    <input type="hidden" id="amountSubTotal" value="">
+                                                </td>
                                                 <td>
-                                                    <input id="philCovered" class="w-100 text-center form-control" type="number" name="Services[@ServiceCount].PhilHealthCovered" value="@(service.PhilhealthCovered ?? 0)">
+                                                    <input id="philCovered" class="w-100 text-center form-control" type="number" name="BillingDTO.Services[@ServiceCount].PhilHealthCovered" value="@(service.PhilhealthCovered ?? 0)">
                                                 </td>
                                                 <td style="">
                                                     <i class="fas fa-trash "></i>
@@ -244,22 +272,6 @@
 
                                         }
 
-                                        <script>
-                                            $(document).ready(function () {
-                                         
-                                                @if (Model.PrintDTO != null)
-                                                {
-                                                    foreach (var service in Model.PrintDTO.Services)
-                                                    {                      
-                                                        var selectedServiceName = service.Services.ServiceName;
-                                                        <text>
-                                                                $("#serviceNameSelect_@servicesCount").val('@selectedServiceName');
-                                                        </text>
-                                                    }
-                                                }
-                                            });
-                                        </script>
-
                                         foreach (var items in Model.PrintDTO.Items)
                                         {
                                             rowCount++;
@@ -268,7 +280,7 @@
                                                 <td class="row-number">@rowCount</td>
 
                                                 <td style="display:flex; flex-direction:row; justify-content:space-evenly; align-items:center;" class="button-container">
-                                                    <select class="form-control selectItems valid" style="width: 100%; text-align:center;" name="Items[@ItemCount].ItemName" aria-invalid="false" id="itemsNameSelect_@rowCount">
+                                                    <select class="form-control selectItems valid" style="width: 100%; text-align:center;" name="BillingDTO.Items[@ItemCount].ItemName" aria-invalid="false" id="itemsNameSelect_@rowCount">
 
                                                         <option class="optionTag" value="">SELECT ITEMS</option>
                                                         @foreach (var itemOption in Model.PrintDTO.Items.Distinct())
@@ -286,7 +298,7 @@
                                                 </td>
 
                                                 <td>
-                                                    <input list="numberList" id="quantity" class="w-100 text-center form-control" type="number" name="Items[@ItemCount].Quantity" value="@items.Quantity"> 
+                                                    <input list="numberList" id="quantity" class="w-100 text-center form-control" type="number" name="BillingDTO.Items[@ItemCount].Quantity" value="@items.Quantity">
                                                     <datalist id="numberList">
                                                         <option value="1">
                                                         </option>
@@ -302,13 +314,14 @@
                                                 </td>
                                                 <td>
                                                     ₱<span id="price">@items?.Items?.Price</span>
-                                                    <input type="hidden" id="pricehidden" name="Items[@ItemCount].Price" value="@items?.Items?.Price">
+                                                    <input type="hidden" id="pricehidden" name="BillingDTO.Items[@ItemCount].Price" value="@items?.Items?.Price">
                                                 </td>
                                                 <td>
                                                     ₱<span id="amount">@(((items?.Items?.Price ?? 0) * (items?.Quantity ?? 0)) - (items.PhilHealthCovered ?? 0))</span>
-                                                    <input type="hidden" id="amounthidden" name="Items[@ItemCount].Amount"><input type="hidden" id="amountSubTotal"></td>
+                                                    <input type="hidden" id="amounthidden" name="BillingDTO.Items[@ItemCount].Amount"><input type="hidden" id="amountSubTotal">
+                                                </td>
                                                 <td>
-                                                    <input id="philCovered" class="w-100 text-center form-control" type="number" name="Items[@ItemCount].PhilHealthCovered" value="@(items.PhilHealthCovered?? 0)">
+                                                    <input id="philCovered" class="w-100 text-center form-control" type="number" name="BillingDTO.Items[@ItemCount].PhilHealthCovered" value="@(items.PhilHealthCovered?? 0)">
                                                 </td>
                                                 <td style="">
                                                     <i class="fas fa-trash "></i>
@@ -322,24 +335,7 @@
 
                                             ItemCount++;
                                         }
-                                        <script>
-                                            $(document).ready(function () {
-                                                // Set the selected value for each service select box based on the model
-                                            @if (Model.PrintDTO != null)
-                                            {
 
-                                                foreach (var service in Model.PrintDTO.Items)
-                                                {
-                                                    itemsCount++;
-
-                                                    var selectedItemsName = service.Items.ItemName;
-                                                    <text>
-                                                            $("#itemsNameSelect_@itemsCount").val('@selectedItemsName');
-                                                    </text>
-                                                }
-                                            }
-                                                                                            });
-                                        </script>
                                     }
                                     else
                                     {
@@ -352,7 +348,7 @@
                                                 <td class="row-number">@rowCount</td>
 
                                                 <td style="display:flex; flex-direction:row; justify-content:space-evenly; align-items:center;" class="button-container">
-                                                    <select class="form-control selectServices valid" style="width: 100%; text-align:center;" name="Services[@ServiceCount].ServiceName" aria-invalid="false">
+                                                    <select class="form-control selectServices valid" style="width: 100%; text-align:center;" name="BillingDTO.Services[@ServiceCount].ServiceName" aria-invalid="false">
                                                         <option class="optionTag" value="">SELECT SERVICE</option>
                                                         @foreach (var serviceOption in Model.PrintDTO.Services.Distinct())
                                                         {
@@ -368,7 +364,7 @@
                                                 </td>
 
                                                 <td>
-                                                    <input list="numberList" id="quantity" class="w-100 text-center form-control" type="number" name="Services[@ServiceCount].Quantity">
+                                                    <input list="numberList" id="quantity" class="w-100 text-center form-control" type="number" name="BillingDTO.Services[@ServiceCount].Quantity">
                                                     <datalist id="numberList">
                                                         <option value="1">
                                                         </option>
@@ -382,10 +378,10 @@
                                                         </option>
                                                     </datalist>
                                                 </td>
-                                                <td>₱<span id="price">200.00</span><input type="hidden" id="pricehidden" name="Services[@ServiceCount].Price" value="200.00"></td>
-                                                <td>₱<span id="amount">0.00</span><input type="hidden" id="amounthidden" name="Services[@ServiceCount].Amount" value="0.00"><input type="hidden" id="amountSubTotal" value="0.00"></td>
+                                                <td>₱<span id="price">200.00</span><input type="hidden" id="pricehidden" name="BillingDTO.Services[@ServiceCount].Price" value="200.00"></td>
+                                                <td>₱<span id="amount">0.00</span><input type="hidden" id="amounthidden" name="BillingDTO.Services[@ServiceCount].Amount" value="0.00"><input type="hidden" id="amountSubTotal" value="0.00"></td>
                                                 <td>
-                                                    <input id="philCovered" class="w-100 text-center form-control" type="number" name="Services[@ServiceCount].PhilHealthCovered">
+                                                    <input id="philCovered" class="w-100 text-center form-control" type="number" name="BillingDTO.Services[@ServiceCount].PhilHealthCovered">
                                                 </td>
                                                 <td style="">
                                                     <i class="fas fa-trash "></i>
@@ -409,12 +405,14 @@
 
                     <div class="form-group col-md-5 mb-3">
                         <label for="Notes" class="control-label fw-bold">Notes:</label>
-                        <textarea asp-for="BillingDTO.Notes" class="form-control" rows="4" cols="50" name="Notes" id="notes" disabled></textarea>
+                        <textarea asp-for="BillingDTO.Notes" class="form-control" rows="4" cols="50" name="BillingDTO.Notes" id="notes"></textarea>
                         @if (!string.IsNullOrEmpty(Model?.PrintDTO?.Payments?.Notes))
                         {
                             <script>
                                 $(document).ready(function () {
                                     $("#notes").val('@Html.Raw(Model.PrintDTO.Payments.Notes)');
+                                    $("#notes").prop("disabled", true);
+
                                 });
                             </script>
                         }
@@ -435,14 +433,20 @@
             @if(Model.PrintDTO != null){
                 <script>
                     $(document).ready(function () {
+
+
                         $("#subTotalShow").text("₱" + parseFloat(@Model.PrintDTO.Payments.Total_Amount).toFixed(2));
                         $("#philHealthTotalShow").text("₱" + parseFloat(@Model.PrintDTO.Payments.PhilHealth_Deduction).toFixed(2));
 
                         $("#subTotalHidden").val(parseFloat(@Model.PrintDTO.Payments.Total_Amount).toFixed(2));
                         $("#philHealthTotalHidden").val(parseFloat(@Model.PrintDTO.Payments.PhilHealth_Deduction).toFixed(2));
 
+                                        
+                          var discountCount = $("#discountInput").val(@Model.PrintDTO.Payments.Discount);
 
-                        $("#discountInput").val(@Model.PrintDTO.Payments.Discount);
+                            if (!isNaN(discountCount) && discountCount > 0) {
+                                 $("#myCheck").prop("checked", true);
+                            }
 
                                         $("#totalAmountShow").text("Total Amount: ₱" + parseFloat(@Model.PrintDTO.Payments.Final_Amount).toFixed(2));
                         $("#totalAmountHidden").val(parseFloat(@Model.PrintDTO.Payments.Final_Amount).toFixed(2));
@@ -452,16 +456,16 @@
             }
             <p class=" mt-1 fw-bold" id="philHealthTotalShow">₱0.00</p>
 
-            <input type="hidden" asp-for="BillingDTO.SubTotal" name="SubTotal" id="subTotalHidden"/>
-            <input type="hidden" asp-for="BillingDTO.PhilHeathTotal" name="PhilHeathTotal" id="philHealthTotalHidden"/>
+            <input type="hidden" asp-for="BillingDTO.SubTotal" name="BillingDTO.SubTotal" id="subTotalHidden"/>
+            <input type="hidden" asp-for="BillingDTO.PhilHeathTotal" name="BillingDTO.PhilHeathTotal" id="philHealthTotalHidden"/>
 
 
                             <input class="form-check-input discounted mb-3 fw-bold" type="checkbox" id="isDiscounted" style="width: 25px;">
 
-                            <input asp-for="BillingDTO.Discount" name="Discount" class="form-control mb-3 fw-bold" type="number" id="discountInput" disabled />
+                            <input asp-for="BillingDTO.Discount" name="BillingDTO.Discount" class="form-control mb-3 fw-bold" type="number" id="discountInput" disabled />
 
             <p class="align-self-center fw-bold" id="totalAmountShow">Total Amount: ₱0.00</p>
-            <input type="hidden" asp-for="BillingDTO.TotalAmount" name="TotalAmount" id="totalAmountHidden"/>
+            <input type="hidden" asp-for="BillingDTO.TotalAmount" name="BillingDTO.TotalAmount" id="totalAmountHidden"/>
 
                         </div>
                     </div>
@@ -470,9 +474,14 @@
 
                         @if (Model.PrintDTO != null)
                         {
-                            <button class="btn btn-success mx-2" onclick="event.preventDefault();">
+                            <a class="btn btn-success mx-2 editInvoiceBtn">
                                 <i class="fas fa-pen"></i>
                                 <span>EDIT</span>
+                            </a>
+
+                            <button class="btn btn-success mx-2" id="saveInBtn" type="submit" name="action" value="Save" style="display:none;">
+                                <i class="fas fa-plus"></i>
+                                <span>Save</span>
                             </button>
 
                             <a class="btn btn-dark mx-2" asp-action="InvoiceList" asp-controller="Billing">
@@ -507,6 +516,37 @@
 </div>
 
 
+<script>
+    $(document).ready(function () {
+        // Set the selected value for each service select box
+    @if (Model.PrintDTO != null)
+    {
+        int serviceIndex = 0; // Initialize for services
+        foreach (var service in Model.PrintDTO.Services)
+        {
+            serviceIndex++;
+            var selectedServiceName = service.Services.ServiceName; // Adjust based on your property
+            <text>
+                    $("#serviceNameSelect_@serviceIndex").val('@selectedServiceName');
+            </text>
+        }
+    }
+
+            // Set the selected value for each item select box
+    @if (Model.PrintDTO != null)
+    {
+        int itemIndex = 0; // Initialize for items
+        foreach (var item in Model.PrintDTO.Items)
+        {
+            itemIndex++;
+            var selectedItemName = item.Items.ItemName; // Adjust based on your property
+            <text>
+                    $("#itemsNameSelect_@(rowCount - Model.PrintDTO.Items.Count + itemIndex)").val('@selectedItemName');
+            </text>
+        }
+    }
+    });
+</script>
 
                                 @* ADD ITEM *@
 <div class="modal fade" aria-labelledby="staticBackdropLabel" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -625,6 +665,12 @@
 <script>
     $(document).ready(function () {
 
+
+
+
+
+
+
         $('#isDiscounted').on('change', function () {
             $('#discountInput').prop('disabled', !this.checked); // Enable input if checkbox is checked
         });
@@ -711,7 +757,7 @@
 
 
 
-                select = $(`<select class="form-control selectItems" style="width: 100%; text-align:center;" name="Items[${ItemCount}].ItemName">
+                select = $(`<select class="form-control selectItems" style="width: 100%; text-align:center;" name="BillingDTO.Items[${ItemCount}].ItemName">
                     </select>`);
 
                 //ALL ITEMS
@@ -755,7 +801,7 @@
 
 
 
-                select = $(`<select class="form-control selectServices" style="width: 100%; text-align:center;" name="Services[${ServiceCount}].ServiceName">
+                select = $(`<select class="form-control selectServices" style="width: 100%; text-align:center;" name="BillingDTO.Services[${ServiceCount}].ServiceName">
                     </select>`);
 
                 //ALL SERVICES
@@ -802,10 +848,10 @@
 
 
         function setItemOrServiceNames(row, type, count) {
-            row.find("#quantity").attr('name', `${type}[${count}].Quantity`);
-            row.find("#pricehidden").attr('name', `${type}[${count}].Price`);
-            row.find("#amounthidden").attr('name', `${type}[${count}].Amount`);
-            row.find("#philCovered").attr('name', `${type}[${count}].PhilHealthCovered`);
+            row.find("#quantity").attr('name', `BillingDTO.${type}[${count}].Quantity`);
+            row.find("#pricehidden").attr('name', `BillingDTO.${type}[${count}].Price`);
+            row.find("#amounthidden").attr('name', `BillingDTO.${type}[${count}].Amount`);
+            row.find("#philCovered").attr('name', `BillingDTO.${type}[${count}].PhilHealthCovered`);
         }
 
 
@@ -833,7 +879,45 @@
             updateRowPrice(row, price);
         });
 
+        
+        //EDIT INVOICE
+        $(".editInvoiceBtn").on("click", function (event) {
 
+
+            $("#patientNameInput").prop("disabled", false);
+            $("#staffName").prop("disabled", false);
+            $("#billDate").prop("disabled", false);
+            $("#dueDate").prop("disabled", false);
+            $("#notes").prop("disabled", false);
+
+            $(".selectItems").prop("disabled", false);
+            $(".selectServices").prop("disabled", false);
+    
+            $("#invoiceHeader").text("EDIT INVOICE DETAILS");
+
+            $(".addRow").prop("disabled", false);
+            $(".addItem").prop("disabled", false);
+            $(".addServices").prop("disabled", false);
+
+            $("tbody tr input").prop("disabled", false);
+            $("tbody tr select").prop("disabled", false);
+            $("tbody tr button").prop("disabled", false);
+
+  
+            $("#saveInBtn").css("display", "block");
+
+            $(".editInvoiceBtn").css("display", "none");
+
+            $("#isDiscounted").prop("disabled", false);
+
+            var discountCount = $("#discountInput").val();
+
+            if (!isNaN(discountCount) && discountCount > 0) {
+                $("#isDiscounted").prop("checked", true);
+                $('#discountInput').prop('disabled', false);
+            }
+          
+        });
 
         // Change event for service selection
         $(document).on("change", ".selectServices", function () {

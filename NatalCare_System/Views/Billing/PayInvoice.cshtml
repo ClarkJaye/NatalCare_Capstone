@@ -1,0 +1,66 @@
+﻿@model NatalCare.Models.Entities.PatientPayments
+
+@{
+    ViewData["Title"] = "Add Payment";
+    Layout = "_UserLayout";
+}
+
+<partial name="Partial/_Navbar" />
+
+<div class="mx-5">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center bg-pink">
+            <h5 class="card-title my-2" id="invoiceHeader">ADD PAYMENT</h5>
+            <h5>Bill # <span>@ViewBag.PaymentId</span></h5>
+        </div>
+        <div class="card-body m-4">
+            <form method="post" asp-action="AddPatientPayment">
+                <div class="row form-group" style="position:relative;">
+                    <div validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="hidden" class="form-control" id="paymentId" asp-for="PaymentID"  autocomplete="off" value="@ViewBag.PaymentId" />
+
+                    <input type="hidden" class="form-control" id="patientId" asp-for="PatientID" autocomplete="off" value="@ViewBag.PatientId" />
+
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="FirstName" class="control-label">Amount: ₱</label>
+
+                        <input class="form-control" placeholder="₱" id="patientNameInput" autocomplete="off" type="number" asp-for="Amount" />
+
+                        <span validation-for="BillingDTO.PatientName" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="FirstName" class="control-label">Payment Method: </label>
+
+                        <select class="form-control" asp-for="Payment_Method">
+                            <option value="CASH">CASH</option>
+                            <option value="CARD">CARD</option>
+                            <option value="ONLINE">ONLINE</option>
+                        </select>
+
+                    </div>
+
+                    <div class="form-group row-md-12 d-flex justify-content-end align-items-center mt-5">
+
+  
+                            <button class="btn btn-primary mx-2" type="submit">
+                                <i class="fas fa-plus"></i>
+                                <span>ADD</span>
+                            </button>
+
+                            <a class="btn btn-dark mx-2" asp-action="Payment" asp-controller="Billing" asp-route-id="@ViewBag.PaymentId">
+                                <i class="fas fa-close"></i>
+                                <span>Cancel</span>
+                            </a>
+                 
+
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

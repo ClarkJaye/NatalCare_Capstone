@@ -10,6 +10,8 @@ namespace NatalCare.Models.DTOs
     public class BillingDTO
     {
 
+        public int? paymentID { get; set; }
+
         [Required]
         [StringLength(20)]
         public string? PatientName { get; set; }
@@ -30,8 +32,6 @@ namespace NatalCare.Models.DTOs
         [Required]
         public List<ServicesDTO>? Services { get; set; } = new List<ServicesDTO>();
 
-
-        [StringLength(20)]
         public string? Notes { get; set; }
 
         [Required]

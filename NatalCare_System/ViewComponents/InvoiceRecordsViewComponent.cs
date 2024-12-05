@@ -3,7 +3,6 @@ using NatalCare.DataAccess.Interfaces;
 
 namespace NatalCare_System.ViewComponents
 {
-
     public class InvoiceRecordsViewComponent : ViewComponent
     {
         private readonly IBillingServices serviceServices;

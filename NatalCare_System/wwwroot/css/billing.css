@@ -474,11 +474,33 @@
     }
 }
 
+
+
+
+.paymentPatientDiv1{
+    width:100%;
+    height:80px;
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
+}
+
+
 #invoiceContainer tbody tr td {
     text-align: center;
 }
 
 
-#invoiceTable thead tr th{
-    text-align:center;
+#invoiceTable thead tr th {
+    text-align: center;
+}
+
+
+#patientPaymentContainer tbody tr td {
+    text-align: center;
+}
+
+
+#patientPaymentContainer thead tr th {
+    text-align: center;
 }

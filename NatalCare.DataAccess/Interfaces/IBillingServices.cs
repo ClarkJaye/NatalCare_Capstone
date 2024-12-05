@@ -26,12 +26,30 @@ namespace NatalCare.DataAccess.Interfaces
 
         Task<InvoiceListDTO> GetPayments();
 
+        Task<List<PatientPayments>> GetPatientPaymentHistory(int paymentId);
+
         Task<PrintDTO> PaymentVM(int? invoiceNumber);
 
         Task<BillingAndPrintVM> generateInvoiceModel(int? id);
 
         Task<CommonResponse> deleyePayment(int paymentId);
 
+        Task<CommonResponse> deletePatientPayment(int? paymentId);
 
+        Task<PatientPayments> payInvoice();
+
+        Task<CommonResponse> addPatientPayment(PatientPayments? patientPayments);
+
+        Task<string> patientID(int? id);
+
+        Task<CommonResponse> editPatientPayment(PatientPayments? patientPayments);
+
+        Task<PrintInvoiceResponse> editInvoice(BillingDTO billingDTO);
+
+        Task<dynamic> GetDataByYearAndMonth(int? year, string? month);
+
+        Task<dynamic> GetPaymentStatusStatistics();
+
+        
     }
 }

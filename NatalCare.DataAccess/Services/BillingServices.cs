@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using NatalCare.DataAccess.data;
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.DataAccess.Repository.IRepository;
@@ -8,6 +9,7 @@ using NatalCare.Models.DTOs;
 using NatalCare.Models.DTOs.VM;
 using NatalCare.Models.Entities;
 using System.Security.Claims;
+using static Azure.Core.HttpHeader;
 using static NatalCare.DataAccess.Response.ServiceResponses;
 
 
@@ -29,10 +31,13 @@ namespace NatalCare.DataAccess.Services
             this.db = db;   
         }
 
+            
+
+
         public async Task<InvoiceListDTO> GetPayments()
         {
 
-            var payments = await _unitOfWork.Repository<Payments>().AsQueryable().Include(a => a.Patient).Include(a => a.Staff).Include(a => a.CreatedBy).ToListAsync();
+            var payments = await _unitOfWork.Repository<Payments>().AsQueryable().Include(a => a.Patient).Include(a => a.Staff).Include(a => a.CreatedBy).OrderBy(a => a.Payment_Status).ToListAsync();
 
             var patientPayments = await _unitOfWork.Repository<PatientPayments>().AsQueryable().Include(a => a.Patients).Include(a => a.Payments).ToListAsync();
 
@@ -42,6 +47,14 @@ namespace NatalCare.DataAccess.Services
                 PatientPayments = patientPayments
             };
         }
+
+        public async Task<List<PatientPayments>> GetPatientPaymentHistory(int paymentId)
+        {
+            var patientPayments = await _unitOfWork.Repository<PatientPayments>().AsQueryable().Include(a => a.Patients).Include(a => a.Payments).Where(a => a.PaymentID == paymentId).ToListAsync();
+
+            return patientPayments;
+        }
+
 
 
         public Task<List<Items>> allItems()
@@ -56,6 +69,136 @@ namespace NatalCare.DataAccess.Services
             var allServices = _unitOfWork.Repository<Servicesss>().AsQueryable().OrderBy(a => a.ServiceID).ToListAsync();
 
             return allServices;
+        }
+
+        public async Task<PrintInvoiceResponse> editInvoice(BillingDTO billingDTO)
+        {
+            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.Users.FirstOrDefaultAsync(a => a.Id == userId);
+
+            var invoice = await _unitOfWork.Repository<Payments>().AsQueryable().FirstOrDefaultAsync(a => a.PaymentID == billingDTO.paymentID);
+
+            if (invoice == null)
+            {
+                return new PrintInvoiceResponse(false, 0);
+            }
+
+            var patient = await _unitOfWork.Repository<Patients>().AsQueryable().FirstOrDefaultAsync(a => a.PatientID == billingDTO.PatientName);
+
+            invoice.PatientID = patient.PatientID;
+            invoice.Total_Amount = billingDTO.SubTotal;
+            invoice.Final_Amount = billingDTO.TotalAmount;
+            invoice.Discount = billingDTO.Discount;
+            invoice.PhilHealth_Deduction = billingDTO.PhilHeathTotal;
+            invoice.Notes = billingDTO.Notes;
+            invoice.BillDate = billingDTO.BillDate;
+            invoice.DueDate = billingDTO.DueDate;
+            invoice.Updated_At = DateTime.Now;
+            invoice.PatientUpdatedBy = user.Id;
+            invoice.StaffID = int.Parse(billingDTO.StaffName);
+
+            _unitOfWork.Repository<Payments>().Update(invoice);
+
+            foreach (var item in billingDTO.Items)
+            {
+                var itemPayment = await _unitOfWork.Repository<ItemPayments>().AsQueryable().Include(a => a.Items).FirstOrDefaultAsync(a => a.PaymentID == billingDTO.paymentID && a.Items.ItemName == item.ItemName);
+
+                if(itemPayment != null)
+                {
+                    itemPayment.Quantity = item.Quantity;
+                    itemPayment.PhilHealthCovered = item.PhilHealthCovered;
+
+                    _unitOfWork.Repository<ItemPayments>().Update(itemPayment);
+                }
+                else
+                {
+                    var ogItem = await _unitOfWork.Repository<Items>().GetFirstOrDefaultAsync(a => a.ItemName == item.ItemName);
+
+                    ItemPayments itemPayments2 = new ItemPayments
+                    {
+                        PaymentID = billingDTO.paymentID,
+                        ItemID = ogItem.ItemID,
+                        Quantity = item.Quantity,
+                        PhilHealthCovered = item.PhilHealthCovered
+                    };
+
+                    _unitOfWork.Repository<ItemPayments>().Add(itemPayments2);
+
+                }
+            }
+
+            foreach (var service in billingDTO.Services)
+            {
+                var servicePayment = await _unitOfWork.Repository<ServicesPayment>().AsQueryable().Include(a => a.Services).FirstOrDefaultAsync(a => a.PaymentID == billingDTO.paymentID && a.Services.ServiceName == service.ServiceName);
+
+                if (servicePayment != null)
+                {
+                    servicePayment.Quantity = service.Quantity;
+                    servicePayment.PhilhealthCovered = service.PhilHealthCovered;
+
+                    _unitOfWork.Repository<ServicesPayment>().Update(servicePayment);
+                }
+                else
+                {
+                    var ogService = await _unitOfWork.Repository<Servicesss>().GetFirstOrDefaultAsync(a => a.ServiceName == service.ServiceName);
+
+                    ServicesPayment servicePayment2 = new ServicesPayment
+                    {
+                        PaymentID = billingDTO.paymentID,
+                        ServiceID = ogService.ServiceID,
+                        Quantity = service.Quantity,
+                        PhilhealthCovered = service.PhilHealthCovered
+                    };
+
+                    _unitOfWork.Repository<ServicesPayment>().Add(servicePayment2);
+
+                }
+            }
+
+            var patientPayment = await _unitOfWork.Repository<PatientPayments>().AsQueryable().Include(a => a.Payments).Where(a => a.PaymentID == invoice.PaymentID).ToListAsync();
+
+
+            decimal? final_amount = 0;
+
+            decimal? totalPaid = 0;
+
+            if (patientPayment.Count > 0)
+            {
+                List<decimal?> paidAmount = new List<decimal?>();
+
+                foreach (var payment1 in patientPayment)
+                {
+                    paidAmount.Add(payment1.Amount);
+                    final_amount = payment1?.Payments?.Final_Amount;
+                }
+
+                totalPaid = paidAmount.Sum(x => x ?? 0);
+            }
+
+            var payment = await _unitOfWork.Repository<Payments>().AsQueryable().FirstOrDefaultAsync(a => a.PaymentID == invoice.PaymentID);
+
+
+            if (totalPaid != 0)
+            {
+                if (final_amount == totalPaid || totalPaid > final_amount)
+                {
+                    payment.Payment_Status = "PAID";
+                }
+                else
+                {
+                    payment.Payment_Status = "PARTIAL";
+                }
+            }
+            else
+            {
+                payment.Payment_Status = "PENDING";
+            }
+
+            _unitOfWork.Repository<Payments>().Update(payment);
+            await _unitOfWork.Complete();
+
+            return new PrintInvoiceResponse(true, billingDTO.paymentID);
+
         }
 
         public async Task<PrintInvoiceResponse> createInvoice(BillingDTO billingDTO)
@@ -384,13 +527,65 @@ namespace NatalCare.DataAccess.Services
             return new CommonResponse(true, "Payment Sucessfully Deleted!");
         }
 
+        public async Task<CommonResponse> deletePatientPayment(int? paymentId)
+        {
+            var payment11 = await _unitOfWork.Repository<PatientPayments>().AsQueryable().FirstOrDefaultAsync(a => a.PatientPaymentID == paymentId);
+
+            _unitOfWork.Repository<PatientPayments>().Remove(payment11);
+            await _unitOfWork.Complete();
+
+            var patientPayment = await _unitOfWork.Repository<PatientPayments>().AsQueryable().Include(a => a.Payments).Where(a => a.PaymentID == payment11.PaymentID).ToListAsync();
+
+            decimal? final_amount = 0;
+
+            decimal? totalPaid = 0;
+
+            if (patientPayment.Count > 0)
+            {
+                List<decimal?> paidAmount = new List<decimal?>();
+
+                foreach (var payment1 in patientPayment)
+                {
+                    paidAmount.Add(payment1.Amount);
+                    final_amount = payment1?.Payments?.Final_Amount;
+                }
+
+                totalPaid = paidAmount.Sum(x => x ?? 0);
+            }
+
+            var payment = await _unitOfWork.Repository<Payments>().AsQueryable().FirstOrDefaultAsync(a => a.PaymentID == payment11.PaymentID);
+
+
+            if (totalPaid != 0)
+            {
+                if (final_amount == totalPaid || totalPaid > final_amount)
+                {
+                    payment.Payment_Status = "PAID";
+                }
+                else
+                {
+                    payment.Payment_Status = "PARTIAL";
+                }
+            }
+            else
+            {
+                payment.Payment_Status = "PENDING";
+            }
+
+            _unitOfWork.Repository<Payments>().Update(payment);
+            await _unitOfWork.Complete();
+
+            return new CommonResponse(true, "Payment Sucessfully Deleted!");
+        }
+
+        
+
+
         public async Task<BillingAndPrintVM> generateInvoiceModel(int? id)
         {
 
             if (id == null)
             {
-
-
                 BillingDTO billingDTO = new BillingDTO();
 
                 return new BillingAndPrintVM
@@ -454,6 +649,199 @@ namespace NatalCare.DataAccess.Services
            
         }
 
+        public async Task<PatientPayments> payInvoice()
+        {
+            var model = new PatientPayments();
 
+            return model;
+        }
+
+
+        public async Task<string> patientID(int? id)
+        {
+            var model =  await _unitOfWork.Repository<Payments>().AsQueryable().FirstOrDefaultAsync(a => a.PaymentID == id);
+
+            return model.PatientID;
+        }
+
+        public async Task<CommonResponse> addPatientPayment(PatientPayments? patientPayments)
+        {
+
+            PatientPayments newPatientPayment = new PatientPayments
+            {
+                Amount = patientPayments.Amount,
+                Payment_Method = patientPayments.Payment_Method,
+                PaymentID = patientPayments.PaymentID,
+                DatePaid = DateTime.Now,
+                PatientID = patientPayments.PatientID,
+            };
+
+            _unitOfWork.Repository<PatientPayments>().Add(newPatientPayment);
+            await _unitOfWork.Complete();
+
+
+            var patientPayment = await _unitOfWork.Repository<PatientPayments>().AsQueryable().Include(a => a.Payments).Where(a => a.PaymentID == patientPayments.PaymentID).ToListAsync();
+
+
+            decimal? final_amount = 0;
+
+            decimal? totalPaid = 0;
+
+            if (patientPayment.Count > 0)
+            {
+                List<decimal?> paidAmount = new List<decimal?>();
+
+                foreach (var payment1 in patientPayment)
+                {
+                    paidAmount.Add(payment1.Amount);
+                    final_amount = payment1?.Payments?.Final_Amount;
+                }
+
+                totalPaid = paidAmount.Sum(x => x ?? 0);
+            }
+
+            var payment = await _unitOfWork.Repository<Payments>().AsQueryable().FirstOrDefaultAsync(a => a.PaymentID == patientPayments.PaymentID);
+
+            if (totalPaid != 0)
+            {
+                if (final_amount == totalPaid || totalPaid > final_amount)
+                {
+                    payment.Payment_Status = "PAID";
+                }
+                else
+                {
+                    payment.Payment_Status = "PARTIAL";
+                }
+            }
+            else
+            {
+                payment.Payment_Status = "PENDING";
+            }
+
+            _unitOfWork.Repository<Payments>().Update(payment);
+            await _unitOfWork.Complete();
+
+            return new CommonResponse(true, "Payment for Patient added Succesffully!");
+        }
+
+
+        public async Task<CommonResponse> editPatientPayment(PatientPayments? patientPayments)
+        {
+
+            var patientPayment = await _unitOfWork.Repository<PatientPayments>().GetFirstOrDefaultAsync(a => a.PatientPaymentID == patientPayments.PatientPaymentID);
+
+            patientPayment.Amount = patientPayments?.Amount;
+            patientPayment.Payment_Method = patientPayments?.Payment_Method;
+
+            _unitOfWork.Repository<PatientPayments>().Update(patientPayment);
+            await _unitOfWork.Complete();
+
+
+            var patientPayment1 = await _unitOfWork.Repository<PatientPayments>().AsQueryable().Include(a => a.Payments).Where(a => a.PaymentID == patientPayment.PaymentID).ToListAsync();
+
+            decimal? final_amount = 0;
+
+            decimal? totalPaid = 0;
+
+            if (patientPayment1.Count > 0)
+            {
+                List<decimal?> paidAmount = new List<decimal?>();
+
+                foreach (var payment1 in patientPayment1)
+                {
+                    paidAmount.Add(payment1.Amount);
+                    final_amount = payment1?.Payments?.Final_Amount;
+                }
+
+                totalPaid = paidAmount.Sum(x => x ?? 0);
+            }
+
+            var payment = await _unitOfWork.Repository<Payments>().AsQueryable().FirstOrDefaultAsync(a => a.PaymentID == patientPayment.PaymentID);
+
+            if (totalPaid != 0)
+            {
+                if (final_amount == totalPaid || totalPaid > final_amount)
+                {
+                    payment.Payment_Status = "PAID";
+                }
+                else
+                {
+                    payment.Payment_Status = "PARTIAL";
+                }
+            }
+            else
+            {
+                payment.Payment_Status = "PENDING";
+            }
+
+            _unitOfWork.Repository<Payments>().Update(payment);
+            await _unitOfWork.Complete();
+
+
+            return new CommonResponse(true, "Patient Payment Updated Successfully!");
+        }
+
+        public async Task<dynamic> GetDataByYearAndMonth(int? year, string? month)
+        {
+            var query = _unitOfWork.Repository<Payments>().AsQueryable();
+
+            if (year.HasValue)
+            {
+                query = query.Where(d => d.Created_At.HasValue && d.Created_At.Value.Year == year.Value);
+
+                if (!string.IsNullOrEmpty(month))
+                {
+                    query = query.Where(d => d.Created_At.Value.Month.ToString("D2") == month);
+                }
+            }
+
+            var data = await query.ToListAsync();
+
+            var yearlyData = new
+            {
+                TotalPayments = data.Count,
+                TotalAmount = data.Sum(d => d.Total_Amount) ?? 0,
+                TotalDiscount = data.Sum(d => d.Discount) ?? 0,
+            };
+
+            return yearlyData;
+        }
+
+        public async Task<dynamic> GetPaymentStatusStatistics()
+        {
+            var payments = await _unitOfWork.Repository<Payments>().AsQueryable()
+                .Include(a => a.Patient).Include(a => a.Staff).Include(a => a.CreatedBy)
+                .OrderBy(a => a.Payment_Status).ToListAsync();
+
+            int paid = 0;
+            int partial = 0;
+            int pending = 0;
+
+
+            foreach (var payment in payments)
+            {
+                if (payment.Payment_Status == "PAID")
+                {
+                    paid++;
+                }
+                else if(payment.Payment_Status == "PARTIAL")
+                {
+                    partial++;
+                }
+                else
+                {
+                    pending++;
+                }
+            }
+
+            var data = new
+            {
+                paid = paid,    
+                partial = partial,
+                pending = pending,
+            };
+
+            return data;
+        }
     }
 }

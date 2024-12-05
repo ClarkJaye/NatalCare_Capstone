@@ -3,6 +3,8 @@
 using NatalCare.DataAccess.Interfaces;
 using NatalCare.DataAccess.Services;
 using NatalCare.Models.DTOs;
+using NatalCare.Models.DTOs.VM;
+using NatalCare.Models.Entities;
 
 namespace NatalCare_System.Controllers
 {
@@ -17,6 +19,9 @@ namespace NatalCare_System.Controllers
             this.selectListServices = selectListServices;
         }
 
+
+                    //VIEW
+
         public IActionResult Index()
         {
             return View();
@@ -28,6 +33,57 @@ namespace NatalCare_System.Controllers
         }
 
 
+        public async Task<IActionResult> PayInvoice(int? id)
+        {
+
+            ViewBag.PaymentId = id;
+
+            var patientId = await _billing.patientID(id);
+
+            ViewBag.PatientId = patientId;
+
+           var model = await _billing.payInvoice();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> EditInvoice(int? id)
+        {
+
+            ViewBag.PaymentId = id;
+
+            var model = await _billing.payInvoice();
+
+            return View(model);
+        }
+
+
+        public async Task<IActionResult> Payment(int? id)
+        {
+            if (id != null)
+            {
+                ViewBag.PaymentId = id;
+
+                var patientId = await _billing.patientID(id);
+
+                ViewBag.PatientId = patientId;
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(nameof(InvoiceList));
+            }
+
+        }
+
+        public async Task<IActionResult> PrintInvoice(int? id)
+        {
+            var model = await _billing.PaymentVM(id);
+
+            return View(model);
+        }
+
 
         public async Task<IActionResult> GenerateInvoice(int? id)
         {
@@ -36,10 +92,62 @@ namespace NatalCare_System.Controllers
             var model = await _billing.generateInvoiceModel(id);
 
             return View(model);
-            
+
         }
 
 
+
+        //LOGIC
+
+        //WALA PA
+        [HttpPost]
+        public async Task<IActionResult> editPatientPayment(PatientPayments patientPayments)
+        {
+            if (patientPayments != null)
+            {
+
+                var (result, message) = await _billing.editPatientPayment(patientPayments);
+
+                if (result)
+                {
+                    return RedirectToAction(nameof(InvoiceList));
+                }
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(nameof(InvoiceList));
+            }
+
+
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddPatientPayment(PatientPayments patientPayments)
+        {
+            if (patientPayments != null)
+            {
+
+                var (result, message) = await _billing.addPatientPayment(patientPayments);
+
+                if (result)
+                {
+                    return RedirectToAction(nameof(InvoiceList));
+                }
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(nameof(InvoiceList));
+            }
+   
+
+        }
+       
 
         [HttpPost]
         public async Task<IActionResult> AddItem(string itemName, string description, decimal price)
@@ -96,31 +204,39 @@ namespace NatalCare_System.Controllers
 
         
         [HttpPost]
-        public async Task<IActionResult> CreateInvoice(BillingDTO billingDTO, string action)
+        public async Task<IActionResult> CreateInvoice(BillingAndPrintVM billingAndPrint, string action)
         {
-            var (result, id) = await _billing.createInvoice(billingDTO);
+            if (action == "Save")
+            {
+                var (result, id) = await _billing.editInvoice(billingAndPrint.BillingDTO);
 
-            if (result)
-            {        
-                if (action == "MakePayment")
-                {
-                    return RedirectToAction(nameof(PrintInvoice), new { id });
-                }
-                else if (action == "SaveAndPayLater")
+                if (result)
                 {
                     return RedirectToAction(nameof(InvoiceList));
+
                 }
+                return RedirectToAction(nameof(Index));
+
             }
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                var (result, id) = await _billing.createInvoice(billingAndPrint.BillingDTO);
 
+                if (result)
+                {
+                    if (action == "MakePayment")
+                    {
+                        return RedirectToAction(nameof(PrintInvoice), new { id });
+                    }
+                    else if (action == "SaveAndPayLater")
+                    {
+                        return RedirectToAction(nameof(InvoiceList));
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
         }
 
-        public async Task<IActionResult> PrintInvoice(int? id)
-        {
-            var model = await _billing.PaymentVM(id);
-
-            return View(model);
-        }
 
 
 
@@ -166,5 +282,64 @@ namespace NatalCare_System.Controllers
             }
         }
 
+        [HttpDelete]
+        public async Task<JsonResult> DeletePatientPayment(int paymentId)
+        {
+            try
+            {
+                if (paymentId != null)
+                {
+
+                    var (result, message) = await _billing.deletePatientPayment(paymentId);
+
+                    if (result)
+                    {
+                        return Json(message);
+                    }
+
+                    return Json(null);
+
+                }
+                return Json(new { IsSuccess = false, Message = "Delete Payment failed!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while deleting family planning record for Patient");
+                return Json(new { IsSuccess = false, Message = "An error occurred in DeleteFPRecord." });
+            }
+
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetDataByYearAndMonthPaymentStatistics(int? year, string? month)
+        {
+            try
+            {
+                var response = await _billing.GetDataByYearAndMonth(year, month);
+                return Json(new { IsSuccess = true, Data = response });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Json(new { IsSuccess = false, Message = "An error occurred while fetching data." });
+            }
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetPaymentStatusStatistics()
+        {
+            try
+            {
+                var response = await _billing.GetPaymentStatusStatistics();
+                return Json(response);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Json(new { IsSuccess = false, Message = "An error occurred while fetching data." });
+            }
+        }
+
+        
     }
 }

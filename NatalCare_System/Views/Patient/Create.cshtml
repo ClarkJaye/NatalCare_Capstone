@@ -103,12 +103,23 @@
                         <label asp-for="Religion" class="control-label">Religion</label>
                         <input asp-for="Religion" class="form-control" placeholder="Enter religion" />
                         <span asp-validation-for="Religion" class="text-danger"></span>
-                    </div>  
+                    </div>
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="Nationality" class="control-label">Nationality</label>
+                        <input asp-for="Nationality" class="form-control" placeholder="Enter nationality" />
+                        <span asp-validation-for="Nationality" class="text-danger"></span>
+                    </div>
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="BloodType" class="control-label">Blood Type</label>
                         <input asp-for="BloodType" class="form-control text-uppercase" placeholder="O+, AB" />
                         <span asp-validation-for="BloodType" class="text-danger"></span>
                     </div>
+
+                    <hr class="my-4" />
+
+                    <!--Insurance Side-->
+                    <h5 class="card-title my-2 mb-3">Insurance Details</h5>
+
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="HasPhilHealth" class="control-label">Has PhilHealth?</label>
                         <select asp-for="HasPhilHealth" class="form-select text-muted" required>
@@ -121,7 +132,7 @@
 
                     <div class="form-group col-md-4 mb-3" id="philHealthSection" style="display:none;">
                         <label asp-for="PHIC_NO" class="control-label">PhilHealth Number</label>
-                        <input asp-for="PHIC_NO" class="form-control" placeholder="Enter PhilHealth Number" required/>
+                        <input asp-for="PHIC_NO" class="form-control" placeholder="Enter PhilHealth Number" required />
                         <span asp-validation-for="PHIC_NO" class="text-danger"></span>
                     </div>
 
@@ -193,6 +204,11 @@
                         <span asp-validation-for="Spouse.Occupation" class="text-danger"></span>
                     </div>
 
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="Spouse.Nationality" class="control-label"></label>
+                        <input asp-for="Spouse.Nationality" class="form-control" placeholder="Enter Nationality" />
+                        <span asp-validation-for="Spouse.Nationality" class="text-danger"></span>
+                    </div>
 
 
                     <div class="form-group col-12 mt-3 mb-3">

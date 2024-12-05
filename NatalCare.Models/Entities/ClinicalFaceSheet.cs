@@ -9,21 +9,15 @@ namespace NatalCare.Models.Entities
     {   
         [Key]
         public int ID { get; set; }
-        public string? Admission_Date { get; set; }
-        public string? Admission_Time { get; set; }
-        public string? Discharge_Date { get; set; }
-        public string? Discharge_Time { get; set; }
-        public int? TotalNoDays { get; set; }
         public string? LMP { get; set; }
         public string? EDC { get; set; }
         public string? AOG { get; set; }
-        public int? Clinical_T { get; set; }
-        public int? Clinical_P { get; set; }
-        public int? Clinical_A { get; set; }
-        public int? Clinical_L { get; set; }
+        public int? TermBirths { get; set; }
+        public int? Premature { get; set; }
+        public int? Abortion { get; set; }
+        public int? LivingChildren { get; set; }
         public int? Gravida { get; set; }
         public int? Para { get; set; }
-        public int? Abortion { get; set; }
         public string? HistoryOfPatientPresentCondition{ get; set; }
         public string? Admitting { get; set; }
         public string? ICDCodes { get; set; }

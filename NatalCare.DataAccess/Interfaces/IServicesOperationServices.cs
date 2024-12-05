@@ -71,22 +71,34 @@ namespace NatalCare.DataAccess.Interfaces
         //PHYSICAL EXAMINATION
         Task<PhysicalExamination> GetPhysicalExaminationRecords(string patientId, string deliveryId);
         Task<CommonResponse> AddPERecordAsync(PhysicalExamination item, string patientId, string userId, string deliveryId);
-
+        Task<GeneralResponse> GetPhysicalExaminationRecord(int id);
+        Task<CommonResponse> UpdatePERecordAsync(PhysicalExamination item, string userId);
 
 
         //OBSTETRICAL
         Task<Obstetrical> GetObstetricalRecords(string patientId, string deliveryId);
+        Task<CommonResponse> AddOBRecordAsync(Obstetrical item, string patientId, string userId, string deliveryId);
+        Task<GeneralResponse> GetOBRecord(int id);
+        Task<CommonResponse> UpdateOBRecordAsync(Obstetrical item, string userId);
+
+
 
         //MATERNAL MONITORING
-        //Task<Obstetrical> GetMaternalMonitoringRecords(string patientId, string deliveryId);
+        Task<MaternalMonitoring> GetMaternalMonitoringRecords(string patientId, string deliveryId);
 
         //CLINICAL SHEET
         Task<ClinicalFaceSheet> GetClinicalSheetRecords(string patientId, string deliveryId);
+        Task<CommonResponse> AddCFRecordAsync(ClinicalFaceSheet item, string patientId, string userId, string deliveryId);
+        Task<GeneralResponse> GetCFRecord(int id);
+        Task<CommonResponse> UpdateCFRecordAsync(ClinicalFaceSheet item, string userId);
 
         //DISCHARGEMENT FORM
         Task<DischargementForm> GetDischargementRecords(string patientId, string deliveryId);
+        Task<CommonResponse> AddDFRecordAsync(DischargementForm item, string patientId, string userId, string deliveryId);
+        Task<GeneralResponse> GetDFRecord(int id);
+        Task<CommonResponse> UpdateDFRecordAsync(DischargementForm item, string userId);
 
-        
+
 
 
         //ADMISSION

@@ -10,12 +10,12 @@ namespace NatalCare.Models.Entities
         [Key]
         public int ID { get; set; }
         public string? FirstDayOfLastMenstrualCycle { get; set; }
-        public DateTime? PriorMensesDate { get; set; }
+        public DateOnly? PriorMensesDate { get; set; }
         public string? FrequencyOfCycleEvery { get; set; }
         public bool DaysMensesMonthly { get; set; } = false;
         public int? AgesOfFirstMenses { get; set; }
         public bool BirthControlTheOfPregnancy { get; set; } = false;
-        public DateTime? DateOfPositivePregnancyTest { get; set; }
+        public DateOnly? DateOfPositivePregnancyTest { get; set; }
         public string? PregnancyTestDoneBy { get; set; }
 
         //PAST PREGNANCY

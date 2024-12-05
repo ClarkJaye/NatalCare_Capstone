@@ -1,10 +1,11 @@
-﻿@model NatalCare.Models.Entities.ClinicalFaceSheet
-
+﻿@model NatalCare.Models.Entities.Obstetrical
 
 <div class="d-flex justify-content-center align-items-center flex-column ">
-    <h5 class="px-2 mb-3 text-center fw-bold">CLINICAL FACE SHEET</h5>
+    <h5 class="px-2 mb-3 text-center fw-bold">OBSTETRICAL FORM</h5>
     <div class="d-flex align-items-center">
         <h6 class="me-2 mb-0 fw-bold">CASE NO#:</h6>
+        <input type="hidden" id="delID" name="CaseNo" value="@ViewBag.DeliveryId" />
+
         <div class="border-bottom flex-grow-1">
             <span class="px-2 h6">
                 @ViewBag.DeliveryId
@@ -13,38 +14,46 @@
     </div>
 </div>
 
+
 <div class="d-flex justify-content-end my-3 gap-3 px-2">
-    @if (Model == null || Model.CaseNo == null){
-        <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#clinicalSheetAddModal">
+    @if (Model == null || Model.CaseNo == null)
+    {
+        <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#OBAddModal">
             <i class="fas fa-plus"></i>
             <span>Add New</span>
         </button>
     }
-    else{
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#clinicalSheetEditModal">
+    else
+    {
+        <button id="printOBBtn" class="btn btn-sm btn-success">
+            <i class="fas fa-save"></i>
+            <span>Print</span>
+        </button>
+        <button id="editOBBtn" class="btn btn-sm btn-primary" data-obid="@Model.ID">
             <i class="fas fa-pencil-alt"></i>
             <span>Edit</span>
         </button>
     }
 </div>
 
+
 @if (Model == null || Model.CaseNo == null)
 {
     <div class="alert alert-primary" role="alert">
-        No Data Added Yet!
+        No Obstetrical Data Added Yet!
     </div>
 }
 else{
-<div class="container mt-4">
-        <!-- Patient Basic Info -->
+    <div class="container mt-4">
+         @* Patient Basic Info  *@
         <div class="row mb-3">
             @* Patient Details *@
-            <div class="col-md-6 border py-3 d-flex align-items-center">
+            <div class="col-md-12 border py-3 d-flex align-items-center">
                 <div class="d-flex align-items-center">
                     <h6 class="me-2 mb-0 fw-bold">Name of Patient:</h6>
                     <div class="flex-grow-1">
                         <span class="px-2">
-                            Jay Clark Jimenez Anore
+                            @Model.Patient?.FirstName @Model.Patient?.MiddleName  @Model.Patient?.LastName
                         </span>
                     </div>
                 </div>
@@ -52,65 +61,10 @@ else{
 
             <div class="col-md-6 border py-3 d-flex align-items-center">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Ward/Service:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">Date of Birth:</h6>
                     <div class="flex-grow-1">
                         <span class="px-2">
-
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 border py-3 d-flex align-items-center">
-                <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
-                    <div class="flex-grow-1">
-                        <span class="px-2">
-                            Tipolo, Mandaue City, Cebu
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-2 border py-3 d-flex align-items-center">
-                <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">CONTACT NO#:</h6>
-                    <div class="flex-grow-1">
-                        <span class="px-2">
-                            09123456789
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 border py-3 d-flex align-items-center">
-                <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Religion:</h6>
-                    <div class="flex-grow-1">
-                        <span class="px-2">
-                            Roman Catholic
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 border py-3 d-flex align-items-center">
-                <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Occupation:</h6>
-                    <div class="flex-grow-1">
-                        <span class="px-2">
-                            Enginneer
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 border py-3 d-flex align-items-center">
-                <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Birthdate:</h6>
-                    <div class="flex-grow-1">
-                        <span class="px-2">
-                            November 21, 2024
+                            @Model.Patient?.Birthdate
                         </span>
                     </div>
                 </div>
@@ -121,386 +75,594 @@ else{
                     <h6 class="me-2 mb-0 fw-bold">Age:</h6>
                     <div class="flex-grow-1">
                         <span class="px-2">
-                            23
+                            @{
+                                if (Model.Patient?.Birthdate != null)
+                                {
+                                    var birthYear = Model.Patient.Birthdate.Value.Year;
+                                    var currentYear = DateTime.Now.Year;
+                                    var age = currentYear - birthYear;
+                                    <text>@age years old</text>
+                                }
+                                else
+                                {
+                                    @:N/A
+                                }
+                            }
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-3 border py-3 d-flex align-items-center">
+            <div class="col-md-2 border py-3 d-flex align-items-center">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Birthplace:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">Race:</h6>
                     <div class="flex-grow-1">
                         <span class="px-2">
-                            Tipolo, Mandaue City, Cebu
+                            @(Model.Patient?.Nationality != null ? Model.Patient?.Nationality : "N/A" )
                         </span>
                     </div>
                 </div>
             </div>
-            <style>
-                @@media (min-width: 768px) {
-                .mcol {
-                flex: 0 0 auto;
-                width: 12.5% !important;
-                }
-                }
-            </style>
-            <div class="col-md-2 border py-3 mcol d-flex align-items-center">
+
+            <div class="col-md-2 border py-3 d-flex align-items-center">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Sex:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">Marital Status:</h6>
                     <div class="flex-grow-1">
                         <span class="px-2">
-                            Female
+                            @(Model.Patient?.CivilStatus != null ? Model.Patient?.CivilStatus : "N/A")
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-2 border py-3 mcol d-flex align-items-center">
-                <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Status:</h6>
-                    <div class="flex-grow-1">
-                        <span class="px-2">
-                            Single
-                        </span>
-                    </div>
-                </div>
-            </div>
-            @* Admission Details *@
-            <div class="col-md-12 border py-3">
-                <div class="row">
-                    <div class="col-md-4">
-                        <h6 class="me-2 mb-0 fw-bold">Admission:</h6>
-                        <div class="d-flex align-items-center mt-3 mx-5">
-                            <h6 class="me-2 mb-0 fw-bold">Date:</h6>
-                            <div class="border-bottom flex-grow-1">
-                                <span class="px-4">
-                                    08-08-2024
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="d-flex align-items-center mt-3 mb-sm-3 mx-5">
-                            <h6 class="me-2 mb-0 fw-bold">Time:</h6>
-                            <div class="border-bottom flex-grow-1">
-                                <span class="px-4">
-                                    08-08-2024
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <h6 class="me-2 mb-0 fw-bold">Discharge:</h6>
-                        <div class="d-flex align-items-center mt-3 mx-5">
-                            <h6 class="me-2 mb-0 fw-bold">Date:</h6>
-                            <div class="border-bottom flex-grow-1">
-                                <span class="px-4">
-                                    08-08-2024
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="d-flex align-items-center mt-3 mb-sm-3 mx-5">
-                            <h6 class="me-2 mb-0 fw-bold">Time:</h6>
-                            <div class="border-bottom flex-grow-1">
-                                <span class="px-4">
-                                    08-08-2024
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <h6 class="me-2 mb-0 fw-bold">Total # of Days:</h6>
-                        <div class="d-flex align-items-center mt-3 mx-5">
-                            <div class="border-bottom flex-grow-1">
-                                <span class="px-4">
-
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="col-md-3 border py-3 d-flex align-items-center">
-                <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">LMP:</h6>
-                    <div class="flex-grow-1">
-                        <span class="px-2">
-                            November 21, 2024
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 border py-3 d-flex align-items-center">
-                <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">EDC#:</h6>
-                    <div class="flex-grow-1">
-                        <span class="px-2">
-                            June 21, 2025
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 border py-3 d-flex align-items-center">
-                <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">AOG:</h6>
-                    <div class="flex-grow-1">
-                        <span class="px-2">
-                            32 Weeks
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 border py-3">
-                <div class="d-flex align-items-center mt-3 mx-1">
-                    <h6 class="me-2 mb-0 fw-bold">T:</h6>
-                    <div class="border-bottom flex-grow-1">
-                        <span class="px-2">
-                        </span>
-                    </div>
-
-                    <h6 class="me-2 mb-0 fw-bold">P:</h6>
-                    <div class="border-bottom flex-grow-1">
-                        <span class="px-2">
-                        </span>
-                    </div>
-
-                    <h6 class="me-2 mb-0 fw-bold">A:</h6>
-                    <div class="border-bottom flex-grow-1">
-                        <span class="px-2">
-                        </span>
-                    </div>
-
-                    <h6 class="me-2 mb-0 fw-bold">L:</h6>
-                    <div class="border-bottom flex-grow-1">
-                        <span class="px-2">
-                        </span>
-                    </div>
-                </div>
-
-                <div class="d-flex align-items-center mt-3 mx-1">
-                    <h6 class="me-2 mb-0 fw-bold">G:</h6>
-                    <div class="border-bottom flex-grow-1">
-                        <span class="px-2">
-                        </span>
-                    </div>
-
-                    <h6 class="me-2 mb-0 fw-bold">P:</h6>
-                    <div class="border-bottom flex-grow-1">
-                        <span class="px-2">
-                        </span>
-                    </div>
-
-                    <h6 class="me-2 mb-0 fw-bold">A:</h6>
-                    <div class="border-bottom flex-grow-1">
-                        <span class="px-2">
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-6 border py-3">
-                <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">History of Patients Condition:</h6>
-                    <div class="flex-grow-1">
-                        <span class="px-2">
-                            History of Patients Condition, History of Patients Condition, History of Patients Condition
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 border py-3 d-flex align-items-center">
-                <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">ADMITTING:</h6>
-                    <div class="flex-grow-1">
-                        <span class="px-2">
-                            Patient In Labor
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 border py-3 d-flex align-items-center">
-                <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">ICD-10 CODE/S:</h6>
-                    <div class="flex-grow-1">
-                        <span class="px-2">
-                            080,9,Z39.0,Z39.2
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-12 border py-3">
-                <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Final Diagnosis:</h6>
-                    <div class="flex-grow-1">
-                        <span class="px-2">
-                            History of Patients Condition, History of Patients Condition, History of Patients Condition
-                        </span>
-                    </div>
-                </div>
-            </div>
 
             <div class="col-md-6 border py-3 d-flex align-items-center">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Name Of Informant:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">Husband/Partner's Name':</h6>
                     <div class="flex-grow-1">
                         <span class="px-2">
-                            Paul Cuenca
+                            @(Model.Patient?.Spouse?.FirstName != null ? Model.Patient?.Spouse?.FirstName + " " + Model.Patient?.Spouse?.MiddleName + " " + Model.Patient?.Spouse?.LastName : "N/A")
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 border py-3 d-flex align-items-center">
+            <div class="col-md-3 border py-3 d-flex align-items-center">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Relation to Patient:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">Age:</h6>
                     <div class="flex-grow-1">
                         <span class="px-2">
-                            Sibling
+                            @{
+                                if (Model.Patient?.Spouse?.Birthdate != null)
+                                {
+                                    var birthYear = Model.Patient.Spouse.Birthdate.Value.Year;
+                                    var currentYear = DateTime.Now.Year;
+                                    var age = currentYear - birthYear;
+                                    <text>@age years old</text>
+                                }
+                                else
+                                {
+                                    @:N/A
+                                }
+                            }
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 border py-3 d-flex align-items-center">
+            <div class="col-md-3 border py-3 d-flex align-items-center">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">Race:</h6>
                     <div class="flex-grow-1">
                         <span class="px-2">
-                            Tipolo, Mandaue City, Cebu
+                            @(Model.Patient?.Spouse?.Nationality != null ? Model.Patient?.Spouse?.Nationality : "N/A")
                         </span>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-6 border py-3 d-flex align-items-center">
-                <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Contact #:</h6>
-                    <div class="flex-grow-1">
-                        <span class="px-2">
-                            09123456789
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 border py-3">
-                <label class="fw-bold mb-2">Condition on Discharge:</label>
-                <div class="form-check d-flex align-items-center mb-2 gap-2">
-                    <input type="checkbox" id="dRecovered" class="update-checkbox custom-checkbox">
-                    <label for="dRecovered" class="form-check-label">RECOVERED</label>
-                </div>
-                <div class="form-check d-flex align-items-center mb-2 gap-2">
-                    <input type="checkbox" id="dImprov" class="update-checkbox custom-checkbox">
-                    <label for="dImprov" class="form-check-label">IMPROVED</label>
-                </div>
-                <div class="form-check d-flex align-items-center mb-2 gap-2">
-                    <input type="checkbox" id="dUnimprov" class="update-checkbox custom-checkbox">
-                    <label for="dUnimprov" class="form-check-label">UNIMPROVED</label>
-                </div>
-            </div>
-
-            <div class="col-md-6 border py-3">
-                <label class="fw-bold mb-2">Disposition:</label>
-                <div class="form-check d-flex align-items-center mb-2 gap-2">
-                    <input type="checkbox" id="dDischarge" class="update-checkbox custom-checkbox">
-                    <label for="dDischarge" class="form-check-label">DISCHARGE</label>
-                </div>
-                <div class="form-check d-flex align-items-center mb-2 gap-2">
-                    <input type="checkbox" id="dTransfered" class="update-checkbox custom-checkbox">
-                    <label for="dTransfered" class="form-check-label">TRASNFERRED</label>
-                </div>
-                <div class="form-check d-flex align-items-center mb-2 gap-2">
-                    <input type="checkbox" id="dHama" class="update-checkbox custom-checkbox">
-                    <label for="dHama" class="form-check-label">HAMA(Home Against Medical Advice)</label>
-                </div>
-                <div class="form-check d-flex align-items-center mb-2 gap-2">
-                    <input type="checkbox" id="dAbssconded" class="update-checkbox custom-checkbox">
-                    <label for="dAbssconded" class="form-check-label">ABSSCONDED</label>
-                </div>
-            </div>
-
-
-            <!-- Midwife -->
-            <div class="row py-3 d-flex justify-content-center">
-                <div class="col-md-6 mt-5 text-center">
-                    <div class="border-bottom px-3 mx-5">Midwife Member 1</div>
-                    <label class="fw-bold mt-2 d-block">Admitting Midwife</label>
-                    <label class="fw-bold mt-2 d-block">Printed Name & Signature</label>
-                </div>
-            </div>
-
-
         </div>
 
         <hr class="divider bg-pink" />
+
+        @* Menstrual History  *@
+        <fieldset class="mb-4 mt-2">
+            <legend class="fw-bold text-center mb-4" style="font-size:1.2rem;">Menstrual History</legend>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">First day of last Mestrual Cycle</h6>
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                @(Model.FirstDayOfLastMenstrualCycle != null ? Model.FirstDayOfLastMenstrualCycle : "N/A")
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">prior Menses date</h6>
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                @(Model.PriorMensesDate != null ? Model.PriorMensesDate : "N/A")
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">Frequency of Cycle every</h6>
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                @(Model.FrequencyOfCycleEvery != null ? Model.FrequencyOfCycleEvery : "N/A")
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">days menses monthly</h6>
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                @if (Model.DaysMensesMonthly == true)
+                                {
+                                    <i class="fas fa-check text-pink" style="font-size: 20px;"></i>
+                                }
+                            </span>
+                        </div>
+                        <span class="ms-2 fw-bold">Y</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                @if (Model.DaysMensesMonthly == false)
+                                {
+                                    <i class="fas fa-check text-pink" style="font-size: 20px;"></i>
+                                }
+                            </span>
+                        </div>
+                        <h6 class="me-2 mb-0 fw-bold">N check if unknown</h6>
+                    </div>
+                </div>
+
+                <div class="col-md-5 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">Age of first menses</h6>
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                @(Model.AgesOfFirstMenses != null ? Model.AgesOfFirstMenses + " years old" : "N/A")
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">on birth control pills at the time of pregnancy</h6>
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                @if(Model.BirthControlTheOfPregnancy == true){
+                                    <i class="fas fa-check text-pink" style="font-size: 20px;"></i>
+                                }
+                            </span>
+                        </div>
+                        <span class="ms-2 fw-bold">YES</span>
+                    </div>
+                </div>
+
+                <div class="col-md-2 mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                @if (Model.BirthControlTheOfPregnancy == false)
+                                {
+                                    <i class="fas fa-check text-pink" style="font-size: 20px;"></i>
+                                }
+                            </span>
+                        </div>
+                        <h6 class="me-2 mb-0 fw-bold">NO</h6>
+                    </div>
+                </div>
+
+            </div>
+        </fieldset>
+
+        <hr class="divider bg-pink" />
+
+        <h6 class="fw-bold text-center mb-4" style="font-size:1.2rem;">Past Pregnancy History</h6>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr style="vertical-align: middle; text-align: center;">
+                        <th>Total # of Pregnancy</th>
+                        <th># of Full Term Deliveries</th>
+                        <th># of Premature Deliveries</th>
+                        <th># of Abortions</th>
+                        <th># of Miscarriages</th>
+                        <th># of D & C with Miscarriages Pregnancy</th>
+                        <th># of Ectopic Pregnancy / Tubal Pregnancy</th>
+                        <th># of Multiple Births</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr>
+                        <td>@(Model.TotalNoOfPreg != null ? Model.TotalNoOfPreg : "N/A")</td>
+                        <td>@(Model.NoOf_FullTerm != null ? Model.NoOf_FullTerm : "N/A")</td>
+                        <td>@(Model.NoOf_Premature != null ? Model.NoOf_Premature : "N/A")</td>
+                        <td>@(Model.NoOfAbortions != null ? Model.NoOfAbortions : "N/A")</td>
+                        <td>@(Model.NoOfMiscarriages != null ? Model.NoOfMiscarriages : "N/A")</td>
+                        <td>@(Model.NoOfD_CWithCarriagesPregnancy != null ? Model.NoOfD_CWithCarriagesPregnancy : "N/A")</td>
+                        <td>@(Model.NoOfPregnancy_TubalPregnancy != null ? Model.NoOfPregnancy_TubalPregnancy : "N/A")</td>
+                        <td>@(Model.NoOfMultipleBirths != null ? Model.NoOfMultipleBirths : "N/A")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <hr class="divider bg-pink" />
+
+        <div class="table-responsive mt-4">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Month Year</th>
+                        <th># Weeks</th>
+                        <th>Length of Labor</th>
+                        <th>Birth Weight</th>
+                        <th>Sex M/F</th>
+                        <th>Vaginal / CS</th>
+                        <th>Anes</th>
+                        <th>Place Of delivery</th>
+                        <th>Pre Term Labor Y/N</th>
+                        <th>Complications & Comments</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr>
+                        <td>@(Model.PregnancyMonthYear != null ? Model.PregnancyMonthYear : "N/A")</td>
+                        <td>@(Model.NoOfWeeks != null ? Model.NoOfWeeks : "N/A")</td>
+                        <td>@(Model.LaborLengthHours != null ? Model.LaborLengthHours : "N/A")</td>
+                        <td>@(Model.BirthWeigth != null ? Model.BirthWeigth : "N/A")</td>
+                        <td>@(Model.BirthSex != null ? Model.BirthSex : "N/A")</td>
+                        <td>@(Model.Vaginal_CS != null ? Model.Vaginal_CS : "N/A")</td>
+                        <td>@(Model.AnesthesiaType != null ? Model.AnesthesiaType : "N/A")</td>
+                        <td>@(Model.PlaceOfDelivery != null ? Model.PlaceOfDelivery : "N/A")</td>
+                        <td>@(Model.PretermLabor != null ? Model.PretermLabor : "N/A")</td>
+                        <td>@(Model.ComplicationsOrComments != null ? Model.ComplicationsOrComments : "N/A")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 }
 
 
-<!-- Add Hearing Modal -->
-<div class="modal fade" id="clinicalSheetAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+@* Add Modal  *@
+<div class="modal fade" id="OBAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-pink">
-                <h5 class="modal-title">Clinical Face Sheet</h5>
+                <h5 class="modal-title">Add Obstetrical Form</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="AddHRForm" method="POST">
+                <form id="AddOBForm" method="POST">
                     @Html.AntiForgeryToken()
                     <div class="row">
+                        <h6 class="modal-title fw-bold mb-4">MENSTRUAL HISTORY</h6>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="DateVisitHR-Add" class="control-label">Date Visit</label>
-                            <input type="datetime-local" id="DateVisitHR-Add" name="DateVisit" class="form-control" required />
+                        <div class="col-md-6 mb-4">
+                            <label for="FirstDayOfLastMenstrualCycle-Add" class="control-label">First Day of Last Menstural Cycle</label>
+                            <input type="text" id="FirstDayOfLastMenstrualCycle-Add" name="FirstDayOfLastMenstrualCycle" class="form-control" placeholder="Enter first day of last mense cycle" />
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="newbornBb-Add" class="control-label">Select Newborn</label>
-                            <select id="newbornBb-Add" class="form-select" name="NewbornID" required>
-                                <option disabled selected>select newborn baby</option>
+                        <div class="col-md-6 mb-4">
+                            <label for="PriorMensesDate-Add" class="control-label">Prior Menses Date</label>
+                            <input type="date" id="PriorMensesDate-Add" name="PriorMensesDate" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="FrequencyOfCycleEvery-Add" class="control-label">Frequency of Cycle every</label>
+                            <input type="text" id="FrequencyOfCycleEvery-Add" name="FrequencyOfCycleEvery" class="form-control" placeholder="Enter frequency of cycle every" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="DaysMensesMonthly-Add" class="control-label">Days Menses Monthly?</label>
+                            <select id="DaysMensesMonthly-Add" class="form-select" name="DaysMensesMonthly">
+                                <option disabled selected>Yes / No</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
                             </select>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="testDate-Add" class="control-label">Test Date</label>
-                            <input type="date" id="testDate-Add" name="TestDate" class="form-control" required />
+                        <div class="col-md-6 mb-4">
+                            <label for="AgesOfFirstMenses-Add" class="control-label">Age of first Menses</label>
+                            <input type="number" id="AgesOfFirstMenses-Add" name="AgesOfFirstMenses" class="form-control" placeholder="Enter age of first menses" />
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="babyStatus-Add" class="control-label">Baby Status</label>
-                            <input id="babyStatus-Add" name="BabyStatus" class="form-control" placeholder="Enter status" required />
+                        <div class="col-md-6 mb-4">
+                            <label for="BirthControlTheOfPregnancy-Add" class="control-label">Birth Control Pills at the of Pregnancy?</label>
+                            <select id="BirthControlTheOfPregnancy-Add" class="form-select" name="BirthControlTheOfPregnancy">
+                                <option disabled selected>Yes / No</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
                         </div>
 
+                        <div class="col-md-6 mb-4">
+                            <label for="DateOfPositivePregnancyTest-Add" class="control-label">Date of Positive Pregnancy Test</label>
+                            <input type="date" id="DateOfPositivePregnancyTest-Add" name="DateOfPositivePregnancyTest" class="form-control" />
+                        </div>
+
+                        <hr class="divider bg-pink" />
+
+                        <h6 class="modal-title fw-bold mb-4">PAST PREGNANCY HISTORY</h6>
+                        @* First Table *@
+                        <div class="col-md-4 mb-4">
+                            <label for="TotalNoOfPreg-Add" class="control-label">Total # of Pregnancies</label>
+                            <input type="number" id="TotalNoOfPreg-Add" name="TotalNoOfPreg" class="form-control" placeholder="Enter total number of pregnancies" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOf_FullTerm-Add" class="control-label">Total # of Full Term</label>
+                            <input type="number" id="NoOf_FullTerm-Add" name="NoOf_FullTerm" class="form-control" placeholder="Enter total number of full-term" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOf_Premature-Add" class="control-label">Total # of Premature</label>
+                            <input type="number" id="NoOf_Premature-Add" name="NoOf_Premature" class="form-control" placeholder="Enter total number of premature" />
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOfAbortions-Add" class="control-label">Total # of Abortion</label>
+                            <input type="number" id="NoOfAbortions-Add" name="NoOfAbortions" class="form-control" placeholder="Enter total number of abortion" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOfMiscarriages-Add" class="control-label">Total # of Miscarriages</label>
+                            <input type="number" id="NoOfMiscarriages-Add" name="NoOfMiscarriages" class="form-control" placeholder="Enter total number of miscarriages" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOfD_CWithCarriagesPregnancy-Add" class="control-label">Total # of D&C with Miscarriages Pregnancy</label>
+                            <input type="number" id="NoOfD_CWithCarriagesPregnancy-Add" name="NoOfD_CWithCarriagesPregnancy" class="form-control" placeholder="Enter total number of D&C w/ miscarriages" />
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOfPregnancy_TubalPregnancy-Add" class="control-label">Total # of Ectopic / Tubal Prenancy</label>
+                            <input type="number" id="NoOfPregnancy_TubalPregnancy-Add" name="NoOfPregnancy_TubalPregnancy" class="form-control" placeholder="Enter total number of Ectopic / Tubal Prenancy" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOfLiving-Add" class="control-label">Total # of NoOfLiving</label>
+                            <input type="number" id="NoOfLiving-Add" name="NoOfLiving" class="form-control" placeholder="Enter total number of Living" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOfMultipleBirths-Add" class="control-label">Total # of Multiple Births</label>
+                            <input type="number" id="NoOfMultipleBirths-Add" name="NoOfMultipleBirths" class="form-control" placeholder="Enter total number of multiple births" />
+                        </div>
+                        @* Second Table *@
+                        <div class="col-md-4 mb-4">
+                            <label for="PregnancyMonthYear-Add" class="control-label">Month & Year</label>
+                            <input type="text" id="PregnancyMonthYear-Add" name="PregnancyMonthYear" class="form-control" placeholder="Enter month & year" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOfWeeks-Add" class="control-label">Total # of Weeks</label>
+                            <input type="number" id="NoOfWeeks-Add" name="NoOfWeeks" class="form-control" placeholder="Enter total number of Weeks" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="LaborLengthHours-Add" class="control-label">Length Of Labor</label>
+                            <input type="text" id="LaborLengthHours-Add" name="LaborLengthHours" class="form-control" placeholder="Enter length of labor" />
+                        </div>
+                       
+                        <div class="col-md-4 mb-4">
+                            <label for="BirthWeigth-Add" class="control-label">Birth Weight</label>
+                            <input type="text" id="BirthWeigth-Add" name="BirthWeigth" class="form-control" placeholder="Enter birth weight" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="BirthSex-Add" class="control-label">Birth Sex</label>
+                            <input type="text" id="BirthSex-Add" name="BirthSex" class="form-control" placeholder="Enter birth sex" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="Vaginal_CS-Add" class="control-label">Vaginal / CS</label>
+                            <select id="Vaginal_CS-Add" class="form-select" name="Vaginal_CS">
+                                <option disabled selected>Yes / No</option>
+                                <option value="true">Vaginal</option>
+                                <option value="false">CS</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <label for="AnesthesiaType-Add" class="control-label">Anesthesia Type</label>
+                            <input type="text" id="AnesthesiaType-Add" name="AnesthesiaType" class="form-control" placeholder="Enter anesthesia type" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="PlaceOfDelivery-Add" class="control-label">Place of Delivery</label>
+                            <input type="text" id="PlaceOfDelivery-Add" name="PlaceOfDelivery" class="form-control" placeholder="Enter place of delivery" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="PretermLabor-Add" class="control-label">Preterm Labor Y/N</label>
+                            <select id="PretermLabor-Add" class="form-select" name="PretermLabor">
+                                <option disabled selected>Yes / No</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+
+                        @* Complications / Comments *@
                         <div class="col-md-12 mb-3">
-                            <label for="hearingResult-Add" class="control-label">Hearing Result</label>
-                            <textarea id="hearingResult-Add" name="HearingResult" class="form-control" placeholder="Enter the result" rows="3"></textarea>
+                            <label for="ComplicationsOrComments-Add" class="control-label">Complications / Comments</label>
+                            <textarea id="ComplicationsOrComments-Add" name="ComplicationsOrComments" class="form-control" placeholder="have complications or comments? " rows="3"></textarea>
+                        </div>
+                      
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-pink">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+ @* Edit Modal  *@
+<div class="modal fade" id="OBEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Update Obstetrical Form</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="UpdateOBForm" method="POST">
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <input type="hidden" id="obId-Edit" name="Id" />
+                        <input type="hidden" id="caseNoOB-Edit" name="CaseNo" />
+                        <input type="hidden" id="patientIDOB-Edit" name="PatientID" />
+
+                        <h6 class="modal-title fw-bold mb-4">MENSTRUAL HISTORY</h6>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="FirstDayOfLastMenstrualCycle-Edit" class="control-label">First Day of Last Menstural Cycle</label>
+                            <input type="text" id="FirstDayOfLastMenstrualCycle-Edit" name="FirstDayOfLastMenstrualCycle" class="form-control" placeholder="Enter first day of last mense cycle" />
                         </div>
 
+                        <div class="col-md-6 mb-4">
+                            <label for="PriorMensesDate-Edit" class="control-label">Prior Menses Date</label>
+                            <input type="date" id="PriorMensesDate-Edit" name="PriorMensesDate" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="FrequencyOfCycleEvery-Edit" class="control-label">Frequency of Cycle every</label>
+                            <input type="text" id="FrequencyOfCycleEvery-Edit" name="FrequencyOfCycleEvery" class="form-control" placeholder="Enter frequency of cycle every" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="DaysMensesMonthly-Edit" class="control-label">Days Menses Monthly?</label>
+                            <select id="DaysMensesMonthly-Edit" class="form-select" name="DaysMensesMonthly">
+                                <option disabled selected>Yes / No</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="AgesOfFirstMenses-Edit" class="control-label">Age of first Menses</label>
+                            <input type="number" id="AgesOfFirstMenses-Edit" name="AgesOfFirstMenses" class="form-control" placeholder="Enter age of first menses" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="BirthControlTheOfPregnancy-Edit" class="control-label">Birth Control Pills at the of Pregnancy?</label>
+                            <select id="BirthControlTheOfPregnancy-Edit" class="form-select" name="BirthControlTheOfPregnancy">
+                                <option disabled selected>Yes / No</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="DateOfPositivePregnancyTest-Edit" class="control-label">Date of Positive Pregnancy Test</label>
+                            <input type="date" id="DateOfPositivePregnancyTest-Edit" name="DateOfPositivePregnancyTest" class="form-control" />
+                        </div>
+
+                        <hr class="divider bg-pink" />
+
+                        <h6 class="modal-title fw-bold mb-4">PAST PREGNANCY HISTORY</h6>
+                        @* First Table *@
+                        <div class="col-md-4 mb-4">
+                            <label for="TotalNoOfPreg-Edit" class="control-label">Total # of Pregnancies</label>
+                            <input type="number" id="TotalNoOfPreg-Edit" name="TotalNoOfPreg" class="form-control" placeholder="Enter total number of pregnancies" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOf_FullTerm-Edit" class="control-label">Total # of Full Term</label>
+                            <input type="number" id="NoOf_FullTerm-Edit" name="NoOf_FullTerm" class="form-control" placeholder="Enter total number of full-term" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOf_Premature-Edit" class="control-label">Total # of Premature</label>
+                            <input type="number" id="NoOf_Premature-Edit" name="NoOf_Premature" class="form-control" placeholder="Enter total number of premature" />
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOfAbortions-Edit" class="control-label">Total # of Abortion</label>
+                            <input type="number" id="NoOfAbortions-Edit" name="NoOfAbortions" class="form-control" placeholder="Enter total number of abortion" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOfMiscarriages-Edit" class="control-label">Total # of Miscarriages</label>
+                            <input type="number" id="NoOfMiscarriages-Edit" name="NoOfMiscarriages" class="form-control" placeholder="Enter total number of miscarriages" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOfD_CWithCarriagesPregnancy-Edit" class="control-label">Total # of D&C with Miscarriages Pregnancy</label>
+                            <input type="number" id="NoOfD_CWithCarriagesPregnancy-Edit" name="NoOfD_CWithCarriagesPregnancy" class="form-control" placeholder="Enter total number of D&C w/ miscarriages" />
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOfPregnancy_TubalPregnancy-Edit" class="control-label">Total # of Ectopic / Tubal Prenancy</label>
+                            <input type="number" id="NoOfPregnancy_TubalPregnancy-Edit" name="NoOfPregnancy_TubalPregnancy" class="form-control" placeholder="Enter total number of Ectopic / Tubal Prenancy" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOfLiving-Edit" class="control-label">Total # of NoOfLiving</label>
+                            <input type="number" id="NoOfLiving-Edit" name="NoOfLiving" class="form-control" placeholder="Enter total number of Living" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOfMultipleBirths-Edit" class="control-label">Total # of Multiple Births</label>
+                            <input type="number" id="NoOfMultipleBirths-Edit" name="NoOfMultipleBirths" class="form-control" placeholder="Enter total number of multiple births" />
+                        </div>
+                        @* Second Table *@
+                        <div class="col-md-4 mb-4">
+                            <label for="PregnancyMonthYear-Edit" class="control-label">Month & Year</label>
+                            <input type="text" id="PregnancyMonthYear-Edit" name="PregnancyMonthYear" class="form-control" placeholder="Enter month & year" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="NoOfWeeks-Edit" class="control-label">Total # of Weeks</label>
+                            <input type="number" id="NoOfWeeks-Edit" name="NoOfWeeks" class="form-control" placeholder="Enter total number of Weeks" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="LaborLengthHours-Edit" class="control-label">Length Of Labor</label>
+                            <input type="text" id="LaborLengthHours-Edit" name="LaborLengthHours" class="form-control" placeholder="Enter length of labor" />
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <label for="BirthWeigth-Edit" class="control-label">Birth Weight</label>
+                            <input type="text" id="BirthWeigth-Edit" name="BirthWeigth" class="form-control" placeholder="Enter birth weight" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="BirthSex-Edit" class="control-label">Birth Sex</label>
+                            <input type="text" id="BirthSex-Edit" name="BirthSex" class="form-control" placeholder="Enter birth sex" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="Vaginal_CS-Edit" class="control-label">Vaginal / CS</label>
+                            <select id="Vaginal_CS-Edit" class="form-select" name="Vaginal_CS">
+                                <option disabled selected>Yes / No</option>
+                                <option value="vaginal">Vaginal</option>
+                                <option value="cs">CS</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <label for="AnesthesiaType-Edit" class="control-label">Anesthesia Type</label>
+                            <input type="text" id="AnesthesiaType-Edit" name="AnesthesiaType" class="form-control" placeholder="Enter anesthesia type" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="PlaceOfDelivery-Edit" class="control-label">Place of Delivery</label>
+                            <input type="text" id="PlaceOfDelivery-Edit" name="PlaceOfDelivery" class="form-control" placeholder="Enter place of delivery" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="PretermLabor-Edit" class="control-label">Preterm Labor Y/N</label>
+                            <select id="PretermLabor-Edit" class="form-select" name="PretermLabor">
+                                <option disabled selected>Yes / No</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+
+                        @* Complications / Comments *@
                         <div class="col-md-12 mb-3">
-                            <label for="NotesHR-Add" class="control-label">Notes(Optional)</label>
-                            <textarea id="NotesHR-Add" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="practitionerHR-Add" class="control-label">Attending Practitioner</label>
-                            <input id="practitionerHR-Add" name="AttendingPractioner" class="form-control" required />
-
-                            @*   <select id="staff-Add" class="form-select" name="StaffID" required>
-                                <option disabled selected>select encharged staff</option>
-                            </select> *@
+                            <label for="ComplicationsOrComments-Edit" class="control-label">Complications / Comments</label>
+                            <textarea id="ComplicationsOrComments-Edit" name="ComplicationsOrComments" class="form-control" placeholder="have complications or comments? " rows="3"></textarea>
                         </div>
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
@@ -515,3 +677,146 @@ else{
         </div>
     </div>
 </div>
+
+
+
+
+<script>
+    var patID = document.getElementById('patID').value;
+    var delID = document.getElementById('delID').value;
+
+    $("#UpdateOBForm").on("submit", function (e) {
+        e.preventDefault();
+        UpdateOB();
+    });
+
+    $("#editOBBtn").on("click", function (e) {
+        var id = $(this).data('obid');
+        EditObstetrical(id);
+    });
+
+    // Update 
+    function UpdateOB() {
+        var formData = $("#UpdateOBForm").serialize();
+        $.ajax({
+            url: '@Url.Action("UpdateOBRecord", "Delivery")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                if (result.isSuccess) {
+                    $('#OBEditModal').modal('hide');
+                    toastr.success(result.message)
+                    LoadOBComponent();
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                toastr.error('An error occurred while updating the  record.');
+                console.error('Error:', err);
+            }
+        });
+    }
+    // Edit 
+    function EditObstetrical(obId) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetOBRecord", "Delivery")',
+            data: { id: obId },
+            success: function (response) {
+                if (response && response.isSuccess) {
+                    var item = response.item;
+                    console.log(item)
+                    // Populate modal fields
+                    $('#obId-Edit').val(item.id);
+                    $('#caseNoOB-Edit').val(item.caseNo);
+                    $('#patientIDOB-Edit').val(item.patientID);
+
+                    $('#FirstDayOfLastMenstrualCycle-Edit').val(item.firstDayOfLastMenstrualCycle);
+                    $('#PriorMensesDate-Edit').val(item.priorMensesDate);
+                    $('#FrequencyOfCycleEvery-Edit').val(item.frequencyOfCycleEvery);
+                    $('#DaysMensesMonthly-Edit').val(item.daysMensesMonthly === true ? 'true' : 'false');
+                    $('#AgesOfFirstMenses-Edit').val(item.agesOfFirstMenses);
+                    $('#BirthControlTheOfPregnancy-Edit').val(item.birthControlTheOfPregnancy === true ? 'true' : 'false');
+                    $('#DateOfPositivePregnancyTest-Edit').val(item.dateOfPositivePregnancyTest);
+                    $('#PregnancyTestDoneBy-Edit').val(item.pregnancyTestDoneBy);
+                    //PAST PREGNANCY
+                    $('#TotalNoOfPreg-Edit').val(item.totalNoOfPreg);
+                    $('#NoOf_FullTerm-Edit').val(item.noOf_FullTerm);
+                    $('#NoOf_Premature-Edit').val(item.noOf_Premature);
+                    $('#NoOfAbortions-Edit').val(item.noOfAbortions);
+                    $('#NoOfMiscarriages-Edit').val(item.noOfMiscarriages);
+                    $('#NoOfD_CWithCarriagesPregnancy-Edit').val(item.noOfD_CWithCarriagesPregnancy);
+                    $('#NoOfPregnancy_TubalPregnancy-Edit').val(item.noOfPregnancy_TubalPregnancy);
+                    $('#NoOfMultipleBirths-Edit').val(item.noOfMultipleBirths);
+                    $('#NoOfLiving-Edit').val(item.noOfLiving);
+             
+                    $('#PregnancyMonthYear-Edit').val(item.pregnancyMonthYear);
+                    $('#NoOfWeeks-Edit').val(item.noOfWeeks);
+                    $('#LaborLengthHours-Edit').val(item.laborLengthHours);
+                    $('#BirthWeigth-Edit').val(item.birthWeigth);
+                    $('#BirthSex-Edit').val(item.birthSex);
+                    $('#Vaginal_CS-Edit').val(item.vaginal_CS);
+                    $('#AnesthesiaType-Edit').val(item.anesthesiaType);
+                    $('#PlaceOfDelivery-Edit').val(item.placeOfDelivery);
+                    $('#PretermLabor-Edit').val(item.pretermLabor === true ? 'true' : 'false');
+                    $('#ComplicationsOrComments-Edit').val(item.complicationsOrComments);
+
+                    // Show Edit Modal
+                    $('#OBEditModal').modal('show');
+                } else {
+                    toastr.error(response.message || 'Unable to load dishchargement record.');
+                }
+            },
+            error: function () {
+                toastr.error('An error occurred while loading the dishchargement  record.');
+            }
+        });
+    }
+
+
+    $("#AddOBForm").on("submit", function (e) {
+         e.preventDefault();
+         AddOB();
+     });
+
+    //Add
+    function AddOB() {
+        var formData = $('#AddOBForm').serializeArray();
+        formData.push({ name: 'patientID', value: patID });
+        formData.push({ name: 'deliveryID', value: delID});
+
+        $.ajax({
+            url: '@Url.Action("AddOBForm", "Delivery")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                if (result.isSuccess) {
+                    toastr.success(result.message)
+                    LoadOBComponent();
+                    $('#OBAddModal').modal('hide');
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                console.error('Error:', err);
+            }
+        });
+    }
+
+
+    //Load All Records
+    function LoadOBComponent() {
+        $.ajax({
+            url: '@Url.Action("ObstetricalRecords", "Delivery")',
+            data: { patientId: patID, caseno: delID },
+            success: function (result) {
+                $('#obstetrical').html(result);
+            },
+            error: function () {
+                toastr.error("Failed to reload the obstetrical records.");
+            }
+        });
+    }
+</script>

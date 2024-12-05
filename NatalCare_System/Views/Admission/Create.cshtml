@@ -362,18 +362,29 @@
             });
 
             //Prenatal Select
-             $('#prenatalListContainer').on('click', "#prenatalSelectBtn", function () {
+            $('#prenatalListContainer').on('click', "#prenatalSelectBtn", function () {
                 var value = $(this).data("caseid");
                 value.toUpperCase();
                 LoadPrenatalDetails(value);
             });
 
-            // Add form submission validation for Pateint Id
+            // Add form submission validation for Patient ID
             $("form").on("submit", function (e) {
                 var patientId = $("#PatientID").val().trim();
+                var statusId = $("#DeliveryStatusID").val();
+                var dischargeDate = $("#Date_Discharged").val();
+                var dischargeTime = $("#Time_Discharged").val();
+
                 if (patientId === "") {
                     e.preventDefault();
                     alert("Please select a patient for the admission.");
+                    return;
+                }
+
+                if (statusId === "3" && (!dischargeDate || !dischargeTime)) {
+                    e.preventDefault();
+                    alert("Please fill in both the discharge date and time before submitting.");
+                    return;
                 }
             });
 

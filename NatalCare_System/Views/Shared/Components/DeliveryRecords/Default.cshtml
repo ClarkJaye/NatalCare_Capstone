@@ -10,6 +10,10 @@
         <i class="fas fa-plus"></i>
         <span>Admit Patient</span>
     </a>
+    <a class="btn btn-warning d-flex align-items-center gap-2" asp-controller="Newborn" asp-action="Create">
+        <i class="fas fa-baby"></i>
+        <span>Add Newborn</span>
+    </a>
 </div>
 
 @* <div class="d-flex justify-content-end my-3 gap-3">
@@ -23,9 +27,6 @@
     </button>
 </div> *@
 
-@* <div class="d-flex align-items-center gap-2 mb-2">
-    <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
-</div> *@
 
 <!-- Patient Table-->
 <div class="table-responsive" style="max-height:600px;">
@@ -37,7 +38,7 @@
                 <th>Date & Time Discharge</th>
                 <th>Ward No#</th>
                 <th>Bed No#</th>
-                <th>Patient Status</th>
+                <th>Status</th>
                 <th>Notes</th>
                 <th>Added By</th>
                 <th class="text-center">Action</th>
@@ -52,8 +53,8 @@
                         <td>@item.CaseNo</td>
                         <td>@item.Date_Admitted.ToString("MMM dd yyyy") @item.Time_Admitted.ToString("h:mm tt")</td>
                         <td>@item.Date_Discharged?.ToString("MMM dd yyyy") @item.Time_Discharged?.ToString("h:mm tt")</td>
-                        <td>@item.Wards.WardNo</td>
-                        <td>@item.Beds.BedNo</td>
+                        <td>@item.Wards?.WardNo</td>
+                        <td>@item.Beds?.BedNo</td>
                         <td>
                             @if (item.DeliveryStatusID == 1)
                             {   //In Labor
@@ -76,30 +77,15 @@
                         <td>@item.CreatedBy?.FirstName @item.CreatedBy?.MiddleName @item.CreatedBy?.LastName</td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
-@*                                 <a asp-controller="Delivery" asp-action="Index" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-outline-secondary">
-                                    <i class="fa-solid fa-folder-open"></i>
-                                </a>
-                                <a class="btn btn-outline-secondary" asp-controller="" asp-action="" asp-route-id="">
-                                    <i class="fa-solid fa-list"></i>
-                                </a>
-                                <button class="btn btn-outline-primary edit-Btn" data-caseno="@item.CaseNo">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                                <button class="btn btn-outline-danger dlt-Btn" data-caseno="@item.CaseNo">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button> *@
-                                
-                                
                                 <a asp-controller="Delivery" asp-action="Index" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-outline-secondary">
                                     <i class="fa-solid fa-folder-open"></i>
                                 </a>
-                                <a class="btn btn-outline-secondary" asp-controller="" asp-action="" asp-route-id="">
+                                <a class="btn btn-outline-secondary" asp-controller="Admission" asp-action="Details" asp-route-id="@item.CaseNo" asp-route-patid="@item.PatientID">
                                     <i class="fa-solid fa-list"></i>
                                 </a>
                                 <a class="btn btn-outline-primary" asp-controller="Admission" asp-action="Edit" asp-route-id="@item.CaseNo" asp-route-patid="@item.PatientID">
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
-                               
                             </div>
                         </td>
                     </tr>

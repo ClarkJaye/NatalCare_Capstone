@@ -298,6 +298,10 @@
                         <label>Blood Type</label>
                         <input class="form-control text-uppercase" value="@Model.Patient.BloodType" disabled />
                     </div>
+                    <div class="form-group col-md-4 mb-2">
+                        <label>Nationality</label>
+                        <input class="form-control text-capitalize" value="@Model.Patient.Nationality" disabled />
+                    </div>
                     @if (Model.Patient.HasPhilHealth == true)
                     {
                     <div class="form-group col-md-4 mb-3">
@@ -339,7 +343,10 @@
                         <label>Occupation</label>
                         <input class="form-control" value="@Model.Father.Occupation" disabled />
                     </div>
-
+                    <div class="form-group col-md-4 mb-2">
+                        <label>Nationality</label>
+                        <input class="form-control text-capitalize" value="@Model.Father.Nationality" disabled />
+                    </div>
 
 
                     <!-- Emergency Contact -->

@@ -459,3 +459,15 @@ input[type=number]::-webkit-inner-spin-button {
     font-weight: bold;
 }
 
+label.form-check-label {
+    cursor: pointer;
+}
+
+#selectedYear, #servicesYear{
+    padding: .2rem .7rem .2rem .7rem !important;
+}
+
+
+#selectedMonth, #servicesMonth {
+    padding: .2rem 1.5rem .2rem .7rem !important;
+}

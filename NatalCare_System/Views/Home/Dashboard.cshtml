@@ -17,61 +17,77 @@
                 <div class="col-6 mb-4">
                     <!-- Patients Statistics (Line Graph) -->
                     <div class="card h-100 p-3">
-                        <h6 class="card-title">Patients Statistics</h6>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h6 class="card-title">Patients Statistics</h6>
+                            <div class="yearContainer d-flex gap-2">
+                                <select id="selectedMonth" onchange="LoadData(document.getElementById('selectedYear').value, this.value)" class="form-select">
+                                    <option data-month="All" value="">All</option>
+                                    <option data-month="January" value="01">January</option>
+                                    <option data-month="February" value="02">February</option>
+                                    <option data-month="March" value="03">March</option>
+                                    <option data-month="April" value="04">April</option>
+                                    <option data-month="May" value="05">May</option>
+                                    <option data-month="June" value="06">June</option>
+                                    <option data-month="July" value="07">July</option>
+                                    <option data-month="August" value="08">August</option>
+                                    <option data-month="September" value="09">September</option>
+                                    <option data-month="October" value="10">October</option>
+                                    <option data-month="November" value="11">November</option>
+                                    <option data-month="December" value="12">December</option>
+                                </select>
+
+                                <select id="selectedYear" onchange="LoadData(this.value,  document.getElementById('selectedMonth').value)" class="form-select">
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                    <option value="2030">2030</option>
+                                </select>
+                            </div>
+                        </div>
                         <canvas id="lineGraph"></canvas>
                     </div>
-                </div>
+                </div>  
                 <div class="col-6 mb-4">
                     <!-- Services Statistics (Bar Graph) -->
                     <div class="card h-100 p-3">
-                        <h6 class="card-title">Services Statistics</h6>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h6 class="card-title">Services Statistics</h6>
+                            <div class="yearContainer d-flex gap-2">
+                                <select id="servicesMonth" onchange="LoadBarData(document.getElementById('selectedYear').value, this.value)" class="form-select">
+                                    <option data-month="All" value="">All</option>
+                                    <option data-month="January" value="01">January</option>
+                                    <option data-month="February" value="02">February</option>
+                                    <option data-month="March" value="03">March</option>
+                                    <option data-month="April" value="04">April</option>
+                                    <option data-month="May" value="05">May</option>
+                                    <option data-month="June" value="06">June</option>
+                                    <option data-month="July" value="07">July</option>
+                                    <option data-month="August" value="08">August</option>
+                                    <option data-month="September" value="09">September</option>
+                                    <option data-month="October" value="10">October</option>
+                                    <option data-month="November" value="11">November</option>
+                                    <option data-month="December" value="12">December</option>
+                                </select>
+
+                                <select id="servicesYear" onchange="LoadBarData(this.value,  document.getElementById('selectedMonth').value)" class="form-select">
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                    <option value="2030">2030</option>
+                                </select>
+                            </div>
+                        </div>
                         <canvas id="barGraph"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-
-    @*  <!-- Totals Section -->
-        <div class="col-md-3">
-            <div class="mb-4">
-                <div class="card shadow py-2" style=" border-color: var(--pink); color: var(--pink);">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col mr-2">
-                                <div class="fw-bold text-uppercase mb-1" style="font-size: .8em;">
-                                    Total Delivery
-                                </div>
-                                <div class="h4 fw-bold mb-0" id="countAllUsers">
-                                    1500
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-user" style="font-size: 2em; font-weight: 800; color: var(--pink)"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="mb-4">
-                <div class="card shadow py-2" style=" border-color: var(--pink); color: var(--pink);">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col mr-2">
-                                <div class="fw-bold text-uppercase mb-1" style="font-size: .8em;">
-                                    Total Delivery
-                                </div>
-                                <div class="h4 fw-bold mb-0" id="countTotalDelivery">
-                                    1500
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-user" style="font-size: 2em; font-weight: 800; color: var(--pink)"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> *@
     </div>
 
 
@@ -118,18 +134,13 @@
                                 }
                             </td>
                             <td>@patient.Created_At?.ToString("MMM dd yyyy hh mm tt")</td>
-                            <td>@patient.CreatedBy.FirstName @patient.CreatedBy.MiddleName @patient.CreatedBy.LastName </td>
+                            <td>@patient.CreatedBy?.FirstName @patient.CreatedBy?.MiddleName @patient.CreatedBy?.LastName </td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
     </div>
-
-
-
-
-
 </div>
 
 
@@ -138,109 +149,247 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-    // Make rows clickable
-    $('.patient-row').on('click', function (e) {
-        // Prevent navigation when clicking inside buttons or links
-        if (!$(e.target).closest('a, button').length) {
-            window.location.href = $(this).data('url');
-        }
-    });
+<script>    
+    var LineChart;
+    // var BarChart;
+    document.addEventListener("DOMContentLoaded", function () {
+        LoadLineChart();
+        // LoadBarChart();
 
-
-    // Line Graph for Patients Statistics
-    const lineCtx = document.getElementById('lineGraph').getContext('2d');
-    const lineChart = new Chart(lineCtx, {
-        type: 'line',
-        data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'], // Sample months
-            datasets: [{
-                label: 'Patients',
-                data: [120, 150, 180, 220, 170, 210, 260], // Sample data
-                borderColor: '#ff6384',
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                fill: true,
-                tension: 0.1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    enabled: true,
-                }
-            },
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Month'
-                    }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Number of Patients'
-                    }
-                }
+        // Make rows clickable
+        $('.patient-row').on('click', function (e) {
+            // Prevent navigation when clicking inside buttons or links
+            if (!$(e.target).closest('a, button').length) {
+                window.location.href = $(this).data('url');
             }
-        }
+        });
+
+     
     });
+
+     function LoadLineChart() {
+        const ctx = document.getElementById("lineGraph").getContext("2d");
+        LineChart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: [],
+                datasets: []
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: "top" },
+                    tooltip: { enabled: true }
+                },
+               scales: {
+                    x: {
+                        title: { display: true, text: "Month" }
+                    },
+                    y: {
+                        title: { display: true, text: "Number of Patients" },
+                        ticks: {
+                            autoSkip: true,
+                            // maxRotation: 40,
+                            // minRotation: 40
+                        },
+                    }
+               }
+            }
+        });
+
+        LoadData(new Date().getFullYear(), ""); // Load with current year
+    }
+
+    function LoadData(yearData, monthData) {
+        $.ajax({
+            type: "GET",
+            url: "/Home/GetDataByYearAndMonth",
+            data: { year: yearData, month: monthData },
+            dataType: "json",
+            success: function (data) {
+                // Map numeric month to month names
+                const monthNames = [
+                    "January", "February", "March", "April", "May",
+                    "June", "July", "August", "September", "October",
+                    "November", "December"
+                ];
+
+                // Update chart labels and datasets
+                LineChart.data.labels = data.map(item => monthNames[item.month - 1]); 
+                LineChart.data.datasets = [{
+                    label: "Patients",
+                    data: data.map(item => item.data), 
+                    borderColor: '#ff6384',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    pointRadius: 5,
+                    fill: true,
+                    tension: 0.1
+                }];
+                    
+                // Update the chart
+                LineChart.update();
+            },
+            error: function (error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    }
+
+
+
+
+
+
+    // function LoadBarChart() {
+    //         const ctx = document.getElementById("barGraph").getContext("2d");
+    //         BarChart = new Chart(ctx, {
+    //             type: "bar",
+    //             data: {
+    //                 labels: [], // Months
+    //                 datasets: [
+    //                     {
+    //                         label: "Prenatal",
+    //                         data: [],
+    //                         backgroundColor: "#ffcd56"
+    //                     },
+    //                     {
+    //                         label: "Delivery",
+    //                         data: [],
+    //                         backgroundColor: "#36a2eb"
+    //                     },
+    //                     {
+    //                         label: "Screening",
+    //                         data: [],
+    //                         backgroundColor: "#ff9f40"
+    //                     },
+    //                     {
+    //                         label: "Hearing",
+    //                         data: [],
+    //                         backgroundColor: "#9966ff"
+    //                     }
+    //                 ]
+    //             },
+    //             options: {
+    //                 responsive: true,
+    //                 plugins: {
+    //                     legend: { position: "top" },
+    //                     tooltip: { enabled: true }
+    //                 },
+    //                 scales: {
+    //                     x: {
+    //                         title: { display: true, text: "Month" }
+    //                     },
+    //                     y: {
+    //                         title: { display: true, text: "Number of Services" },
+    //                         beginAtZero: true
+    //                     }
+    //                 }
+    //             }
+    //         });
+
+    //         LoadBarData(new Date().getFullYear(), new Date().getMonth());
+    //     }
+
+    // function LoadBarData(year, month) {
+    //      $.ajax({
+    //          type: "GET",
+    //          url: "/Home/GetBarDataByYearAndMonth",
+    //          data: { year: year, month: month },
+    //          dataType: "json",
+    //          success: function (response) {
+    //              console.log(response)
+    //              const monthNames = [
+    //                  "January", "February", "March", "April", "May",
+    //                  "June", "July", "August", "September", "October",
+    //                  "November", "December"
+    //              ];
+
+    //              // Parse the data for each service
+    //              const { prenatalData, deliveryData, screeningData, hearingData } = response;
+
+    //              // Extract data for each service by month
+    //              const prenatalCounts = Array(12).fill(0);
+    //              const deliveryCounts = Array(12).fill(0);
+    //              const screeningCounts = Array(12).fill(0);
+    //              const hearingCounts = Array(12).fill(0);
+
+    //              prenatalData.forEach(item => prenatalCounts[item.month - 1] = item.data);
+    //              deliveryData.forEach(item => deliveryCounts[item.month - 1] = item.data);
+    //              screeningData.forEach(item => screeningCounts[item.month - 1] = item.data);
+    //              hearingData.forEach(item => hearingCounts[item.month - 1] = item.data);
+
+    //              // Update the chart labels and datasets
+    //              BarChart.data.labels = monthNames;
+    //              BarChart.data.datasets[0].data = prenatalCounts;
+    //              BarChart.data.datasets[1].data = deliveryCounts;
+    //              BarChart.data.datasets[2].data = screeningCounts;
+    //              BarChart.data.datasets[3].data = hearingCounts;
+
+    //              BarChart.update();
+    //          },
+    //          error: function (error) {
+    //              console.error("Error fetching data:", error);
+    //          }
+    //      });
+    //  }
+
+
 
     // Bar Graph for Services Statistics
     const barCtx = document.getElementById('barGraph').getContext('2d');
     const barChart = new Chart(barCtx, {
-        type: 'bar',
-        data: {
-            labels: ['Delivery', 'Prenatal', 'Family Planning', 'Newborn Screening', 'Newborn Hearing'], // Sample services
-            datasets: [{
-                label: 'Number of Services',
-                data: [300, 200, 150, 100, 50], // Sample data
-                backgroundColor: [
-                    '#36a2eb',
-                    '#ffcd56',
-                    '#4bc0c0',
-                    '#ff9f40',
-                    '#9966ff'
-                ],
-                borderColor: [
-                    '#36a2eb',
-                    '#ffcd56',
-                    '#4bc0c0',
-                    '#ff9f40',
-                    '#9966ff'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    enabled: true,
-                }
+            type: 'bar',
+            data: {
+                labels: ['Delivery', 'Prenatal', 'Newborn Screening', 'Newborn Hearing'], // Sample services
+                // labels: ['Delivery', 'Prenatal', 'Family Planning', 'Newborn Screening', 'Newborn Hearing'], // Sample services
+                datasets: [{
+                    label: 'Number of Services',
+                    data: [300, 200, 150, 100, 50], // Sample data
+                    backgroundColor: [
+                        '#36a2eb',
+                        '#ffcd56',
+                        '#4bc0c0',
+                        '#9966ff'
+                        //  '#36a2eb',
+                        // '#ffcd56',
+                        // '#4bc0c0',
+                        // '#ff9f40',
+                        // '#9966ff'
+                    ],
+                    borderColor: [
+                        '#36a2eb',
+                        '#ffcd56',
+                        '#4bc0c0',
+                        '#9966ff'
+                    ],
+                    borderWidth: 1
+                }]
             },
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Services'
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: true,
                     }
                 },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Number of Services'
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Services'
+                        }
                     },
-                    beginAtZero: true
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Number of Services'
+                        },
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
 </script>

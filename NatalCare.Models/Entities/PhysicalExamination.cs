@@ -48,7 +48,6 @@ namespace NatalCare.Models.Entities
         [ForeignKey("CaseNo")]
         public Delivery? Delivery { get; set; }
 
-        // Foreign Key
         [Required]
         public string? PatientID { get; set; }
         [ForeignKey("PatientID")]

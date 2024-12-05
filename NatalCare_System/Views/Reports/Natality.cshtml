@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="col-md-4 mb-sm-3">
-            <!-- Deliveries Attended by Skilled Health Professionals (Pie Graph) -->
+            @* Deliveries Attended by Skilled Health Professionals (Pie Graph) *@
             <div class="card h-100 p-3">
                 <h6 class="card-title">Deliveries Attended by Skilled Health Professionals</h6>
                 <canvas id="pieGraph"></canvas>
@@ -26,46 +26,67 @@
 
         <div class="col-md-4">
             <div class="card p-3 mb-4">
-                <h6 class="card-title">Total No# Live Births</h6>
+                <h6 class="card-title">Generate Natality Reports</h6>
                 <div class="d-flex align-items-center justify-content-end gap-3">
-                    <a href="#" class="btn btn-sm btn-danger">PDF</a>
-                    <a href="#" class="btn btn-sm btn-success">Excel</a>
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#NatalReportModal">
+                        <i class="fas fa-file-pdf"></i>
+                        Generate
+                    </button>
                 </div>
             </div>
-
-            <div class="card p-3 mb-4">
-                <h6 class="card-title">Total No# Live Births</h6>
-                <div class="d-flex align-items-center justify-content-end gap-3">
-                    <a href="#" class="btn btn-sm btn-danger">PDF</a>
-                    <a href="#" class="btn btn-sm btn-success">Excel</a>
-                </div>
-            </div>
-
-            <div class="card p-3 mb-4">
-                <h6 class="card-title">Total No# Live Births</h6>
-                <div class="d-flex align-items-center justify-content-end gap-3">
-                    <a href="#" class="btn btn-sm btn-danger">PDF</a>
-                    <a href="#" class="btn btn-sm btn-success">Excel</a>
-                </div>
-            </div>
-
-            <div class="card p-3 mb-4">
-                <h6 class="card-title">Total No# Live Births</h6>
-                <div class="d-flex align-items-center justify-content-end gap-3">
-                    <a href="#" class="btn btn-sm btn-danger">PDF</a>
-                    <a href="#" class="btn btn-sm btn-success">Excel</a>
-                </div>
-            </div>
-
         </div>
     </div>
 </div>
+
+
+
+<!-- Add Hearing Modal -->
+<div class="modal fade" id="NatalReportModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Start Date and End Date</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="NatalForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="startDate" class="control-label">Start Date</label>
+                            <input type="date" id="startDate" name="startDate" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DateVisitHR-Add" class="control-label">End Date</label>
+                            <input type="date" id="DateVisitHR-Add" name="DateVisit" class="form-control" required />
+                        </div>
+
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-3">
+                                <button class="btn btn-danger generateNatalPdfBtn" >
+                                    <i class="fas fa-file-pdf"></i>
+                                    PDF
+                                </button>
+                                <button class="btn btn-success generateNatalExcelBtn" >
+                                    <i class="fas fa-file-excel"></i>
+                                    Excel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    $(document).ready(function () {
+    document.addEventListener('DOMContentLoaded', function () {
         // Delivery Types (Doughnut Chart)
         const deliveryData = {
             labels: ['Cesarean', 'Vaginal'],
@@ -128,5 +149,12 @@
             }
         };
         new Chart(document.getElementById('pieGraph'), skilledConfig);
+
+
+        $(".generateNatalExcelBtn").on("click", function (e) {
+            EditClinical(id);
+        });
+
     });
+
 </script>

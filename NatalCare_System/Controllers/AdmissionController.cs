@@ -90,6 +90,24 @@ namespace NatalCare_System.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Details(string id, string patid)
+        {
+            if (!await CheckAccessAsync(4))
+            {
+                return RedirectTo();
+            }
+            ViewData["triggerPatID"] = patid;
+            ViewData["deliveryStatus"] = await selectListServices.GetDeliveryStatusSelectListAsync();
+            ViewData["wardList"] = await selectListServices.GetWardsSelectListAsync();
+            var userId = GetCurrentUserId();
+            var result = await serviceServices.GetAdmittedDeliveryRecord(id);
+            if (result != null)
+            {
+                return View(result);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
         [HttpPost]
         public async Task<IActionResult> Edit(Delivery model)
         {

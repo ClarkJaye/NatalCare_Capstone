@@ -9,9 +9,9 @@ namespace NatalCare.Models.Entities
     {
         [Key]
         public int Id { get; set; }
+        public string? Hosp_No { get; set; }
         public string? CompleteDiagnosis { get; set; }
         public string? Medications { get; set; }
-        //Boolean
         public bool PostpartumCareAndHygiene { get; set; } = false;
         public bool Nutrition { get; set; } = false;
         public bool IronFolate { get; set; } = false;
@@ -26,6 +26,18 @@ namespace NatalCare.Models.Entities
         public string? FollowUpManagement { get; set; }
         public string? Notes { get; set; }
 
+        // Foreign Key
+        [Required]
+        public string? CaseNo { get; set; }
+        [ForeignKey("CaseNo")]
+        public Delivery? Delivery { get; set; }
+
+        [Required]
+        public string? PatientID { get; set; }
+        [ForeignKey("PatientID")]
+        [ValidateNever]
+        public Patients? Patient { get; set; }
+
         ////ASSISTED STAFF
         public int? MidwifeID { get; set; }
         [ForeignKey("MidwifeID")]
@@ -36,20 +48,6 @@ namespace NatalCare.Models.Entities
         [ForeignKey("PreparedBy")]
         [ValidateNever]
         public Staff? Prepared { get; set; }
-
-
-        // Foreign Key
-        [Required]
-        public string? DeliveryId { get; set; }
-        [ForeignKey("CaseNo")]
-        public Delivery? Delivery { get; set; }
-
-        // Foreign Key
-        [Required]
-        public string? PatientID { get; set; }
-        [ForeignKey("PatientID")]
-        [ValidateNever]
-        public Patients? Patient { get; set; }
 
         public DateTime? Created_At { get; set; }
         [Column("Created_By")]

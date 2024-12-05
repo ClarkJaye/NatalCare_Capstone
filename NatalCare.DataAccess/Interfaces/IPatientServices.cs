@@ -6,6 +6,10 @@ namespace NatalCare.DataAccess.Interfaces
 {
     public interface IPatientServices
     {
+        //Statistics
+        Task<GeneralResponse> PatientStatistics(int year, int month);
+        Task<GeneralResponse> ServicesStatistics(int year, int month);
+
         //Patient Info
         Task<Patients> GetInformation(string id);
         Task<List<Patients>> GetRecentPatientsAsync();

@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Delivery Records";
-    ViewData["Title"] = "Patients / Delivery Records";
+    ViewData["NavTitle"] = "Patients / Delivery Records";
     Layout = "_UserLayout";
 }
 
@@ -21,7 +21,7 @@
     </div>
 
     <div class="card card-selected mb-5" id="clinicalCard" data-patient-id="@Model.Patient?.PatientID" data-caseno="@Model.Delivery?.CaseNo">
-        <div class="card-body">
+        <div class="card-body mb-5">
             <h5 class="card-title mb-4">Delivery Details</h5>
             <!-- Tabs for Services -->
             <ul class="nav nav-tabs" id="patientTabs" role="tablist">
@@ -209,449 +209,10 @@
                 <div class="tab-pane fade" id="clinicalSheet" role="tabpanel"></div>
 
                 <!-- Obstetrical Tab -->
-                <div class="tab-pane fade" id="obstetrical" role="tabpanel">
-                    <h5 class="px-2 mb-3 text-center fw-bold">OBSTETRICAL HISTORY</h5>
-                    <div class="d-flex justify-content-end my-3 gap-3 px-2">
-                        @*   <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
-                            <i class="fas fa-plus"></i>
-                            <span>Add New</span>
-                        </button> *@
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
-                            <i class="fas fa-pencil-alt"></i>
-                            <span>Edit</span>
-                        </button>
-                    </div>
-                    <div class="container mt-4">
-                        <!-- Patient Basic Info -->
-                        <div class="row mb-3">
-                            @* Patient Details *@
-                            <div class="col-md-12 border py-3 d-flex align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <h6 class="me-2 mb-0 fw-bold">Name of Patient:</h6>
-                                    <div class="flex-grow-1">
-                                        <span class="px-2">
-                                            Jay Clark Jimenez Anore
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 border py-3 d-flex align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <h6 class="me-2 mb-0 fw-bold">Date of Birth:</h6>
-                                    <div class="flex-grow-1">
-                                        <span class="px-2">
-                                            November 12, 2000
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2 border py-3 d-flex align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <h6 class="me-2 mb-0 fw-bold">Age:</h6>
-                                    <div class="flex-grow-1">
-                                        <span class="px-2">
-                                            24
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2 border py-3 d-flex align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <h6 class="me-2 mb-0 fw-bold">Race:</h6>
-                                    <div class="flex-grow-1">
-                                        <span class="px-2">
-                                            Filipino
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                           <div class="col-md-2 border py-3 d-flex align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <h6 class="me-2 mb-0 fw-bold">Marital Status:</h6>
-                                    <div class="flex-grow-1">
-                                        <span class="px-2">
-                                            Single
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="col-md-6 border py-3 d-flex align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <h6 class="me-2 mb-0 fw-bold">Husband/Partner's Name':</h6>
-                                    <div class="flex-grow-1">
-                                        <span class="px-2">
-                                            Paul Souma
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3 border py-3 d-flex align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <h6 class="me-2 mb-0 fw-bold">Age:</h6>
-                                    <div class="flex-grow-1">
-                                        <span class="px-2">
-                                            24
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3 border py-3 d-flex align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <h6 class="me-2 mb-0 fw-bold">Race:</h6>
-                                    <div class="flex-grow-1">
-                                        <span class="px-2">
-                                            Filipino
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr class="divider bg-pink" />
-
-                        <!-- Menstrual History -->
-                        <fieldset class="mb-4 mt-2">
-                            <legend class="fw-bold text-center mb-4" style="font-size:1.2rem;">Menstrual History</legend>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <h6 class="me-2 mb-0 fw-bold">First day of last Mestrual Cycle</h6>
-                                        <div class="border-bottom flex-grow-1">
-                                            <span class="px-2">
-                                                sample
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <h6 class="me-2 mb-0 fw-bold">prior Menses date</h6>
-                                        <div class="border-bottom flex-grow-1">
-                                            <span class="px-2">
-                                                sample
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <h6 class="me-2 mb-0 fw-bold">Frequency of Cycle every</h6>
-                                        <div class="border-bottom flex-grow-1">
-                                            <span class="px-2">
-                                                
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3 mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <h6 class="me-2 mb-0 fw-bold">days menses monthly</h6>
-                                        <div class="border-bottom flex-grow-1">
-                                            <span class="px-2">
-                                                sample
-                                            </span>
-                                        </div>
-                                         <span class="ms-2 fw-bold">Y</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3 mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="border-bottom flex-grow-1">
-                                            <span class="px-2">
-                                                sample
-                                            </span>
-                                        </div>
-                                        <h6 class="me-2 mb-0 fw-bold">N check if unknown</h6>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-5 mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <h6 class="me-2 mb-0 fw-bold">Age of first menses</h6>
-                                        <div class="border-bottom flex-grow-1">
-                                            <span class="px-2">
-
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-5 mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <h6 class="me-2 mb-0 fw-bold">on birth control pills at the time of pregnancy</h6>
-                                        <div class="border-bottom flex-grow-1">
-                                            <span class="px-2">
-                                                
-                                            </span>
-                                        </div>
-                                        <span class="ms-2 fw-bold">YES</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2 mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="border-bottom flex-grow-1">
-                                            <span class="px-2">
-                                                
-                                            </span>
-                                        </div>
-                                        <h6 class="me-2 mb-0 fw-bold">NO</h6>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </fieldset>
-
-                        <hr class="divider bg-pink" />
-
-                        <h6 class="fw-bold text-center mb-4" style="font-size:1.2rem;">Past Pregnancy History</h6>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Total # of Pregnancy</th>
-                                        <th># of Full Term Deliveries</th>
-                                        <th># of Premature Deliveries</th>
-                                        <th># of Abortions</th>
-                                        <th># of Miscarriages</th>
-                                        <th># of D & C with Miscarriages Pregnancy</th>
-                                        <th># of Ectopic Pregnancy / Tubal Pregnancy</th>
-                                        <th># of Multiple Births</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-center">
-                                     <tr>
-                                         <td>1</td>
-                                         <td>1</td>
-                                         <td>0</td>
-                                         <td>0</td>
-                                         <td>0</td>
-                                         <td>0</td>
-                                         <td>0</td>
-                                         <td>1</td>
-                                     </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <hr class="divider bg-pink" />
-
-                        <div class="table-responsive mt-4">
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Month Year</th>
-                                        <th># Weeks</th>
-                                        <th>Length of Labor</th>
-                                        <th>Birth Weight</th>
-                                        <th>Sex M/F</th>
-                                        <th>Vaginal / CS</th>
-                                        <th>Anes</th>
-                                        <th>Place Of delivery</th>
-                                        <th>Pre Term Labor Y/N</th>
-                                        <th>Complications & Comments</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-center">
-                                    <tr>
-                                       <td>May 2024</td>
-                                       <td>39 Weeks</td>
-                                       <td>2 days</td>
-                                       <td>3.5 kg</td>
-                                       <td>Male</td>
-                                       <td>Vaginal</td>
-                                       <td></td>
-                                       <td>Paanakan</td>
-                                       <td>N</td>
-                                       <td>N</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <div class="tab-pane fade" id="obstetrical" role="tabpanel"></div>
 
                 <!-- Dischargement Tab -->
-                <div class="tab-pane fade" id="dischargementForm" role="tabpanel">
-                    <h5 class="px-2 mb-3 text-center fw-bold">DISCHARGEMENT FORM</h5>
-                    <div class="d-flex justify-content-end my-3 gap-3">
-                        <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
-                            <i class="fas fa-plus"></i>
-                            <span>Add New</span>
-                        </button>
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryAddModal">
-                            <i class="fas fa-plus"></i>
-                            <span>Edit</span>
-                        </button>
-                    </div>
-                    <div class="container mt-4">
-                        <!-- Patient Basic Info -->
-                        <div class="row mb-3">
-                            <div class="col-md-6 mb-3">
-                                <div class="d-flex align-items-center">
-                                    <h6 class="me-2 mb-0 fw-bold">NAME OF PATIENT:</h6>
-                                    <div class="border-bottom flex-grow-1">
-                                        <span class="px-2">
-                                            Jay Clark Jimenez Anore
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <div class="d-flex align-items-center">
-                                    <h6 class="me-2 mb-0 fw-bold">HOSP. NO#:</h6>
-                                    <div class="border-bottom flex-grow-1">
-                                        <span class="px-2">
-                                            
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <div class="d-flex align-items-center">
-                                    <h6 class="me-2 mb-0 fw-bold">Date & Time Admitted:</h6>
-                                    <div class="border-bottom flex-grow-1">
-                                        <span class="px-2">
-                                            November 20, 2024
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <div class="d-flex align-items-center">
-                                    <h6 class="me-2 mb-0 fw-bold">Date & Time Discharged:</h6>
-                                    <div class="border-bottom flex-grow-1">
-                                        <span class="px-2">
-                                            November 21, 2024
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>     
-                        </div>
-
-                        <hr class="divider bg-pink" />
-
-                        <div class="row mb-4">
-                            <div class="col-md-12 mb-3">
-                                <label class="fw-bold">COMPLETE DIAGNOSIS:</label>
-                                <div class="border-bottom pb-1">
-                                    <span class="px-3">
-                                        Patient is in good condition, advised to maintain proper diet and hydration, 
-                                        Patient is in good condition, advised to maintain proper diet and hydration.
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-md-12 mb-3">
-                                <label class="fw-bold">MEDICATIONS:</label>
-                                <div class="border-bottom pb-1">
-                                    <span class="px-3">
-                                        Amoxixillin 500mg - 3x a day per 7 days,
-                                        Mefenamic Acid 500mg - 3x a day per 7 days,
-                                        Multivitamins + Iron 500mg - one daily for 1 iron
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr class="divider bg-pink" />
-
-                        <!-- Discharge & Instructions -->
-                        <fieldset class="mb-3">
-                            <legend class="fw-bold" style="font-size:1.2rem;">DISCHARGED INSTRUCTIONS:</legend>
-                            <H6 class="fw-bold">Advice & Counsel</H6>
-                            <div class="row mt-2">
-                                @* MOTHER *@
-                                <div class="col-md-6 mb-3">
-                                    <label class="fw-bold mb-2">MOTHER:</label>
-                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
-                                        <input type="checkbox" id="mPostpartum" class="update-checkbox custom-checkbox">
-                                        <label for="mPostpartum" class="form-check-label">Post-Partum care & hygiene</label>
-                                    </div>
-                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
-                                        <input type="checkbox" id="mNutrition" class="update-checkbox custom-checkbox">
-                                        <label for="mNutrition" class="form-check-label">Nutrition</label>
-                                    </div>
-                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
-                                        <input type="checkbox" id="mIron_Folate" class="update-checkbox custom-checkbox">
-                                        <label for="mIron_Folate" class="form-check-label">Iron/Folate</label>
-                                    </div>
-                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
-                                        <input type="checkbox" id="mbSpacing" class="update-checkbox custom-checkbox">
-                                        <label for="mbSpacing" class="form-check-label">Birth spacing & Family Planning</label>
-                                    </div>
-                                     <div class="form-check d-flex align-items-center mb-2 gap-2">
-                                        <input type="checkbox" id="mDangersigns" class="update-checkbox custom-checkbox">
-                                        <label for="mDangersigns" class="form-check-label">Danger Signs</label>
-                                    </div>
-                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
-                                        <input type="checkbox" id="mfollowVisit" class="update-checkbox custom-checkbox">
-                                        <label for="mfollowVisit" class="form-check-label">Follow-up visits</label>
-                                    </div>
-                                </div>
-                                @* BABY *@
-                                <div class="col-md-6 mb-3">
-                                    <label class="fw-bold mb-2">BABY:</label>
-                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
-                                        <input type="checkbox" id="bbExclusive" class="update-checkbox custom-checkbox">
-                                        <label for="bbExclusive" class="form-check-label">Exclusive Breastfeeding</label>
-                                    </div>
-                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
-                                        <input type="checkbox" id="bbHygiene" class="update-checkbox custom-checkbox">
-                                        <label for="bbHygiene" class="form-check-label">Hygiene, Cord care and Warmth</label>
-                                    </div>
-                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
-                                        <input type="checkbox" id="bbSpecialAdvice" class="update-checkbox custom-checkbox">
-                                        <label for="bbSpecialAdvice" class="form-check-label">Special advice if low birth weight</label>
-                                    </div>
-                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
-                                        <input type="checkbox" id="bbDangersigns" class="update-checkbox custom-checkbox">
-                                        <label for="bbDangersigns" class="form-check-label">Danger Signs</label>
-                                    </div>
-                                    <div class="form-check d-flex align-items-center mb-2 gap-2">
-                                        <input type="checkbox" id="bbfollowVisit" class="update-checkbox custom-checkbox">
-                                        <label for="bbfollowVisit" class="form-check-label">Follow-up visits</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-
-                        <hr class="divider bg-pink" />
-
-                        <!-- Follow-Up and Prepared By -->
-                        <div class="row mb-4">
-                            <div class="col-md-12 mb-3">
-                                <label class="fw-bold">FOLLOW-UP MANAGEMENT:</label>
-                                <div class="border-bottom px-3">
-                                    Patient is in good condition, advised to maintain proper diet and hydration.
-                                </div>
-                            </div>
-                            <div class="col-md-6 mt-4 text-center">
-                                <div class="border-bottom px-3 mx-5">Staff Member 1</div>
-                                <label class="fw-bold mt-2 d-block">Prepared By</label>
-                            </div>
-                            <div class="col-md-6 mt-4 text-center">
-                                <div class="border-bottom px-3 mx-5">Midwife Member 1</div>
-                                <label class="fw-bold mt-2 d-block">Attending Midwife</label>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+                <div class="tab-pane fade" id="dischargementForm" role="tabpanel"></div>
 
             </div>
         </div>
@@ -661,12 +222,39 @@
 
 
 <script>
-    $(document).ready(function () {
+    document.addEventListener('DOMContentLoaded', function () {
         // Retrieve patientId from the card's data attribute
         var patientId = $('#clinicalCard').data('patient-id');
         var caseno = $('#clinicalCard').data('caseno');
-        console.log(patientId)
-        console.log(caseno)
+
+        // Get the current patient ID
+        var currentPatientID = patientId;
+        // Get the stored from localStorage
+        var storedPatientID = localStorage.getItem('deliveryCurrentPatientID');
+        var activeTab = localStorage.getItem('activeTabDelivery');
+
+        // Check if the patient has changed
+        if (currentPatientID !== storedPatientID) {
+            // Reset the tab to Prenatal if the patient is different
+            localStorage.removeItem('activeTabDelivery');
+            localStorage.setItem('deliveryCurrentPatientID', currentPatientID);
+            activeTab = '#physicalExamination';
+        }
+        // Show the active tab
+        if (activeTab) {
+            var tab = new bootstrap.Tab(document.querySelector(`a[href="${activeTab}"]`));
+            tab.show();
+        }
+        var tabLinks = document.querySelectorAll('.nav-tabs .nav-link');
+        tabLinks.forEach(function (tabLink) {
+            tabLink.addEventListener('shown.bs.tab', function (event) {
+                var activeTab = event.target.getAttribute('href');
+                localStorage.setItem('activeTabDelivery', activeTab);
+                localStorage.setItem('deliveryCurrentPatientID', currentPatientID);
+            });
+        });
+
+
         // Listen for tab changes
         $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
             var tabId = $(e.target).attr('href');
@@ -677,16 +265,16 @@
                     url = '/Delivery/ClinicalRecords?patientId=' + patientId + '&caseno=' + caseno;
                     break;
                 case '#obstetrical':
-                    url = '/Delivery/ObstetricalRecords?patientId=' + patientId;
+                    url = '/Delivery/ObstetricalRecords?patientId=' + patientId + '&caseno=' + caseno;
                     break;
                 case '#maternalDeliveryMonitoring':
-                    url = '/Delivery/MaternalMonitoringRecords?patientId=' + patientId;
+                    url = '/Delivery/MaternalMonitoringRecords?patientId=' + patientId + '&caseno=' + caseno;
                     break;
                 case '#physicalExamination':
                     url = '/Delivery/PERecords?patientId=' + patientId  + '&caseno=' + caseno;
                     break;
                 case '#dischargementForm':  
-                    url = '/Delivery/DischargmentRecord?patientId=' + patientId;
+                    url = '/Delivery/DischargmentRecord?patientId=' + patientId + '&caseno=' + caseno;
                     break;
             }
 

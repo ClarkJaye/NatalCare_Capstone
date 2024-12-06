@@ -1,7 +1,9 @@
 ﻿@model List<NatalCare.Models.Entities.PatientPayments>
 @{
-    int? billNo = ViewBag.PaymentId as int?;
     string? patientId = ViewBag.PatientId as String;
+
+    int? billNo = ViewBag.PaymentId as int?;
+    decimal? balance = ViewBag.Balance as decimal?;
 
     string? name = string.Empty;
 }
@@ -19,9 +21,7 @@
             @if (Model != null && Model.Any())
             {
                 foreach (var payments in Model)
-                {
-
-            
+                {       
                     name = payments.Patients.FirstName
                     + (payments.Patients.MiddleName != null ? " " + payments.Patients.MiddleName + " " : " ")
                     + payments.Patients.LastName;
@@ -44,8 +44,6 @@
                         </td>
                     </tr>
                 }
-
-
             }
             else
             {
@@ -84,13 +82,15 @@
 
 
         var patientName = @Html.Raw(Json.Serialize(name));
+
         var billNumber = @Html.Raw(Json.Serialize(billNo));
+        var balance = @Html.Raw(Json.Serialize(balance.HasValue ? balance.Value.ToString("F2") : "0.00"));
 
 
         $("#patientNameHeader").text(patientName);
         $("#patientBillNumberHeader").text(billNumber);
 
-        $("#payInvoiceBtn").attr("href", "/Billing/PayInvoice?id=" + billNumber);
+        $("#payInvoiceBtn").attr("href", "/Billing/PayInvoice?id=" + billNumber + "&balance=" + balance);
 
 
 

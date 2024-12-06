@@ -60,7 +60,7 @@
                                 <span>Details</span>
                             </a>
                             |
-                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Billing" asp-action="Payment" asp-route-id="@payments.PaymentID">
+                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Billing" asp-action="Payment" asp-route-id="@payments.PaymentID" asp-route-balance="@balance">
                                 <i class="fa fa-money" aria-hidden="true"></i>
                                 <span>Payment</span>
                             </a>

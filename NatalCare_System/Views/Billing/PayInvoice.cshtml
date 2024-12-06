@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Add Payment";
     Layout = "_UserLayout";
+
+    decimal? balance = ViewBag.Balance as decimal?;
 }
 
 <partial name="Partial/_Navbar" />
@@ -16,7 +18,7 @@
         <div class="card-body m-4">
             <form method="post" asp-action="AddPatientPayment">
                 <div class="row form-group" style="position:relative;">
-                    <div validation-summary="ModelOnly" class="text-danger"></div>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                     <input type="hidden" class="form-control" id="paymentId" asp-for="PaymentID"  autocomplete="off" value="@ViewBag.PaymentId" />
 
@@ -25,9 +27,8 @@
                     <div class="form-group col-md-6 mb-3">
                         <label for="FirstName" class="control-label">Amount: ₱</label>
 
-                        <input class="form-control" placeholder="₱" id="patientNameInput" autocomplete="off" type="number" asp-for="Amount" />
-
-                        <span validation-for="BillingDTO.PatientName" class="text-danger"></span>
+                        <input class="form-control" placeholder="Balance: ₱ @balance" id="patientPaymentAmount" autocomplete="off" step="0.01" type="number" asp-for="Amount" min="0" max="@balance" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
 
                     </div>
 
@@ -39,13 +40,14 @@
                             <option value="CARD">CARD</option>
                             <option value="ONLINE">ONLINE</option>
                         </select>
+                        <span asp-validation-for="Payment_Method" class="text-danger"></span>
 
                     </div>
 
                     <div class="form-group row-md-12 d-flex justify-content-end align-items-center mt-5">
 
   
-                            <button class="btn btn-primary mx-2" type="submit">
+                            <button class="btn btn-primary mx-2 addPayment" type="submit">
                                 <i class="fas fa-plus"></i>
                                 <span>ADD</span>
                             </button>
@@ -64,3 +66,40 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        var quantityInput = $("#patientPaymentAmount");
+
+        $("form[method='post']").on("submit", function (event) {
+            
+            const max = parseFloat(quantityInput.attr("max"));
+
+            const value = parseFloat(quantityInput.val());
+
+            if (value <= max) {
+             
+            }
+            else if(isNaN(value)) {
+
+            }
+            else if (max == 0 || max == 0.00) {
+                alert("You dont have any balance to Pay!");
+            
+            }
+            else{
+                alert("The amount must not exceed the balance.");
+                event.preventDefault();      
+                quantityInput.val(0);
+            }
+
+        });
+    });
+</script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+    }
+
+}

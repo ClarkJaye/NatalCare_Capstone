@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Payment History";
     Layout = "_UserLayout";
+
+    decimal? balance = ViewBag.Balance as decimal?;
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -57,9 +59,10 @@
                     <div class="form-group col-md-12 mb-3">
                         <label for="FirstName" class="control-label">Amount:</label>
 
-                        <input class="form-control" placeholder="₱" id="payAmount" autocomplete="off" type="number" asp-for="Amount" />
+                        <input class="form-control" placeholder="Balance: ₱ @balance" id="payAmount" autocomplete="off" type="number" asp-for="Amount" step="0.01" max="@balance" />
 
-                        <span validation-for="BillingDTO.PatientName" class="text-danger"></span>
+
+                        <span asp-validation-for="Amount" class="text-danger"></span>
 
                     </div>
 
@@ -93,3 +96,40 @@
         </div>
     </div>
 </form>
+
+<script>
+    $(document).ready(function () {
+        var quantityInput = $("#payAmount");
+
+        $("form[method='post']").on("submit", function (event) {
+
+            const max = parseFloat(quantityInput.attr("max"));
+
+            const value = parseFloat(quantityInput.val());
+
+            if (value <= max) {
+
+            }
+            else if (isNaN(value)) {
+
+            }
+            else if (max == 0 || max == 0.00) {
+                alert("You dont have any balance to Pay!");
+
+            }
+            else {
+                alert("The amount must not exceed the balance.");
+                event.preventDefault();
+                quantityInput.val(0);
+            }
+
+        });
+    });
+</script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+    }
+
+}

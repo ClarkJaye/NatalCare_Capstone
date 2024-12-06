@@ -33,10 +33,12 @@ namespace NatalCare_System.Controllers
         }
 
 
-        public async Task<IActionResult> PayInvoice(int? id)
+        public async Task<IActionResult> PayInvoice(int? id, decimal? balance)
         {
 
             ViewBag.PaymentId = id;
+
+            ViewBag.Balance = balance;
 
             var patientId = await _billing.patientID(id);
 
@@ -58,11 +60,13 @@ namespace NatalCare_System.Controllers
         }
 
 
-        public async Task<IActionResult> Payment(int? id)
+        public async Task<IActionResult> Payment(int? id, decimal? balance)
         {
             if (id != null)
             {
                 ViewBag.PaymentId = id;
+
+                ViewBag.Balance = balance;
 
                 var patientId = await _billing.patientID(id);
 

@@ -300,6 +300,22 @@ namespace NatalCare.DataAccess.Services
             return new CommonResponse(true, "Item Added Successfully");
         }
 
+        public async Task<CommonResponse> editItems(int id,string itemName, string description, decimal price)
+        {
+
+            var item = await _unitOfWork.Repository<Items>().AsQueryable().FirstOrDefaultAsync(a => a.ItemID == id);
+
+            item.ItemName = itemName;
+            item.Description = description;
+            item.Price = price;
+
+
+            _unitOfWork.Repository<Items>().Update(item);
+            await _unitOfWork.Complete();
+
+            return new CommonResponse(true, "Item Updated Successfully");
+        }
+
         public async Task<CommonResponse> createServices(string serviceName, string description, decimal price)
         {
             var services = new Servicesss
@@ -315,7 +331,19 @@ namespace NatalCare.DataAccess.Services
             return new CommonResponse(true, "Service Added Successfully");
         }
 
+        public async Task<CommonResponse> editServices(int id, string serviceName, string description, decimal price)
+        {
+            var service = await _unitOfWork.Repository<Servicesss>().AsQueryable().FirstOrDefaultAsync(a => a.ServiceID == id);
 
+            service.ServiceName = serviceName;
+            service.Description = description;
+            service.Price = price;
+
+            _unitOfWork.Repository<Servicesss>().Update(service);
+            await _unitOfWork.Complete();
+
+            return new CommonResponse(true, "Item Updated Successfully");
+        }
 
         public async Task<SearchResultResponse> searchPatient(string patientName)
         {
@@ -842,6 +870,17 @@ namespace NatalCare.DataAccess.Services
             };
 
             return data;
+        }
+
+
+        public async Task<CommonResponse> deleteItem(int itemId)
+        {
+            var item = await _unitOfWork.Repository<Items>().AsQueryable().FirstOrDefaultAsync(a => a.ItemID == itemId);
+
+            _unitOfWork.Repository<Items>().Remove(item);
+            await _unitOfWork.Complete();
+
+            return new CommonResponse(true, "Item Successfully Deleted!");
         }
     }
 }

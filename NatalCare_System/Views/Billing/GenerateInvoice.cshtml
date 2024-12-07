@@ -94,7 +94,7 @@
 </ul>
                     <div class="form-group col-md-4 mb-3">
                         <label for="MiddleName" class="control-label">Staff Name</label>
-                        <select asp-for="BillingDTO.StaffName" class="form-control" asp-items="ViewBag.staffList" name="BillingDTO.StaffName" id="staffName">
+                        <select asp-for="BillingDTO.StaffName" class="form-select" asp-items="ViewBag.staffList" name="BillingDTO.StaffName" id="staffName">
                         </select>
 
                         @if (staffId != 0)
@@ -154,7 +154,7 @@
                         <div class="d-flex align-items-center justify-content-end gap-3" style="position:relative;">
 
                                             <div class="itemSettings">
-                                                <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#allItemsModal" onclick="event.preventDefault()">
+                                                <button class="btn btn-outline-dark allItemsBtn" data-bs-toggle="modal" data-bs-target="#allItemsModal" onclick="event.preventDefault()">
                                                     <span>Items</span>
                                                     <i class="fa fa-cogs" aria-hidden="true"> </i>
 
@@ -162,7 +162,7 @@
                                             </div>
 
                                             <div class="serviceSettings">
-                                                <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#allSerivesModal" onclick="event.preventDefault()">
+                                                <button class="btn btn-outline-dark allServicesBtn" data-bs-toggle="modal" data-bs-target="#allSerivesModal" onclick="event.preventDefault()">
                                                     <span>Service</span>
                                                     <i class="fa fa-cogs" aria-hidden="true"> </i>
 
@@ -562,6 +562,100 @@
     });
 </script>
 
+
+
+
+                                @* EDIT ITEMS *@
+<div class="modal fade" aria-labelledby="staticBackdropLabel"  id="editItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+
+    <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+        <div class="modal-content" style="height: 440px; color: #425833;  font-family: 'Montserrat', sans-serif; border-radius:.9rem;">
+
+            <div class="modal-header bg-pink" style="height:60px; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                <div class="modal-headerDiv1 " style="width:100%; display:flex;justify-content:center;align-items:center;">
+                    <h4 style="color:white;">EDIT ITEM</h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body addItemModalBody">
+                <input type="hidden" class="form-control"  id="editItemId" />
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Item Name : </label>
+                    <input type="text" class="form-control " autocomplete="off" id="editItemName" />
+
+                </div>
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Description : </label>
+                    <textarea class="form-control form-text " id="editItemDescription" placeholder="Optional..."></textarea>
+
+                </div>
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Price : ₱</label>
+                    <input type="number" class="form-control " id="editItemPrice" />
+
+                </div>
+
+                <button type="submit" id="editItemSubmitBtn" class="btn btn-success " style="margin-top:1rem" data-bs-dismiss="modal"><i class="fa fa-check" aria-hidden="true"></i> SAVE</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+                            @* EDIT SERVICES *@
+<div class="modal fade" aria-labelledby="staticBackdropLabel" id="editServicesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+
+    <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+        <div class="modal-content" style="height: 440px; color: #425833;  font-family: 'Montserrat', sans-serif; border-radius:.9rem;">
+
+            <div class="modal-header bg-pink" style="height:60px; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                <div class="modal-headerDiv1 " style="width:100%; display:flex;justify-content:center;align-items:center;">
+                    <h4 style="color:white;">EDIT SERVICES</h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body addItemModalBody">
+                <input type="hidden" class="form-control" id="editServiceId" />
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Item Name : </label>
+                    <input type="text" class="form-control " autocomplete="off" id="editServiceName" />
+
+                </div>
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Description : </label>
+                    <textarea class="form-control form-text " id="editServiceDescription" placeholder="Optional..."></textarea>
+
+                </div>
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Price : ₱</label>
+                    <input type="number" class="form-control " id="editServicePrice" />
+
+                </div>
+
+                <button type="submit" id="editServiceSubmitBtn" class="btn btn-success " style="margin-top:1rem" data-bs-dismiss="modal"><i class="fa fa-check" aria-hidden="true"></i> SAVE</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
                                 @* ALL ITEMS *@
 <div class="modal fade" aria-labelledby="staticBackdropLabel" id="allItemsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 
@@ -579,24 +673,7 @@
 
                 <div class="allItemsModalBodyDiv1">
 
-                    <div class="allItemsResult">
-                        <div class="allItemsResultName">
-                            <h5>wadawdwadwad</h5>
-                        </div>
-                        <div class="allItemsResultAction">
 
-                            <button class="btn btn-outline-dark" onclick="event.preventDefault()">                       
-                                <i class="fa fa-pen" aria-hidden="true"> </i>
-                      
-                            </button>
-
-                            <button class="btn btn-outline-danger" onclick="event.preventDefault()">
-                                <i class="fa fa-trash" aria-hidden="true"> </i>
-                         
-                            </button>
-
-                        </div>
-                    </div>
 
                 </div>
 
@@ -625,26 +702,7 @@
 
                 <div class="allServicesModalBodyDiv1">
 
-                    <div class="allServicesResult">
-
-                        <div class="allServicesResultName">
-                            <h5>wadawdwadwad</h5>
-                        </div>
-
-                        <div class="allServicesResultAction">
-
-                            <button class="btn btn-outline-dark" onclick="event.preventDefault()">
-                                <i class="fa fa-pen" aria-hidden="true"> </i>
-
-                            </button>
-
-                            <button class="btn btn-outline-danger" onclick="event.preventDefault()">
-                                <i class="fa fa-trash" aria-hidden="true"> </i>
-
-                            </button>
-
-                        </div>
-                    </div>
+                    
 
                 </div>
 
@@ -769,9 +827,320 @@
 
 <script>
     $(document).ready(function () {
+        
 
 
 
+        $("#editItemName, #editItemPrice").on("input", function (event) {
+
+            var itemName = $("#editItemName").val();
+            var pri = $("#editItemPrice").val();
+            var price = parseFloat(pri);
+
+            if (itemName.length > 0 && !isNaN(price)) {
+                $("#editItemSubmitBtn").prop("disabled", false);
+            }
+            else {
+                $("#editItemSubmitBtn").prop("disabled", true);
+
+            }
+        });
+
+           //EDIT ITEM
+        $("#editItemSubmitBtn").on("click", function (event) {
+
+            var idd = $("#editItemId").val();
+            var id1 = parseInt(idd);
+
+            var itemName1 = $("#editItemName").val();
+
+            var pri = $("#editItemPrice").val();
+            var price1 = parseFloat(pri);
+
+            var description1 = $("#editItemDescription").val();
+
+            $.ajax({
+                type: 'POST',
+                url: "/Billing/EditItem",
+                data: { id: id1, itemName: itemName1, description: description1, price: price1 },
+                dataType: "json",
+                success: function (result) {
+                    toastr.success(result);
+                    setTimeout(function () {
+                        window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
+                    }, 3000);
+                },
+                error: function (req, status, error) {
+                    console.log(status);
+                }
+            });
+
+            $("#addItemName").val("");
+            $("#addItemPrice").val("");
+            $("#addItemDescription").val("");
+
+        });
+
+
+
+                //ALL ITEMS
+        $.ajax({
+            type: 'POST',
+            url: "/Billing/AllItems",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+
+
+                if (result.length > 0) {
+
+                        $(".allItemsModalBodyDiv1").empty();
+
+                            result.forEach(function (allItems) {
+                                var option = `
+                                     <div class="allItemsResult">
+
+                                        <div class="allItemsResultName">
+                                            <h5>${allItems.itemName}</h5>
+                                        </div>
+
+                                        <div class="allItemsResultAction">
+                                            <button class="btn btn-outline-dark editItemBtn" id="editItemBtn" data-bs-toggle="modal" data-bs-target="#editItemModal" data-id="${allItems.itemID}" data-name="${allItems.itemName}" data-price="${allItems.price}" data-desc="${allItems.description}">
+                                                <i class="fa fa-pen" aria-hidden="true"> </i>
+                                            </button> 
+
+                                            <button class="btn btn-outline-danger deleteItemBtn" data-id="${allItems.itemID}" onclick="event.preventDefault()">
+                                                <i class="fa fa-trash" aria-hidden="true"> </i>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                `;
+
+                               $(".allItemsModalBodyDiv1").append(option);
+                            });
+
+                        $(".editItemBtn").on("click", function () {
+    
+                            var idd = $(this).data("id");
+                            var price1 = $(this).data("price");
+
+                            var id = parseInt(idd);
+                            var name = $(this).data("name");
+                            var desc = $(this).data("desc");
+                            var price = parseFloat(price1);
+
+                            $("#editItemId").val(id);
+                            $("#editItemName").val(name);
+                            $("#editItemDescription").val(desc);
+                            $("#editItemPrice").val(price);
+
+                            $("#allItemsModal").fadeOut();
+                        });
+
+
+                        $(".deleteItemBtn").on("click", function (event) {
+                            alert("wadwadwad")
+                            var idd = $(this).data("id");
+                            var id = parseInt(idd);
+                            DeleteItem(id);
+                        });
+
+                            function DeleteItem(itemid) {
+                                Swal.fire({
+                                    title: "Are you sure?",
+                                    text: "You won't be able to revert this Item!",
+                                    icon: "warning",
+                                    showCancelButton: true,
+                                    confirmButtonColor: "#3085d6",
+                                    cancelButtonColor: "#d33",
+                                    confirmButtonText: "Yes, delete it!"
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        $.ajax({
+                                            type: 'DELETE',
+                                            url: '@Url.Action("DeleteItem", "Billing")',
+                                            data: { itemId: itemid },
+                                            success: function (result) {
+                
+                                                toastr.success(result);
+                                                setTimeout(function () {
+                                                    window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
+                                                }, 3000);
+                                            },
+                                            error: function () {
+                                                console.log('Unable to delete the patient.');
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                }
+                else{
+                            var option = `
+                                 <div class="allItemsResult">
+
+                                    <div class="allItemsResultName" style="border:none;">
+                                        <h5 style="margin-left:100px;">No Items Yet</h5>
+                                    </div>
+
+                                    <div class="allItemsResultAction" style="border:none;">
+          
+                                    </div>
+
+                                </div>
+                            `;
+
+                           $(".allItemsModalBodyDiv1").append(option);
+                }
+            },
+            error: function (req, status, error) {
+                console.log(status);
+            }
+        });
+
+        
+        $(window).on("click", function(event) {
+            if ($(event.target).is("#editItemModal")) {
+                $(".modal-backdrop").hide();
+            }
+        });
+
+         $(".allItemsBtn").on("click", function(event) {
+                $(".modal-backdrop").show();   
+        });
+        
+
+
+
+
+
+        $("#editServiceName, #editServicePrice").on("input", function (event) {
+
+            var itemName = $("#editServiceName").val();
+            var pri = $("#editServicePrice").val();
+            var price = parseFloat(pri);
+
+            if (itemName.length > 0 && !isNaN(price)) {
+                $("#editServiceSubmitBtn").prop("disabled", false);
+            }
+            else {
+                $("#editServiceSubmitBtn").prop("disabled", true);
+
+            }
+        });
+
+           //EDIT SERVICE
+        $("#editServiceSubmitBtn").on("click", function (event) {
+            alert("wadwadwad")
+            var idd = $("#editServiceId").val();
+            var id1 = parseInt(idd);
+
+            var itemName1 = $("#editServiceName").val();
+
+            var pri = $("#editServicePrice").val();
+            var price1 = parseFloat(pri);
+
+            var description1 = $("#editServiceDescription").val();
+
+            $.ajax({
+                type: 'POST',
+                url: "/Billing/EditService",
+                data: { id: id1, serviceName: itemName1, description: description1, price: price1 },
+                dataType: "json",
+                success: function (result) {
+                    toastr.success(result);
+                    setTimeout(function () {
+                        window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
+                    }, 3000);
+                },
+                error: function (req, status, error) {
+                    console.log(status);
+                }
+            });
+
+            $("#editServiceName").val("");
+            $("#editServicePrice").val("");
+            $("#editServiceDescription").val("");
+
+        });
+
+
+
+                //ALL SERVICES
+        $.ajax({
+            type: 'POST',
+            url: "/Billing/AllServices",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+
+                if (result.length > 0) {
+
+                    $(".allServicesModalBodyDiv1").empty();
+
+                    result.forEach(function (allServices) {
+                        var option = `
+                            <div class="allServicesResult">
+
+                                <div class="allServicesResultName">
+                                    <h5>${allServices.serviceName}</h5>
+                                </div>
+
+                                <div class="allServicesResultAction">
+
+                                    <button class="btn btn-outline-dark editServiceBtn" id="editServiceBtn" data-bs-toggle="modal" data-bs-target="#editServicesModal" onclick="event.preventDefault()" data-id="${allServices.serviceID}" data-name="${allServices.serviceName}" data-price="${allServices.price}" data-desc="${allServices.description}">
+                                        <i class="fa fa-pen" aria-hidden="true"> </i>
+                                    </button>
+
+                                    <button class="btn btn-outline-danger deleteServiceBtn" data-id="${allServices.serviceID}" onclick="event.preventDefault()">
+                                        <i class="fa fa-trash" aria-hidden="true"> </i>
+                                    </button>
+
+                                </div>
+                            </div>
+                        `;
+
+                      $(".allServicesModalBodyDiv1").append(option);
+                    });
+
+                        $(".editServiceBtn").on("click", function () {
+                            alert("wad")
+                            var idd = $(this).data("id");
+                            var price1 = $(this).data("price");
+
+                            var id = parseInt(idd);
+                            var name = $(this).data("name");
+                            var desc = $(this).data("desc");
+                            var price = parseFloat(price1);
+
+                            $("#editServiceId").val(id);
+                            $("#editServiceName").val(name);
+                            $("#editServiceDescription").val(desc);
+                            $("#editServicePrice").val(price);
+
+                            $("#allSerivesModal").fadeOut();
+                        });
+
+
+                }
+
+
+            },
+            error: function (req, status, error) {
+                console.log(status);
+            }
+        });
+
+        $(window).on("click", function(event) {
+            if ($(event.target).is("#editServicesModal")) {
+                $(".modal-backdrop").hide();
+            }
+        });
+
+         $(".allServicesBtn").on("click", function(event) {
+                $(".modal-backdrop").show();
+        });
 
 
 
@@ -1160,6 +1529,9 @@
                 dataType: "json",
                 success: function (result) {
                     toastr.success(result);
+                    setTimeout(function () {
+                        window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
+                    }, 3000);
                 },
                 error: function (req, status, error) {
                     console.log(status);
@@ -1209,7 +1581,9 @@
                 dataType: "json",
                 success: function (result) {
                     toastr.success(result);
-
+                    setTimeout(function () {
+                        window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
+                    }, 3000);
                 },
                 error: function (req, status, error) {
                     console.log(status);

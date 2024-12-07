@@ -170,6 +170,62 @@ namespace NatalCare_System.Controllers
        
         }
 
+        [HttpDelete]
+        public async Task<IActionResult> DeleteItem(int itemId)
+        {
+
+            var (result, message) = await _billing.deleteItem(itemId);
+
+            if (result)
+            {
+                return Json(message);
+            }
+            else
+            {
+                return Json("Cant Delete Item");
+            }
+
+
+        }
+
+        
+
+        [HttpPost]
+        public async Task<IActionResult> EditItem(int id, string itemName, string description, decimal price)
+        {
+
+            var (result, message) = await _billing.editItems(id, itemName, description, price);
+
+            if (result)
+            {
+                return Json(message);
+            }
+            else
+            {
+                return Json("Cant Update Item");
+            }
+
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditService(int id, string serviceName, string description, decimal price)
+        {
+
+            var (result, message) = await _billing.editServices(id, serviceName, description, price);
+
+            if (result)
+            {
+                return Json(message);
+            }
+            else
+            {
+                return Json("Cant Update Services");
+            }
+
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> AddService(string serviceName, string description, decimal price)
         {

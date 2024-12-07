@@ -19,6 +19,9 @@ namespace NatalCare.Models.Entities
 
         public string? Notes { get; set; }
 
+        public decimal? Notorial_Fee { get; set; }
+
+
         public DateOnly? BillDate { get; set; }
 
         public DateOnly? DueDate { get; set; }

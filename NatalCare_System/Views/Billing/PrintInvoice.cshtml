@@ -4,6 +4,8 @@
     decimal? balance = Model.Payments.Final_Amount;
 
     List<decimal?> paidAmount = new List<decimal?>();
+
+    ViewData["Title"] = "Print Invoice";
 }
 
 @if (Model.Patients != null && Model.Patients.Count > 0)
@@ -145,7 +147,7 @@
                 </div>
                 <div class="printDiv3In2Div1Div2" style="border: none;">
                     <p style="margin:0; border: none">₱ @balance</p>
-                    <p style="margin:0; border: none">₱ @balance</p>
+                    <p style="margin:0; border: none">₱ @(Model.Payments.Notorial_Fee ?? 0)</p>
                     <p style="margin:0; border: none; line-height:1rem; text-align:center;" id="printNotes">@(Model.Payments.Notes ?? "None")</p>
                 </div>
             </div>
@@ -155,7 +157,7 @@
                     <p style="margin:0;">PATIENT'S SIGNATURE :</p>
                 </div>
                 <div class="printDiv3In2Div1Div2" style="border: none;">
-                    <p style="margin:0; border: none; text-decoration:underline;">__________________________</p>
+                    <p style="margin:0; border: none; text-decoration:underline;">________________________</p>
                 </div>
             </div>
             <div class="printDiv3In1Div3">
@@ -203,30 +205,30 @@
 </div>
 
 <script>
-    // window.print();
+    window.print();
 
-    // function beforePrint() {
-    //     console.log('Preparing to print...');
-    // }
+    function beforePrint() {
+        console.log('Preparing to print...');
+    }
 
-    // function afterPrint() {
-    //     window.location.href = '@Url.Action("InvoiceList", "Billing")';
-    // }
+    function afterPrint() {
+        window.location.href = '@Url.Action("InvoiceList", "Billing")';
+    }
 
 
-    // // Monitor print events
-    // if (window.matchMedia) {
-    //     window.matchMedia('print').addListener(function (mql) {
-    //         if (mql.matches) {
-    //             beforePrint();
-    //         } else {
-    //             afterPrint(); // This will run when the print dialog is closed
-    //         }
-    //     });
-    // }
+    // Monitor print events
+    if (window.matchMedia) {
+        window.matchMedia('print').addListener(function (mql) {
+            if (mql.matches) {
+                beforePrint();
+            } else {
+                afterPrint(); // This will run when the print dialog is closed
+            }
+        });
+    }
 
-    // // For IE, does not attach in browsers that do not support these events
-    // window.addEventListener('beforeprint', beforePrint, false);
-    // window.addEventListener('afterprint', afterPrint, false);
+    // For IE, does not attach in browsers that do not support these events
+    window.addEventListener('beforeprint', beforePrint, false);
+    window.addEventListener('afterprint', afterPrint, false);
 
 </script>

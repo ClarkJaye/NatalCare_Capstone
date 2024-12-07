@@ -6,7 +6,6 @@
     gap: 2rem;
 }
 * {
-    scrollbar-color: #FC7995 white;
     scrollbar-width:thin;
 }
 .addItemModalBodyDiv1 {

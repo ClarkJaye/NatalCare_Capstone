@@ -50,7 +50,7 @@
                     <td>@(payments.DueDate.HasValue ? payments.DueDate.Value.ToString("MMMM d, yyyy") : "N/A")</td>
                     <td class="text-center">
                         <div class="d-flex align-items-center justify-content-center gap-2">
-                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Billing" asp-action="PrintInvoice" asp-route-id="@payments.PaymentID">
+                            <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1" asp-controller="Billing" asp-action="PrintInvoice" asp-route-id="@payments.PaymentID">
                                 <i class="fa fa-print" aria-hidden="true"></i>
                                 <span>Print</span>
                             </a>
@@ -60,7 +60,7 @@
                                 <span>Details</span>
                             </a>
                             |
-                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Billing" asp-action="Payment" asp-route-id="@payments.PaymentID" asp-route-balance="@balance">
+                            <a class="btn btn-sm btn-outline-success d-flex align-items-center justify-content-center gap-1" asp-controller="Billing" asp-action="Payment" asp-route-id="@payments.PaymentID" asp-route-balance="@balance">
                                 <i class="fa fa-money" aria-hidden="true"></i>
                                 <span>Payment</span>
                             </a>

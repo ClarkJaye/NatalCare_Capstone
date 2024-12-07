@@ -14,7 +14,12 @@ namespace NatalCare.DataAccess.Interfaces
     {
         Task<CommonResponse> createItems(string itemName, string description, decimal price);
 
+        Task<CommonResponse> editItems(int id, string itemName, string description, decimal price);
+
         Task<CommonResponse> createServices(string itemName, string description, decimal price);
+
+        Task<CommonResponse> editServices(int id, string serviceName, string description, decimal price);
+
 
         Task<SearchResultResponse> searchPatient(string patientName);
 
@@ -33,6 +38,9 @@ namespace NatalCare.DataAccess.Interfaces
         Task<BillingAndPrintVM> generateInvoiceModel(int? id);
 
         Task<CommonResponse> deleyePayment(int paymentId);
+
+        Task<CommonResponse> deleteItem(int itemId);
+
 
         Task<CommonResponse> deletePatientPayment(int? paymentId);
 

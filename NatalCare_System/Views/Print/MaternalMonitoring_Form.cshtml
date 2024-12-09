@@ -9,9 +9,19 @@
         font-size: 14px;
     }
 
+    .table thead th{
+        font-size: 12px;
+    }
+
+    .table tbody td {
+        font-size: 12px;
+    }
 </style>
 
 <div class="m-3">
+    <input type="hidden" id="patID" name="PatientID" value="@Model.MaternalMonitoring?.PatientID" />
+    <input type="hidden" id="delID" name="CaseNo" value="@Model.MaternalMonitoring?.CaseNo" />
+
     <div class="text-center mb-4" style="cursor: pointer;">
         <img class="img-fluid" src="/img/logo.png" width="160" />
     </div>
@@ -19,23 +29,23 @@
     <h5 class="px-2 text-center fw-bold">MATERNAL SERVICES RECORD</h5>
     <h5 class="px-2 mb-3 text-center fw-bold">DELIVERY MONITORING RECORD</h5>
 
-    <div class="container-sm mt-5">
+    <div class="mt-5">
         <div class="d-flex align-items-center justify-content-between mb-2">
-            <h6 class="fw-bold" style="font-size:1.2rem;">I. PROGRESS OF LABOR</h6>
+            <h6 class="fw-bold" style="font-size: 14px;">I. PROGRESS OF LABOR</h6>
         </div>
         <div class="table-responsive">
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Date</th>
                         <th>Time</th>
-                        <th>Temperature</th>
+                        <th>Temp</th>
                         <th>BP</th>
                         <th>PR</th>
                         <th>RR</th>
                         <th>Uterine Contraction Interval</th>
                         <th>Clervical Dilation</th>
-                        <th>Bow Intact/Rupture</th>
+                        <th>Bow Intact / Rupture</th>
                         <th>Fetal Heart Tones</th>
                         <th>Characteristic of FHT Weak/Strong</th>
                         <th>Presenting Part</th>
@@ -46,7 +56,7 @@
                     {
                         @foreach (var item in Model.ProgressLabor)
                         {
-                            <tr>
+                            <tr style="vertical-align: middle;">
                                 <td>@item.Date</td>
                                 <td>@item.Time</td>
                                 <td>@item.Temperature ℃</td>
@@ -59,22 +69,6 @@
                                 <td>@item.FetalHeartTones</td>
                                 <td>@item.FetalHeartToneChar</td>
                                 <td>@item.PresentingPart</td>
-                            </tr>
-                        }
-
-                        for(var i = 0; i<3; i++){
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
                             </tr>
                         }
                     }
@@ -99,12 +93,12 @@
         <div class="row">
             <div class="row">
                     @* Baby delivered *@
-                    <div class="col-md-6">
-                        <h6 class="fw-bold mb-4" style="font-size:1.2rem;">II. DELIVERY OF THE BABY</h6>
+                    <div class="col-sm-6">
+                        <h6 class="fw-bold mb-4" style="font-size: 14px;">II. DELIVERY OF THE BABY</h6>
 
-                        <div class="col-sm-8 mb-3">
+                        <div class="col-sm-12 mb-3"> 
                             <div class="d-flex align-items-center">
-                                <h6 class="me-2 mb-0 fw-bold">DATE & TIME DELIVERED: </h6>
+                                <h6 class="me-2 mb-0 fw-bold" style="font-size: 12px;">DATE & TIME DELIVERED: </h6>
                                 <div class="border-bottom flex-grow-1">
                                     <span class="px-2">
                                         @(Model.MaternalMonitoring?.BabyDateDelivered != null ? Model.MaternalMonitoring.BabyDateDelivered + " " + Model.MaternalMonitoring?.BabyTimeDelivered : "N/A")
@@ -113,9 +107,9 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-8 mb-3">
+                        <div class="col-sm-12 mb-3">
                             <div class="d-flex align-items-center">
-                                <h6 class="me-2 mb-0 fw-bold">APGAR SCORING:</h6>
+                                <h6 class="me-2 mb-0 fw-bold" style="font-size: 12px;">APGAR SCORING:</h6>
                                 <div class="border-bottom flex-grow-1">
                                     <span class="px-2">
                                         @(Model.MaternalMonitoring?.Apgar != null ? Model.MaternalMonitoring.Apgar : "N/A")
@@ -124,9 +118,9 @@
                             </div>
                         </div>
 
-                        <div class="col-m-8 mb-3">
+                        <div class="col-sm-12 mb-3">
                             <div class="d-flex align-items-center">
-                                <h6 class="me-2 mb-0 fw-bold">SEX OF BABY:</h6>
+                                <h6 class="me-2 mb-0 fw-bold" style="font-size: 12px;">SEX OF BABY:</h6>
                                 <div class="border-bottom flex-grow-1">
                                     <span class="px-2">
                                         @(Model.MaternalMonitoring?.BabySex != null ? Model.MaternalMonitoring.BabySex.ToUpper() : "N/A")
@@ -135,9 +129,9 @@
                             </div>
                         </div>
 
-                        <div class="col-md-8 mb-3">
+                        <div class="col-sm-12 mb-3">
                             <div class="d-flex align-items-center">
-                                <h6 class="me-2 mb-0 fw-bold">WEIGHT:</h6>
+                                <h6 class="me-2 mb-0 fw-bold" style="font-size: 12px;">WEIGHT:</h6>
                                 <div class="border-bottom flex-grow-1">
                                     <span class="px-2">
                                         @(Model.MaternalMonitoring?.BabyWeight != null ? Model.MaternalMonitoring.BabyWeight.ToUpper() : "N/A")
@@ -149,11 +143,11 @@
                     </div>
                     @* Placenta*@
                     <div class="col-sm-6">
-                        <h6 class="fw-bold mb-4" style="font-size:1.2rem;">III. DELIVERY OF THE PLACENTA</h6>
+                    <h6 class="fw-bold mb-4" style="font-size: 14px;">II. DELIVERY OF THE BABY</h6>
 
-                        <div class="col-md-8 mb-3">
+                        <div class="col-sm-12 mb-3">
                             <div class="d-flex align-items-center">
-                                <h6 class="me-2 mb-0 fw-bold">DATE & TIME DELIVERED: </h6>
+                                <h6 class="me-2 mb-0 fw-bold" style="font-size: 12px;">DATE & TIME DELIVERED: </h6>
                                 <div class="border-bottom flex-grow-1">
                                     <span class="px-2">
                                         @(Model.MaternalMonitoring?.PlacentaDateDelivered != null ? Model.MaternalMonitoring.PlacentaDateDelivered + " " + Model.MaternalMonitoring?.PlacentaTimeDelivered : "N/A")
@@ -162,9 +156,9 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-8 mb-3">
+                        <div class="col-sm-12 mb-3">
                             <div class="d-flex align-items-center">
-                                <h6 class="me-2 mb-0 fw-bold">COMPLETE OR INCOMPLETE:</h6>
+                                <h6 class="me-2 mb-0 fw-bold" style="font-size: 12px;">COMPLETE OR INCOMPLETE:</h6>
                                 <div class="border-bottom flex-grow-1">
                                     <span class="px-2">
                                         @(Model.MaternalMonitoring?.PlacentaStatus != null ? Model.MaternalMonitoring.PlacentaStatus : "N/A")
@@ -190,16 +184,16 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // PrintForm();
-    });
+    var patID = document.getElementById('patID').value;
+     var delID = document.getElementById('delID').value;
+     document.addEventListener('DOMContentLoaded', function () {
+         PrintForm();
+     });
 
-    function PrintForm() {
-        var patId = $("#patId").val();
-        window.onafterprint = function () {
-            window.location.href = "/Patient/Information?id=" + patId;
-        };
-
-        window.print();
-    }
+     function PrintForm() {
+         window.onafterprint = function () {
+             window.location.href = "/Delivery/Index?patientid=" + patID  + '&caseno=' + delID;
+         };
+         window.print();
+     }
 </script>

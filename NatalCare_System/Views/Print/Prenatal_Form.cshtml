@@ -15,15 +15,17 @@
         <img class="img-fluid" src="/img/logo.png" width="160" />
     </div>
 
-    <h5 class="text-center mb-3">PRENATAL RECORD</h5>
+    <h5 class="text-center fw-bold mb-3">MATERNAL HEALTH RECORD / CONSULTATION</h5>
 
-    <div class="container mt-4">
+    <div class="mt-4">
         @* Patient Basic Info  *@
-        <div class="row mb-5">
-            <div class="col-md-6 mb-3">
+        <div class="row mb-3">
+            <div class="col-sm-6">
                 <div class="d-flex align-items-center">
                     <h6 class="me-2 mb-0 fw-bold">Name of Patient:</h6>
                     <div class="border-bottom flex-grow-1">
+                        <input type="hidden" id="patID" name="PatientID" value="@Model.Prenatal?.PatientID" />
+                        <input type="hidden" id="preID" name="CaseNo" value="@Model.Prenatal?.CaseNo" />
                         <span class="px-2">
                             @(Model.Prenatal?.PatientID != null ?  Model.Prenatal?.Patient?.FirstName + " " + Model.Prenatal?.Patient?.MiddleName+ " " + Model.Prenatal?.Patient?.LastName : "N/A")
                         </span>
@@ -31,7 +33,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-sm-2 mb-3">
                 <div class="d-flex align-items-center">
                     <h6 class="me-2 mb-0 fw-bold">Age:</h6>
                     <div class="border-bottom flex-grow-1">
@@ -42,7 +44,7 @@
                                     var birthYear = Model.Prenatal?.Patient.Birthdate.Value.Year;
                                     var currentYear = DateTime.Now.Year;
                                     var age = currentYear - birthYear;
-                                    <text>@age years old</text>
+                                    @age
                                 }
                                 else
                                 {
@@ -54,34 +56,223 @@
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-sm-4 mb-3">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">Mobile #:</h6>
                     <div class="border-bottom flex-grow-1">
                         <span class="px-2">
-                            @Model.Prenatal?.Patient?.Address
+                            @Model.Prenatal?.Patient?.MobileNumber
                         </span>
                     </div>
                 </div>
             </div>
-           
+
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">BirthDate:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.Prenatal?.Patient?.Birthdate
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Blood Type:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.Prenatal?.Patient?.BloodType
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Phil-Health Member:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @{
+                                if (Model.Prenatal?.Patient?.HasPhilHealth == true){
+                                    <text>Yes</text>
+                                }else{
+                                    <text>No</text>
+                                }
+                            }
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Place of Birth:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.Prenatal?.Patient?.PlaceOfBirth
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Husband's Name':</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Prenatal?.Patient?.Spouse != null ? Model.Prenatal?.Patient?.Spouse.FirstName + " " + Model.Prenatal?.Patient?.Spouse?.MiddleName + " " + Model.Prenatal?.Patient?.Spouse?.LastName : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                           @Model.Prenatal?.Patient?.Spouse?.Address
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        <fieldset class="mb-5">
+            <legend class="fw-bold" style="font-size:1.2rem;">PRESENT PREGNANCY</legend>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label class="fw-bold">GRAVIDA:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.Prenatal?.Gravida != null ? Model.Prenatal?.Gravida : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label class="fw-bold">PARA:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.Prenatal?.Para != null ? Model.Prenatal?.Para : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label class="fw-bold">ABORTION:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.Prenatal?.Abortion != null ? Model.Prenatal?.Abortion : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label class="fw-bold">LMP:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.Prenatal?.LMP != null ? Model.Prenatal?.LMP : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label class="fw-bold">EDC:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.Prenatal?.EDC != null ? Model.Prenatal?.EDC : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label class="fw-bold">HR CODE:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.Prenatal?.HRCODE != null ? Model.Prenatal?.HRCODE : "N/A")</div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+
+        <div class="table-responsive">
+            <h6>PRENATAL CHECKUP / VISIT</h6>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Date Visit</th>
+                        <th>AOG Week</th>
+                        <th>Total Month</th>
+                        <th>Weight</th>
+                        <th>BP</th>
+                        <th>FH</th>
+                        <th>FHT</th>
+                        <th>Temperature</th>
+                        <th>CR</th>
+                        <th>RR</th>
+                        <th>Physical Asssessment</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sample Data -->
+                    @if (Model?.PrenatalVisit != null && Model.PrenatalVisit.Any())
+                    {
+                        @foreach (var item in Model.PrenatalVisit)
+                        {
+                            <tr>
+                                <td>@item.DateVisit?.ToString("MMM dd yyyy h:mm tt")</td>
+                                <td>@item.AOGWeek Weeks</td>
+                                <td>
+                                    @{
+                                        // Attempt to parse the string AOGWeek to a numeric value
+                                        decimal aogWeekValue;
+                                        if (decimal.TryParse(item.AOGWeek, out aogWeekValue))
+                                        {
+                                            // Calculate months by dividing weeks by 4
+                                            @($"{Math.Round(aogWeekValue / 4, 1)} Months")
+                                        }
+                                        else
+                                        {
+                                            // Handle cases where parsing fails
+                                            @("Invalid AOG Week")
+                                        }
+                                    }
+                                </td>
+
+                                <td>@item.Weight</td>
+                                <td>@item.BP</td>
+                                <td>@item.FH</td>
+                                <td>@item.FHT</td>
+                                <td>@item.Temp</td>
+                                <td>@item.CR</td>
+                                <td>@item.RR</td>
+                                <td style="max-width: 150px; word-wrap: break-word;">@item.PhysicalAssessment</td>
+                                <td style="max-width: 150px; word-wrap: break-word;">@item.Notes</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="20" class="text-center">
+                                No data available.
+                            </td>
+                        </tr>
+                    }
+
+                    <!-- No match found row -->
+                    <tr class="no-record-found" style="display: none;">
+                        <td colspan="30" class="text-center">No match found</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 
 <script>
+    var patID = document.getElementById('patID').value;
+    var preID = document.getElementById('preID').value;
     document.addEventListener('DOMContentLoaded', function () {
-        // PrintForm();
+        PrintForm();
     });
 
     function PrintForm() {
-        var patId = $("#patId").val();
         window.onafterprint = function () {
-            window.location.href = "/Patient/Information?id=" + patId;
+            window.location.href = "/Prenatal/PrenatalRecord?patientid=" + patID + '&caseno=' + preID;
         };
-
         window.print();
     }
 </script>

@@ -99,7 +99,7 @@ namespace NatalCare.DataAccess.Services
         }
         public async Task<Prenatal> GetPrenatalInformation(string id)
         {
-            var prenatal = await unitOfWork.Repository<Prenatal>().GetFirstOrDefaultAsync(p => p.CaseNo == id, includeProperties: "Patient");
+            var prenatal = await unitOfWork.Repository<Prenatal>().GetFirstOrDefaultAsync(p => p.CaseNo == id, includeProperties: "Patient,Patient.Spouse");
 
             if (prenatal == null)
                 return new Prenatal();
@@ -552,7 +552,7 @@ namespace NatalCare.DataAccess.Services
         }
         public async Task<GeneralResponse> GetHRFormPrint(string caseNo)
         {
-            var item = await unitOfWork.Repository<NewbornHearing>().GetFirstOrDefaultAsync(x => x.HearingNo == caseNo, includeProperties: "Newborn");
+            var item = await unitOfWork.Repository<NewbornHearing>().GetFirstOrDefaultAsync(x => x.HearingNo == caseNo, includeProperties: "Newborn,Patient,Patient.Spouse");
             if (item == null)
                 return new GeneralResponse(false, item, "Record not existing.");
 
@@ -698,7 +698,7 @@ namespace NatalCare.DataAccess.Services
         }
         public async Task<GeneralResponse> GetScreeningFormPrint(string caseNo)
         {
-            var item = await unitOfWork.Repository<NewbornScreening>().GetFirstOrDefaultAsync(x => x.ScreeningNo == caseNo, includeProperties: "Newborn");
+            var item = await unitOfWork.Repository<NewbornScreening>().GetFirstOrDefaultAsync(x => x.ScreeningNo == caseNo, includeProperties: "Newborn,Patient");
             if (item == null)
                 return new GeneralResponse(false, item, "Record not existing.");
 
@@ -1357,7 +1357,7 @@ namespace NatalCare.DataAccess.Services
         }
         public async Task<GeneralResponse> GetOBRecord(int id)
         {
-            var data = await unitOfWork.Repository<Obstetrical>().GetFirstOrDefaultAsync(x => x.ID == id);
+            var data = await unitOfWork.Repository<Obstetrical>().GetFirstOrDefaultAsync(x => x.ID == id, includeProperties: "Patient");
             if (data == null)
                 return new GeneralResponse(false, data, "Obstetrical record not existing.");
 
@@ -1456,7 +1456,7 @@ namespace NatalCare.DataAccess.Services
         }
         public async Task<ClinicalFaceSheet> GetCFPrintForm(int id)
         {
-            var record = await unitOfWork.Repository<ClinicalFaceSheet>().GetFirstOrDefaultAsync(p => p.ID == id, includeProperties: "Patient");
+            var record = await unitOfWork.Repository<ClinicalFaceSheet>().GetFirstOrDefaultAsync(p => p.ID == id, includeProperties: "Patient,Delivery,Midwife,Delivery.PrenatalCase,Delivery.Wards,Delivery.Beds");
 
             if (record == null)
                 return new ClinicalFaceSheet();
@@ -1542,7 +1542,7 @@ namespace NatalCare.DataAccess.Services
         }
         public async Task<DischargementForm> GetDFPrintForm(int id)
         {
-            var record = await unitOfWork.Repository<DischargementForm>().GetFirstOrDefaultAsync(p => p.Id == id, includeProperties: "Patient");
+            var record = await unitOfWork.Repository<DischargementForm>().GetFirstOrDefaultAsync(p => p.Id == id, includeProperties: "Patient,Delivery,Midwife,Prepared");
 
             if (record == null)
                 return new DischargementForm();

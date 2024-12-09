@@ -250,7 +250,7 @@ else{
                                     {
                                         var totalDays = (Model.Delivery.Date_Discharged.Value.ToDateTime(TimeOnly.MinValue)
                                         - Model.Delivery.Date_Admitted.ToDateTime(TimeOnly.MinValue)).Days;
-                                        @totalDays
+                                        <text>@totalDays Days</text>
                                     }
                                     else
                                     {

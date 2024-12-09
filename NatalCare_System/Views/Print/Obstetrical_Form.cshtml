@@ -1,0 +1,341 @@
+﻿@model NatalCare.Models.Entities.Obstetrical
+
+@{
+    ViewData["Title"] = "Print Obstetrical Form Form";
+}
+<style>
+    label, input,h6 {
+        font-size: 14px;
+    }
+    .flex-grow-1{
+        font-size: 12px;
+    }
+</style>
+
+<div class="m-3">
+    <div class="text-center mb-4" style="cursor: pointer;">
+        <img class="img-fluid" src="/img/logo.png" width="160" />
+    </div>
+
+    <h5 class="text-center mb-3 fw-bold">OBSTETRICAL FORM</h5>
+
+    <div class="mt-4">
+        @* Patient Basic Info  *@
+        <div class="row mb-3">
+            @* Patient Details *@
+            <div class="col-sm-12 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Name of Patient:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            <input type="hidden" id="patID" name="PatientID" value="@Model.PatientID" />
+                            <input type="hidden" id="delID" name="CaseNo" value="@Model.CaseNo" />
+                            @Model.Patient?.FirstName @Model.Patient?.MiddleName  @Model.Patient?.LastName
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Date of Birth:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @Model.Patient?.Birthdate
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-2 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Age:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @{
+                                if (Model.Patient?.Birthdate != null)
+                                {
+                                    var birthYear = Model.Patient.Birthdate.Value.Year;
+                                    var currentYear = DateTime.Now.Year;
+                                    var age = currentYear - birthYear;
+                                    <text>@age years old</text>
+                                }
+                                else
+                                {
+                                    @:N/A
+                                }
+                            }
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-2 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Race:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Patient?.Nationality != null ? Model.Patient?.Nationality : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-2 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Marital Status:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Patient?.CivilStatus != null ? Model.Patient?.CivilStatus : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-6 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Husband/Partner's Name':</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Patient?.Spouse?.FirstName != null ? Model.Patient?.Spouse?.FirstName + " " + Model.Patient?.Spouse?.MiddleName + " " + Model.Patient?.Spouse?.LastName : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Age:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @{
+                                if (Model.Patient?.Spouse?.Birthdate != null)
+                                {
+                                    var birthYear = Model.Patient.Spouse.Birthdate.Value.Year;
+                                    var currentYear = DateTime.Now.Year;
+                                    var age = currentYear - birthYear;
+                                    <text>@age years old</text>
+                                }
+                                else
+                                {
+                                    @:N/A
+                                }
+                            }
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Race:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Patient?.Spouse?.Nationality != null ? Model.Patient?.Spouse?.Nationality : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="divider bg-pink" />
+
+        @* Menstrual History  *@
+        <fieldset class="mb-4 mt-2">
+            <legend class="fw-bold text-center mb-4" style="font-size:1.2rem;">Menstrual History</legend>
+            <div class="row">
+                <div class="col-sm-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">First day of last Mestrual Cycle</h6>
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                @(Model.FirstDayOfLastMenstrualCycle != null ? Model.FirstDayOfLastMenstrualCycle : "N/A")
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">prior Menses date</h6>
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                @(Model.PriorMensesDate != null ? Model.PriorMensesDate : "N/A")
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">Frequency of Cycle every</h6>
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                @(Model.FrequencyOfCycleEvery != null ? Model.FrequencyOfCycleEvery : "N/A")
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">days menses monthly</h6>
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                @if (Model.DaysMensesMonthly == true)
+                                {
+                                    <input type="checkbox" class="custom-checkbox" disabled checked />
+                                }
+                            </span>
+                        </div>
+                        <span class="fw-bold">Y</span>
+                    </div>
+                </div>
+
+                <div class="col-sm-3 mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                <i class="fas fa-check text-pink" style="font-size: 20px;"></i>
+
+                                @if (Model.DaysMensesMonthly == false)
+                                {
+                                    <input type="checkbox" class="custom-checkbox" disabled checked />
+                                }
+                            </span>
+                        </div>
+                        <h6 class="me-2 mb-0 fw-bold">N check if unknown</h6>
+                    </div>
+                </div>
+
+                <div class="col-sm-4 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">Age of first menses</h6>
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                @(Model.AgesOfFirstMenses != null ? Model.AgesOfFirstMenses + " years old" : "N/A")
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-7 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">on birth control pills at the time of pregnancy</h6>
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                @if (Model.BirthControlTheOfPregnancy == true)
+                                {
+                                    <input type="checkbox" class="custom-checkbox" disabled checked />
+                                }
+                            </span>
+                        </div>
+                        <span class="fw-bold">YES</span>
+                    </div>
+                </div>
+
+                <div class="col-sm-1 mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="border-bottom flex-grow-1 text-center">
+                            <span class="px-2">
+                                @if (Model.BirthControlTheOfPregnancy == false)
+                                {
+                                    <input type="checkbox" class="custom-checkbox" disabled checked />
+                                }
+                            </span>
+                        </div>
+                        <h6 class="me-2 mb-0 fw-bold">NO</h6>
+                    </div>
+                </div>
+
+            </div>
+        </fieldset>
+
+        <hr class="divider bg-pink" />
+
+        <h6 class="fw-bold text-center mb-4" style="font-size:1.2rem;">Past Pregnancy History</h6>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr style="vertical-align: middle; text-align: center;">
+                        <th>Total # of Pregnancy</th>
+                        <th># of Full Term Deliveries</th>
+                        <th># of Premature Deliveries</th>
+                        <th># of Abortions</th>
+                        <th># of Miscarriages</th>
+                        <th># of D & C with Miscarriages Pregnancy</th>
+                        <th># of Ectopic Pregnancy / Tubal Pregnancy</th>
+                        <th># of Multiple Births</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr>
+                        <td>@(Model.TotalNoOfPreg != null ? Model.TotalNoOfPreg : "N/A")</td>
+                        <td>@(Model.NoOf_FullTerm != null ? Model.NoOf_FullTerm : "N/A")</td>
+                        <td>@(Model.NoOf_Premature != null ? Model.NoOf_Premature : "N/A")</td>
+                        <td>@(Model.NoOfAbortions != null ? Model.NoOfAbortions : "N/A")</td>
+                        <td>@(Model.NoOfMiscarriages != null ? Model.NoOfMiscarriages : "N/A")</td>
+                        <td>@(Model.NoOfD_CWithCarriagesPregnancy != null ? Model.NoOfD_CWithCarriagesPregnancy : "N/A")</td>
+                        <td>@(Model.NoOfPregnancy_TubalPregnancy != null ? Model.NoOfPregnancy_TubalPregnancy : "N/A")</td>
+                        <td>@(Model.NoOfMultipleBirths != null ? Model.NoOfMultipleBirths : "N/A")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <hr class="divider bg-pink" />
+
+        <div class="table-responsive mt-4">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Month Year</th>
+                        <th># Weeks</th>
+                        <th>Length of Labor</th>
+                        <th>Birth Weight</th>
+                        <th>Sex M/F</th>
+                        <th>Vaginal / CS</th>
+                        <th>Anes</th>
+                        <th>Place Of delivery</th>
+                        <th>Pre Term Labor Y/N</th>
+                        <th>Complications & Comments</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr>
+                        <td>@(Model.PregnancyMonthYear != null ? Model.PregnancyMonthYear : "N/A")</td>
+                        <td>@(Model.NoOfWeeks != null ? Model.NoOfWeeks : "N/A")</td>
+                        <td>@(Model.LaborLengthHours != null ? Model.LaborLengthHours : "N/A")</td>
+                        <td>@(Model.BirthWeigth != null ? Model.BirthWeigth : "N/A")</td>
+                        <td>@(Model.BirthSex != null ? Model.BirthSex : "N/A")</td>
+                        <td>@(Model.Vaginal_CS != null ? Model.Vaginal_CS : "N/A")</td>
+                        <td>@(Model.AnesthesiaType != null ? Model.AnesthesiaType : "N/A")</td>
+                        <td>@(Model.PlaceOfDelivery != null ? Model.PlaceOfDelivery : "N/A")</td>
+                        <td>@(Model.PretermLabor != null ? Model.PretermLabor : "N/A")</td>
+                        <td>@(Model.ComplicationsOrComments != null ? Model.ComplicationsOrComments : "N/A")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var patID = document.getElementById('patID').value;
+    var delID = document.getElementById('delID').value;
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        PrintForm();
+    });
+
+    function PrintForm() {
+        window.onafterprint = function () {
+            window.location.href = "/Delivery/Index?patientid=" + patID  + '&caseno=' + delID;
+        };
+        window.print();
+    }
+    
+
+</script>

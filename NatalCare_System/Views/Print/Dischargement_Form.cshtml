@@ -15,73 +15,179 @@
         <img class="img-fluid" src="/img/logo.png" width="160" />
     </div>
 
-    <h5 class="text-center mb-3">DISCHARGEMENT FORM</h5>
+    <h5 class="text-center fw-bold mb-3">DISCHARGEMENT FORM</h5>
 
-    <div class="container mt-4">
-        @* Patient Basic Info  *@
-        <div class="row mb-5">
-            <div class="col-md-6 mb-3">
+    <div class="mt-4">
+        <div class="row mb-3">
+            <div class="col-sm-6 mb-3">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Name of Patient:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">NAME OF PATIENT:</h6>
                     <div class="border-bottom flex-grow-1">
+                        <input type="hidden" id="patID" name="PatientID" value="@Model.PatientID" />
+                        <input type="hidden" id="delID" name="CaseNo" value="@Model.CaseNo" />
                         <span class="px-2">
-                            @* @Model.Patient?.FirstName @Model.Patient?.MiddleName  @Model.Patient?.LastName *@
+                            @Model.Patient?.FirstName @Model.Patient?.MiddleName  @Model.Patient?.LastName
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-sm-6 mb-3">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Age:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">HOSP. NO#:</h6>
                     <div class="border-bottom flex-grow-1">
                         <span class="px-2">
-                           @*  @{
-                                if (Model.Patient?.Birthdate != null)
-                                {
-                                    var birthYear = Model.Patient.Birthdate.Value.Year;
-                                    var currentYear = DateTime.Now.Year;
-                                    var age = currentYear - birthYear;
-                                    <text>@age years old</text>
-                                }
-                                else
-                                {
-                                    @:N/A
-                                }
-                            } *@
+                            @Model.Hosp_No
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-sm-6 mb-3">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">Date & Time Admitted:</h6>
                     <div class="border-bottom flex-grow-1">
                         <span class="px-2">
-
+                            @Model.Delivery?.Date_Admitted @Model.Delivery?.Time_Admitted
                         </span>
                     </div>
                 </div>
             </div>
 
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Date & Time Discharged:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.Delivery?.Date_Discharged @Model.Delivery?.Time_Discharged
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <hr class="divider bg-pink" />
+
+        <div class="row mb-4">
+            <div class="col-sm-12 mb-4">
+                <label class="fw-bold">COMPLETE DIAGNOSIS:</label>
+                <div class="border-bottom py-3">
+                    <span class="px-3">
+                        @Model.CompleteDiagnosis
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-12 mb-4">
+                <label class="fw-bold">MEDICATIONS:</label>
+                <div class="border-bottom py-3">
+                    <span class="px-3">
+                        @Model.Medications
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <hr class="divider bg-pink" />
+
+        @* Discharge & Instructions *@
+        <fieldset class="mb-3">
+            <legend class="fw-bold" style="font-size:1.2rem;">DISCHARGED INSTRUCTIONS:</legend>
+            <H6 class="fw-bold">Advice & Counsel</H6>
+            <div class="row mt-2">
+                @* MOTHER *@
+                <div class="col-sm-6 mb-3">
+                    <label class="fw-bold mb-2">MOTHER:</label>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="mPostpartum" class="update-checkbox custom-checkbox" @(Model.PostpartumCareAndHygiene == true ? "checked" : "") disabled />
+                        <label for="mPostpartum" class="form-check-label">Post-Partum care & hygiene</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="mNutrition" class="update-checkbox custom-checkbox" @(Model.Nutrition == true ? "checked" : "") disabled />
+                        <label for="mNutrition" class="form-check-label">Nutrition</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="mIron_Folate" class="update-checkbox custom-checkbox" @(Model.IronFolate == true ? "checked" : "") disabled />
+                        <label for="mIron_Folate" class="form-check-label">Iron/Folate</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="mbSpacing" class="update-checkbox custom-checkbox" @(Model.BirthSpacingFamilyPlanning == true ? "checked" : "") disabled />
+                        <label for="mbSpacing" class="form-check-label">Birth spacing & Family Planning</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="mDangersigns" class="update-checkbox custom-checkbox" @(Model.DangerSignsMother == true ? "checked" : "") disabled />
+                        <label for="mDangersigns" class="form-check-label">Danger Signs</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="mfollowVisit" class="update-checkbox custom-checkbox" @(Model.FollowUpVisitsMother == true ? "checked" : "") disabled />
+                        <label for="mfollowVisit" class="form-check-label">Follow-up visits</label>
+                    </div>
+                </div>
+                @* BABY *@
+                <div class="col-sm-6 mb-3">
+                    <label class="fw-bold mb-2">BABY:</label>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="bbExclusive" class="update-checkbox custom-checkbox" @(Model.ExclusiveBreastFeeding == true ? "checked" : "") disabled />
+                        <label for="bbExclusive" class="form-check-label">Exclusive Breastfeeding</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="bbHygiene" class="update-checkbox custom-checkbox" @(Model.HygieneCordCareWarmth == true ? "checked" : "") disabled />
+                        <label for="bbHygiene" class="form-check-label">Hygiene, Cord care and Warmth</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="bbSpecialAdvice" class="update-checkbox custom-checkbox" @(Model.SpecialAdviceLowBirthWeight == true ? "checked" : "") disabled />
+                        <label for="bbSpecialAdvice" class="form-check-label">Special advice if low birth weight</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="bbDangersigns" class="update-checkbox custom-checkbox" @(Model.DangerSignsBaby == true ? "checked" : "") disabled />
+                        <label for="bbDangersigns" class="form-check-label">Danger Signs</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="bbfollowVisit" class="update-checkbox custom-checkbox" @(Model.FollowUpVisitsBaby == true ? "checked" : "") disabled />
+                        <label for="bbfollowVisit" class="form-check-label">Follow-up visits</label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <hr class="divider bg-pink" />
+
+        @* Follow-Up and Prepared By *@
+        <div class="row mb-4">
+            <div class="col-sm-12 mb-5">
+                <label class="fw-bold">FOLLOW-UP MANAGEMENT:</label>
+                <div class="border-bottom py-3">
+                    @* Patient is in good condition, advised to maintain proper diet and hydration. *@
+                    @Model.FollowUpManagement
+                </div>
+            </div>
+            <div class="col-sm-6 mt-4 text-center">
+                <div class="border-bottom px-3 mx-5">@Model.Prepared?.FirstName @Model.Prepared?.MiddleName @Model.Prepared?.LastName</div>
+                <label class="fw-bold mt-2 d-block">Prepared By</label>
+            </div>
+            <div class="col-sm-6 mt-4 text-center">
+                <div class="border-bottom px-3 mx-5">@Model.Midwife?.FirstName @Model.Midwife?.MiddleName @Model.Midwife?.LastName</div>
+                <label class="fw-bold mt-2 d-block">Attending Midwife</label>
+            </div>
+        </div>
+
 
     </div>
 </div>
 
 
 <script>
+    var patID = document.getElementById('patID').value;
+    var delID = document.getElementById('delID').value;
+
     document.addEventListener('DOMContentLoaded', function () {
-        // PrintForm();
+        PrintForm();
     });
 
     function PrintForm() {
-        var patId = $("#patId").val();
         window.onafterprint = function () {
-            window.location.href = "/Patient/Information?id=" + patId;
+            window.location.href = "/Delivery/Index?patientid=" + patID  + '&caseno=' + delID;
         };
-
         window.print();
     }
+
 </script>

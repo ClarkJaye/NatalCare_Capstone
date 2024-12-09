@@ -130,11 +130,13 @@
                     <label asp-for="DeliveryType" class="control-label">Delivery Method</label>
                     <select asp-for="DeliveryType" class="form-select" required>
                         <option disabled selected>select delivery method</option>
-                        <option value="spontaneous">Spontaneous Vaginal</option>
+                      @*   <option value="spontaneous">Spontaneous Vaginal</option>
                         <option value="cesarean">Cesarean Section (C-Section)</option>
                         <option value="assisted">Assisted Vaginal</option>
                         <option value="VBAC">Vaginal Birth After Cesarean (VBAC)</option>
-                        <option value="Instrumental">Instrumental</option>
+                        <option value="Instrumental">Instrumental</option> *@
+                        <option value="vaginal">Vaginal</option>
+                        <option value="cs">Cesarean</option>
                     </select>
                     <span asp-validation-for="DeliveryType" class="text-danger"></span>
                 </div>

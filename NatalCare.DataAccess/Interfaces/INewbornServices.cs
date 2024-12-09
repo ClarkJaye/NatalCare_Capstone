@@ -5,6 +5,8 @@ namespace NatalCare.DataAccess.Interfaces
 {
     public interface INewbornServices
     {
+        Task<GeneralResponse> GetAllNewborns(DateOnly startDate, DateOnly endDate);
+
         Task<List<Newborn>> GetNewborns();
         Task<List<Newborn>> GetDeletedNewborns();
         Task<GeneralResponse> GetInformation(string id);

@@ -833,6 +833,7 @@ else{
             url: '@Url.Action("PrintObstetricalForm", "Print")',
             data: { id: caseNo },
             success: function (response) {
+                console.log(response)
                 if (response && response.isSuccess === false) {
                     alert(response.message);
                 } else if (response && response.isSuccess === true) {

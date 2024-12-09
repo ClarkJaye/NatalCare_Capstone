@@ -1,0 +1,155 @@
+﻿@model NatalCare.Models.DTOs.InvoiceListDTO
+@{
+    decimal? balance = 0;
+
+    List<decimal?> paidAmount = new List<decimal?>();
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Garet:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="table-responsive">
+    <table id="invoiceTable" class="table table-hover table-striped">
+        <thead class="border-bottom-2">
+            <tr>
+                <th>Bill No.</th>
+                <th>Patient Name</th>
+                <th>Bill Amount</th>
+                <th>Balance</th>
+                <th>Status</th>
+                <th>Bill Date</th>
+                <th>Due Date</th>
+                <th class="text-center">Action</th>
+            </tr>
+        </thead>
+        <tbody style="text-align:center;">
+            @foreach (var payments in Model.Payments)
+            {
+                // Start fresh for each payment
+                paidAmount.Clear();
+                decimal? totalPaid = 0;
+
+                // Get all payments for this bill
+                var allPatientPayments = Model.PatientPayments.Where(a => a.PaymentID == payments.PaymentID).ToList();
+
+                foreach (var allSpecificPayment in allPatientPayments.Distinct())
+                {
+                    paidAmount.Add(allSpecificPayment.Amount);
+                }
+
+                totalPaid = paidAmount.Sum(x => x ?? 0);
+                balance = payments.Final_Amount - totalPaid;
+
+                <tr class="align-middle">
+                    <th style="text-align:center;">@payments.PaymentID</th>
+                    <td>@payments?.Patient.FirstName @(payments.Patient?.MiddleName ?? "") @payments.Patient?.LastName</td>
+                    <td style="font-weight:bold;">₱ @payments.Final_Amount</td>
+                    <td style="font-weight:bold;">₱ @balance</td>
+                    <td class="paymentStatus" style="font-weight:bold;">@payments.Payment_Status</td>
+                    <td>@(payments.BillDate.HasValue ? payments.BillDate.Value.ToString("MMMM d, yyyy") : "N/A")</td>
+                    <td>@(payments.DueDate.HasValue ? payments.DueDate.Value.ToString("MMMM d, yyyy") : "N/A")</td>
+                    <td class="text-center">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                            <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1" asp-controller="Billing" asp-action="PrintInvoice" asp-route-id="@payments.PaymentID">
+                                <i class="fa fa-print" aria-hidden="true"></i>
+                                <span>Print</span>
+                            </a>
+                            |
+                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Billing" asp-action="GenerateInvoice" asp-route-id="@payments.PaymentID">
+                                <i class="fa-solid fa-list"></i>
+                                <span>Details</span>
+                            </a>
+                            |
+                            <a class="btn btn-sm btn-outline-success d-flex align-items-center justify-content-center gap-1" asp-controller="Billing" asp-action="Payment" asp-route-id="@payments.PaymentID" asp-route-balance="@balance">
+                                <i class="fa fa-money" aria-hidden="true"></i>
+                                <span>Payment</span>
+                            </a>
+                            |
+                            <button class="btn btn-sm btn-outline-danger dlt-Inv" data-paymentid="@payments.PaymentID">
+                                <i class="fa-solid fa-trash"></i>
+                                <span>Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+
+        $(".paymentStatus").each(function () {
+            let status = $(this).text().trim(); // Get the text and remove whitespace
+            if (status === "PENDING") {
+                $(this).css("color", "red");
+            } else if (status === "PAID") {
+                $(this).css("color", "green");
+            } else if (status === "PARTIAL") {
+                $(this).css("color", "orange");
+            }
+        });
+
+        // Initialize DataTables
+        $('#invoiceTable').DataTable({
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            lengthMenu: [10, 20, 50, 100],
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search Invoice...",
+                paginate: {
+                    previous: "Previous",
+                    next: "Next"
+                },
+                emptyTable: "There are no Payment History"
+            },
+            info: true,
+            autoWidth: false,
+            responsive: true,
+            columnDefs: [
+                { orderable: false, targets: -1 }
+            ]
+        });
+
+        $('#invoiceTable').on("click", ".dlt-Inv", function (e) {
+            var paymentid = $(this).data('paymentid');
+            DeletePayment(paymentid);
+        });
+
+        // Delete Payment
+        function DeletePayment(paymentid) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this Payment!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '@Url.Action("DeletePayment", "Billing")',
+                        data: { paymentId: paymentid },
+                        success: function (result) {                
+                            debugger
+                            toastr.success(result);
+                            setTimeout(function () {
+                                window.location.href = '@Url.Action("InvoiceList", "Billing")';
+                            }, 3000);
+                        },
+                        error: function () {
+                            console.log('Unable to delete the patient.');
+                        }
+                    });
+                }
+            });
+        }
+    });
+</script>

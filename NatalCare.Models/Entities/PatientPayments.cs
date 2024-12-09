@@ -10,7 +10,13 @@ namespace NatalCare.Models.Entities
         [Key]
         [Required]
         public int? PatientPaymentID { get; set; }
+
+        [Required]
         public decimal? Amount { get; set; }
+
+        [Required]
+        public decimal? PatientsMoney { get; set; }
+
         public string? Payment_Method { get; set; }
        
 

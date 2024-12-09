@@ -8,7 +8,7 @@ using static NatalCare.DataAccess.Response.ServiceResponses;
 
 namespace NatalCare.DataAccess.Services
 {
-    internal class NewbornServices : INewbornServices
+    public class NewbornServices : INewbornServices
     {
         private readonly IAppUnitOfWork unitOfWork;
         private readonly IHubContext<NatalCareHub> hubContext;

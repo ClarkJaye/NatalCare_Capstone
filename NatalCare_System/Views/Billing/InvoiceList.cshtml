@@ -2,7 +2,128 @@
     ViewData["Title"] = "Invoice List";
     ViewData["NavTitle"] = "Invoice List";
     Layout = "_UserLayout";
+
+    int? totalPaid = 0;
+    int? totalPending = 0;
+    int? totalPartial = 0;
+
 }
 
 <!-- NAVBAR -->
 <partial name="Partial/_Navbar" />
+
+<div class="mx-4">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow py-2 card-selected">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
+                                Total Paid 
+                            </div>
+                            <div class="h4 fw-bold my-3" id="totalPaid">
+                          
+                            </div>
+                            <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
+                            
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-success">
+                                <i class="fas fa-check text-white" style="font-size: 20px;"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow py-2 card-selected">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
+                                Total Pending 
+                            </div>
+                            <div class="h4 fw-bold my-3" id="totalPending">
+                     
+                            </div>
+                            <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
+                          
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-warning">
+                                <i class="fas fa-spinner" style="font-size: 20px;"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow py-2 card-selected">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="fw-bold mb-1" style="font-size: 1em; color: var(--dark);">
+                                Total Partial 
+                            </div>
+                            <div class="h4 fw-bold my-3" id="totalPartial">
+                        
+                            </div>
+                            <div class="fw-bold mb-1" style="font-size: .8em; color: var(--dark);">
+                                
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-danger">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-4 mt-2 d-flex align-items-center justify-content-end gap-3">
+
+    </div>
+
+
+    <div class="card shadow-sm card-selected">
+        <div class="card-body" id="invoiceContainer">
+            @await Component.InvokeAsync("InvoiceRecords")
+        </div>
+    </div>
+</div>
+
+<script>
+        $(document).ready(function () {
+        $.ajax({
+            url: '/Billing/GetPaymentStatusStatistics',
+            type: 'GET',
+            dataType: 'json', // Specify the expected response type
+            success: function (response) {
+
+                var totalPaid = response.paid || 0;
+                var totalPending = response.pending || 0;
+                var totalPartial = response.partial || 0;
+
+
+                $("#totalPaid").text(totalPaid);
+                $("#totalPending").text(totalPending);
+                $("#totalPartial").text(totalPartial);
+
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+                alert("An error occurred while fetching data: " + error);
+            }
+        });
+    });
+</script>

@@ -99,6 +99,7 @@ namespace NatalCare.DataAccess.data
             );
             modelBuilder.Entity<Status>().HasData(
                 new Status { StatusCode = "AC", StatusName = "ACTIVE" },
+                new Status { StatusCode = "AD", StatusName = "ADMITTED" },
                 new Status { StatusCode = "IN", StatusName = "INACTTIVE" },
                 new Status { StatusCode = "DL", StatusName = "DELETE" }
             );

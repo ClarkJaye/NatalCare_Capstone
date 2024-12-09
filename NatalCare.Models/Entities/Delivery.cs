@@ -8,22 +8,42 @@ namespace NatalCare.Models.Entities
     public class Delivery : BaseEntity
     {
         [Key]
-        [Required]
         public string? CaseNo { get; set; }
-
-        // Essential Family Planning Fields
-        public int? NoOfLivingChild { get; set; }
-        public bool? PlanToHaveMoreChildren { get; set; }
-        public string? MethodType { get; set; }
-        public double? AverageMonthlyIncome { get; set; }
-        public string? SpouseName { get; set; }
-        public string? SpouseOccupation { get; set; }
-        public DateTime? DateVisit { get; set; }
+        [Required]
+        public DateOnly Date_Admitted { get; set; }
+        [Required]
+        public TimeOnly Time_Admitted { get; set; }
+        public DateOnly? Date_Discharged { get; set; }
+        public TimeOnly? Time_Discharged { get; set; }
         public string? Notes { get; set; }
 
-
         // Foreign Key
-        [Required]
+        public int? WardNumber { get; set; }
+        [ForeignKey("WardNumber")]
+        [ValidateNever]
+        public Ward? Wards { get; set; }
+
+        public int? BedNumber { get; set; }
+        [ForeignKey("BedNumber")]
+        [ValidateNever]
+        public Bed? Beds { get; set; }
+
+
+        public int? DeliveryStatusID { get; set; }
+        [ForeignKey("DeliveryStatusID")]
+        [ValidateNever]
+        public DeliveryStatus? DeliveryStatus { get; set; }
+
+        public string? PrenatalID{ get; set; }
+        [ForeignKey("PrenatalID")]
+        [ValidateNever]
+        public Prenatal? PrenatalCase { get; set; }
+
+        public string? NewbornID { get; set; }
+        [ForeignKey("NewbornID")]
+        [ValidateNever]
+        public Newborn? Newborn { get; set; }
+
         public string? PatientID { get; set; }
         [ForeignKey("PatientID")]
         [ValidateNever]

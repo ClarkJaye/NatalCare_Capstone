@@ -1,0 +1,105 @@
+﻿@model List<NatalCare.Models.Entities.NewbornScreening>
+
+@{
+    Layout = null;
+}
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Case No##</th>
+                @* <th>Date Visit</th> *@
+                <th>Date Registration</th>
+                <th>Baby Name</th>
+                <th>Type of Sample</th>
+                <th>Filter Card No#</th>
+                <th>Date of Collection</th>
+                <th>Time of Collection</th>
+                <th>Place of Collection</th>
+                <th>Screening Results</th>
+                <th>Remarks</th>
+                <th class="text-center">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ScreeningNo</td>
+                    @* <td>@item.DateVisit?.ToString("MMM dd yyyy h:mm tt")</td> *@
+                    <td>@item.DateRegistration?.ToString("MMM dd yyyy")</td>
+                    <td>@item.Newborn?.FirstName @item.Newborn?.MiddleName @item.Newborn?.LastName</td>
+                    <td>@item.TypeOfSample</td>
+                    <td>@item.FilterCardNo</td>
+                    <td>@item.DateOfCollection</td>
+                    <td>@item.TimeOfCollection</td>
+                    <td>@item.PlaceOfCollection</td>
+                    <td>@item.ScreeningResults</td>
+                    <td>@item.Remarks</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-pink d-flex align-items-center gap-2 retreiveBtn" data-caseno="@item.ScreeningNo">
+                            <i class="fa-solid fa-undo"></i>
+                            <span>Retrieve</span>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    // Initialize DataTables
+    $('#deletedSNListContainer #deletedSNTable').DataTable({
+        paging: true,
+        lengthChange: true,
+        searching: true,
+        ordering: true,
+        lengthMenu: [10, 20, 50, 100],
+        language: {
+            search: "_INPUT_",
+            searchPlaceholder: "Search record..."
+        },
+        language: {
+            paginate: {
+                previous: "Previous",
+                next: "Next"
+            }
+        },
+        info: true,
+        autoWidth: false,
+        responsive: true,
+        columnDefs: [
+            { orderable: false, targets: -1 }
+        ]
+    });
+
+    $(".retreiveBtn").on("click", function () {
+        var caseno = $(this).data('caseno');
+        retrieveRecord(caseno);
+    });
+
+    function retrieveRecord(caseno) {
+        $.ajax({
+            url: '@Url.Action("RetrieveSNRecord", "NewbornScreening")',
+            type: 'POST',
+            data: { caseno: caseno },
+            success: function (result) {
+                if (result.isSuccess) {
+                    toastr.success(result.message)
+                    LoadScreeningComponent();
+                    $('#deletedSNModal').modal('hide');
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function () {
+                console.error("Failed to load records.");
+            }
+        });
+    }
+</script>
+
+

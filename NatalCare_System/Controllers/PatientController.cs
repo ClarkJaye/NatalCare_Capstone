@@ -11,21 +11,32 @@ namespace NatalCare_System.Controllers
     {
         private readonly IPatientServices patientServices;
         private readonly IServicesOperationServices serviceServices;
+        private readonly ISelectListServices selectListServices;
 
-        public PatientController(IPatientServices patientServices, IServicesOperationServices serviceServices)
+        public PatientController(IPatientServices patientServices, IServicesOperationServices serviceServices, ISelectListServices selectListServices, IModuleAccessServices moduleAccessServices)
+            : base(moduleAccessServices)
         {
             this.patientServices = patientServices;
             this.serviceServices = serviceServices;
+            this.selectListServices = selectListServices;
         }
 
         public async Task<IActionResult> Index()
         {
+            if (!await CheckAccessAsync(2))
+            {
+               return RedirectTo();
+            }
             // Get all counts in one call
-            var (todayRecordCount, monthlyRecordCount, yearlyRecordCount) = await patientServices.GetPatientCountsAsync();
+            var (todayRecordCount, monthlyRecordCount, yearlyRecordCount, totalCount, activeCount, inActiveCount) = await patientServices.GetPatientCountsAsync();
             // Pass counts to the view using ViewBag
             ViewBag.TodayRecord = todayRecordCount;
             ViewBag.MonthlyRecord = monthlyRecordCount;
             ViewBag.YearlyRecord = yearlyRecordCount;
+
+            ViewBag.TotalRecord = totalCount;
+            ViewBag.ActiveRecord = activeCount;
+            ViewBag.InActiveRecord = inActiveCount;
             return View();
         }
         //Redirection of Each Tab
@@ -33,6 +44,10 @@ namespace NatalCare_System.Controllers
         {
             try
             {
+                if (!await CheckAccessAsync(2))
+                {
+                    return RedirectTo();
+                }
                 var response = await patientServices.GetInformation(id);
                 return View(response);
             }
@@ -45,6 +60,9 @@ namespace NatalCare_System.Controllers
         }
         public async Task<IActionResult> MedicalRecords(string id)
         {
+            ViewData["newbornList"] = await selectListServices.GetAllNewbornSelectListAsync(id);
+            ViewData["prenatalList"] = await selectListServices.GetAllPrenatalSelectListAsync(id);
+            ViewData["dlstatusList"] = await selectListServices.GetDeliveryStatusSelectListAsync();
             var patient = await patientServices.GetInformation(id);
             return View(patient);
         }
@@ -52,6 +70,10 @@ namespace NatalCare_System.Controllers
         {
             try
             {
+                if (!await CheckAccessAsync(2))
+                {
+                    return RedirectTo();
+                }
                 var response = await patientServices.GetInformation(id);
                 return View(response);
             }
@@ -79,6 +101,10 @@ namespace NatalCare_System.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Patients patient)
         {
+            if (!await CheckAccessAsync(2))
+            {
+                return RedirectTo();
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -107,6 +133,10 @@ namespace NatalCare_System.Controllers
         //Edit Patient
         public async Task<IActionResult> Edit(string id)
         {
+            if (!await CheckAccessAsync(2))
+            {
+                return RedirectTo();
+            }
             var userId = GetCurrentUserId();
             var result = await patientServices.Edit(id, userId);
 
@@ -122,6 +152,10 @@ namespace NatalCare_System.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Patients patient)
         {
+            if (!await CheckAccessAsync(2))
+            {
+                return RedirectTo();
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -170,14 +204,35 @@ namespace NatalCare_System.Controllers
             }
         }
 
-
-        //------ Patient Records View Component ------//
-        //Records
-        public async Task<IActionResult> GetAllPatients()
+        // Clear Spouse
+        [HttpPost]
+        public async Task<JsonResult> ClearSpouse(int spouseId)
         {
             try
             {
-                var PatientsRecords = await patientServices.GetPatients();
+                if (spouseId > 0)
+                {
+                    var result = await patientServices.ClearSpouse(spouseId);
+                    return Json(new { isSuccess = result.IsSuccess, message = result.Message });
+                }
+                return Json(new { isSuccess = true, message = "Spouse already cleared." });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Error occurred while deleting spouse record for Patient");
+                return Json(new { isSuccess = false, message = "An error occurred while deleting the spouse record." });
+            }
+        }
+
+
+
+
+        //------ Patient Records View Component ------//
+        //Records
+        public IActionResult GetAllPatients()
+        {
+            try
+            {
                 return ViewComponent("PatientsRecords");
             }
             catch (Exception ex)
@@ -191,20 +246,47 @@ namespace NatalCare_System.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMotherDetails(string motherID)
         {
-            var mother = await patientServices.GetInformation(motherID);
+            var data = await patientServices.GetInformation(motherID);
 
-            if (mother.PatientID != null)
+            if (data.PatientID != null)
             {
                 var motherData = new
                 {
-                    id = mother.PatientID,
-                    firstname = mother.FirstName,
-                    middlename = mother.MiddleName,
-                    lastname = mother.LastName,
+                    id = data.PatientID,
+                    firstname = data.FirstName,
+                    middlename = data.MiddleName,
+                    lastname = data.LastName,
+                    fatherId = data.SpouseId,
+                    fFirstname = data.Spouse.FirstName,
+                    fMiddlename = data.Spouse.MiddleName,
+                    fLastname = data.Spouse.LastName
                 };
                 return Json(new { isSuccess = true, item = motherData });
             }
             return Json(new { isSuccess = false, Message = "Mother not found." } );
+
+        }
+
+        //Detail Patient
+        [HttpGet]
+        public async Task<IActionResult> GetPatientDetails(string patientId)
+        {
+            var data = await patientServices.GetInformation(patientId);
+
+            if (data.PatientID != null)
+            {
+                var motherData = new
+                {
+                    id = data.PatientID,
+                    firstname = data.FirstName,
+                    middlename = data.MiddleName,
+                    lastname = data.LastName,
+                    address = data.Address,
+                    birthdate = data.Birthdate,
+                };
+                return Json(new { isSuccess = true, item = motherData });
+            }
+            return Json(new { isSuccess = false, Message = "Mother not found." });
 
         }
         //Get All Deleted Patient

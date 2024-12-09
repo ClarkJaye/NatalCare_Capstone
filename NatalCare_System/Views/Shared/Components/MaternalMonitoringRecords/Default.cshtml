@@ -1,0 +1,866 @@
+﻿@using NatalCare.Models.ViewModel.Patient
+@model MaternalMonitoringVM
+
+<button id="PrintMDBtn" data-mdid="@ViewBag.DeliveryId" class="btn btn-sm btn-success" style="position: absolute; right: 1rem; top: 0;">
+    <i class="fas fa-save"></i>
+    <span>Print</span>
+</button>
+
+<div class="d-flex justify-content-center align-items-center flex-column ">
+    <h5 class="px-2 text-center fw-bold">MATERNAL SERVICES RECORD</h5>
+    <h5 class="px-2 mb-3 text-center fw-bold">DELIVERY MONITORING RECORD</h5>
+    <div class="d-flex align-items-center">
+        <h6 class="me-2 mb-0 fw-bold">CASE NO#:</h6>
+        <input type="hidden" id="delID" name="CaseNo" value="@ViewBag.DeliveryId" />
+
+        <div class="border-bottom flex-grow-1">
+            <span class="px-2 h6">
+                @ViewBag.DeliveryId
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <h6 class="fw-bold" style="font-size:1.2rem;">I. PROGRESS OF LABOR</h6>
+        <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#PLAddModal">
+            <i class="fas fa-plus"></i>
+            <span>Add New</span>
+        </button>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Temperature</th>
+                    <th>BP</th>
+                    <th>PR</th>
+                    <th>RR</th>
+                    <th>Uterine Contraction Interval</th>
+                    <th>Clervical Dilation</th>
+                    <th>Bow Intact/Rupture</th>
+                    <th>Fetal Heart Tones</th>
+                    <th>Characteristic of FHT Weak/Strong</th>
+                    <th>Presenting Part</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                @if(Model.ProgressLabor != null || Model.ProgressLabor?.Count() > 0){
+                    @foreach(var item in Model.ProgressLabor){
+                        <tr>
+                            <td>@item.Date</td>
+                            <td>@item.Time</td>
+                            <td>@item.Temperature ℃</td>
+                            <td>@item.BP</td>
+                            <td>@item.PulseRate</td>
+                            <td>@item.RespiratoryRate</td>
+                            <td>@item.UterineContractionInterval</td>
+                            <td>@item.Cervicaldilation</td>
+                            <td>@item.BowStatus</td>
+                            <td>@item.FetalHeartTones</td>
+                            <td>@item.FetalHeartToneChar</td>
+                            <td>@item.PresentingPart</td>
+                            <td>
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                    <button class="btn btn-sm btn-outline-primary pleditBtn" data-plid="@item.ID">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                    |
+                                    <button class="btn btn-sm btn-outline-danger pldltBtn" data-plid="@item.ID">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button> 
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }else{
+                    <tr>
+                        <td colspan="15">
+                            <div class="alert alert-primary" role="alert">
+                                No Data Added Yet!
+                            </div>
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    <hr class="divider bg-pink my-5" />
+
+    <div class="row">
+        <div class="d-flex justify-content-end my-3 gap-3 px-2">
+            @if (Model.MaternalMonitoring == null || Model.MaternalMonitoring.CaseNo == null)
+            {
+                <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#MDAddModal">
+                    <i class="fas fa-plus"></i>
+                    <span>Add New</span>
+                </button>
+            }
+            else
+            {
+                <button id="editMDBtn" class="btn btn-sm btn-primary" data-mdid="@Model.MaternalMonitoring.ID">
+                    <i class="fas fa-pencil-alt"></i>
+                    <span>Edit</span>
+                </button>
+            }
+        </div>
+        @if (Model.MaternalMonitoring == null || Model.MaternalMonitoring.CaseNo == null)
+        {
+            <div class="alert alert-primary text-center" role="alert">
+                No Data Added Yet!
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                @* Baby delivered *@
+                <div class="col-md-6">
+                    <h6 class="fw-bold mb-4" style="font-size:1.2rem;">II. DELIVERY OF THE BABY</h6>
+
+                    <div class="col-md-8 mb-3">
+                        <div class="d-flex align-items-center">
+                            <h6 class="me-2 mb-0 fw-bold">DATE & TIME DELIVERED: </h6>
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-2">
+                                    @(Model.MaternalMonitoring.BabyDateDelivered != null ? Model.MaternalMonitoring.BabyDateDelivered + " " + Model.MaternalMonitoring?.BabyTimeDelivered : "N/A")
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8 mb-3">
+                        <div class="d-flex align-items-center">
+                            <h6 class="me-2 mb-0 fw-bold">APGAR SCORING:</h6>
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-2">
+                                    @(Model.MaternalMonitoring?.Apgar != null ? Model.MaternalMonitoring.Apgar : "N/A")
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8 mb-3">
+                        <div class="d-flex align-items-center">
+                            <h6 class="me-2 mb-0 fw-bold">SEX OF BABY:</h6>
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-2">
+                                    @(Model.MaternalMonitoring?.BabySex != null ? Model.MaternalMonitoring.BabySex.ToUpper() : "N/A")
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8 mb-3">
+                        <div class="d-flex align-items-center">
+                            <h6 class="me-2 mb-0 fw-bold">WEIGHT:</h6>
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-2">
+                                    @(Model.MaternalMonitoring?.BabyWeight != null ? Model.MaternalMonitoring.BabyWeight.ToUpper() : "N/A")
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                @* Placenta*@
+                <div class="col-md-6">
+                    <h6 class="fw-bold mb-4" style="font-size:1.2rem;">III. DELIVERY OF THE PLACENTA</h6>
+
+                    <div class="col-md-8 mb-3">
+                        <div class="d-flex align-items-center">
+                            <h6 class="me-2 mb-0 fw-bold">DATE & TIME DELIVERED: </h6>
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-2">
+                                    @(Model.MaternalMonitoring?.PlacentaDateDelivered != null ? Model.MaternalMonitoring.PlacentaDateDelivered + " " + Model.MaternalMonitoring?.PlacentaTimeDelivered : "N/A")
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8 mb-3">
+                        <div class="d-flex align-items-center">
+                            <h6 class="me-2 mb-0 fw-bold">COMPLETE OR INCOMPLETE:</h6>
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-2">
+                                    @(Model.MaternalMonitoring?.PlacentaStatus != null ? Model.MaternalMonitoring.PlacentaStatus : "N/A")
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @* Midwife *@
+                <div class="row py-3 d-flex justify-content-center">
+                    <div class="col-md-6 mt-5 text-center">
+                        <div class="border-bottom px-3 mx-5">
+                            @(Model.MaternalMonitoring?.ServiceProviderID != null ? Model.MaternalMonitoring.ServiceProvider?.FirstName + " " + Model.MaternalMonitoring.ServiceProvider?.MiddleName + " " + Model.MaternalMonitoring.ServiceProvider?.LastName : "N/A")
+                        </div>
+                        <label class="fw-bold mt-2 d-block">Signature of the Service Provider</label>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@* Progress Labor *@
+@* Add *@
+<div class="modal fade" id="PLAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Add Progress Labor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="AddPLForm" method="POST">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <input type="hidden" id="DeliveryIDPL-Add" name="DeliveryID" value="@ViewBag.DeliveryId"/>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="DatePL-Add" class="control-label">Date</label>
+                            <input type="date" id="DatePL-Add" name="Date" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="TimePL-Add" class="control-label">Time</label>
+                            <input type="time" id="TimePL-Add" name="Time" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="TemperaturePL-Add" class="control-label">Temperature</label>
+                            <input type="number" id="TemperaturePL-Add" name="Temperature" class="form-control" placeholder="Enter (e.g, 37, 37.5 ,...) / ℃" step="0.1" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="BPPL-Add" class="control-label">Blood Pressure</label>
+                            <input type="text" id="BPPL-Add" name="BP" class="form-control" placeholder="Enter (e.g, 180/200...)" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="PulseRatePL-Add" class="control-label">Pulse Rate</label>
+                            <input type="number" id="PulseRatePL-Add" name="PulseRate" class="form-control" placeholder="Enter (e.g, 80,...)" step="0.1" />
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <label for="RespiratoryRatePL-Add" class="control-label">Respiratory Rate</label>
+                            <input type="number" id="RespiratoryRatePL-Add" name="RespiratoryRate" class="form-control" placeholder="Enter (e.g, 20,...)" step="0.1" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="UterineContractionIntervalPL-Add" class="control-label">Uterine Contraction Interval</label>
+                            <input type="text" id="UterineContractionIntervalPL-Add" name="UterineContractionInterval" class="form-control" placeholder="Enter uterine contraction interval" />
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label for="CervicaldilationPL-Add" class="control-label">Cervical Dilation</label>
+                            <input type="number" id="CervicaldilationPL-Add" name="Cervicaldilation" class="form-control" placeholder="Enter (e.g, 10, 11, ...) /CM" step="0.1" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="BowStatusPL-Add" class="control-label">Bow Intact/Rupture</label>
+                            <input type="text" id="BowStatusPL-Add" name="BowStatus" class="form-control" placeholder="Enter bow intact/rupture" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="FetalHeartTonesPL-Add" class="control-label">Fetal Heart Tones</label>
+                            <input type="number" id="FetalHeartTonesPL-Add" name="FetalHeartTones" class="form-control" placeholder="Enter (e.g, 142,...) /BPM " step="0.1" />
+                        </div>
+
+                        <div class="form-group col-md-6 mb-4">
+                            <label for="FetalHeartToneCharPL-Add" class="control-label">Characteristic of FHT Weak/Strong</label>
+                            <select id="FetalHeartToneCharPL-Add" class="form-select" name="FetalHeartToneChar">
+                                <option value="" class="text-muted" selected>select weak/strong</option>
+                                <option value="Strong" class="text-muted">Strong</option>
+                                <option value="Weak" class="text-muted">Weak</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="PresentingPartPL-Add" class="control-label">Presenting Part</label>
+                            <input type="text" id="PresentingPartPL-Add" name="PresentingPart" class="form-control" placeholder="Enter presenting part" />
+                        </div>
+
+
+                        @* Submit and Close Buttons *@
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-pink">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@* Edit *@
+<div class="modal fade" id="PLEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Edit Progress Labor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="UpdatePLForm" method="POST">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <input type="hidden" id="plId-Edit" name="ID" />
+                        <input type="hidden" id="DeliveryIDPL-Edit" name="DeliveryID" value="@ViewBag.DeliveryId" />
+
+                        <div class="col-md-6 mb-4">
+                            <label for="DatePL-Edit" class="control-label">Date</label>
+                            <input type="date" id="DatePL-Edit" name="Date" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="TimePL-Edit" class="control-label">Time</label>
+                            <input type="time" id="TimePL-Edit" name="Time" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="TemperaturePL-Edit" class="control-label">Temperature</label>
+                            <input type="number" id="TemperaturePL-Edit" name="Temperature" class="form-control" placeholder="Enter (e.g, 37, 37.5 ,...) / ℃" step="0.1" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="BPPL-Edit" class="control-label">Blood Pressure</label>
+                            <input type="text" id="BPPL-Edit" name="BP" class="form-control" placeholder="Enter (e.g, 180/200...)" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="PulseRatePL-Edit" class="control-label">Pulse Rate</label>
+                            <input type="number" id="PulseRatePL-Edit" name="PulseRate" class="form-control" placeholder="Enter (e.g, 80,...)" step="0.1" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="RespiratoryRatePL-Edit" class="control-label">Respiratory Rate</label>
+                            <input type="number" id="RespiratoryRatePL-Edit" name="RespiratoryRate" class="form-control" placeholder="Enter (e.g, 20,...)" step="0.1" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="UterineContractionIntervalPL-Edit" class="control-label">Uterine Contraction Interval</label>
+                            <input type="text" id="UterineContractionIntervalPL-Edit" name="UterineContractionInterval" class="form-control" placeholder="Enter uterine contraction interval" />
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label for="CervicaldilationPL-Edit" class="control-label">Cervical Dilation</label>
+                            <input type="number" id="CervicaldilationPL-Edit" name="Cervicaldilation" class="form-control" placeholder="Enter (e.g, 10, 11, ...) /CM" step="0.1" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="BowStatusPL-Edit" class="control-label">Bow Intact/Rupture</label>
+                            <input type="text" id="BowStatusPL-Edit" name="BowStatus" class="form-control" placeholder="Enter bow intact/rupture" />
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="FetalHeartTonesPL-Edit" class="control-label">Fetal Heart Tones</label>
+                            <input type="number" id="FetalHeartTonesPL-Edit" name="FetalHeartTones" class="form-control" placeholder="Enter (e.g, 142,...) /BPM " step="0.1" />
+                        </div>
+
+                        <div class="form-group col-md-6 mb-4">
+                            <label for="FetalHeartToneCharPL-Edit" class="control-label">Characteristic of FHT Weak/Strong</label>
+                            <select id="FetalHeartToneCharPL-Edit" class="form-select" name="FetalHeartToneChar">
+                                <option value="" class="text-muted" selected>select weak/strong</option>
+                                <option value="Strong" class="text-muted">Strong</option>
+                                <option value="Weak" class="text-muted">Weak</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label for="PresentingPartPL-Edit" class="control-label">Presenting Part</label>
+                            <input type="text" id="PresentingPartPL-Edit" name="PresentingPart" class="form-control" placeholder="Enter presenting part" />
+                        </div>
+
+
+                        @* Submit and Close Buttons *@
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-pink">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@* Delivery Details *@
+@* Add Modal  *@
+<div class="modal fade" id="MDAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Add Delivery Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="AddMDForm" method="POST">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <h5 class="modal-title mb-2">Delivery of the Baby</h5>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DateDeliveredMD-Add" class="control-label">Date Delivered</label>
+                            <input type="date" id="DateDeliveredMD-Add" name="BabyDateDelivered" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="BabyTimeDeliveredMD-Add" class="control-label">Time Delivered</label>
+                            <input type="time" id="BabyTimeDeliveredMD-Add" name="BabyTimeDelivered" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="ApgarMD-Add" class="control-label">APGAR Scoring</label>
+                            <input type="number" id="ApgarMD-Add" name="Apgar" class="form-control" placeholder="Enter apgar score"/>
+                        </div>
+
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="BabySexMD-Add" class="control-label">Sex of Baby</label>
+                            <select id="BabySexMD-Add" class="form-select" name="BabySex">
+                                <option value="" class="text-muted" selected>select sex</option>
+                                <option value="Male" class="text-muted">Male</option>
+                                <option value="Female" class="text-muted">Female</option>
+                                <option value="Others" class="text-muted">Others</option>
+                            </select>
+                        </div>  
+
+                        <div class="col-md-6 mb-3">
+                            <label for="BabyWeightMD-Add" class="control-label">Baby Weight</label>
+                            <input type="text" id="BabyWeightMD-Add" name="BabyWeight" class="form-control" placeholder="Enter weight of baby" />
+                        </div>
+
+
+                        <h5 class="modal-title mt-4 mb-2">Delivery of the Placenta</h5>
+                        <div class="col-md-6 mb-3">
+                            <label for="PlacentaDateDeliveredMD-Add" class="control-label">Date</label>
+                            <input type="Date" id="PlacentaDateDeliveredMD-Add" name="PlacentaDateDelivered" class="form-control" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="PlacentaTimeDeliveredMD-Add" class="control-label">Time</label>
+                            <input type="time" id="PlacentaTimeDeliveredMD-Add" name="PlacentaTimeDelivered" class="form-control" />
+                        </div>
+
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="PlacentaStatusMD-Add" class="control-label">COMPLETE OR INCOMPLETE</label>
+                            <select id="PlacentaStatusMD-Add" class="form-select" name="PlacentaStatus">
+                                <option value="" class="text-muted" selected>select status</option>
+                                <option value="Complete" class="text-muted">COMPLETE</option>
+                                <option value="InComplete" class="text-muted">INCOMPLETE</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="ServiceProviderID-Add" class="control-label">Service Provider</label>
+                            <select id="ServiceProviderID-Add" class="form-select" name="ServiceProviderID" asp-items="ViewBag.allStaffList">
+                                <option value="" class="text-muted" selected>select service provider</option>
+                            </select>
+                        </div>
+
+                        @* Submit and Close Buttons *@
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-pink">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@* Edit Modal  *@
+<div class="modal fade" id="MDEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Edit Delivery Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="UpdateMDForm" method="POST">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <input type="hidden" id="mdId-Edit" name="Id" />
+                        <input type="hidden" id="caseNoMD-Edit" name="CaseNo" />
+                        <input type="hidden" id="patientIDMD-Edit" name="PatientID" />
+
+                        <h5 class="modal-title mb-2">Delivery of the Baby</h5>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="BabyDateDeliveredMD-Edit" class="control-label">Date Delivered</label>
+                            <input type="date" id="BabyDateDeliveredMD-Edit" name="BabyDateDelivered" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="BabyTimeDeliveredMD-Edit" class="control-label">Time Delivered</label>
+                            <input type="time" id="BabyTimeDeliveredMD-Edit" name="BabyTimeDelivered" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="ApgarMD-Edit" class="control-label">APGAR Scoring</label>
+                            <input type="number" id="ApgarMD-Edit" name="Apgar" class="form-control" placeholder="Enter apgar score" />
+                        </div>
+
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="BabySexMD-Edit" class="control-label">Sex of Baby</label>
+                            <select id="BabySexMD-Edit" class="form-select" name="BabySex">
+                                <option value="" class="text-muted" selected>select sex</option>
+                                <option value="Male" class="text-muted">Male</option>
+                                <option value="Female" class="text-muted">Female</option>
+                                <option value="Others" class="text-muted">Others</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="BabyWeightMD-Edit" class="control-label">Baby Weight</label>
+                            <input type="text" id="BabyWeightMD-Edit" name="BabyWeight" class="form-control" placeholder="Enter weight of baby" />
+                        </div>
+
+                        <h5 class="modal-title mt-4 mb-2">Delivery of the Placenta</h5>
+                        <div class="col-md-6 mb-3">
+                            <label for="PlacentaDateDeliveredMD-Edit" class="control-label">Date Delivered</label>
+                            <input type="Date" id="PlacentaDateDeliveredMD-Edit" name="PlacentaDateDelivered" class="form-control" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="PlacentaTimeDeliveredMD-Edit" class="control-label">Time Delivered</label>
+                            <input type="time" id="PlacentaTimeDeliveredMD-Edit" name="PlacentaTimeDelivered" class="form-control" />
+                        </div>
+
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="PlacentaStatusMD-Edit" class="control-label">COMPLETE OR INCOMPLETE</label>
+                            <select id="PlacentaStatusMD-Edit" class="form-select" name="PlacentaStatus">
+                                <option value="" class="text-muted" selected>select status</option>
+                                <option value="Complete" class="text-muted">COMPLETE</option>
+                                <option value="InComplete" class="text-muted">INCOMPLETE</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="ServiceProviderID-Edit" class="control-label">Service Provider</label>
+                            <select id="ServiceProviderID-Edit" class="form-select" name="ServiceProviderID" asp-items="ViewBag.allStaffList">
+                                <option value="" class="text-muted" selected>select service provider</option>
+                            </select>
+                        </div>
+
+                        @* Submit and Close Buttons *@
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-pink">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var patID = document.getElementById('patID').value;
+    var delID = document.getElementById('delID').value
+
+    $('#PrintMDBtn').on("click", function () {
+        var caseNo = $(this).data('mdid');
+        PrintForm(caseNo);
+    });
+
+    ////Maternal
+    $("#AddMDForm").on("submit", function (e) {
+         e.preventDefault();
+         AddMaternal();
+    });
+    $("#editMDBtn").on("click", function (e) {
+        var id = $(this).data('mdid');
+        EditMaternal(id);
+    });
+    $("#UpdateMDForm").on("submit", function (e) {
+        e.preventDefault();
+        UpdateMD();
+    });
+
+
+    ////Progress Labor
+    $("#AddPLForm").on("submit", function (e) {
+        e.preventDefault();
+        AddProgressLabor();
+    });
+    $(".pleditBtn").on("click", function (e) {
+        var id = $(this).data('plid');
+        EditProgressLabor(id);
+    });
+    $("#UpdatePLForm").on("submit", function (e) {
+        e.preventDefault();
+        UpdatePL();
+    });
+    // DELETE
+    $(".pldltBtn").on("click", function (e) {
+        var id = $(this).data('plid');
+        DeleteProgressLabor(id);
+    });
+
+
+
+    ////Progress Labor
+    // Update Record
+    function UpdatePL() {
+        var formData = $("#UpdatePLForm").serialize();
+        $.ajax({
+            url: '@Url.Action("UpdatePLRecord", "Delivery")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                if (result.isSuccess) {
+                    $('#PLEditModal').modal('hide');
+                    toastr.success(result.message)
+                    LoadMDComponent();
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                toastr.error('An error occurred while updating the  record.');
+                console.error('Error:', err);
+            }
+        });
+    }
+    // Edit Record
+    function EditProgressLabor(plId) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetPLRecord", "Delivery")',
+            data: { id: plId },
+            success: function (response) {
+                if (response && response.isSuccess) {
+                    var item = response.item.data;
+                    console.log(item)
+                    // Populate modal fields
+                    $('#plId-Edit').val(item.id);
+                    $('#caseNoMD-Edit').val(item.caseNo);
+
+                    $('#DatePL-Edit').val(item.date);
+                    $('#TimePL-Edit').val(item.time);
+                    $('#TemperaturePL-Edit').val(item.temperature);
+                    $('#BPPL-Edit').val(item.bp);
+                    $('#PulseRatePL-Edit').val(item.pulseRate);
+                    $('#RespiratoryRatePL-Edit').val(item.respiratoryRate);
+                    $('#UterineContractionIntervalPL-Edit').val(item.uterineContractionInterval);
+                    $('#CervicaldilationPL-Edit').val(item.cervicaldilation);
+                    $('#BowStatusPL-Edit').val(item.bowStatus);
+                    $('#FetalHeartTonesPL-Edit').val(item.fetalHeartTones);
+                    $('#FetalHeartToneCharPL-Edit').val(item.fetalHeartToneChar);
+                    $('#PresentingPartPL-Edit').val(item.presentingPart);
+
+                    // Show Edit Modal
+                    $('#PLEditModal').modal('show');
+                } else {
+                    toastr.error(response.message || 'Unable to load progress labor monitoring record.');
+                }
+            },
+            error: function () {
+                toastr.error('An error occurred while loading the progress labor monitoring record.');
+            }
+        });
+    }
+    // Add 
+    function AddProgressLabor() {
+        var formData = $('#AddPLForm').serializeArray();
+        formData.push({ name: 'patientID', value: patID });
+
+        $.ajax({
+            url: '@Url.Action("AddPLForm", "Delivery")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                if (result.isSuccess) {
+                    toastr.success(result.message)
+                    LoadMDComponent();
+                    $('#PLAddModal').modal('hide');
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                console.error('Error:', err);
+            }
+        });
+    }
+    //Delete Prenatal Visit
+    function DeleteProgressLabor(id) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("DeletePLRecord", "Delivery")',
+                    data: { deleteId: id },
+                    success: function (result) {
+                        if (result) {
+                            LoadMDComponent();
+                        }
+                    },
+                    error: function () {
+                        console.log('Unable to get the data.');
+                    }
+                })
+            }
+        });
+    }
+
+    ////Maternal
+    // Update Record
+    function UpdateMD() {
+        var formData = $("#UpdateMDForm").serialize();
+        $.ajax({
+            url: '@Url.Action("UpdateMDRecord", "Delivery")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                if (result.isSuccess) {
+                    $('#MDEditModal').modal('hide');
+                    toastr.success(result.message)
+                    LoadMDComponent();
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                toastr.error('An error occurred while updating the  record.');
+                console.error('Error:', err);
+            }
+        });
+    }
+    // Edit Record
+    function EditMaternal(mdId) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetMDRecord", "Delivery")',
+            data: { id: mdId },
+            success: function (response) {
+                if (response && response.isSuccess) {
+                    var item = response.item.data;
+                    console.log(item)
+                    // Populate modal fields
+                    $('#mdId-Edit').val(item.id);
+                    $('#caseNoMD-Edit').val(item.caseNo);
+                    $('#patientIDMD-Edit').val(item.patientID);
+
+                    $('#BabyDateDeliveredMD-Edit').val(item.babyDateDelivered);
+                    $('#BabyTimeDeliveredMD-Edit').val(item.babyTimeDelivered);
+                    $('#ApgarMD-Edit').val(item.apgar);
+                    $('#BabySexMD-Edit').val(item.babySex);
+                    $('#BabyWeightMD-Edit').val(item.babyWeight);
+                    $('#PlacentaDateDeliveredMD-Edit').val(item.placentaDateDelivered);
+                    $('#PlacentaTimeDeliveredMD-Edit').val(item.placentaTimeDelivered);
+                    $('#PlacentaStatusMD-Edit').val(item.placentaStatus);
+        
+
+                    var provider = response.item.staff;
+                    $('#ServiceProviderID-Edit').empty().append('<option selected>select provider name</option>');
+                    provider.forEach(function (data) {
+                        $('#ServiceProviderID-Edit').append(
+                            $('<option>', {
+                                value: data.id,
+                                text: data.firstname + " " + data.middlename + " " + data.lastname,
+                                selected: item.serviceProviderID === data.id
+                            })
+                        );
+                    });
+
+                    // Show Edit Modal
+                    $('#MDEditModal').modal('show');
+                } else {
+                    toastr.error(response.message || 'Unable to load maternal delivery monitoring record.');
+                }
+            },
+            error: function () {
+                toastr.error('An error occurred while loading the maternal delivery monitoring record.');
+            }
+        });
+    }
+    // Add Record
+    function AddMaternal() {
+        var formData = $('#AddMDForm').serializeArray();
+        formData.push({ name: 'patientID', value: patID });
+        formData.push({ name: 'caseno', value: delID});
+
+        $.ajax({
+            url: '@Url.Action("AddMDForm", "Delivery")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                if (result.isSuccess) {
+                    toastr.success(result.message)
+                    LoadMDComponent();
+                    $('#MDAddModal').modal('hide');
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                console.error('Error:', err);
+            }
+        });
+    }
+
+    //Load All Records
+    function LoadMDComponent() {
+        $.ajax({
+            url: '@Url.Action("MaternalMonitoringRecords", "Delivery")',
+            data: { patientId: patID, caseno: delID },
+            success: function (result) {
+                $('#maternalDeliveryMonitoring').html(result);
+            },
+            error: function () {
+                toastr.error("Failed to reload the maternal delivery monitoring records.");
+            }
+        });
+    }
+
+    //Print
+    function PrintForm(caseNo) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("PrintMaternalForm", "Print")',
+            data: { caseno: caseNo },
+            success: function (response) {
+                console.log(response)
+                if (response && response.isSuccess === false) {
+                    alert(response.message);
+                } else if (response && response.isSuccess === true) {
+                    window.location.href = "/Print/MaternalMonitoring_Form?caseno=" + response.maternal;
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle error
+                alert("An error occurred, Please ask the It support.");
+            }
+        });
+    }
+</script>

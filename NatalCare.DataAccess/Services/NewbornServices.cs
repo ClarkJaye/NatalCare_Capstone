@@ -31,12 +31,21 @@ namespace NatalCare.DataAccess.Services
             .GetAllAsync(p => p.StatusCode == "DL", includeProperties: "CreatedBy");
             return record.ToList();
         }
+        public async Task<Newborn> GetGeneralInformation(string id)
+        {
+            var newborn = await unitOfWork.Repository<Newborn>().GetFirstOrDefaultAsync(p => p.NewbornID == id, includeProperties: "Patient");
+
+            if (newborn == null)
+                return new Newborn();
+
+            return newborn;
+        }
 
 
         public async Task<GeneralResponse> GetInformation(string id)
         {
             var record = await unitOfWork.Repository<Newborn>()
-                .GetFirstOrDefaultAsync(x => x.NewbornID == id, includeProperties: "Patient");
+                .GetFirstOrDefaultAsync(x => x.NewbornID == id, includeProperties: "Patient,Father,Midwife,Physician,AssisstedBy");
 
             if (record == null) return new GeneralResponse(false, record, "Newborn Not Found.");
 
@@ -93,14 +102,19 @@ namespace NatalCare.DataAccess.Services
             existingRecord.TimeofBirth = newborn.TimeofBirth;
             existingRecord.Address = newborn.Address;
             existingRecord.Gender = newborn.Gender;
-            existingRecord.Circumference = newborn.Circumference;
-            existingRecord.Head = newborn.Head;
-            existingRecord.Chest = newborn.Chest;
-            existingRecord.Length = newborn.Length;
-            existingRecord.Temp = newborn.Temp;
             existingRecord.Weight = newborn.Weight;
+            existingRecord.Length = newborn.Length;
+            existingRecord.HeadCircumference = newborn.HeadCircumference;
+            existingRecord.ChestCircumference = newborn.ChestCircumference;
+            existingRecord.MidArmCircumference = newborn.MidArmCircumference;
+            existingRecord.Temp = newborn.Temp;
             existingRecord.APGAR = newborn.APGAR;
             existingRecord.Medication = newborn.Medication;
+            existingRecord.DeliveryType = newborn.DeliveryType;
+            existingRecord.DeliveryPresentation = newborn.DeliveryPresentation;
+            existingRecord.MidwifeID = newborn.MidwifeID;
+            existingRecord.StaffID = newborn.StaffID;
+            existingRecord.PhysicianID = newborn.PhysicianID;
             existingRecord.MotherID = newborn.MotherID;
             existingRecord.StatusCode = newborn.StatusCode;
             existingRecord.Updated_At = DateTime.Now;

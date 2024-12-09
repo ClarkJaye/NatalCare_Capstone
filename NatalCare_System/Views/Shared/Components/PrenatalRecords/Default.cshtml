@@ -2,19 +2,19 @@
 
 <h6 class="px-2">Prenatal Records</h6>
 <div class="d-flex justify-content-end my-3 gap-3">
-    <a asp-controller="" asp-action="" class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#prenatalAddModal" data-patient-id="@Model.FirstOrDefault()?.PatientID">
+    <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#prenatalAddModal" data-patient-id="@Model.FirstOrDefault()?.PatientID">
         <i class="fas fa-plus"></i>
         <span>Add New Prenatal Record</span>
-    </a>
+    </button>
     <button id="displayDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
         <i class="fas fa-trash"></i>
         <span>Deleted History Records</span>
     </button>
 </div>
 
-<div class="d-flex align-items-center gap-2">
+@* <div class="d-flex align-items-center gap-2 mb-2">
     <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
-</div>
+</div> *@
 <!-- Patient Table-->
 <div class="table-responsive" style="max-height:600px;">
     <table class="table table-striped">
@@ -48,20 +48,18 @@
                         <td>@item.LMP?.ToString("MMM dd yyyy")</td>
                         <td>@item.EDC?.ToString("MMM dd yyyy")</td>
                         <td>@item.HRCODE</td>
-                        <td>@item.Notes</td>
+                        <td style="max-width: 200px; word-wrap: break-word;">@item.Notes</td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
-                                <a asp-controller="Prenatal" asp-action="PrenatalRecord" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-sm btn-outline-secondary">
-                                    <i class="fa-solid fa-list"></i>
-                                    <span>Records</span>
+                                <a asp-controller="Prenatal" asp-action="PrenatalRecord" asp-route-patientid="@item.PatientID" asp-route-caseno="@item.CaseNo" class="btn btn-outline-secondary">
+                                    @* <i class="fa-solid fa-list"></i> *@
+                                    <i class="fa-solid fa-folder-open"></i>
                                 </a>
-                                <button class="btn btn-sm btn-outline-primary edit-Btn" data-caseno="@item.CaseNo">
+                                <button class="btn btn-outline-primary editPre-Btn" data-caseno="@item.CaseNo">
                                     <i class="fa-solid fa-pen-to-square"></i>
-                                    <span>Edit</span>
                                 </button>
-                                <button class="btn btn-sm btn-outline-danger dlt-Btn" data-caseno="@item.CaseNo">
+                                <button class="btn btn-outline-danger dltPre-Btn" data-caseno="@item.CaseNo">
                                     <i class="fa-solid fa-trash"></i>
-                                    <span>Delete</span>
                                 </button>
                             </div>
                         </td>
@@ -89,7 +87,7 @@
 <div class="modal fade" id="prenatalAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Add Prenatal Record</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -99,32 +97,32 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="Gravida-Add" class="control-label">GRAVIDA</label>
-                            <input id="Gravida-Add" name="Gravida" class="form-control" placeholder="Enter number of Gravida" required />
+                            <input type="number" id="Gravida-Add" name="Gravida" class="form-control" placeholder="Enter number of Gravida" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="Para-Add" class="control-label">PARA</label>
-                            <input id="Para-Add" name="Para" class="form-control" placeholder="Enter number of Para" required />
+                            <input type="number" id="Para-Add" name="Para" class="form-control" placeholder="Enter number of Para" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="Abortion-Add" class="control-label">ABORTION</label>
-                            <input id="Abortion-Add" name="Abortion" class="form-control" placeholder="Enter number of Abortion" required />
+                            <input type="number" id="Abortion-Add" name="Abortion" class="form-control" placeholder="Enter number of Abortion" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="StillBirth-Add" class="control-label">STILL BIRTH</label>
-                            <input id="StillBirth-Add" name="StillBirth" class="form-control" placeholder="Enter number of Still Birth" required />
+                            <input type="number" id="StillBirth-Add" name="StillBirth" class="form-control" placeholder="Enter number of Still Birth" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="LMP" class="control-label">LMP</label>
-                            <input type="date" id="LMP-Add" name="LMP" class="form-control" required />
+                            <input type="date" id="LMP-Add" name="LMP" class="form-control" required onchange="calculateAddEDC()" />
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="EDC" class="control-label">EDC</label>
-                            <input type="date" id="EDC-Add" name="EDC" class="form-control" required />
+                            <input type="date" id="EDC-Add" name="EDC" class="form-control" readonly />
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -134,7 +132,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="HRCODE" class="control-label">H.R. Code</label>
-                            <input id="HRCODE-Add" name="HRCODE" class="form-control" placeholder="Enter H.R Code"required />
+                            <input id="HRCODE-Add" name="HRCODE" class="form-control" placeholder="Enter H.R Code" required />
                         </div>
 
                         <div class="col-md-12 mb-3">
@@ -159,7 +157,7 @@
 <div class="modal fade" id="prenatalEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Edit Prenatal Record</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -192,12 +190,12 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="LMP" class="control-label">LMP</label>
-                            <input type="date" id="LMP-Edit" name="LMP" class="form-control" required />
+                            <input type="date" id="LMP-Edit" name="LMP" class="form-control" required onchange="calculateEditEDC()" />
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="EDC" class="control-label">EDC</label>
-                            <input type="date" id="EDC-Edit" name="EDC" class="form-control" required />
+                            <input type="date" id="EDC-Edit" name="EDC" class="form-control" readonly />
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -262,12 +260,12 @@
         UpdatePrenatal();
     });
 
-    $(".edit-Btn").on("click", function (e) {
+    $(".editPre-Btn").on("click", function (e) {
         var caseNo = $(this).data('caseno');
         EditPrenatal(caseNo);
     });
         
-    $(".dlt-Btn").on("click", function (e) {
+    $(".dltPre-Btn").on("click", function (e) {
         var caseNo = $(this).data('caseno');
         DeletePrenatal(caseNo);
     });
@@ -414,4 +412,47 @@
         });
     }
 
+    function calculateAddEDC() {
+        const lmpInput = document.getElementById("LMP-Add");
+        const edcInput = document.getElementById("EDC-Add");
+
+        // Get the LMP date value
+        const lmpDate = new Date(lmpInput.value);
+        if (isNaN(lmpDate)) {
+            edcInput.value = ""; 
+            return;
+        }
+
+        // Calculate EDC using Naegele's Rule
+        const edcDate = new Date(lmpDate);
+        edcDate.setDate(edcDate.getDate() + 280); // Add 280 days (40 weeks)
+
+        // Set the calculated EDC in the input field
+        const year = edcDate.getFullYear();
+        const month = String(edcDate.getMonth() + 1).padStart(2, "0"); 
+        const day = String(edcDate.getDate()).padStart(2, "0"); 
+        edcInput.value = `${year}-${month}-${day}`;
+    }
+
+    function calculateEditEDC() {
+        const lmpInput = document.getElementById("LMP-Edit");
+        const edcInput = document.getElementById("EDC-Edit");
+
+        // Get the LMP date value
+        const lmpDate = new Date(lmpInput.value);
+        if (isNaN(lmpDate)) {
+            edcInput.value = "";
+            return;
+        }
+
+        // Calculate EDC using Naegele's Rule
+        const edcDate = new Date(lmpDate);
+        edcDate.setDate(edcDate.getDate() + 280); // Add 280 days (40 weeks)
+
+        // Set the calculated EDC in the input field
+        const year = edcDate.getFullYear();
+        const month = String(edcDate.getMonth() + 1).padStart(2, "0");
+        const day = String(edcDate.getDate()).padStart(2, "0");
+        edcInput.value = `${year}-${month}-${day}`;
+    }
 </script>

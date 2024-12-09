@@ -17,7 +17,7 @@ namespace NatalCare.DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -171,6 +171,108 @@ namespace NatalCare.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("NatalCare.Models.Entities.Bed", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BedNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PatientID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("WardID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PatientID");
+
+                    b.HasIndex("WardID");
+
+                    b.ToTable("Beds");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BedNo = "Bed 1",
+                            IsUsed = false,
+                            WardID = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BedNo = "Bed 2",
+                            IsUsed = false,
+                            WardID = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BedNo = "Bed 3",
+                            IsUsed = false,
+                            WardID = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            BedNo = "Bed 4",
+                            IsUsed = false,
+                            WardID = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            BedNo = "Bed 5",
+                            IsUsed = false,
+                            WardID = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            BedNo = "Bed 1",
+                            IsUsed = false,
+                            WardID = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            BedNo = "Bed 2",
+                            IsUsed = false,
+                            WardID = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            BedNo = "Bed 3",
+                            IsUsed = false,
+                            WardID = 2
+                        },
+                        new
+                        {
+                            Id = 9,
+                            BedNo = "Bed 4",
+                            IsUsed = false,
+                            WardID = 2
+                        },
+                        new
+                        {
+                            Id = 10,
+                            BedNo = "Bed 5",
+                            IsUsed = false,
+                            WardID = 2
+                        });
+                });
+
             modelBuilder.Entity("NatalCare.Models.Entities.Category", b =>
                 {
                     b.Property<int>("CategoryId")
@@ -203,37 +305,382 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             CategoryId = 1,
                             CategoryName = "Masters",
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5568),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9451),
                             StatusCode = "AC"
                         },
                         new
                         {
                             CategoryId = 2,
                             CategoryName = "Patient Management",
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5570),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9453),
                             StatusCode = "AC"
                         },
                         new
                         {
                             CategoryId = 3,
                             CategoryName = "Billing & Payement",
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5571),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9454),
                             StatusCode = "AC"
                         },
                         new
                         {
                             CategoryId = 4,
                             CategoryName = "Reports",
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5572),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9455),
                             StatusCode = "AC"
                         },
                         new
                         {
                             CategoryId = 5,
                             CategoryName = "Maintenance",
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5573),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9456),
                             StatusCode = "AC"
                         });
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.ClinicalFaceSheet", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("Abortion")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Abssconded")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Admitting")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CaseNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ClinicalCreatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Created_By");
+
+                    b.Property<string>("ClinicalUpdatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Updated_By");
+
+                    b.Property<DateTime?>("Created_At")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<bool>("Discarged")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FinalDiagnosis")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Gravida")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Hama")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HistoryOfPatientPresentCondition")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ICDCodes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Improved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("InformantAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InformantContactNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InformantName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("LivingChildren")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MidwifeID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Para")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PatientID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("Premature")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Recoverred")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RelationToPatient")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StatusCode")
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<int?>("TermBirths")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Transferred")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("UnImproved")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("Updated_At")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CaseNo");
+
+                    b.HasIndex("ClinicalCreatedBy");
+
+                    b.HasIndex("ClinicalUpdatedBy");
+
+                    b.HasIndex("MidwifeID");
+
+                    b.HasIndex("PatientID");
+
+                    b.HasIndex("StatusCode");
+
+                    b.ToTable("ClinicalFaceSheet");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.Delivery", b =>
+                {
+                    b.Property<string>("CaseNo")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("BedNumber")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("Created_At")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("DLCreatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Created_By");
+
+                    b.Property<string>("DLUpdatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Updated_By");
+
+                    b.Property<DateOnly>("Date_Admitted")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly?>("Date_Discharged")
+                        .HasColumnType("date");
+
+                    b.Property<int?>("DeliveryStatusID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NewbornID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PatientID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PrenatalID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StatusCode")
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<TimeOnly>("Time_Admitted")
+                        .HasColumnType("time");
+
+                    b.Property<TimeOnly?>("Time_Discharged")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime?>("Updated_At")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("WardNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("CaseNo");
+
+                    b.HasIndex("BedNumber");
+
+                    b.HasIndex("DLCreatedBy");
+
+                    b.HasIndex("DLUpdatedBy");
+
+                    b.HasIndex("DeliveryStatusID");
+
+                    b.HasIndex("NewbornID");
+
+                    b.HasIndex("PatientID");
+
+                    b.HasIndex("PrenatalID");
+
+                    b.HasIndex("StatusCode");
+
+                    b.HasIndex("WardNumber");
+
+                    b.ToTable("Delivery");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.DeliveryStatus", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+
+                    b.Property<string>("StatusName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DeliveryStatus");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            StatusName = "In-Labor"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            StatusName = "PostPartum"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            StatusName = "Discharged"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            StatusName = "Referred"
+                        });
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.DischargementForm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("BirthSpacingFamilyPlanning")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CaseNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CompleteDiagnosis")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Created_At")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<bool>("DangerSignsBaby")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DangerSignsMother")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DeliveryCreatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Created_By");
+
+                    b.Property<string>("DeliveryUpdatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Updated_By");
+
+                    b.Property<bool>("ExclusiveBreastFeeding")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FollowUpManagement")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("FollowUpVisitsBaby")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FollowUpVisitsMother")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Hosp_No")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HygieneCordCareWarmth")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IronFolate")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Medications")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MidwifeID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Nutrition")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PatientID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("PostpartumCareAndHygiene")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("PreparedBy")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("SpecialAdviceLowBirthWeight")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("StatusCode")
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<DateTime?>("Updated_At")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaseNo");
+
+                    b.HasIndex("DeliveryCreatedBy");
+
+                    b.HasIndex("DeliveryUpdatedBy");
+
+                    b.HasIndex("MidwifeID");
+
+                    b.HasIndex("PatientID");
+
+                    b.HasIndex("PreparedBy");
+
+                    b.HasIndex("StatusCode");
+
+                    b.ToTable("DischargementForm");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.FamilyPlanning", b =>
@@ -299,6 +746,126 @@ namespace NatalCare.DataAccess.Migrations
                     b.ToTable("FamilyPlanning");
                 });
 
+            modelBuilder.Entity("NatalCare.Models.Entities.ItemPayments", b =>
+                {
+                    b.Property<int?>("ItemID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PaymentID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("ItemID", "PaymentID");
+
+                    b.HasIndex("PaymentID");
+
+                    b.ToTable("ItemPayments");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.Items", b =>
+                {
+                    b.Property<int>("ItemID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ItemID"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ItemName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.HasKey("ItemID");
+
+                    b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.MaternalMonitoring", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("Apgar")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly?>("BabyDateDelivered")
+                        .HasColumnType("date");
+
+                    b.Property<string>("BabySex")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly?>("BabyTimeDelivered")
+                        .HasColumnType("time");
+
+                    b.Property<string>("BabyWeight")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CaseNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("Created_At")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("MDCreatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Created_By");
+
+                    b.Property<string>("MDUpdatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Updated_By");
+
+                    b.Property<string>("PatientID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateOnly?>("PlacentaDateDelivered")
+                        .HasColumnType("date");
+
+                    b.Property<string>("PlacentaStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly?>("PlacentaTimeDelivered")
+                        .HasColumnType("time");
+
+                    b.Property<int?>("ServiceProviderID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StatusCode")
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<DateTime?>("Updated_At")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CaseNo");
+
+                    b.HasIndex("MDCreatedBy");
+
+                    b.HasIndex("MDUpdatedBy");
+
+                    b.HasIndex("PatientID");
+
+                    b.HasIndex("ServiceProviderID");
+
+                    b.HasIndex("StatusCode");
+
+                    b.ToTable("MaternalMonitoring");
+                });
+
             modelBuilder.Entity("NatalCare.Models.Entities.Modules", b =>
                 {
                     b.Property<int>("ModuleId")
@@ -335,7 +902,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 1,
                             CategoryId = 1,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5586),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9491),
                             ModuleTitle = "Dashboard",
                             StatusCode = "AC"
                         },
@@ -343,7 +910,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 2,
                             CategoryId = 2,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5588),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9493),
                             ModuleTitle = "Patient Records",
                             StatusCode = "AC"
                         },
@@ -351,7 +918,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 3,
                             CategoryId = 2,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5590),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9494),
                             ModuleTitle = "Newborn Records",
                             StatusCode = "AC"
                         },
@@ -359,7 +926,7 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 4,
                             CategoryId = 2,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5590),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9496),
                             ModuleTitle = "Admission / In-Patient",
                             StatusCode = "AC"
                         },
@@ -367,56 +934,72 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             ModuleId = 5,
                             CategoryId = 2,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5591),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9497),
                             ModuleTitle = "Out-Patient (OPD)",
                             StatusCode = "AC"
                         },
                         new
                         {
                             ModuleId = 6,
-                            CategoryId = 3,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5592),
-                            ModuleTitle = "Invoice List",
+                            CategoryId = 2,
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9498),
+                            ModuleTitle = "Refferal Patient",
                             StatusCode = "AC"
                         },
                         new
                         {
                             ModuleId = 7,
                             CategoryId = 3,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5593),
-                            ModuleTitle = "Generate Invoice",
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9499),
+                            ModuleTitle = "Invoice List",
                             StatusCode = "AC"
                         },
                         new
                         {
                             ModuleId = 8,
-                            CategoryId = 4,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5593),
-                            ModuleTitle = "Natality Reports",
+                            CategoryId = 3,
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9501),
+                            ModuleTitle = "Generate Invoice",
                             StatusCode = "AC"
                         },
                         new
                         {
                             ModuleId = 9,
                             CategoryId = 4,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5594),
-                            ModuleTitle = "Invoice Reports",
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9502),
+                            ModuleTitle = "Natality Reports",
                             StatusCode = "AC"
                         },
                         new
                         {
                             ModuleId = 10,
-                            CategoryId = 5,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5595),
-                            ModuleTitle = "Profiles",
+                            CategoryId = 4,
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9503),
+                            ModuleTitle = "Invoice Reports",
                             StatusCode = "AC"
                         },
                         new
                         {
                             ModuleId = 11,
                             CategoryId = 5,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5596),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9504),
+                            ModuleTitle = "Profiles",
+                            StatusCode = "AC"
+                        },
+                        new
+                        {
+                            ModuleId = 12,
+                            CategoryId = 5,
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9506),
                             ModuleTitle = "Users",
+                            StatusCode = "AC"
+                        },
+                        new
+                        {
+                            ModuleId = 13,
+                            CategoryId = 5,
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9507),
+                            ModuleTitle = "Staff",
                             StatusCode = "AC"
                         });
                 });
@@ -432,11 +1015,8 @@ namespace NatalCare.DataAccess.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Chest")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Circumference")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal?>("ChestCircumference")
+                        .HasColumnType("decimal(5, 2)");
 
                     b.Property<DateTime?>("Created_At")
                         .ValueGeneratedOnAdd()
@@ -447,6 +1027,15 @@ namespace NatalCare.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("date");
 
+                    b.Property<string>("DeliveryPresentation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeliveryType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("FatherID")
+                        .HasColumnType("int");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -455,21 +1044,27 @@ namespace NatalCare.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Head")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal?>("HeadCircumference")
+                        .HasColumnType("decimal(5, 2)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Length")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal?>("Length")
+                        .HasColumnType("decimal(5, 2)");
 
                     b.Property<string>("Medication")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal?>("MidArmCircumference")
+                        .HasColumnType("decimal(5, 2)");
+
                     b.Property<string>("MiddleName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MidwifeID")
+                        .HasColumnType("int");
 
                     b.Property<string>("MotherID")
                         .HasColumnType("nvarchar(450)");
@@ -482,14 +1077,20 @@ namespace NatalCare.DataAccess.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("Updated_By");
 
+                    b.Property<int?>("PhysicianID")
+                        .HasColumnType("int");
+
                     b.Property<string>("PlaceOfBirth")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StaffID")
+                        .HasColumnType("int");
 
                     b.Property<string>("StatusCode")
                         .HasColumnType("nvarchar(2)");
 
-                    b.Property<string>("Temp")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal?>("Temp")
+                        .HasColumnType("decimal(4, 1)");
 
                     b.Property<TimeOnly?>("TimeofBirth")
                         .IsRequired()
@@ -498,10 +1099,14 @@ namespace NatalCare.DataAccess.Migrations
                     b.Property<DateTime?>("Updated_At")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Weight")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal?>("Weight")
+                        .HasColumnType("decimal(5, 2)");
 
                     b.HasKey("NewbornID");
+
+                    b.HasIndex("FatherID");
+
+                    b.HasIndex("MidwifeID");
 
                     b.HasIndex("MotherID");
 
@@ -509,9 +1114,380 @@ namespace NatalCare.DataAccess.Migrations
 
                     b.HasIndex("NewbornUpdatedBy");
 
+                    b.HasIndex("PhysicianID");
+
+                    b.HasIndex("StaffID");
+
                     b.HasIndex("StatusCode");
 
                     b.ToTable("Newborn");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.NewbornHearing", b =>
+                {
+                    b.Property<string>("HearingNo")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AttendingPractitioner")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BabyStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Created_At")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<DateTime?>("DateVisit")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("HearingCreatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Created_By");
+
+                    b.Property<string>("HearingResults")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HearingUpdatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Updated_By");
+
+                    b.Property<string>("NewbornID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PatientID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StatusCode")
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<DateOnly?>("TestDate")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime?>("Updated_At")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("HearingNo");
+
+                    b.HasIndex("HearingCreatedBy");
+
+                    b.HasIndex("HearingUpdatedBy");
+
+                    b.HasIndex("NewbornID");
+
+                    b.HasIndex("PatientID");
+
+                    b.HasIndex("StatusCode");
+
+                    b.ToTable("NewbornHearing");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.NewbornScreening", b =>
+                {
+                    b.Property<string>("ScreeningNo")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AttendingPractitioner")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BabyStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Courier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Created_At")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DataSampleSent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly?>("DateOfCollection")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly?>("DateRegistration")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime?>("DateVisit")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Feeding")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilterCardNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NewbornID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PatientID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PlaceOfCollection")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ScreeningCreatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Created_By");
+
+                    b.Property<string>("ScreeningResults")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ScreeningUpdatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Updated_By");
+
+                    b.Property<string>("Specimen")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StatusCode")
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<TimeOnly?>("TimeOfCollection")
+                        .HasColumnType("time");
+
+                    b.Property<string>("TrackingNubmer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TypeOfSample")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Updated_At")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ScreeningNo");
+
+                    b.HasIndex("NewbornID");
+
+                    b.HasIndex("PatientID");
+
+                    b.HasIndex("ScreeningCreatedBy");
+
+                    b.HasIndex("ScreeningUpdatedBy");
+
+                    b.HasIndex("StatusCode");
+
+                    b.ToTable("NewbornScreening");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.Obstetrical", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("AgesOfFirstMenses")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AnesthesiaType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("BirthControlTheOfPregnancy")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("BirthSex")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BirthWeigth")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CaseNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ComplicationsOrComments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Created_At")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<DateOnly?>("DateOfPositivePregnancyTest")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("DaysMensesMonthly")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstDayOfLastMenstrualCycle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FrequencyOfCycleEvery")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LaborLengthHours")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("NoOfAbortions")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NoOfD_CWithCarriagesPregnancy")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NoOfLiving")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NoOfMiscarriages")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NoOfMultipleBirths")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NoOfPregnancy_TubalPregnancy")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NoOfWeeks")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NoOf_FullTerm")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NoOf_Premature")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ObsCreatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Created_By");
+
+                    b.Property<string>("ObsUpdatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Updated_By");
+
+                    b.Property<string>("PatientID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PlaceOfDelivery")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PregnancyMonthYear")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PregnancyTestDoneBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("PretermLabor")
+                        .HasColumnType("bit");
+
+                    b.Property<DateOnly?>("PriorMensesDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("StatusCode")
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<int?>("TotalNoOfPreg")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("Updated_At")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Vaginal_CS")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CaseNo");
+
+                    b.HasIndex("ObsCreatedBy");
+
+                    b.HasIndex("ObsUpdatedBy");
+
+                    b.HasIndex("PatientID");
+
+                    b.HasIndex("StatusCode");
+
+                    b.ToTable("Obstetrical");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.OpdVisit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("Created_At")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateVisit")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OPDCreatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Created_By");
+
+                    b.Property<string>("PatientID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ReasonForVisit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ServiceID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StatusCode")
+                        .HasColumnType("nvarchar(2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OPDCreatedBy");
+
+                    b.HasIndex("PatientID");
+
+                    b.HasIndex("StatusCode");
+
+                    b.ToTable("OPD");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.PatientPayments", b =>
+                {
+                    b.Property<int?>("PatientPaymentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("PatientPaymentID"));
+
+                    b.Property<decimal?>("Amount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<DateTime?>("DatePaid")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PatientID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("PaymentID")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Payment_Method")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PatientPaymentID");
+
+                    b.HasIndex("PatientID");
+
+                    b.HasIndex("PaymentID");
+
+                    b.ToTable("PatientPayments");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.Patients", b =>
@@ -564,6 +1540,9 @@ namespace NatalCare.DataAccess.Migrations
                     b.Property<string>("MobileNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Nationality")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Occupation")
                         .HasColumnType("nvarchar(max)");
 
@@ -607,6 +1586,214 @@ namespace NatalCare.DataAccess.Migrations
                     b.HasIndex("StatusCode");
 
                     b.ToTable("Patients");
+
+                    b.HasData(
+                        new
+                        {
+                            PatientID = "PT0001",
+                            Address = "Tipolo, Mandaue City Cebu ",
+                            Birthdate = new DateOnly(1998, 1, 4),
+                            BloodType = "O+",
+                            CivilStatus = "single",
+                            Created_At = new DateTime(2024, 2, 28, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            Emergency_MobileNumber = "09912356894",
+                            Emergency_Name = "Mardelita Calma",
+                            FirstName = "Erina",
+                            Gender = "Female",
+                            HasPhilHealth = false,
+                            LastName = "Souma",
+                            MiddleName = "Nakiri",
+                            MobileNumber = "09317860939",
+                            Occupation = "Fashion Designer",
+                            PatientCreatedBy = "223e5845-f58c-493f-b6b4-46ff3b18a332",
+                            PlaceOfBirth = "Bantayan Cebu City",
+                            Religion = "Catholic",
+                            SpouseId = 1,
+                            StatusCode = "AC"
+                        });
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.Payments", b =>
+                {
+                    b.Property<int?>("PaymentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("PaymentID"));
+
+                    b.Property<DateTime?>("Created_At")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<decimal?>("Discount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("PatientCreatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Created_By");
+
+                    b.Property<string>("PatientID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PatientUpdatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Updated_By");
+
+                    b.Property<string>("Payment_Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("PhilHealth_Deduction")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal?>("Total_Amount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<DateTime?>("Updated_At")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("PaymentID");
+
+                    b.HasIndex("PatientCreatedBy");
+
+                    b.HasIndex("PatientID");
+
+                    b.HasIndex("PatientUpdatedBy");
+
+                    b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.PhysicalExamination", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Abdomen_Mass")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Abdomen_Normal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Abdomen_Varicosities")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("BP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Breast_Mass")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Breast_NippleDischarged")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Breast_Normal")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CaseNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("Conjunctive_Normal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Conjunctive_Pale")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Conjunctive_YW")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("Created_At")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<bool>("Extremities_Edema")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Extremities_Normal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Extremities_Varicosities")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Height")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Neck_EnlargedLymphNodes")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Neck_Mass")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Neck_Normal")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OBHistory")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PECreatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Created_By");
+
+                    b.Property<string>("PEUpdatedBy")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("Updated_By");
+
+                    b.Property<string>("PatientID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal?>("PulseRate")
+                        .HasColumnType("decimal(5, 2)");
+
+                    b.Property<decimal?>("RespiratoryRate")
+                        .HasColumnType("decimal(5, 2)");
+
+                    b.Property<bool>("Skin_Hematoma")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Skin_Normal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Skin_Pale")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Skin_Yellowish")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("StatusCode")
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<decimal?>("Temperature")
+                        .HasColumnType("decimal(4, 1)");
+
+                    b.Property<DateTime?>("Updated_At")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("Weight")
+                        .HasColumnType("decimal(5, 2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaseNo");
+
+                    b.HasIndex("PECreatedBy");
+
+                    b.HasIndex("PEUpdatedBy");
+
+                    b.HasIndex("PatientID");
+
+                    b.HasIndex("StatusCode");
+
+                    b.ToTable("PhysicalExamination");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.Prenatal", b =>
@@ -614,8 +1801,8 @@ namespace NatalCare.DataAccess.Migrations
                     b.Property<string>("CaseNo")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Abortion")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Abortion")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("Created_At")
                         .ValueGeneratedOnAdd()
@@ -628,8 +1815,8 @@ namespace NatalCare.DataAccess.Migrations
                     b.Property<DateOnly?>("EDC")
                         .HasColumnType("date");
 
-                    b.Property<string>("Gravida")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Gravida")
+                        .HasColumnType("int");
 
                     b.Property<string>("HRCODE")
                         .HasColumnType("nvarchar(max)");
@@ -640,8 +1827,8 @@ namespace NatalCare.DataAccess.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Para")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Para")
+                        .HasColumnType("int");
 
                     b.Property<string>("PatientID")
                         .IsRequired()
@@ -655,11 +1842,14 @@ namespace NatalCare.DataAccess.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("Updated_By");
 
+                    b.Property<int>("PrenatalVisitTotal")
+                        .HasColumnType("int");
+
                     b.Property<string>("StatusCode")
                         .HasColumnType("nvarchar(2)");
 
-                    b.Property<string>("StillBirth")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("StillBirth")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("Updated_At")
                         .HasColumnType("datetime2");
@@ -766,6 +1956,105 @@ namespace NatalCare.DataAccess.Migrations
                     b.ToTable("PrenatalVisit");
                 });
 
+            modelBuilder.Entity("NatalCare.Models.Entities.ProgressLabor", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("BP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BowStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Cervicaldilation")
+                        .HasColumnType("decimal(4, 1)");
+
+                    b.Property<DateOnly?>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<string>("DeliveryID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FetalHeartToneChar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("FetalHeartTones")
+                        .HasColumnType("decimal(4, 1)");
+
+                    b.Property<string>("PresentingPart")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PulseRate")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RespiratoryRate")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Temperature")
+                        .HasColumnType("decimal(4, 1)");
+
+                    b.Property<TimeOnly?>("Time")
+                        .HasColumnType("time");
+
+                    b.Property<string>("UterineContractionInterval")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("DeliveryID");
+
+                    b.ToTable("ProgressLabor");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.RoleStaff", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RoleStaff");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            RoleName = "Staff"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            RoleName = "Midwife"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            RoleName = "Physician"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            RoleName = "Nurse"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            RoleName = "Doctor"
+                        });
+                });
+
             modelBuilder.Entity("NatalCare.Models.Entities.Role_Access", b =>
                 {
                     b.Property<string>("RoleId")
@@ -795,79 +2084,133 @@ namespace NatalCare.DataAccess.Migrations
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 1,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5613),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9580),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 2,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5615),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9585),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 3,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5616),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9587),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 4,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5616),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9588),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 5,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5617),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9589),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 6,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5618),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9590),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 7,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5618),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9591),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 8,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5619),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9607),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 9,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5620),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9620),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 10,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5620),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9621),
                             OpenAccess = "Y"
                         },
                         new
                         {
                             RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             ModuleId = 11,
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5621),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9622),
+                            OpenAccess = "Y"
+                        },
+                        new
+                        {
+                            RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
+                            ModuleId = 12,
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9624),
+                            OpenAccess = "Y"
+                        },
+                        new
+                        {
+                            RoleId = "18ab63db-22b1-4656-93e8-6240c08c988c",
+                            ModuleId = 13,
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9625),
                             OpenAccess = "Y"
                         });
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.ServicesPayment", b =>
+                {
+                    b.Property<int?>("ServiceID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PaymentID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("ServiceID", "PaymentID");
+
+                    b.HasIndex("PaymentID");
+
+                    b.ToTable("ServicesPayments");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.Servicesss", b =>
+                {
+                    b.Property<int>("ServiceID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ServiceID"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("ServiceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ServiceID");
+
+                    b.ToTable("Services");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.Spouse", b =>
@@ -900,12 +2243,84 @@ namespace NatalCare.DataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("Nationality")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Occupation")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SpouseId");
 
                     b.ToTable("Spouse");
+
+                    b.HasData(
+                        new
+                        {
+                            SpouseId = 1,
+                            Address = "Tipolo, Mandaue City Cebu ",
+                            Birthdate = new DateOnly(1899, 1, 4),
+                            FirstName = "Yukihira",
+                            Gender = "Female",
+                            LastName = "Souma",
+                            MiddleName = "Dela",
+                            Occupation = "Enginneer"
+                        });
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.Staff", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Staff");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstName = "Shane",
+                            LastName = "Cruz",
+                            MiddleName = "Dela",
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FirstName = "Jane",
+                            LastName = "Salvador",
+                            MiddleName = "Salvi",
+                            RoleId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FirstName = "Liza",
+                            LastName = "Ariesgado",
+                            MiddleName = "Aries",
+                            RoleId = 3
+                        });
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.Status", b =>
@@ -931,19 +2346,19 @@ namespace NatalCare.DataAccess.Migrations
                         new
                         {
                             StatusCode = "AC",
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5551),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9316),
                             StatusName = "ACTIVE"
                         },
                         new
                         {
                             StatusCode = "IN",
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5554),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9319),
                             StatusName = "INACTTIVE"
                         },
                         new
                         {
                             StatusCode = "DL",
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5554),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9320),
                             StatusName = "DELETE"
                         });
                 });
@@ -1074,6 +2489,35 @@ namespace NatalCare.DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("NatalCare.Models.Entities.Ward", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("WardNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Wards");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            WardNo = "Ward 1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            WardNo = "Ward 2"
+                        });
+                });
+
             modelBuilder.Entity("NatalCare.Models.Entities.Role", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
@@ -1110,7 +2554,7 @@ namespace NatalCare.DataAccess.Migrations
                             Id = "18ab63db-22b1-4656-93e8-6240c08c988c",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            Created_At = new DateTime(2024, 11, 8, 19, 12, 12, 294, DateTimeKind.Local).AddTicks(5512),
+                            Created_At = new DateTime(2024, 12, 8, 20, 19, 35, 206, DateTimeKind.Local).AddTicks(9175),
                             Description = "CRUD Anything",
                             RoleCreatedBy = "223e5845-f58c-493f-b6b4-46ff3b18a332"
                         });
@@ -1167,6 +2611,21 @@ namespace NatalCare.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("NatalCare.Models.Entities.Bed", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.Patients", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientID");
+
+                    b.HasOne("NatalCare.Models.Entities.Ward", "Wards")
+                        .WithMany()
+                        .HasForeignKey("WardID");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Wards");
+                });
+
             modelBuilder.Entity("NatalCare.Models.Entities.Category", b =>
                 {
                     b.HasOne("NatalCare.Models.Entities.Status", "Status")
@@ -1174,6 +2633,156 @@ namespace NatalCare.DataAccess.Migrations
                         .HasForeignKey("StatusCode");
 
                     b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.ClinicalFaceSheet", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.Delivery", "Delivery")
+                        .WithMany()
+                        .HasForeignKey("CaseNo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("ClinicalCreatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("ClinicalUpdatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.Staff", "Midwife")
+                        .WithMany()
+                        .HasForeignKey("MidwifeID");
+
+                    b.HasOne("NatalCare.Models.Entities.Patients", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusCode");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Delivery");
+
+                    b.Navigation("Midwife");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.Delivery", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.Bed", "Beds")
+                        .WithMany()
+                        .HasForeignKey("BedNumber");
+
+                    b.HasOne("NatalCare.Models.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("DLCreatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("DLUpdatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.DeliveryStatus", "DeliveryStatus")
+                        .WithMany()
+                        .HasForeignKey("DeliveryStatusID");
+
+                    b.HasOne("NatalCare.Models.Entities.Newborn", "Newborn")
+                        .WithMany()
+                        .HasForeignKey("NewbornID");
+
+                    b.HasOne("NatalCare.Models.Entities.Patients", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientID");
+
+                    b.HasOne("NatalCare.Models.Entities.Prenatal", "PrenatalCase")
+                        .WithMany()
+                        .HasForeignKey("PrenatalID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("NatalCare.Models.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusCode");
+
+                    b.HasOne("NatalCare.Models.Entities.Ward", "Wards")
+                        .WithMany()
+                        .HasForeignKey("WardNumber");
+
+                    b.Navigation("Beds");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("DeliveryStatus");
+
+                    b.Navigation("Newborn");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("PrenatalCase");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("UpdatedBy");
+
+                    b.Navigation("Wards");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.DischargementForm", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.Delivery", "Delivery")
+                        .WithMany()
+                        .HasForeignKey("CaseNo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("DeliveryCreatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("DeliveryUpdatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.Staff", "Midwife")
+                        .WithMany()
+                        .HasForeignKey("MidwifeID");
+
+                    b.HasOne("NatalCare.Models.Entities.Patients", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.Staff", "Prepared")
+                        .WithMany()
+                        .HasForeignKey("PreparedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusCode");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Delivery");
+
+                    b.Navigation("Midwife");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Prepared");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("UpdatedBy");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.FamilyPlanning", b =>
@@ -1205,6 +2814,68 @@ namespace NatalCare.DataAccess.Migrations
                     b.Navigation("UpdatedBy");
                 });
 
+            modelBuilder.Entity("NatalCare.Models.Entities.ItemPayments", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.Items", "Items")
+                        .WithMany()
+                        .HasForeignKey("ItemID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.Modules", "Module")
+                        .WithMany()
+                        .HasForeignKey("PaymentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Items");
+
+                    b.Navigation("Module");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.MaternalMonitoring", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.Delivery", "Delivery")
+                        .WithMany()
+                        .HasForeignKey("CaseNo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("MDCreatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("MDUpdatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.Patients", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.Staff", "ServiceProvider")
+                        .WithMany()
+                        .HasForeignKey("ServiceProviderID");
+
+                    b.HasOne("NatalCare.Models.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusCode");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Delivery");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("ServiceProvider");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("UpdatedBy");
+                });
+
             modelBuilder.Entity("NatalCare.Models.Entities.Modules", b =>
                 {
                     b.HasOne("NatalCare.Models.Entities.Category", "Category")
@@ -1222,6 +2893,14 @@ namespace NatalCare.DataAccess.Migrations
 
             modelBuilder.Entity("NatalCare.Models.Entities.Newborn", b =>
                 {
+                    b.HasOne("NatalCare.Models.Entities.Spouse", "Father")
+                        .WithMany()
+                        .HasForeignKey("FatherID");
+
+                    b.HasOne("NatalCare.Models.Entities.Staff", "Midwife")
+                        .WithMany()
+                        .HasForeignKey("MidwifeID");
+
                     b.HasOne("NatalCare.Models.Entities.Patients", "Patient")
                         .WithMany()
                         .HasForeignKey("MotherID");
@@ -1234,6 +2913,156 @@ namespace NatalCare.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("NewbornUpdatedBy");
 
+                    b.HasOne("NatalCare.Models.Entities.Staff", "Physician")
+                        .WithMany()
+                        .HasForeignKey("PhysicianID");
+
+                    b.HasOne("NatalCare.Models.Entities.Staff", "AssisstedBy")
+                        .WithMany()
+                        .HasForeignKey("StaffID");
+
+                    b.HasOne("NatalCare.Models.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusCode");
+
+                    b.Navigation("AssisstedBy");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Father");
+
+                    b.Navigation("Midwife");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Physician");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.NewbornHearing", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("HearingCreatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("HearingUpdatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.Newborn", "Newborn")
+                        .WithMany()
+                        .HasForeignKey("NewbornID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.Patients", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusCode");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Newborn");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.NewbornScreening", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.Newborn", "Newborn")
+                        .WithMany()
+                        .HasForeignKey("NewbornID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.Patients", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("ScreeningCreatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("ScreeningUpdatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusCode");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Newborn");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.Obstetrical", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.Delivery", "Delivery")
+                        .WithMany()
+                        .HasForeignKey("CaseNo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("ObsCreatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("ObsUpdatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.Patients", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusCode");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Delivery");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.OpdVisit", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("OPDCreatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.Patients", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientID");
+
                     b.HasOne("NatalCare.Models.Entities.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusCode");
@@ -1243,8 +3072,25 @@ namespace NatalCare.DataAccess.Migrations
                     b.Navigation("Patient");
 
                     b.Navigation("Status");
+                });
 
-                    b.Navigation("UpdatedBy");
+            modelBuilder.Entity("NatalCare.Models.Entities.PatientPayments", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.Patients", "Patients")
+                        .WithMany()
+                        .HasForeignKey("PatientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.Payments", "Payments")
+                        .WithMany()
+                        .HasForeignKey("PaymentID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Patients");
+
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.Patients", b =>
@@ -1268,6 +3114,66 @@ namespace NatalCare.DataAccess.Migrations
                     b.Navigation("CreatedBy");
 
                     b.Navigation("Spouse");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.Payments", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("PatientCreatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.Patients", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("PatientUpdatedBy");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.PhysicalExamination", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.Delivery", "Delivery")
+                        .WithMany()
+                        .HasForeignKey("CaseNo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("PECreatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("PEUpdatedBy");
+
+                    b.HasOne("NatalCare.Models.Entities.Patients", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusCode");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Delivery");
+
+                    b.Navigation("Patient");
 
                     b.Navigation("Status");
 
@@ -1340,6 +3246,17 @@ namespace NatalCare.DataAccess.Migrations
                     b.Navigation("UpdatedBy");
                 });
 
+            modelBuilder.Entity("NatalCare.Models.Entities.ProgressLabor", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.Delivery", "Delivery")
+                        .WithMany()
+                        .HasForeignKey("DeliveryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Delivery");
+                });
+
             modelBuilder.Entity("NatalCare.Models.Entities.Role_Access", b =>
                 {
                     b.HasOne("NatalCare.Models.Entities.Modules", "Module")
@@ -1357,6 +3274,36 @@ namespace NatalCare.DataAccess.Migrations
                     b.Navigation("Module");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.ServicesPayment", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.Modules", "Module")
+                        .WithMany()
+                        .HasForeignKey("PaymentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NatalCare.Models.Entities.Servicesss", "Services")
+                        .WithMany()
+                        .HasForeignKey("ServiceID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Module");
+
+                    b.Navigation("Services");
+                });
+
+            modelBuilder.Entity("NatalCare.Models.Entities.Staff", b =>
+                {
+                    b.HasOne("NatalCare.Models.Entities.RoleStaff", "RoleStaff")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RoleStaff");
                 });
 
             modelBuilder.Entity("NatalCare.Models.Entities.User", b =>

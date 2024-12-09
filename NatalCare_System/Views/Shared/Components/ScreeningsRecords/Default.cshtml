@@ -1,0 +1,806 @@
+﻿@model List<NatalCare.Models.Entities.NewbornScreening>
+
+
+<h6 class="px-2">Newborn Screening Records</h6>
+
+@if (ViewContext.RouteData.Values["controller"]?.ToString() != "Newborn")
+{
+    <div class="d-flex justify-content-end my-3 gap-3">
+        <button class="btn btn-sm btn-pink" id="addNewSCBtn" data-patient-id="@Model.FirstOrDefault()?.PatientID">
+            <i class="fas fa-plus"></i>
+            <span>Add New Screening Record</span>
+        </button>
+        <button id="displaySNDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-trash"></i>
+            <span>Deleted History Records</span>
+        </button>
+    </div>
+}
+@* <div class="d-flex align-items-center gap-2 mb-2">
+    <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
+</div> *@
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Case No##</th>
+                @* <th>Date Visit</th> *@
+                <th>Date Registration</th>
+                <th>Baby Name</th>
+                <th>Type of Sample</th>
+                <th>Filter Card No#</th>
+                <th>Date of Collection</th>
+                <th>Time of Collection</th>
+                <th>Place of Collection</th>
+                <th>Screening Results</th>
+                <th>Remarks</th>
+                <th class="text-center">ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ScreeningNo</td>
+                        @* <td>@item.DateVisit?.ToString("MMM dd yyyy h:mm tt")</td> *@
+                        <td>@item.DateRegistration?.ToString("MMM dd yyyy")</td>
+                        <td>@item.Newborn?.FirstName @item.Newborn?.MiddleName @item.Newborn?.LastName</td>
+                        <td>@item.TypeOfSample</td>
+                        <td>@item.FilterCardNo</td>
+                        <td>@item.DateOfCollection</td>
+                        <td>@item.TimeOfCollection</td>
+                        <td>@item.PlaceOfCollection</td>
+                        <td>@item.ScreeningResults</td>
+                        <td>@item.Remarks</td>
+                        @if (ViewContext.RouteData.Values["controller"]?.ToString() != "Newborn")
+                        {
+                            <td>
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                    <a class="btn btn-outline-secondary detailScreening-Btn" data-caseno="@item.ScreeningNo">
+                                        <i class="fa-solid fa-list"></i>
+                                    </a>
+                                    <a class="btn btn-outline-primary editScreening-Btn" data-caseno="@item.ScreeningNo">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <button class="btn btn-outline-danger dltScreening-Btn" data-caseno="@item.ScreeningNo">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <a class="btn btn-outline-secondary detailScreening-Btn" data-caseno="@item.ScreeningNo">
+                                    <i class="fa-solid fa-list"></i>
+                                </a>
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="20" class="text-center">
+                        No data available.
+                    </td>
+                </tr>
+            }
+            <!-- No match found row -->
+            <tr class="no-record-found" style="display: none;">
+                <td colspan="30" class="text-center">No match found</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Add Screening Modal -->
+<div class="modal fade" id="ScreeningAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Add Newborn Screening Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="AddScreeningForm" method="POST">
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                     
+                        <div class="col-md-6 mb-3">
+                            <label for="DateVisitSN-Add" class="control-label">Date Visit</label>
+                            <input type="datetime-local" id="DateVisitSN-Add" name="DateVisit" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DateRegistrationSN-Add" class="control-label">Date Registration</label>
+                            <input type="date" id="DateRegistrationSN-Add" name="DateRegistration" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="newbornBbSN-Add" class="control-label">Select Newborn</label>
+                            <select id="newbornBbSN-Add" class="form-select" name="NewbornID" required>
+                                <option disabled selected>select newborn baby</option>
+                            </select>
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+                            <label for="FilterCardNoSN-Add" class="control-label">Filter Card No</label>
+                            <input id="FilterCardNoSN-Add" name="FilterCardNo" class="form-control" required placeholder="Enter filter card no#"/>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="TypeOfSampleSN-Add" class="control-label">Tyoe of Sample</label>
+                            <input id="TypeOfSampleSN-Add" name="TypeOfSample" class="form-control" placeholder="Enter type of sample"/>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DateOfCollectionSN-Add" class="control-label">Date of Collection</label>
+                            <input type="date" id="DateOfCollectionSN-Add" name="DateOfCollection" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="TimeOfCollectionSN-Add" class="control-label">Time of Collection</label>
+                            <input type="time" id="TimeOfCollectionSN-Add" name="TimeOfCollection" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="PlaceOfCollectionSN-Add" class="control-label">Place of Collection</label>
+                            <input id="PlaceOfCollectionSN-Add" name="PlaceOfCollection" class="form-control" placeholder="Enter place collection"/>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="FeedingSN-Add" class="control-label">Feeding</label>
+                            <input id="FeedingSN-Add" name="Feeding" class="form-control" placeholder="Enter Feeding" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="SpecimenSN-Add" class="control-label">Specimen</label>
+                            <input id="SpecimenSN-Add" name="Specimen" class="form-control" placeholder="Enter Specimen" />
+                        </div>
+
+                      
+                        <div class="col-md-6 mb-3">
+                            <label for="BabyStatusSN-Add" class="control-label">Baby Status</label>
+                            <input id="BabyStatusSN-Add" name="BabyStatus" class="form-control" placeholder="Enter baby status" required/>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DataSampleSent-Add" class="control-label">Data Sample Sent</label>
+                            <input id="DataSampleSent-Add" name="DataSampleSent" class="form-control" placeholder="Enter data sample sent" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="CourierSN-Add" class="control-label">Courier</label>
+                            <input id="CourierSN-Add" name="Courier" class="form-control" placeholder="Enter data sample sent" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="TrackingNubmerSN-Add" class="control-label">Tracking Nubmer</label>
+                            <input id="TrackingNubmerSN-Add" name="TrackingNubmer" class="form-control" placeholder="Enter tracking number" required />
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="RemarksSN-Add" class="control-label">Remarks</label>
+                            <textarea id="RemarksSN-Add" name="Remarks" class="form-control" placeholder="Enter remarks" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="ScreeningResultsSN-Add" class="control-label">Screening Results</label>
+                            <textarea id="ScreeningResultsSN-Add" name="ScreeningResults" class="form-control" placeholder="Enter remarks" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="NotesSN-Add" class="control-label">Notes(Optional)</label>
+                            <textarea id="NotesSN-Add" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="practitioner-Add" class="control-label">Attending Practitioner</label>
+                            <input id="practitioner-Add" name="AttendingPractitioner" class="form-control" placeholder="Enter attenting practitioner" />
+                        </div>
+
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-pink">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Hearing Modal -->
+<div class="modal fade" id="ScreeningEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Edit Screening Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="UpdateScreeningForm" method="POST">
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <input type="hidden" id="caseNoSN-Edit" name="ScreeningNo" />
+                        <input type="hidden" id="patientIDSN-Edit" name="PatientID" />
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DateVisitSN-Edit" class="control-label">Date Visit</label>
+                            <input type="datetime-local" id="DateVisitSN-Edit" name="DateVisit" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DateRegistrationSN-Edit" class="control-label">Date Registration</label>
+                            <input type="date" id="DateRegistrationSN-Edit" name="DateRegistration" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="newbornBbSN-Edit" class="control-label">Select Newborn</label>
+                            <select id="newbornBbSN-Edit" class="form-select" name="NewbornID" required>
+                                <option disabled selected>select newborn baby</option>
+                            </select>
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+                            <label for="FilterCardNoSN-Edit" class="control-label">Filter Card No</label>
+                            <input type="number" id="FilterCardNoSN-Edit" name="FilterCardNo" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="TypeOfSampleSN-Edit" class="control-label">Tyoe of Sample</label>
+                            <input id="TypeOfSampleSN-Edit" name="TypeOfSample" class="form-control" placeholder="Enter type of sample" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DateOfCollectionSN-Edit" class="control-label">Date of Collection</label>
+                            <input type="date" id="DateOfCollectionSN-Edit" name="DateOfCollection" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="TimeOfCollectionSN-Edit" class="control-label">Time of Collection</label>
+                            <input type="time" id="TimeOfCollectionSN-Edit" name="TimeOfCollection" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="PlaceOfCollectionSN-Edit" class="control-label">Place of Collection</label>
+                            <input id="PlaceOfCollectionSN-Edit" name="PlaceOfCollection" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="FeedingSN-Edit" class="control-label">Feeding</label>
+                            <input id="FeedingSN-Edit" name="Feeding" class="form-control" placeholder="Enter Feeding" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="SpecimenSN-Edit" class="control-label">Specimen</label>
+                            <input id="SpecimenSN-Edit" name="Specimen" class="form-control" placeholder="Enter Specimen" />
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+                            <label for="BabyStatusSN-Edit" class="control-label">Baby Status</label>
+                            <input id="BabyStatusSN-Edit" name="BabyStatus" class="form-control" placeholder="Enter baby status" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DataSampleSent-Edit" class="control-label">Data Sample Sent</label>
+                            <input id="DataSampleSent-Edit" name="DataSampleSent" class="form-control" placeholder="Enter data sample sent" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="CourierSN-Edit" class="control-label">Courier</label>
+                            <input id="CourierSN-Edit" name="Courier" class="form-control" placeholder="Enter data sample sent" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="TrackingNubmerSN-Edit" class="control-label">Tracking Nubmer</label>
+                            <input id="TrackingNubmerSN-Edit" name="TrackingNubmer" class="form-control" placeholder="Enter tracking number" required />
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="ScreeningResultsSN-Edit" class="control-label">Screening Results</label>
+                            <textarea id="ScreeningResultsSN-Edit" name="ScreeningResults" class="form-control" placeholder="Enter screening result" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="RemarksSN-Edit" class="control-label">Remarks</label>
+                            <textarea id="RemarksSN-Edit" name="Remarks" class="form-control" placeholder="Enter remarks" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="NotesSN-Edit" class="control-label">Notes(Optional)</label>
+                            <textarea id="NotesSN-Edit" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="practitioner-Edit" class="control-label">Attending Practitioner</label>
+                            <input id="practitioner-Edit" name="AttendingPractitioner" class="form-control" placeholder="Enter attenting practitioner" />
+                        </div>
+
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-pink">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Details Hearing Modal -->
+<div class="modal fade" id="ScreeningDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Detail Screening Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <input type="hidden" id="caseNoSN-Detail" name="ScreeningNo" />
+                        <input type="hidden" id="patientIDSN-Detail" name="PatientID" />
+
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DateVisitSN-Detail" class="control-label">Date Visit</label>
+                            <input type="datetime-local" id="DateVisitSN-Detail" name="DateVisit" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DateRegistrationSN-Detail" class="control-label">Date Registration</label>
+                            <input type="date" id="DateRegistrationSN-Detail" name="DateRegistration" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="newbornBbSN-Detail" class="control-label">Select Newborn</label>
+                            <select id="newbornBbSN-Detail" class="form-select" name="NewbornID" disabled>
+                                <option disabled selected>select newborn baby</option>
+                            </select>
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+                            <label for="FilterCardNoSN-Detail" class="control-label">Filter Card No</label>
+                            <input id="FilterCardNoSN-Detail" name="FilterCardNo" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="TypeOfSampleSN-Detail" class="control-label">Tyoe of Sample</label>
+                            <input id="TypeOfSampleSN-Detail" name="TypeOfSample" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DateOfCollectionSN-Detail" class="control-label">Date of Collection</label>
+                            <input type="date" id="DateOfCollectionSN-Detail" name="DateOfCollection" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="TimeOfCollectionSN-Detail" class="control-label">Time of Collection</label>
+                            <input type="time" id="TimeOfCollectionSN-Detail" name="TimeOfCollection" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="PlaceOfCollectionSN-Detail" class="control-label">Place of Collection</label>
+                            <input id="PlaceOfCollectionSN-Detail" name="PlaceOfCollection" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="FeedingSN-Detail" class="control-label">Feeding</label>
+                            <input id="FeedingSN-Detail" name="Feeding" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="SpecimenSN-Detail" class="control-label">Specimen</label>
+                            <input id="SpecimenSN-Detail" name="Specimen" class="form-control" disabled />
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+                            <label for="BabyStatusSN-Detail" class="control-label">Baby Status</label>
+                            <input id="BabyStatusSN-Detail" name="BabyStatus" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DataSampleSent-Detail" class="control-label">Data Sample Sent</label>
+                            <input id="DataSampleSent-Detail" name="DataSampleSent" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="CourierSN-Detail" class="control-label">Courier</label>
+                            <input id="CourierSN-Detail" name="Courier" class="form-control" placeholder="Enter data sample sent" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="TrackingNubmerSN-Detail" class="control-label">Tracking Nubmer</label>
+                            <input id="TrackingNubmerSN-Detail" name="TrackingNubmer" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="ScreeningResultsSN-Detail" class="control-label">Screening Results</label>
+                            <textarea id="ScreeningResultsSN-Detail" name="ScreeningResults" class="form-control" placeholder="Enter screening results" rows="3" disabled></textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="RemarksSN-Detail" class="control-label">Remarks</label>
+                            <textarea id="RemarksSN-Detail" name="Remarks" class="form-control" disabled rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="NotesSN-Detail" class="control-label">Notes(Optional)</label>
+                            <textarea id="NotesSN-Detail" name="Notes" class="form-control" disabled rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="practitioner-Detail" class="control-label">Attending Practitioner</label>
+                            <input id="practitioner-Detail" name="AttendingPractitioner" class="form-control" disabled />
+                        </div>
+
+
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button class="btn btn-success printBtn" type="button">
+                                    <i class="fas fa-save"></i>
+                                    <span>Print</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Deleted History Modal -->
+<div class="modal fade" id="deletedSNModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger"><i class="fa-solid fa-trash"></i> Deleted Screening Records</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="deletedSNListContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var patID = document.getElementById('patID').value;
+    $('#printBtn').on("click", function () {
+        var caseNo = $("#caseNoSN-Detail").val();
+        PrintForm(caseNo);
+    });
+
+    // Reset the form when the modal is hidden
+    $('#ScreeningAddModal').on('hidden.bs.modal', function () {
+        var modal = $(this);
+        // Reset the form fields after the modal is hidden
+        modal.find('form')[0].reset();
+    });
+
+    $("#addNewSCBtn").on("click", function () {
+        ViewAddScreeningModal();
+    });
+    
+    $("#AddScreeningForm").on("submit", function (e) {
+        e.preventDefault();
+        AddScreening();
+    });
+
+    $("#UpdateScreeningForm").on("submit", function (e) {
+        e.preventDefault();
+        UpdateScreening();
+    });
+
+    $(".editScreening-Btn").on("click", function (e) {
+        var caseNo = $(this).data('caseno');
+        EditScreening(caseNo);
+    });
+
+    $(".dltScreening-Btn").on("click", function (e) {
+        var caseNo = $(this).data('caseno');
+        DeleteScreening(caseNo);
+    });
+    
+    $(".detailScreening-Btn").on("click", function (e) {
+        var caseNo = $(this).data('caseno');
+        DetailScreening(caseNo);
+    });
+
+
+    $('#displaySNDeletedHistoryBtn').on('click', function () {
+        LoadDeletedHistoryScreening();
+    });
+
+
+    function LoadDeletedHistoryScreening() {
+        $.ajax({
+            url: '@Url.Action("DisplayDeletedScreening", "NewbornScreening")',
+            type: 'GET',
+            data: { patientId: patID },
+            success: function (result) {
+                $("#deletedSNListContainer").html(result);
+                $('#deletedSNModal').modal('show');
+            },
+            error: function () {
+                console.error("Failed to load records.");
+            }
+        });
+    }
+
+    // Update Screening Record
+    function UpdateScreening() {
+        var formData = $("#UpdateScreeningForm").serialize();
+        $.ajax({
+            url: '@Url.Action("UpdateScreeningRecord", "NewbornScreening")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                if (result.isSuccess) {
+                    $('#ScreeningEditModal').modal('hide');
+                    toastr.success(result.message)
+                    LoadScreeningComponent();
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                toastr.error('An error occurred while updating the  record.');
+                console.error('Error:', err);
+            }
+        });
+    }
+    // Edit Screening Record
+    function EditScreening(caseNo) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetScreeningRecord", "NewbornScreening")',
+            data: { caseNo: caseNo },
+            success: function (response) {
+                if (response && response.isSuccess) {
+                    var item = response.item.result;
+                    var newborn = response.item.newborn;
+                    // Set values for editable fields
+                    $("#caseNoSN-Edit").val(item.screeningNo);
+                    $("#patientIDSN-Edit").val(item.patientId);
+                    $("#DateVisitSN-Edit").val(item.dateVisit);
+                    $("#DateRegistrationSN-Edit").val(item.dateRegistration);
+                    $("#FilterCardNoSN-Edit").val(item.filterCardNo);
+                    $("#TypeOfSampleSN-Edit").val(item.typeOfSample);
+                    $("#DateOfCollectionSN-Edit").val(item.dateOfCollection);
+                    $("#TimeOfCollectionSN-Edit").val(item.timeOfCollection);
+                    $("#PlaceOfCollectionSN-Edit").val(item.placeOfCollection);
+                    $("#FeedingSN-Edit").val(item.feeding);
+                    $("#SpecimenSN-Edit").val(item.specimen);
+                    $("#BabyStatusSN-Edit").val(item.babyStatus);
+                    $("#DataSampleSent-Edit").val(item.dataSampleSent);
+                    $("#CourierSN-Edit").val(item.courier);
+                    $("#TrackingNubmerSN-Edit").val(item.trackingNubmer);
+                    $("#ScreeningResultsSN-Edit").val(item.screeningResults);
+                    $("#RemarksSN-Edit").val(item.remarks);
+                    $("#NotesSN-Edit").val(item.notes);
+                    $("#practitioner-Edit").val(item.attendingPractitioner);
+
+                    // $('#staffSN-Edit').empty().append('<option disabled selected>select encharged staff</option>');
+                    // staff.forEach(function (data) {
+                    //     $('#staffSN-Edit').append(
+                    //         $('<option>', {
+                    //             value: data.id,
+                    //             text: data.staffName,
+                    //             selected: item.staffID === data.id
+                    //         })
+                    //     );
+                    // }); 
+                    
+                    $('#newbornBbSN-Edit').empty().append('<option disabled selected>select newborn baby</option>');
+                    newborn.forEach(function (data) {
+                        $('#newbornBbSN-Edit').append(
+                            $('<option>', {
+                                value: data.id,
+                                text: data.firstname + " " + data.middlename + " " + data.lastname + " - " + data.birthdate,
+                                selected: item.newbornID === data.id
+                            })
+                        );
+                    });
+                    // Show Edit Modal
+                    $('#ScreeningEditModal').modal('show');
+                } else {
+                    toastr.error(response.message || 'Unable to load screening record.');
+                }
+            },
+            error: function () {
+                toastr.error('An error occurred while loading the screening record.');
+            }
+        });
+    }
+
+    // Edit Hearing Record
+    function DetailScreening(caseNo) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetScreeningRecord", "NewbornScreening")',
+            data: { caseNo: caseNo },
+            success: function (response) {
+                if (response && response.isSuccess) {
+                    var item = response.item.result;
+                    // Set values for editable fields
+                    $("#caseNoSN-Detail").val(item.screeningNo);
+                    $("#patientIDSN-Detail").val(item.patientId);
+                    $("#DateVisitSN-Detail").val(item.dateVisit);
+                    $("#DateRegistrationSN-Detail").val(item.dateRegistration);
+                    $("#FilterCardNoSN-Detail").val(item.filterCardNo);
+                    $("#TypeOfSampleSN-Detail").val(item.typeOfSample);
+                    $("#DateOfCollectionSN-Detail").val(item.dateOfCollection);
+                    $("#TimeOfCollectionSN-Detail").val(item.timeOfCollection);
+                    $("#PlaceOfCollectionSN-Detail").val(item.placeOfCollection);
+                    $("#FeedingSN-Detail").val(item.feeding);
+                    $("#SpecimenSN-Detail").val(item.specimen);
+                    $("#BabyStatusSN-Detail").val(item.babyStatus);
+                    $("#DataSampleSent-Detail").val(item.dataSampleSent);
+                    $("#CourierSN-Detail").val(item.courier);
+                    $("#TrackingNubmerSN-Detail").val(item.trackingNubmer);
+                    $("#ScreeningResultsSN-Detail").val(item.screeningResults);
+                    $("#RemarksSN-Detail").val(item.remarks);
+                    $("#NotesSN-Detail").val(item.notes);
+                    $("#practitioner-Detail").val(item.attendingPractitioner);
+
+                    // Show Edit Modal  
+                    $('#ScreeningDetailModal').modal('show');
+                } else {
+                    toastr.error(response.message || 'Unable to load screening record.');
+                }
+            },
+            error: function () {
+                toastr.error('An error occurred while loading the screening record.');
+            }
+        });
+    }
+
+    //Delete Screening
+    function DeleteScreening(caseNo) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this, but you can see this on deleted history!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("DeleteScreeningRecord", "NewbornScreening")',
+                    data: { caseNo: caseNo },
+                    success: function (result) {
+                        if (result.isSuccess) {
+                            toastr.success(result.message)
+                            LoadScreeningComponent();
+                        } else {
+                            toastr.error(result.message);
+                        }
+                    },
+                    error: function () {
+                        console.log('Unable to get the data.');
+                    }
+                })
+            }
+        });
+    }
+
+    //Add Screening View Modal
+    function ViewAddScreeningModal() {
+        $.ajax({
+            url: '@Url.Action("Get_Staff_Newborn", "NewbornScreening")',
+            type: 'GET',
+            data: { id: patID },
+            success: function (result) {
+                if (result.isSuccess) {
+                    var newborn = result.item.newborn;
+                    $('#newbornBbSN-Add').empty().append('<option disabled selected>select newborn baby</option>');
+                    newborn.forEach(function (item) {
+                        $('#newbornBbSN-Add').append(
+                            $('<option>', {
+                                value: item.id,
+                                text: item.firstname + " " + item.middlename + " " + item.lastname + " - " + item.birthdate
+                            })
+                        );
+                    });
+                    $('#ScreeningAddModal').modal('show');
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                console.error('Error:', err);
+            }
+        });
+    }
+
+    //Add the Screening Record
+    function AddScreening() {
+        var formData = $('#AddScreeningForm').serializeArray();
+        formData.push({ name: 'patientID', value: patID });
+
+        $.ajax({
+            url: '@Url.Action("AddScreeningRecord", "NewbornScreening")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                if (result.isSuccess) {
+                    toastr.success(result.message)
+                    LoadScreeningComponent();
+                    $('#ScreeningAddModal').modal('hide');
+                } 
+                else {
+                    if (result.newborn == false) {
+                        alert(result.message)
+                    }
+                    else {
+                        toastr.error(result.message);
+                    }
+                }
+            },
+            error: function (err) {
+                console.error('Error:', err);
+            }
+        });
+    }
+
+
+    function PrintForm(id) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("PrintScreeningForm", "Print")',
+            data: { id: id },
+            success: function (response) {
+                if (response && response.isSuccess === false) {
+                    alert(response.message);
+                } else if (response && response.isSuccess === true) {
+                    window.location.href = "/Print/Screening_Form?id=" + response.data.result.screeningNo;
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle error
+                alert("An error occurred, Please ask the It support.");
+            }
+        });
+    }
+
+
+    //Load All Records
+    function LoadScreeningComponent() {
+        var patientId = $("#patID").val();
+        $.ajax({
+            url: '@Url.Action("ScreeningRecords", "NewbornScreening")',
+            data: { patientId: patientId },
+            success: function (result) {
+                $('#screening').html(result);
+            },
+            error: function () {
+                toastr.error("Failed to reload the Screening records.");
+            }
+        });
+    }
+
+</script>
+
+

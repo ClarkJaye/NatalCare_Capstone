@@ -6,7 +6,7 @@
         <thead class="border-bottom-2">
             <tr>
                 <th>Profile</th>
-                <th>Baby No</th>
+                <th>Baby No#</th>
                 <th>Firstname</th>
                 <th>Middlename</th>
                 <th>Lastname</th>
@@ -15,13 +15,13 @@
                 <th>Mother Full Name</th>
                 <th>Date Added</th>
                 <th>Added By</th>
-                <th class="text-center">Action</th>
+                <th class="text-center">ACTION</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr class="align-middle">
+                <tr>
                     <td>
                         @if (item.Gender?.ToLower() == "female")
                         {
@@ -43,14 +43,14 @@
                     <td>@item.CreatedBy?.FirstName @item.CreatedBy?.LastName</td>
                     <td class="text-center">
                         <div class="d-flex align-items-center justify-content-center gap-2">
-                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Newborn" asp-action="Information" asp-route-id="@item.NewbornID">
-                                <i class="fa-solid fa-list"></i>
-                                <span>Record</span>
+                            <a class="btn btn-sm btn-outline-secondary" asp-controller="Newborn" asp-action="Information" asp-route-id="@item.NewbornID" title="View Records">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <span>Records</span>
                             </a>
-                            <button class="btn btn-sm btn-outline-danger dlt-Btn" data-nbid="@item.NewbornID">
+                           @*  <button class="btn btn-sm btn-outline-danger dlt-Btn" data-nbid="@item.NewbornID">
                                 <i class="fa-solid fa-trash"></i>
                                 <span>Delete</span>
-                            </button>
+                            </button> *@
                         </div>
                     </td>
                 </tr>
@@ -68,18 +68,17 @@
             lengthChange: true,
             searching: true,
             ordering: true,
+            pageLength: 10,
             lengthMenu: [10, 20, 50, 100],
             language: {
                 search: "_INPUT_",
-                searchPlaceholder: "Search newborn..."
-            },
-            language: {
+                searchPlaceholder: "Search newborn...",
                 paginate: {
                     previous: "Previous",
                     next: "Next"
-                }
+                },
+                info: "Showing _START_ to _END_ of _TOTAL_ newborn"
             },
-            info: true,
             autoWidth: false,
             responsive: true,
             columnDefs: [

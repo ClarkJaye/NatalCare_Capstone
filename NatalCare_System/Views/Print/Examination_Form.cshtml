@@ -1,0 +1,268 @@
+﻿@model NatalCare.Models.Entities.PhysicalExamination
+
+@{
+    ViewData["Title"] = "Print Physical Examination Form";
+}
+<style>
+    label, input {
+        font-size: 14px;
+    }
+
+</style>
+
+<div class="m-3">
+    <div class="text-center mb-4" style="cursor: pointer;">
+        <img class="img-fluid" src="/img/logo.png" width="160" />
+    </div>
+
+    <h5 class="text-center mb-3 fw-bold">PHYSICAL EXAMINATION</h5>
+
+    <div class="container-sm mt-4">
+        <input type="hidden" id="patID" name="PatientID" value="@Model.PatientID" />
+        <input type="hidden" id="delID" name="CaseNo" value="@Model.CaseNo" />
+
+        @* Patient Basic Info  *@
+        <div class="row mb-2">
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Name of Patient:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @(Model.PatientID != null ? Model.Patient?.FirstName + " " + Model.Patient?.MiddleName + " " + Model.Patient?.LastName : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Age:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @{
+                                if (Model.Patient?.Birthdate != null)
+                                {
+                                    var birthYear = Model.Patient.Birthdate.Value.Year;
+                                    var currentYear = DateTime.Now.Year;
+                                    var age = currentYear - birthYear;
+                                    <text>@age years old</text>
+                                }
+                                else
+                                {
+                                    @:N/A
+                                }
+                            }
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Patient?.Address != null ? Model.Patient?.Address : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">OB History:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @(Model.OBHistory != null ? Model.OBHistory : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="divider bg-pink" />
+
+        @* Physical Measurements  *@
+        <fieldset class="mb-2">
+            <legend class="fw-bold" style="font-size:1.2rem;">Physical Measurements</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label class="fw-bold">Weight:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.Weight != null ? Model.Weight : "N/A")</div>
+                        <span class="ms-2 pt-2">kg</span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Height:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.Height != null ? Model.Height : "N/A")</div>
+                        <span class="ms-2 pt-2">m</span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Blood Pressure:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.BP != null ? Model.BP : "N/A")</div>
+                        <span class="ms-2 pt-2">mmHg</span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Pulse Rate:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.PulseRate != null ? Model.PulseRate : "N/A")</div>
+                        <span class="ms-2 pt-2">/min</span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Respiratory Rate:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.RespiratoryRate != null ? Model.RespiratoryRate : "N/A")</div>
+                        <span class="ms-2 pt-2">/min</span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Temperature:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.Temperature != null ? Model.Temperature : "N/A")</div>
+                        <span class="ms-2 pt-2">Celsius</span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <hr class="divider bg-pink" />
+
+        @* Physical Examination  *@
+        <fieldset class="mb-3">
+            <legend class="fw-bold" style="font-size:1.2rem;">Physical Examination</legend>
+            <div class="row">
+                @* SKIN *@
+                <div class="col-sm-4 mb-3">
+                    <label class="fw-bold mb-2">SKIN:</label>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="skinNormal" class="update-checkbox custom-checkbox" @(Model.Skin_Normal == true ? "checked" : "") disabled />
+                        <label for="skinNormal" class="form-check-label">Normal</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="skinPale" class="update-checkbox custom-checkbox" @(Model.Skin_Pale == true ? "checked" : "") disabled />
+                        <label for="skinPale" class="form-check-label">Pale</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="skinYellowish" class="update-checkbox custom-checkbox" @(Model.Skin_Yellowish == true ? "checked" : "") disabled />
+                        <label for="skinYellowish" class="form-check-label">Yellowish</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="skinHematoma" class="update-checkbox custom-checkbox" @(Model.Skin_Hematoma == true ? "checked" : "") disabled />
+                        <label for="skinHematoma" class="form-check-label">Hematoma</label>
+                    </div>
+                </div>
+                @* CONJUNCTIVA *@
+                <div class="col-sm-4 mb-3">
+                    <label class="fw-bold mb-2">CONJUNCTIVA:</label>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="conNormal" class="update-checkbox custom-checkbox" @(Model.Conjunctive_Normal == true ? "checked" : "") disabled />
+                        <label for="conNormal" class="form-check-label">Normal</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="conPale" class="update-checkbox custom-checkbox" @(Model.Conjunctive_Pale == true ? "checked" : "") disabled />
+                        <label for="conPale" class="form-check-label">Pale</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="conYellowish" class="update-checkbox custom-checkbox" @(Model.Conjunctive_YW == true ? "checked" : "") disabled />
+                        <label for="conYellowish" class="form-check-label">Yellowish</label>
+                    </div>
+                </div>
+                @* NECK *@
+                <div class="col-sm-4 mb-3">
+                    <label class="fw-bold mb-2">NECK:</label>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="neckNormal" class="update-checkbox custom-checkbox" @(Model.Neck_Normal == true ? "checked" : "") disabled />
+                        <label for="neckNormal" class="form-check-label">Normal</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="neckMass" class="update-checkbox custom-checkbox" @(Model.Neck_Mass == true ? "checked" : "") disabled />
+                        <label for="neckMass" class="form-check-label">Neck Mass</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="neckEnlage" class="update-checkbox custom-checkbox" @(Model.Neck_EnlargedLymphNodes == true ? "checked" : "") disabled />
+                        <label for="neckEnlage" class="form-check-label">Enlarged Lymph Nodes</label>
+                    </div>
+                </div>
+                @* BREAST *@
+                <div class="col-sm-4 mb-3">
+                    <label class="fw-bold mb-2">BREAST:</label>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="breastNormal" class="update-checkbox custom-checkbox" @(Model.Breast_Normal == true ? "checked" : "") disabled />
+                        <label for="breastNormal" class="form-check-label">Normal</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="breastMass" class="update-checkbox custom-checkbox" @(Model.Breast_Mass == true ? "checked" : "") disabled />
+                        <label for="breastMass" class="form-check-label">Mass</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="breastDischarge" class="update-checkbox custom-checkbox" @(Model.Breast_NippleDischarged == true ? "checked" : "") disabled />
+                        <label for="breastDischarge" class="form-check-label">Nipple Discharge</label>
+                    </div>
+                </div>
+                @* ABDOMEN *@
+                <div class="col-sm-4 mb-3">
+                    <label class="fw-bold mb-2">ABDOMEN:</label>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="abNormal" class="update-checkbox custom-checkbox" @(Model.Abdomen_Normal == true ? "checked" : "") disabled />
+                        <label for="abNormal" class="form-check-label">Normal</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="abMass" class="update-checkbox custom-checkbox" @(Model.Abdomen_Mass == true ? "checked" : "") disabled />
+                        <label for="abMass" class="form-check-label">Abdominal Mass</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="abVaricos" class="update-checkbox custom-checkbox" @(Model.Abdomen_Varicosities == true ? "checked" : "") disabled />
+                        <label for="abVaricos" class="form-check-label">Varicosities</label>
+                    </div>
+                </div>
+                @* EXTREMETIES *@
+                <div class="col-sm-4 mb-3">
+                    <label class="fw-bold mb-2">EXTREMETIES:</label>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="exNormal" class="update-checkbox custom-checkbox" @(Model.Extremities_Normal == true ? "checked" : "") disabled />
+                        <label for="exNormal" class="form-check-label">Normal</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="exEdema" class="update-checkbox custom-checkbox" @(Model.Extremities_Edema == true ? "checked" : "") disabled />
+                        <label for="exEdema" class="form-check-label">Edema</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="exVaricos" class="update-checkbox custom-checkbox" @(Model.Extremities_Varicosities == true ? "checked" : "") disabled />
+                        <label for="exVaricos" class="form-check-label">Varicosities</label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="col-md-12 mb-3">
+            <label class="fw-bold">Notes:</label>
+            <div class="border-bottom py-3">
+                <span class="px-3">
+                    @Model.Notes
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var patID = document.getElementById('patID').value;
+    var delID = document.getElementById('delID').value;
+    document.addEventListener('DOMContentLoaded', function () {
+        PrintForm();
+    });
+
+    function PrintForm() {
+        window.onafterprint = function () {
+            window.location.href = "/Delivery/Index?patientid=" + patID  + '&caseno=' + delID;
+        };
+        window.print();
+    }
+</script>

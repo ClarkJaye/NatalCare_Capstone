@@ -8,7 +8,7 @@ using NatalCare.DataAccess.Interfaces;
 using NatalCare.Models.DTOs;
 using NatalCare.Models.Entities;
 using NatalCare.Models.ViewModel;
-using PrinceQ.Utility;
+using NatalCare.Utility;
 
 namespace NatalCare_System.Controllers
 {
@@ -18,7 +18,8 @@ namespace NatalCare_System.Controllers
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
 
-        public UserController(UserManager<User> userManager, RoleManager<Role> roleManager)
+        public UserController(UserManager<User> userManager, RoleManager<Role> roleManager, IModuleAccessServices moduleAccessServices)
+            : base(moduleAccessServices)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -27,8 +28,12 @@ namespace NatalCare_System.Controllers
         // GET: /User/Index
         public async Task<IActionResult> Index()
         {
+            if (!await CheckAccessAsync(12))
+            {
+                return RedirectTo();
+            }
             // Retrieve all users
-            var users = await _userManager.Users.ToListAsync();
+            var users = await _userManager.Users.Include(a => a.Status).ToListAsync();
 
             // Create a list to hold users along with their roles
             var userRolesViewModel = new List<UserRolesViewModel>();
@@ -49,8 +54,12 @@ namespace NatalCare_System.Controllers
         }
 
 
-        public IActionResult Create()
+        public async  Task<IActionResult> Create()
         {
+            if (!await CheckAccessAsync(12))
+            {
+                return RedirectTo();
+            }
             // Create the role list for the ViewModel
             var roleList = _roleManager.Roles.Select(x => new SelectListItem
             {
@@ -122,6 +131,10 @@ namespace NatalCare_System.Controllers
         // GET: /User/Edit/{id}
         public async Task<IActionResult> Edit(string id)
         {
+            if (!await CheckAccessAsync(12))
+            {
+                return RedirectTo();
+            }
             var userDTO = await GetUserDtoById(id);
             if (userDTO == null)
             {
@@ -133,6 +146,10 @@ namespace NatalCare_System.Controllers
         // GET: /User/Details/{id}
         public async Task<IActionResult> Details(string id)
         {
+            if (!await CheckAccessAsync(12))
+            {
+                return RedirectTo();
+            }
             var userDTO = await GetUserDtoById(id);
             if (userDTO == null)
             {
@@ -230,6 +247,11 @@ namespace NatalCare_System.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
+            if (!await CheckAccessAsync(12))
+            {
+                return RedirectTo();
+            }
+
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {

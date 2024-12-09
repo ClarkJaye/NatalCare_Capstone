@@ -1,0 +1,613 @@
+﻿@model List<NatalCare.Models.Entities.NewbornHearing>
+
+<h6 class="px-2">Newborn Hearing Records</h6>
+
+@if (ViewContext.RouteData.Values["controller"]?.ToString() != "Newborn")
+{
+    <div class="d-flex justify-content-end my-3 gap-3">
+        <button class="btn btn-sm btn-pink" id="addNewHRBtn" data-patient-id="@Model.FirstOrDefault()?.PatientID">
+            <i class="fas fa-plus"></i>
+            <span>Add New Hearing Record</span>
+        </button>
+        <button id="displayHRDeletedHistoryBtn" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-trash"></i>
+            <span>Deleted History Records</span>
+        </button>
+    </div>
+}
+
+@* <div class="d-flex align-items-center gap-2 mb-2">
+    <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
+</div> *@
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Case No#</th>
+                <th>Date Visit</th>
+                <th>Baby Name</th>
+                <th>Test Date</th>
+                <th>Baby Status</th>
+                <th>Hearing Result</th>
+                <th>Notes</th>
+                <th class="text-center">ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.HearingNo</td>
+                        <td>@item.DateVisit?.ToString("MMM dd yyyy h:mm tt")</td>
+                        <td>@item.Newborn?.FirstName @item.Newborn?.MiddleName @item.Newborn?.LastName</td>
+                        <td>@item.TestDate?.ToString("MMM dd yyyy")</td>
+                        <td>@item.BabyStatus</td>
+                        <td>@item.HearingResults</td>
+                        <td style="max-width: 200px; word-wrap: break-word;">@item.Notes</td>
+                        @if (ViewContext.RouteData.Values["controller"]?.ToString() != "Newborn")
+                        {
+                            <td>
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                    <a class="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-1 detailHR-Btn" data-hearingid="@item.HearingNo">
+                                        <i class="fa-solid fa-list"></i>
+                                    </a>
+                                    <a class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-1 editHR-Btn" data-hearingid="@item.HearingNo">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <button class="btn btn-outline-danger dltHR-Btn" data-hearingid="@item.HearingNo">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        }else
+                        {
+                            <td>
+                                <a class="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-1 detailHR-Btn" data-hearingid="@item.HearingNo">
+                                    <i class="fa-solid fa-list"></i>
+                                </a>
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="20" class="text-center">
+                        No data available.
+                    </td>
+                </tr>
+            }
+            <!-- No match found row -->
+            <tr class="no-record-found" style="display: none;">
+                <td colspan="30" class="text-center">No match found</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Add Hearing Modal -->
+<div class="modal fade" id="HRAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Add Hearing Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="AddHRForm" method="POST">
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                     
+                        <div class="col-md-6 mb-3">
+                            <label for="DateVisitHR-Add" class="control-label">Date Visit</label>
+                            <input type="datetime-local" id="DateVisitHR-Add" name="DateVisit" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="newbornBb-Add" class="control-label">Select Newborn</label>
+                            <select id="newbornBb-Add" class="form-select" name="NewbornID" required>
+                                <option disabled selected>select newborn baby</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="testDate-Add" class="control-label">Test Date</label>
+                            <input type="date" id="testDate-Add" name="TestDate" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="babyStatus-Add" class="control-label">Baby Status</label>
+                            <input id="babyStatus-Add" name="BabyStatus" class="form-control" placeholder="Enter status" required />
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="hearingResult-Add" class="control-label">Hearing Result</label>
+                            <textarea id="hearingResult-Add" name="HearingResults" class="form-control" placeholder="Enter the result" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="NotesHR-Add" class="control-label">Notes(Optional)</label>
+                            <textarea id="NotesHR-Add" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="practitionerHR-Add" class="control-label">Attending Practitioner</label>
+                            <input id="practitionerHR-Add" name="AttendingPractitioner" class="form-control" placeholder="Enter Attending Practitioner" required />
+                        </div>
+
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-pink">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Hearing Modal -->
+<div class="modal fade" id="HREditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Edit Hearing Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="UpdateHRForm" method="POST">
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <input type="hidden" id="caseNoHR-Edit" name="HearingNo" />
+                        <input type="hidden" id="patientID-Edit" name="PatientID" />
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DateVisitHR-Edit" class="control-label">Date Visit</label>
+                            <input type="datetime-local" id="DateVisitHR-Edit" name="DateVisit" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="newbornBb-Edit" class="control-label">Select Newborn</label>
+                            <select id="newbornBb-Edit" class="form-select" name="NewbornID" required>
+                                <option disabled selected>select newborn baby</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="testDate-Edit" class="control-label">Test Date</label>
+                            <input type="date" id="testDate-Edit" name="TestDate" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="babyStatus-Edit" class="control-label">Baby Status</label>
+                            <input id="babyStatus-Edit" name="BabyStatus" class="form-control" placeholder="Enter status" required />
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="hearingResult-Edit" class="control-label">Hearing Result</label>
+                            <textarea id="hearingResult-Edit" name="HearingResults" class="form-control" placeholder="Enter the result" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="NotesHR-Edit" class="control-label">Notes(Optional)</label>
+                            <textarea id="NotesHR-Edit" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
+                        </div>
+
+                       @*  <div class="col-md-6 mb-3">
+                            <label for="staff-Edit" class="control-label">Select Encharged Staff</label>
+                            <select id="staff-Edit" class="form-select" name="StaffID" required>
+                                <option disabled selected>select encharged staff</option>
+                            </select>
+                        </div> *@
+
+                        <div class="col-md-6 mb-3">
+                            <label for="practitionerHR-Edit" class="control-label">Attending Practitioner</label>
+                            <input id="practitionerHR-Edit" name="AttendingPractitioner" class="form-control" required />
+                        </div>
+
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-pink">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Details Hearing Modal -->
+<div class="modal fade" id="HRDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Detail Hearing Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <input type="hidden" id="caseNoHR-Detail" name="HearingNo" />
+                        <input type="hidden" id="patientID-Detail" name="PatientID" />
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DateVisitHR-Detail" class="control-label">Date Visit</label>
+                            <input type="datetime-local" id="DateVisitHR-Detail" name="DateVisit" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="newbornBb-Detail" class="control-label">Select Newborn</label>
+                            <select id="newbornBb-Detail" class="form-control" name="NewbornID" disabled>
+                                <option disabled selected>select newborn baby</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="testDate-Detail" class="control-label">Test Date</label>
+                            <input type="date" id="testDate-Detail" name="TestDate" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="babyStatus-Detail" class="control-label">Baby Status</label>
+                            <input id="babyStatus-Detail" name="BabyStatus" class="form-control"  disabled />
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="hearingResult-Detail" class="control-label">Hearing Result</label>
+                            <textarea id="hearingResult-Detail" name="HearingResults" class="form-control" rows="3" disabled></textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="NotesHR-Detail" class="control-label">Notes(Optional)</label>
+                            <textarea id="NotesHR-Detail" name="Notes" class="form-control" rows="3" disabled></textarea>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="practitionerHR-Detail" class="control-label">Attending Practitioner</label>
+                            <input id="practitionerHR-Detail" name="AttendingPractitioner" class="form-control" disabled />
+                        </div>
+
+
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button class="btn btn-success printBtn" type="button">
+                                    <i class="fas fa-save"></i>
+                                    <span>Print</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Deleted History Modal -->
+<div class="modal fade" id="deletedHRModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger"><i class="fa-solid fa-trash"></i> Deleted Hearing Records</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="deletedHRListContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var patID = document.getElementById('patID').value;
+    //Print
+    $('.printBtn').on("click", function () {
+        var caseNo = $("#caseNoHR-Detail").val();
+        PrintForm(caseNo);
+    });
+
+    // Reset the form when the modal is hidden
+    $('#HRAddModal').on('hidden.bs.modal', function () {
+        var modal = $(this);
+        // Reset the form fields after the modal is hidden
+        modal.find('form')[0].reset();
+    });
+
+    $("#addNewHRBtn").on("click", function () {
+        ViewAddHRModal();
+    });
+    
+    $("#AddHRForm").on("submit", function (e) {
+        e.preventDefault();
+        AddHR();
+    });
+
+    $("#UpdateHRForm").on("submit", function (e) {
+        e.preventDefault();
+        UpdateHR();
+    });
+
+    $(".editHR-Btn").on("click", function (e) {
+        var caseNo = $(this).data('hearingid');
+        EditHR(caseNo);
+    });
+
+    $(".dltHR-Btn").on("click", function (e) {
+        var caseNo = $(this).data('hearingid');
+        DeleteHR(caseNo);
+    });
+    
+    $(".detailHR-Btn").on("click", function (e) {
+        var caseNo = $(this).data('hearingid');
+        DetailHR(caseNo);
+    });
+
+    $('#displayHRDeletedHistoryBtn').on('click', function () {
+        LoadDeletedHistoryHR();
+    });
+
+    function LoadDeletedHistoryHR() {
+        $.ajax({
+            url: '@Url.Action("DisplayDeletedHearing", "NewbornHearing")',
+            type: 'GET',
+            data: { patientId: patID },
+            success: function (result) {
+                $("#deletedHRListContainer").html(result);
+                $('#deletedHRModal').modal('show');
+            },
+            error: function () {
+                console.error("Failed to load patients data.");
+            }
+        });
+    }
+
+    // Update Hearing Record
+    function UpdateHR() {
+        var formData = $("#UpdateHRForm").serialize();
+        $.ajax({
+            url: '@Url.Action("UpdateHRRecord", "NewbornHearing")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                if (result.isSuccess) {
+                    $('#HREditModal').modal('hide');
+                    toastr.success(result.message)
+                    LoadHearingComponent();
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                toastr.error('An error occurred while updating the  record.');
+                console.error('Error:', err);
+            }
+        });
+    }
+    // Edit Hearing Record
+    function EditHR(caseNo) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetHRRecord", "NewbornHearing")',
+            data: { caseNo: caseNo },
+            success: function (response) {
+                if (response && response.isSuccess) {
+                    var item = response.item.result;
+                    var newborn = response.item.newborn;
+
+                    // Set values for editable fields
+                    $("#caseNoHR-Edit").val(item.hearingNo);
+                    $("#patientID-Edit").val(item.patientId);
+                    $("#DateVisitHR-Edit").val(item.dateVisit);
+                    $("#testDate-Edit").val(item.testDate);
+                    $("#babyStatus-Edit").val(item.babyStatus);
+                    $("#hearingResult-Edit").val(item.hearingResult);
+                    $("#NotesHR-Edit").val(item.notes);
+                    $("#practitionerHR-Edit").val(item.practitioner);
+
+                    
+                    $('#newbornBb-Edit').empty().append('<option disabled selected>select newborn baby</option>');
+                    newborn.forEach(function (data) {
+                        $('#newbornBb-Edit').append(
+                            $('<option>', {
+                                value: data.id,
+                                text: data.firstname + " " + data.middlename + " " + data.lastname + " - " + data.birthdate,
+                                selected: item.newbornID === data.id
+                            })
+                        );
+                    });
+                    // Show Edit Modal
+                    $('#HREditModal').modal('show');
+                } else {
+                    toastr.error(response.message || 'Unable to load hearing record.');
+                }
+            },
+            error: function () {
+                toastr.error('An error occurred while loading the hearing record.');
+            }
+        });
+    }
+
+    // Edit Hearing Record
+    function DetailHR(caseNo) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetHRRecord", "NewbornHearing")',
+            data: { caseNo: caseNo },
+            success: function (response) {
+                if (response && response.isSuccess) {
+                    var item = response.item.result;
+                    var newborn = response.item.newborn;
+
+                    // Set values for editable fields
+                    $("#caseNoHR-Detail").val(item.hearingNo);
+                    $("#patientID-Detail").val(item.patientId);
+                    $("#DateVisitHR-Detail").val(item.dateVisit);
+                    $("#testDate-Detail").val(item.testDate);
+                    $("#babyStatus-Detail").val(item.babyStatus);
+                    $("#hearingResult-Detail").val(item.hearingResult);
+                    $("#NotesHR-Detail").val(item.notes);
+                    $("#practitionerHR-Detail").val(item.practitioner);
+                    
+                    newborn.forEach(function (data) {
+                        $('#newbornBb-Detail').append(
+                            $('<option>', {
+                                value: data.id,
+                                text: data.firstname + " " + data.middlename + " " + data.lastname + " - " + data.birthdate,
+                                selected: item.newbornID === data.id
+                            })
+                        );
+                    });
+                    // Show Edit Modal
+                    $('#HRDetailModal').modal('show');
+                } else {
+                    toastr.error(response.message || 'Unable to load hearing record.');
+                }
+            },
+            error: function () {
+                toastr.error('An error occurred while loading the hearing record.');
+            }
+        });
+    }
+
+
+    //Delete Hearing
+    function DeleteHR(caseNo) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this, but you can see this on deleted history!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: '@Url.Action("DeleteHRRecord", "NewbornHearing")',
+                    data: { caseNo: caseNo },
+                    success: function (result) {
+                        if (result.isSuccess) {
+                            toastr.success(result.message)
+                            LoadHearingComponent();
+                        } else {
+                            toastr.error(result.message);
+                        }
+                    },
+                    error: function () {
+                        console.log('Unable to get the data.');
+                    }
+                })
+            }
+        });
+    }
+
+    //Add Hearing View Modal
+    function ViewAddHRModal() {
+        var patientId = $("#patID").val();
+
+        $.ajax({
+            url: '@Url.Action("Get_Staff_Newborn", "NewbornHearing")',
+            type: 'GET',
+            data: { id: patientId },
+            success: function (result) {
+                if (result) {
+                    var newborn = result.item.newborn;
+                    $('#newbornBb-Add').empty().append('<option disabled selected>select newborn baby</option>');
+                    newborn.forEach(function (item) {
+                        $('#newbornBb-Add').append(
+                            $('<option>', {
+                                value: item.id,
+                                text: item.firstname + " " + item.middlename + " " + item.lastname + " - " + item.birthdate
+                            })
+                        );
+                    });
+                    $('#HRAddModal').modal('show');
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                console.error('Error:', err);
+            }
+        });
+    }
+
+
+    function AddHR() {
+        var patientId = $("#patID").val();
+
+        // Validate newborn and staff selection
+        var newbornSelected = $('#newbornBb-Add').val();
+
+        if (!newbornSelected) {
+            alert("Please select a newborn baby.");
+            $('#newbornBb-Add').focus();
+            return; 
+        }
+        var formData = $('#AddHRForm').serializeArray();
+        formData.push({ name: 'patientID', value: patientId });
+
+        $.ajax({
+            url: '@Url.Action("AddHRRecord", "NewbornHearing")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                if (result.isSuccess) {
+                    toastr.success(result.message);
+                    LoadHearingComponent();
+                    $('#HRAddModal').modal('hide');
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                console.error('Error:', err);
+            }
+        });
+    }
+
+    //Print Form
+    function PrintForm(caseNo) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("PrintHearingForm", "Print")',
+            data: { id: caseNo },
+            success: function (response) {
+                if (response && response.isSuccess === false) {
+                    alert(response.message);
+                } else if (response && response.isSuccess === true) {
+                    window.location.href = "/Print/Hearing_Form?id=" + response.data.result.hearingNo;
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle error
+                alert("An error occurred, Please ask the It support.");
+            }
+        });
+    }
+    //Load All Records
+    function LoadHearingComponent() {
+        $.ajax({
+            url: '@Url.Action("HearingRecords", "NewbornHearing")',
+            data: { patientId: patID },
+            success: function (result) {
+                $('#hearing').html(result);
+            },
+            error: function () {
+                toastr.error("Failed to reload the Screening records.");
+            }
+        });
+    }
+
+</script>

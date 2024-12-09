@@ -152,6 +152,7 @@
 
             function getDefaults() {
                 return {
+                    closeButton: true,
                     tapToDismiss: true,
                     toastClass: 'toast',
                     containerId: 'toast-container',
@@ -178,7 +179,8 @@
                         warning: 'toast-warning'
                     },
                     iconClass: 'toast-info',
-                    positionClass: 'toast-bottom-right',
+                    //positionClass: 'toast-bottom-right',
+                    positionClass: 'toast-bottom-left',
                     timeOut: 5000, // Set timeOut and extendedTimeOut to 0 to make it sticky
                     titleClass: 'toast-title',
                     messageClass: 'toast-message',

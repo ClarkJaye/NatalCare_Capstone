@@ -8,6 +8,7 @@ namespace NatalCare.DataAccess.Interfaces
         Task<List<Newborn>> GetNewborns();
         Task<List<Newborn>> GetDeletedNewborns();
         Task<GeneralResponse> GetInformation(string id);
+        Task<Newborn> GetGeneralInformation(string id);
         Task<CommonResponse> Create(Newborn newborn, string userId);
         Task<GeneralResponse> Edit(string id, string userId);
         Task<GeneralResponse> Update(Newborn newborn, string userId);

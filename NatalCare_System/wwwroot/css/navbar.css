@@ -78,6 +78,11 @@
         border: 1px solid var(--pink);
     }
 
+    #content nav #shortcutDropdownMenu {
+        margin: 0px -5rem !important;
+    }
+
+
     #content nav .dropdown-menu li:hover {
         cursor: pointer;
         background-color: var(--grey);

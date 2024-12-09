@@ -10,14 +10,18 @@ namespace NatalCare.Models.Entities
         [Key]
         [Required]
         public string? CaseNo { get; set; }
-        public string? Gravida { get; set; }
-        public string? Para { get; set; }
-        public string? Abortion { get; set; }
-        public string? StillBirth { get; set; }
+
+        public int? Gravida { get; set; }
+        public int? Para { get; set; }
+        public int? Abortion { get; set; }
+        public int? StillBirth { get; set; }
+
         public DateOnly? LMP { get; set; }
         public DateOnly? EDC { get; set; }
+
         public string? HRCODE { get; set; }
         public string? Notes { get; set; }
+
         public DateTime? DateVisit { get; set; }
 
         // Foreign Key
@@ -45,5 +49,10 @@ namespace NatalCare.Models.Entities
         [ForeignKey("StatusCode")]
         [ValidateNever]
         public Status? Status { get; set; }
+
+
+        //Triggerable for OPD
+        public int PrenatalVisitTotal { get; set; }
+
     }
 }

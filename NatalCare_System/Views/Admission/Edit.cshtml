@@ -1,0 +1,574 @@
+﻿@model NatalCare.Models.Entities.Delivery
+
+
+@{
+    ViewData["Title"] = "Edit Admission";
+    ViewData["NavTitle"] = "Edit Admission";
+    Layout = "_UserLayout";
+}
+
+<!-- NAVBAR -->
+<partial name="Partial/_Navbar" />
+
+<style>
+    .preSelectBlink {
+        animation: bgBlink 2s;
+    }
+
+    @@keyframes bgBlink {
+        from {
+            background-color: var(--bs-info);
+        }
+
+        to {
+            background-color: transparent;
+        }
+    }
+</style>
+
+<div class="card card-selected w-75 mx-auto mt-5">
+    <div class="card-header card-header-selected d-flex justify-content-between align-items-center bg-pink">
+        <h5 class="card-title my-2">Edit Patient Admission</h5>
+    </div>
+    <div class="card-body m-4 pt-0">
+        <form asp-controller="Admission" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="CaseNo" class="form-control" hidden />
+
+            <!--Parents Side-->
+            <div class="row">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h5 class="card-title my-3 mb-3">Patient's Information</h5>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="PatientID" class="control-label">Patient No#</label>
+                    <input asp-for="PatientID" class="form-control text-uppercase" placeholder="Select patient (e.g., PT0001, PT0002 ...)" readonly />
+                    <span asp-validation-for="PatientID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient _FirstName" class="control-label">First Name</label>
+                    <input id="Patient_FirstName" class="form-control" placeholder="Enter First Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_MiddleName" class="control-label">Middle Name</label>
+                    <input id="Patient_MiddleName" class="form-control" placeholder="Enter Middle Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_LastName" class="control-label">Last Name </label>
+                    <input id="Patient_LastName" class="form-control" placeholder="Enter Last Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_Birthdate" class="control-label">BirthDate</label>
+                    <input id="Patient_Birthdate" class="form-control" placeholder="Enter Birthdate" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_Address" class="control-label">Address</label>
+                    <input id="Patient_Address" class="form-control" placeholder="Enter Address" readonly />
+                </div>
+            </div>
+
+            <hr class="my-3" />
+
+            <!-- Prenatal Case-->
+            <div class="d-flex align-items-center justify-content-between">
+                <h5 class="card-title mb-3">Prenatal Details</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" id="searchPrenatalBtn" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-search"></i>
+                        <span>Prenatal History Of Patient</span>
+                    </button>
+
+                    <button type="button" id="clearPreBtn" class="btn btn-sm btn-outline-danger">
+                        <i class="fas fa-cancel"></i>
+                        <span>Clear</span>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4 mb-3" hidden>
+                    <label asp-for="PrenatalID" class="control-label">Prenatal ID</label>
+                    <input asp-for="PrenatalID" class="form-control text-uppercase" />
+                    <span asp-validation-for="PrenatalID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-12 my-4" id="prenatalSection" style="display: none;">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Case No#</th>
+                                <th>Date Visit</th>
+                                <th>Gravida</th>
+                                <th>Para</th>
+                                <th>Abortion</th>
+                                <th>Still Birth</th>
+                                <th>LMP</th>
+                                <th>EDC</th>
+                                <th>H.R Code</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="preSelect" class="preSelect">
+                                <td id="pre_caseno"></td>
+                                <td id="pre_datevisit"></td>
+                                <td id="pre_gravida"></td>
+                                <td id="pre_para"></td>
+                                <td id="pre_abortion"></td>
+                                <td id="pre_stillbirth"></td>
+                                <td id="pre_lmp"></td>
+                                <td id="pre_edc"></td>
+                                <td id="pre_hrcode"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="mx-2 my-4" id="prenatalMessageSection">
+                <div class="alert alert-primary" role="alert">
+                    No Prenatal Added Yet!
+                </div>
+            </div>
+
+            <hr class="my-3" />
+
+            <!-- Admission -->
+            <h5 class="card-title mb-3">Admission Details</h5>
+            <div class="row">
+                <div class="form-group col-md-4 mb-4">
+                    <label asp-for="Date_Admitted" class="control-label">Date Admitted</label>
+                    <input type="date" asp-for="Date_Admitted" class="form-control" required />
+                    <span asp-validation-for="Date_Admitted" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-4">
+                    <label asp-for="Time_Admitted" class="control-label">Time Admitted</label>
+                    <input type="time" asp-for="Time_Admitted" class="form-control" required />
+                    <span asp-validation-for="Time_Admitted" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-4">
+                    <label asp-for="DeliveryStatusID" class="control-label"></label>
+                    <select asp-for="DeliveryStatusID" class="form-select" asp-items="@ViewBag?.deliveryStatus" required>
+                        <option value="" selected>select status</option>
+                    </select>
+                    <span asp-validation-for="DeliveryStatusID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-4">
+                    <label asp-for="Date_Discharged" class="control-label">Date Discharged</label>
+                    <input type="date" asp-for="Date_Discharged" class="form-control"  />
+                    <span asp-validation-for="Date_Discharged" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-4">
+                    <label asp-for="Time_Discharged" class="control-label">Time Discharged</label>
+                    <input type="time" asp-for="Time_Discharged" class="form-control"  />
+                    <span asp-validation-for="Time_Discharged" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4 mb-4"></div>
+
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="WardNumber" class="control-label">Ward No#</label>
+                    <select asp-for="WardNumber" class="form-select" asp-items="@ViewBag?.wardList">
+                        <option value="" class="text-muted" selected>select ward number</option>
+                    </select>
+                    <span asp-validation-for="WardNumber" class="text-danger"></span>
+                </div>
+
+                <!-- Bed Number -->
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="BedNumber" class="control-label">Bed No#</label>
+                    <input asp-for="BedNumber" class="form-control" hidden/>
+                    <select class="form-select" id="bedNumber">
+                        <option value="" class="text-muted" selected>select bed number</option>
+                    </select>
+                    <span asp-validation-for="BedNumber" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="Notes" class="control-label">Notes (optional)</label>
+                    <textarea asp-for="Notes" class="form-control" placeholder="Enter notes" rows="3"></textarea>
+                    <span asp-validation-for="Notes" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group col-12 mt-3 mb-3">
+                <div class="d-flex align-items-center justify-content-end gap-3">
+                    <button class="btn btn-pink" type="submit">
+                        <i class="fas fa-save"></i>
+                        <span>Save</span>
+                    </button>
+                    @if (ViewBag?.triggerPatID == null)
+                    {
+                        <a class="btn btn-outline-secondary" asp-controller="Admission" asp-action="Index">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            <span>Back to List</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline-secondary" asp-controller="Patient" asp-action="MedicalRecords" asp-route-id="@ViewBag?.triggerPatID">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            <span>Back to Patient</span>
+                        </a>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<!-- Search Mother Modal -->
+<div class="modal fade" id="searchMotherModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Search Patient</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="patientsListContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search Prenatal Details Of that Patient Modal -->
+<div class="modal fade" id="searchPrenatalModal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <style>
+            @@media (min-width: 1200px) {
+                .modal-xl {
+                    max-width: 1400px;
+                }
+            }
+        </style>
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Prenatal History Of Patient</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="prenatalListContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/toastr/toastr.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+           $('#WardNumber').on('change', function () {
+               var value = $(this).val();
+               LoadBedList(value);
+           });
+
+            $('#bedNumber').on('change', function () {
+               var value = $(this).val();
+                $('#BedNumber').val(value)
+            });
+
+           if($('#WardNumber').val()){
+                var value = $('#WardNumber').val();
+                LoadBedList(value);
+           }
+            if($('#BedNumber').val()){
+                var value = $('#WardNumber').val();
+                LoadBedSelected(value);
+           }
+
+           function LoadBedList(value) {
+                var patId = $("#PatientID").val();
+
+                $.ajax({
+                    url: '@Url.Action("GetBedNumber", "Admission")',
+                    type: 'GET',
+                    data: { wardId: value, patId: patId },
+                    success: function (result) {
+                        if (result.isSuccess) {
+                            var data = result.item;
+                            $('#bedNumber').empty().append('<option selected>select bed number</option>');
+                            data.forEach(function (item) {
+                                $('#bedNumber').append(
+                                    $('<option>', {
+                                        value: item.id,
+                                        text: item.bedNo
+                                    })
+                                );
+                            });
+                        } 
+                    },
+                    error: function (err) {
+                        console.error('Error:', err);
+                    }
+                });
+           }
+
+            function LoadBedSelected(value) {
+                var patId = $("#PatientID").val();
+
+                $.ajax({
+                    url: '@Url.Action("GetBedNumberorEdit", "Admission")',
+                    type: 'GET',
+                    data: { wardId: value },
+                    success: function (result) {
+                        if (result.isSuccess) {
+                            var data = result.item;
+                            // Clear and add default option
+                            $('#bedNumber').empty().append('<option value="" selected>select bed number</option>');
+                            // Populate dropdown
+                            data.forEach(function (item) {
+                                let optionText = item.bedNo; 
+                                // Modify text or properties based on conditions
+                                if (item.isUsed === true && item.patientID.toUpperCase() === patId.toUpperCase()) {
+                                    optionText += ' - currently selected';
+                                    $('#bedNumber').append(
+                                        $('<option>', { value: item.id, text: optionText, class: "bg-pink", selected: true })
+                                    );
+                                } else if (item.isUsed === true) {
+                                    $('#bedNumber').append(
+                                        $('<option>', { value: item.id, text: optionText + ' - unavailable', disabled: true })
+                                    );
+                                } else {
+                                    $('#bedNumber').append(
+                                        $('<option>', { value: item.id, text: optionText + ' - available' })
+                                    );
+                                }
+                            });
+                        }
+                    },
+                    error: function (err) {
+                        console.error('Error:', err);
+                    }
+                });
+            }
+
+
+            $('#searchPtBtn').on('click', function () {
+                loadPatientssPartialView()
+            });
+
+            $('#searchPrenatalBtn').on('click', function () {
+                var patId = $("#PatientID").val();
+                if(patId){
+                    loadPrenatalPartialView(patId);
+                }else{
+                     alert("Select Patient First!");
+                }
+            });
+            // Load Patient Detail If the PatientID is not null
+            if ($("#PatientID").val()) {
+                var id = $("#PatientID").val();
+                LoadPatientDetails(id);
+            }
+
+             if ($("#PrenatalID").val()) {
+                var id = $("#PrenatalID").val();
+                LoadPrenatalDetails(id);
+            }
+
+            $('#clearBtn').on('click', function () {
+                $("form input, form select, form textarea").removeClass("bg-white");
+                $("#BedNumber").addClass("readonly");
+                $("#PatientID").val("").attr("placeholder", "Enter (e.g., PT0001, PT0002 ...)");
+                $("#FatherID").val("").attr("placeholder", "Enter Father");
+                $("#Patient_FirstName").val("").attr("placeholder", "Enter First Name");
+                $("#Patient_MiddleName").val("").attr("placeholder", "Enter Middle Name");
+                $("#Patient_LastName").val("").attr("placeholder", "Enter Last Name");
+                $("#Patient_Address").val("").attr("placeholder", "Enter Address");
+                $("#Patient_Birthdate").val("");
+            });
+
+            $('#clearPreBtn').on('click', function () {
+                const prenatalSection = document.getElementById('prenatalSection');
+                const messageSection = document.getElementById('prenatalMessageSection');
+                prenatalSection.style.display = "none";
+                messageSection.style.display = "block";
+                $("#PrenatalID").val("");
+                $("#pre_caseno").text("");
+                $("#pre_datevisit").text("");
+                $("#pre_gravida").text("");
+                $("#pre_para").text("");
+                $("#pre_abortion").text("");
+                $("#pre_stillbirth").text("");
+                $("#pre_lmp").text("");
+                $("#pre_edc").text("");
+                $("#pre_hrcode").text("");
+            });
+
+
+
+            //Patient Select
+            $('#patientsListContainer').on('click', "#patientSelectBtn", function () {
+                var value = $(this).data("patientid");
+                value.toUpperCase();
+                LoadPatientDetails(value);
+            });
+            //For click the Table row
+            $('#patientsListContainer').on('click', "#patientSelectTR", function () {
+                var value = $(this).data("patid");
+                value.toUpperCase();
+                LoadPatientDetails(value);
+            });
+
+            //Prenatal Select
+             $('#prenatalListContainer').on('click', "#prenatalSelectBtn", function () {
+                var value = $(this).data("caseid");
+                value.toUpperCase();
+                LoadPrenatalDetails(value);
+            });
+
+            // Add form submission validation for Patient ID
+            $("form").on("submit", function (e) {
+                var patientId = $("#PatientID").val().trim();
+                var statusId = $("#DeliveryStatusID").val();
+                var dischargeDate = $("#Date_Discharged").val();
+                var dischargeTime = $("#Time_Discharged").val();
+
+                if (patientId === "") {
+                    e.preventDefault();
+                    alert("Please select a patient for the admission.");
+                    return; 
+                }
+
+                if (statusId === "3" && (!dischargeDate || !dischargeTime)) {
+                    e.preventDefault();
+                    alert("Please fill in both the discharge date and time before submitting.");
+                    return;
+                }
+            });
+
+        });
+
+        //Patient
+        function loadPatientssPartialView() {
+            $.ajax({
+                url: '@Url.Action("DisplayPatients", "Patient")',
+                type: 'GET',
+                success: function (result) {
+                    $("#patientsListContainer").html(result);
+                    $('#searchMotherModal').modal('show');
+                },
+                error: function () {
+                    console.error("Failed to load patients data.");
+                }
+            });
+        }
+        //Prenatal
+         function loadPrenatalPartialView(id) {
+            $.ajax({
+                url: '@Url.Action("DisplayPrenatal", "Prenatal")',
+                data: { patientId: id },
+                type: 'GET',
+                success: function (result) {
+                    $("#prenatalListContainer").html(result);
+                    $('#searchPrenatalModal').modal('show');
+                },
+                error: function () {
+                    console.error("Failed to load patients data.");
+                }
+            });
+        }
+        //Patient
+        function LoadPatientDetails(value) {
+            $.ajax({
+                url: '@Url.Action("GetPatientDetails", "Patient")',
+                type: 'GET',
+                data: { patientId: value },
+                success: function (data) {
+                    if (data && data.isSuccess) {
+                        console.log(data)
+                        var item = data.item;
+                        $("#PatientID").val(item.id);   
+                        $("#Patient_FirstName").val(item.firstname);
+                        $("#Patient_MiddleName").val(item.middlename);
+                        $("#Patient_LastName").val(item.lastname);
+                        $("#Patient_Address").val(item.address);
+                        $("#Patient_Birthdate").val(item.birthdate);
+                        // toastr.success('Patient selected!');
+
+                        // Apply the bg-white class to all inputs in the form
+                        $("form input, form select, form textarea").addClass("bg-white");
+                        $("#BedNumber").addClass("readonly");
+                    } else {
+                        $("#PatientID").val(item.message);
+                        $("#Patient_FirstName").val(item.message);
+                        $("#Patient_MiddleName").val(item.message);
+                        $("#Patient_LastName").val(item.message);
+                        $("#Patient_Address").val(item.message);
+                        $("#Patient_Birthdate").val(item.message);
+                        toastr.error('Patient Not Found!');
+                    }
+                    $('#searchMotherModal').modal('hide');
+                },
+                error: function () {
+                    console.error("Error retrieving patient details.");
+                }
+            });
+        }
+        //Prenatal
+        function LoadPrenatalDetails(value) {
+            const prenatalSection = document.getElementById('prenatalSection');
+            const messageSection = document.getElementById('prenatalMessageSection');
+            const prenatalSelect = document.getElementById('preSelect');
+
+            $.ajax({
+                url: '@Url.Action("GetPrenatalDetails", "Prenatal")',
+                type: 'GET',
+                data: { caseNo: value },
+                success: function (data) {
+                    if (data && data.isSuccess) {
+                        var item = data.item;
+                        $("#PrenatalID").val(item.caseNo);
+                        $("#pre_caseno").text(item.caseNo);
+                        $("#pre_datevisit").text(item.dateVisit);
+                        $("#pre_gravida").text(item.gravida);
+                        $("#pre_para").text(item.para);
+                        $("#pre_abortion").text(item.abortion);
+                        $("#pre_stillbirth").text(item.stillBirth);
+                        $("#pre_lmp").text(item.lmp);
+                        $("#pre_edc").text(item.edc);
+                        $("#pre_hrcode").text(item.hrCode);
+
+                        prenatalSection.style.display = "block";
+                        messageSection.style.display = "none";
+
+                        // Add and remove the blink effect
+                        prenatalSelect.classList.remove('preSelectBlink');
+                        void prenatalSelect.offsetWidth;
+                        prenatalSelect.classList.add('preSelectBlink');
+
+                        // toastr.success('Prenatal selected!');
+                    } else {
+                        prenatalSection.style.display = "none";
+                        messageSection.style.display = "block";
+                        toastr.error('Prenatal Not Found!');
+                    }
+                    $('#searchPrenatalModal').modal('hide');
+                },
+                error: function () {
+                    console.error("Error retrieving patient details.");
+                }
+            });
+        }
+    </script>
+}
+
+
+
+

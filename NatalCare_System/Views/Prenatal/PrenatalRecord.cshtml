@@ -2,7 +2,8 @@
 @model PatientsVM
 
 @{
-    ViewData["Title"] = "Patient / Prenatal Record";
+    ViewData["Title"] = "Prenatal Visit Record";
+    ViewData["NavTitle"] = "Patient / Prenatal Visit Record";
     Layout = "_UserLayout";
 }
 
@@ -11,11 +12,11 @@
 
 <div class="mx-4">
     <div class="d-flex align-items-center justify-content-start gap-3 mb-3">
-        <a asp-controller="Patient" asp-action="MedicalRecords" asp-route-id="@Model.Patient.PatientID" class="btn btn-sm btn-outline-pink">
+        <a asp-controller="Patient" asp-action="MedicalRecords" asp-route-id="@Model.Patient?.PatientID" class="btn btn-sm btn-outline-pink">
             <i class="fas fa-arrow-left"></i>
             <span>Back</span>
         </a>
-        <h5 class="fw-bold m-0 text-capitalize">@Model.Patient.FirstName @Model.Patient.MiddleName @Model.Patient.LastName</h5>
+        <h5 class="fw-bold m-0 text-capitalize">@Model.Patient?.FirstName @Model.Patient?.MiddleName @Model.Patient?.LastName</h5>
     </div>
     <div class="card shadow-sm card-selected">
         <div class="card-body">
@@ -26,7 +27,7 @@
                         <i class="fas fa-plus"></i>
                         <span>Add New Visit</span>
                     </a>
-                    <a id="preFormBtn" class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1" data-preid="@Model.PrenatalRecord.CaseNo">
+                    <a id="preFormBtn" class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1" data-preid="@Model?.PrenatalRecord?.CaseNo">
                         <i class="fas fa-eye"></i>
                         <span>See All Detailed</span>
                     </a>
@@ -36,13 +37,13 @@
             <div class="px-2">
                 <div class="d-flex align-items-center gap-2" style="cursor:pointer;">
                     <span class="h6">Patient No#:</span>
-                    <h3 class="btn btn-sm btn-outline-pink fw-bold border-0" style="font-size: 14px;">@Model.Patient.PatientID</h3>
-                    <input type="hidden" id="patID" name="patientID" value="@Model.Patient.PatientID" />
+                    <h3 class="btn btn-sm btn-outline-pink fw-bold border-0" style="font-size: 14px;">@Model?.Patient?.PatientID</h3>
+                    <input type="hidden" id="patID" name="patientID" value="@Model?.Patient?.PatientID" />
                 </div>
                 <div class="d-flex align-items-center gap-2" style="cursor:pointer;">
                     <span class="h6">Case No#:</span>
-                    <h3 class="btn btn-sm btn-outline-pink fw-bold border-0" style="font-size: 14px;">@Model.PrenatalRecord.CaseNo</h3>
-                    <input type="hidden" id="caseID" name="caseNo" value="@Model.PrenatalRecord.CaseNo" />
+                    <h3 class="btn btn-sm btn-outline-pink fw-bold border-0" style="font-size: 14px;">@Model?.PrenatalRecord?.CaseNo</h3>
+                    <input type="hidden" id="caseID" name="caseNo" value="@Model?.PrenatalRecord?.CaseNo" />
                 </div>
             </div>
 
@@ -56,6 +57,7 @@
                         <tr>
                             <th>Date Visit</th>
                             <th>AOG Week</th>
+                            <th>Total Month</th>
                             <th>Weight</th>
                             <th>BP</th>
                             <th>FH</th>
@@ -69,13 +71,30 @@
                     </thead>
                     <tbody>
                         <!-- Sample Data -->
-                        @if (Model.PrenatalVisitRecords != null && Model.PrenatalVisitRecords.Any())
+                        @if (Model?.PrenatalVisitRecords != null && Model.PrenatalVisitRecords.Any())
                         {
                             @foreach (var item in Model.PrenatalVisitRecords)
                             {
                                 <tr>
                                     <td>@item.DateVisit?.ToString("MMM dd yyyy h:mm tt")</td>
-                                    <td>@item.AOGWeek</td>
+                                    <td>@item.AOGWeek Weeks</td>
+                                    <td>
+                                        @{
+                                            // Attempt to parse the string AOGWeek to a numeric value
+                                            decimal aogWeekValue;
+                                            if (decimal.TryParse(item.AOGWeek, out aogWeekValue))
+                                            {
+                                                // Calculate months by dividing weeks by 4
+                                                @($"{Math.Round(aogWeekValue / 4, 1)} Months")
+                                            }
+                                            else
+                                            {
+                                                // Handle cases where parsing fails
+                                                @("Invalid AOG Week")
+                                            }
+                                        }
+                                    </td>
+
                                     <td>@item.Weight</td>
                                     <td>@item.BP</td>
                                     <td>@item.FH</td>
@@ -83,7 +102,7 @@
                                     <td>@item.Temp</td>
                                     <td>@item.CR</td>
                                     <td>@item.RR</td>
-                                    <td>@item.PhysicalAssessment</td>
+                                    <td style="max-width: 300px; word-wrap: break-word;">@item.PhysicalAssessment</td>
                                     <td>
                                         <div class="d-flex align-items-center justify-content-center gap-2">
                                             <a class="detail-Btn btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" data-caseno="@item.CaseNo">
@@ -94,10 +113,10 @@
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                                 <span>Edit</span>
                                             </a>
-                                            <a class="dlt-Btn btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center gap-1" data-caseno="@item.CaseNo">
+                                           @*  <a class="dlt-Btn btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center gap-1" data-caseno="@item.CaseNo">
                                                 <i class="fa-solid fa-trash"></i>
                                                 <span>Delete</span>
-                                            </a>
+                                            </a> *@
                                         </div>
                                     </td>
                                 </tr>
@@ -128,8 +147,15 @@
 <!-- Prenatal Records Form Modal -->
 <div class="modal fade" id="prenatalFormModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
+        <style>
+            @@media (min-width: 1200px) {
+                .modal-xl {
+                    max-width: 1400px;
+                }
+            }
+        </style>
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Prenatal Record Form</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -159,18 +185,13 @@
                         </div>
 
                         <div class="col-md-3 mb-3">
-                            <label for="LMP-Form" class="control-label">LMP</label>
-                            <input type="date" id="LMP-Form" name="LMP" class="form-control bg-white" readonly />
+                            <label for="LMP-Form" class="control-label">Last Menstrual Period (LMP)</label>
+                            <input type="text" id="LMP-Form" name="LMP" class="form-control bg-white" readonly />
                         </div>
 
                         <div class="col-md-3 mb-3">
-                            <label for="EDC-Form" class="control-label">EDC</label>
-                            <input type="date" id="EDC-Form" name="EDC" class="form-control bg-white" readonly />
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <label for="DateVisit-Form" class="control-label">DateVisit</label>
-                            <input type="datetime-local" id="DateVisit-Form" name="DateVisit" class="form-control bg-white" readonly />
+                            <label for="EDC-Form" class="control-label">Estimated Date of Confinement (EDC)</label>
+                            <input type="text" id="EDC-Form" name="EDC" class="form-control bg-white" readonly />
                         </div>
 
                         <div class="col-md-3 mb-3">
@@ -178,7 +199,12 @@
                             <input id="HRCODE-Form" name="HRCODE" class="form-control bg-white" readonly />
                         </div>
 
-                        <hr />
+                        <div class="col-md-3 mb-3">
+                            <label for="DateVisit-Form" class="control-label">DateVisit</label>
+                            <input type="datetime-local" id="DateVisit-Form" name="DateVisit" class="form-control bg-white" readonly />
+                        </div>
+
+                        <hr class="my-2 " />
 
                         <h5 class="card-title my-2 mb-3">Prenatal Visit</h5>
 
@@ -209,8 +235,13 @@
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
                             <div class="d-flex align-items-center gap-2">
-                                <button type="button" class="btn btn-success">Print</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button class="btn btn-success printBtn" type="button">
+                                    <i class="fas fa-save"></i>
+                                    <span>Print</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <span>Close</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -224,7 +255,7 @@
 <div class="modal fade" id="prenatalVisitAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Add Prenatal Visit Record</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -234,12 +265,12 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="AOGWeek-Add" class="control-label">AOG Week</label>
-                            <input id="AOGWeek-Add" name="AOGWeek" class="form-control" placeholder="Enter AOG Week" required />
+                            <input type="number" id="AOGWeek-Add" name="AOGWeek" class="form-control" placeholder="Enter AOG Week" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="Weight-Add" class="control-label">Weight</label>
-                            <input id="Weight-Add" name="Weight" class="form-control" placeholder="Enter Weight" required />
+                            <input id="Weight-Add" name="Weight" class="form-control" placeholder="Enter Weight " required />
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -308,7 +339,7 @@
 <div class="modal fade" id="prenatalVisitEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Edit Prenatal Visit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -320,7 +351,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="AOGWeek-edit" class="control-label">AOG Week</label>
-                            <input id="AOGWeek-edit" name="AOGWeek" class="form-control" placeholder="Enter AOG Week" required />
+                            <input type="number" id="AOGWeek-edit" name="AOGWeek" class="form-control" placeholder="Enter AOG Week" required />
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -394,7 +425,7 @@
 <div class="modal fade" id="prenatalVisitDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-pink">
                 <h5 class="modal-title">Details Prenatal Visit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -479,6 +510,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            $('.printBtn').on("click", function () {
+                var caseNo = $("#caseID").val();
+                PrintForm(caseNo);
+            });
+
             $('.filterInput').on('keyup', function () {
                 var value = $(this).val().toLowerCase();
                 var rows = $('tbody tr:not(.no-record-found)');
@@ -672,7 +708,6 @@
                 url: '@Url.Action("PrenatalFormRecords", "Prenatal")',
                 data: { prenatalId: preId },
                 success: function (result) {
-                    console.log(result)
                     var prenatal = result.item.prenatalRecord;
                     if (result && result.isSuccess == true) {
                         $("#caseNo-Form").val(prenatal.caseNo);
@@ -680,8 +715,12 @@
                         $("#Para-Form").val(prenatal.para);
                         $("#Abortion-Form").val(prenatal.abortion);
                         $("#StillBirth-Form").val(prenatal.stillBirth);
-                        $("#LMP-Form").val(prenatal.lmp ? prenatal.lmp.split('T')[0] : '');
-                        $("#EDC-Form").val(prenatal.edc ? prenatal.edc.split('T')[0] : '');
+                       // Format and display LMP
+                        var lmp = prenatal.lmp ? new Date(prenatal.lmp).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+                        $("#LMP-Form").val(lmp);
+                        // Format and display EDC
+                        var edc = prenatal.edc ? new Date(prenatal.edc).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+                        $("#EDC-Form").val(edc);
                         $("#DateVisit-Form").val(prenatal.dateVisit);
                         $("#HRCODE-Form").val(prenatal.hrcode);
                         $("#Notes-Form").val(prenatal.notes);
@@ -742,6 +781,25 @@
                 },
                 error: function (err) {
                     console.error('Error:', err);
+                }
+            });
+        }
+
+        function PrintForm(caseNo) {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("PrintPrenatalForm", "Print")',
+                data: { id: caseNo },
+                success: function (response) {
+                    if (response && response.isSuccess === false) {
+                        alert(response.message);
+                    } else if (response && response.isSuccess === true) {
+                        window.location.href = "/Print/Prenatal_Form?id=" + response.caseNo + '&patientId=' + response.patientId;
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Handle error
+                    alert("An error occurred, Please ask the It support.");
                 }
             });
         }

@@ -1,0 +1,512 @@
+﻿@model NatalCare.Models.Entities.Delivery
+
+
+@{
+    ViewData["Title"] = "Details Admission";
+    ViewData["NavTitle"] = "Details Admission";
+    Layout = "_UserLayout";
+}
+
+<!-- NAVBAR -->
+<partial name="Partial/_Navbar" />
+
+<style>
+    .preSelectBlink {
+        animation: bgBlink 2s;
+    }
+
+    @@keyframes bgBlink {
+        from {
+            background-color: var(--bs-info);
+        }
+
+        to {
+            background-color: transparent;
+        }
+    }
+</style>
+
+<div class="card card-selected w-75 mx-auto mt-5">
+    <div class="card-header card-header-selected d-flex justify-content-between align-items-center bg-pink">
+        <h5 class="card-title my-2">Details Patient Admission</h5>
+    </div>
+    <div class="card-body m-4 pt-0">
+        <form asp-controller="Admission" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="CaseNo" class="form-control" hidden />
+
+            <!--Parents Side-->
+            <div class="row">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h5 class="card-title my-3 mb-3">Patient's Information</h5>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="PatientID" class="control-label">Patient No#</label>
+                    <input asp-for="PatientID" class="form-control text-uppercase" placeholder="Select patient (e.g., PT0001, PT0002 ...)" readonly />
+                    <span asp-validation-for="PatientID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient _FirstName" class="control-label">First Name</label>
+                    <input id="Patient_FirstName" class="form-control" placeholder="Enter First Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_MiddleName" class="control-label">Middle Name</label>
+                    <input id="Patient_MiddleName" class="form-control" placeholder="Enter Middle Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_LastName" class="control-label">Last Name </label>
+                    <input id="Patient_LastName" class="form-control" placeholder="Enter Last Name" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_Birthdate" class="control-label">BirthDate</label>
+                    <input id="Patient_Birthdate" class="form-control" placeholder="Enter Birthdate" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label for="Patient_Address" class="control-label">Address</label>
+                    <input id="Patient_Address" class="form-control" placeholder="Enter Address" readonly />
+                </div>
+            </div>
+
+            <hr class="my-3" />
+
+            <!-- Prenatal Case-->
+            <div class="d-flex align-items-center justify-content-between">
+                <h5 class="card-title mb-3">Prenatal Details</h5>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4 mb-3" hidden>
+                    <label asp-for="PrenatalID" class="control-label">Prenatal ID</label>
+                    <input asp-for="PrenatalID" class="form-control text-uppercase" />
+                    <span asp-validation-for="PrenatalID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-12 my-4" id="prenatalSection" style="display: none;">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Case No#</th>
+                                <th>Date Visit</th>
+                                <th>Gravida</th>
+                                <th>Para</th>
+                                <th>Abortion</th>
+                                <th>Still Birth</th>
+                                <th>LMP</th>
+                                <th>EDC</th>
+                                <th>H.R Code</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="preSelect" class="preSelect">
+                                <td id="pre_caseno"></td>
+                                <td id="pre_datevisit"></td>
+                                <td id="pre_gravida"></td>
+                                <td id="pre_para"></td>
+                                <td id="pre_abortion"></td>
+                                <td id="pre_stillbirth"></td>
+                                <td id="pre_lmp"></td>
+                                <td id="pre_edc"></td>
+                                <td id="pre_hrcode"></td>
+                                <td>
+                                    <input type="hidden" id="pre_Id" />
+                                    <a class="btn btn-outline-secondary plDeleteBtn">
+                                        <i class="fa-solid fa-list"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="mx-2 my-4" id="prenatalMessageSection">
+                <div class="alert alert-primary" role="alert">
+                    No Prenatal Added Yet!
+                </div>
+            </div>
+
+            <hr class="my-3" />
+
+            <!-- Admission -->
+            <h5 class="card-title mb-3">Admission Details</h5>
+            <div class="row">
+                <div class="form-group col-md-4 mb-4">
+                    <label asp-for="Date_Admitted" class="control-label">Date Admitted</label>
+                    <input asp-for="Date_Admitted" class="form-control" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-4">
+                    <label asp-for="Time_Admitted" class="control-label">Time Admitted</label>
+                    <input asp-for="Time_Admitted" class="form-control" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-4">
+                    <label for="DeliveryStatusID" class="control-label">Status</label>
+                    <input id="DeliveryStatusID" value="@Model.DeliveryStatus?.StatusName" class="form-control" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-4">
+                    <label asp-for="Date_Discharged" class="control-label">Date Discharged</label>
+                    <input asp-for="Date_Discharged" class="form-control" readonly />
+                </div>
+
+                <div class="form-group col-md-4 mb-4">
+                    <label asp-for="Time_Discharged" class="control-label">Time Discharged</label>
+                    <input asp-for="Time_Discharged" class="form-control" readonly />
+                </div>
+                <div class="form-group col-md-4 mb-4"></div>
+
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="WardNumber" class="control-label">Ward No#</label>
+                    <input asp-for="WardNumber" class="form-control" readonly/>
+                </div>
+
+                <!-- Bed Number -->
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="BedNumber" class="control-label">Bed No#</label>
+                    <input asp-for="BedNumber" class="form-control" readonly />
+                </div>
+                <div class="form-group col-md-4 mb-3"></div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="Notes" class="control-label">Notes (optional)</label>
+                    <textarea asp-for="Notes" class="form-control" placeholder="Enter notes" rows="3" readonly></textarea>
+                </div>
+            </div>
+
+            <div class="form-group col-12 mt-3 mb-3">
+                <div class="d-flex align-items-center justify-content-end gap-3">
+                    @if (ViewBag?.triggerPatID == null)
+                    {
+                        <a class="btn btn-outline-secondary" asp-controller="Admission" asp-action="Index">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            <span>Back to List</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline-secondary" asp-controller="Patient" asp-action="MedicalRecords" asp-route-id="@ViewBag?.triggerPatID">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            <span>Back to Patient</span>
+                        </a>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<!-- Search Mother Modal -->
+<div class="modal fade" id="searchMotherModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Search Patient</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="patientsListContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search Prenatal Details Of that Patient Modal -->
+<div class="modal fade" id="searchPrenatalModal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <style>
+            @@media (min-width: 1200px) {
+                .modal-xl {
+                    max-width: 1400px;
+                }
+            }
+        </style>
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Prenatal History Of Patient</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="prenatalListContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Prenatal Records Form Modal -->
+<div class="modal fade" id="prenatalFormModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <style>
+            @@media (min-width: 1200px) {
+                .modal-xl {
+                    max-width: 1400px;
+                }
+            }
+        </style>
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Prenatal Record Form</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <h5 class="card-title my-2 mb-3">Present Pregnancy</h5>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="Gravida-Form" class="control-label">GRAVIDA</label>
+                            <input id="Gravida-Form" name="Gravida" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="Para-Form" class="control-label">PARA</label>
+                            <input id="Para-Form" name="Para" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="Abortion-Form" class="control-label">ABORTION</label>
+                            <input id="Abortion-Form" name="Abortion" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="StillBirth-Form" class="control-label">STILL BIRTH</label>
+                            <input id="StillBirth-Form" name="StillBirth" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="LMP-Form" class="control-label">Last Menstrual Period (LMP)</label>
+                            <input type="text" id="LMP-Form" name="LMP" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="EDC-Form" class="control-label">Estimated Date of Confinement (EDC)</label>
+                            <input type="text" id="EDC-Form" name="EDC" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="HRCODE-Form" class="control-label">H.R. Code</label>
+                            <input id="HRCODE-Form" name="HRCODE" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="DateVisit-Form" class="control-label">DateVisit</label>
+                            <input type="datetime-local" id="DateVisit-Form" name="DateVisit" class="form-control bg-white" readonly />
+                        </div>
+
+                        <hr class="my-2 " />
+
+                        <h5 class="card-title my-2 mb-3">Prenatal Visit</h5>
+
+                        <!-- Prenatal Visit Records Table -->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>AOG Week</th>
+                                        <th>Weight</th>
+                                        <th>BP</th>
+                                        <th>Fundal Height</th>
+                                        <th>Fetal Heart Rate</th>
+                                        <th>Temperature</th>
+                                        <th>CR</th>
+                                        <th>RR</th>
+                                        <th>Date of Visit</th>
+                                        <th>Physical Assessment</th>
+                                        <th>Notes</th>
+                                        <th>RX</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="prenatalVisitTableBody">
+                                    <!-- Rows will be dynamically inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/toastr/toastr.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Load Patient Detail If the PatientID is not null
+            if ($("#PatientID").val()) {
+                var id = $("#PatientID").val();
+                LoadPatientDetails(id);
+            }
+
+            if ($("#PrenatalID").val()) {
+                var id = $("#PrenatalID").val();
+                LoadPrenatalDetails(id);
+            }
+
+            $(".plDeleteBtn").on("click", function (e) {
+                var preId = $("#pre_Id").val();
+                  PrenatalFormModal(preId);
+            });
+        });
+
+        //Patient
+        function LoadPatientDetails(value) {
+            $.ajax({
+                url: '@Url.Action("GetPatientDetails", "Patient")',
+                type: 'GET',
+                data: { patientId: value },
+                success: function (data) {
+                    if (data && data.isSuccess) {
+                        var item = data.item;
+                        $("#PatientID").val(item.id);   
+                        $("#Patient_FirstName").val(item.firstname);
+                        $("#Patient_MiddleName").val(item.middlename);
+                        $("#Patient_LastName").val(item.lastname);
+                        $("#Patient_Address").val(item.address);
+                        $("#Patient_Birthdate").val(item.birthdate);
+                        // toastr.success('Patient selected!');
+
+                        // Apply the bg-white class to all inputs in the form
+                        $("form input, form select, form textarea").addClass("bg-white");
+                        $("#BedNumber").addClass("readonly");
+                    } else {
+                        $("#PatientID").val(item.message);
+                        $("#Patient_FirstName").val(item.message);
+                        $("#Patient_MiddleName").val(item.message);
+                        $("#Patient_LastName").val(item.message);
+                        $("#Patient_Address").val(item.message);
+                        $("#Patient_Birthdate").val(item.message);
+                        toastr.error('Patient Not Found!');
+                    }
+                    $('#searchMotherModal').modal('hide');
+                },
+                error: function () {
+                    console.error("Error retrieving patient details.");
+                }
+            });
+        }
+        //Prenatal
+        function LoadPrenatalDetails(value) {
+            const prenatalSection = document.getElementById('prenatalSection');
+            const messageSection = document.getElementById('prenatalMessageSection');
+            const prenatalSelect = document.getElementById('preSelect');
+
+            $.ajax({
+                url: '@Url.Action("GetPrenatalDetails", "Prenatal")',
+                type: 'GET',
+                data: { caseNo: value },
+                success: function (data) {
+                    if (data && data.isSuccess) {
+                        var item = data.item;
+                        $("#PrenatalID").val(item.caseNo);
+                        $("#pre_caseno").text(item.caseNo);
+                        $("#pre_datevisit").text(item.dateVisit);
+                        $("#pre_gravida").text(item.gravida);
+                        $("#pre_para").text(item.para);
+                        $("#pre_abortion").text(item.abortion);
+                        $("#pre_stillbirth").text(item.stillBirth);
+                        $("#pre_lmp").text(item.lmp);
+                        $("#pre_edc").text(item.edc);
+                        $("#pre_hrcode").text(item.hrCode);
+                        $("#pre_Id").val(item.caseNo);
+
+
+                        prenatalSection.style.display = "block";
+                        messageSection.style.display = "none";
+
+                        // Add and remove the blink effect
+                        prenatalSelect.classList.remove('preSelectBlink');
+                        void prenatalSelect.offsetWidth;
+                        prenatalSelect.classList.add('preSelectBlink');
+
+                        // toastr.success('Prenatal selected!');
+                    } else {
+                        prenatalSection.style.display = "none";
+                        messageSection.style.display = "block";
+                        toastr.error('Prenatal Not Found!');
+                    }
+                    $('#searchPrenatalModal').modal('hide');
+                },
+                error: function () {
+                    console.error("Error retrieving patient details.");
+                }
+            });
+        }
+        //Prenatal Form Detail
+        function PrenatalFormModal(preId) {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("PrenatalFormRecords", "Prenatal")',
+                data: { prenatalId: preId },
+                success: function (result) {
+                    var prenatal = result.item.prenatalRecord;
+                    if (result && result.isSuccess == true) {
+                        $("#caseNo-Form").val(prenatal.caseNo);
+                        $("#Gravida-Form").val(prenatal.gravida);
+                        $("#Para-Form").val(prenatal.para);
+                        $("#Abortion-Form").val(prenatal.abortion);
+                        $("#StillBirth-Form").val(prenatal.stillBirth);
+                       // Format and display LMP
+                        var lmp = prenatal.lmp ? new Date(prenatal.lmp).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+                        $("#LMP-Form").val(lmp);
+                        // Format and display EDC
+                        var edc = prenatal.edc ? new Date(prenatal.edc).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+                        $("#EDC-Form").val(edc);
+                        $("#DateVisit-Form").val(prenatal.dateVisit);
+                        $("#HRCODE-Form").val(prenatal.hrcode);
+                        $("#Notes-Form").val(prenatal.notes);
+
+                        var prenatalVisits = result.item.prenatalVisit;
+                        // Clear existing table rows
+                        $("#prenatalVisitTableBody").empty();
+                        // Populate the table with prenatal visit records
+                        prenatalVisits.forEach(function (visit) {
+                            var row = `<tr>
+                                <td>${visit.aogWeek}</td>
+                                <td>${visit.weight}</td>
+                                <td>${visit.bp}</td>
+                                <td>${visit.fh}</td>
+                                <td>${visit.fht}</td>
+                                <td>${visit.temp}</td>
+                                <td>${visit.cr}</td>
+                                <td>${visit.rr}</td>
+                                <td>${visit.dateVisit ? new Date(visit.dateVisit).toLocaleDateString() : ''}</td>
+                                <td>${visit.physicalAssessment || ''}</td>
+                                <td>${visit.notes || ''}</td>
+                                <td>${visit.rx || ''}</td>
+                            </tr>`;
+                            $("#prenatalVisitTableBody").append(row);
+                        });
+
+                        //Show Modal
+                        $('#prenatalFormModal').modal('show');
+                    } else {
+                        toastr.error(result.message || 'Unable to load prenatal record.');
+                    }
+                },
+                error: function () {
+                    toastr.error('An error occurred while loading the prenatal record.');
+                    console.log('Unable to get the data.');
+                }
+            })
+        }
+
+    </script>
+}
+
+
+
+

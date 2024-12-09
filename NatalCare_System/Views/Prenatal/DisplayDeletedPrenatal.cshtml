@@ -5,7 +5,7 @@
 }
 
 <div class="table-responsive">
-    <table id="deletedPrenetalTable" class="table table-hover table-striped table-datatable">
+    <table id="deletedPrenetalTable" class="table table-hover table-striped">
         <thead class="border-bottom-2">
             <tr>
                 <th>Case No#</th>
@@ -36,7 +36,7 @@
                     <td>@item.HRCODE</td>
                     <td>@item.Notes</td>
                     <td>
-                        <button id="retreiveBtn" class="btn btn-sm btn-outline-pink d-flex align-items-center gap-2" data-caseno="@item.CaseNo">
+                        <button class="btn btn-sm btn-outline-pink retreiveBtn" data-caseno="@item.CaseNo">
                             <i class="fa-solid fa-undo"></i>
                             <span>Retrieve</span>
                         </button>
@@ -74,7 +74,7 @@
         ]
     });
 
-    $("#retreiveBtn").on("click", function () {
+    $(".retreiveBtn").on("click", function () {
         var caseno = $(this).data('caseno');
         retrieveRecord(caseno);
     });

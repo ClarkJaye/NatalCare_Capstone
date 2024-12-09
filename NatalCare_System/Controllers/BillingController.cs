@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NatalCare.DataAccess.Interfaces;
-
-using NatalCare.DataAccess.Interfaces;
-using NatalCare.DataAccess.Services;
-using NatalCare.Models.DTOs;
 using NatalCare.Models.DTOs.VM;
 using NatalCare.Models.Entities;
 
@@ -17,21 +13,17 @@ namespace NatalCare_System.Controllers
         private readonly IBillingServices _billing;
         private readonly ISelectListServices selectListServices;
 
-        public BillingController(IBillingServices billing, ISelectListServices selectListServices) { 
+        public BillingController(IBillingServices billing, ISelectListServices selectListServices, IModuleAccessServices moduleAccessServices) 
+            : base(moduleAccessServices)
+        {
             _billing = billing;
             this.selectListServices = selectListServices;
         }
 
 
-                    //VIEW
-
-        public IActionResult Index()
-        {
-        }
-
         public async Task<IActionResult> Index()
         {
-            if (!await CheckAccessAsync(7)) // Invoice List
+            if (!await CheckAccessAsync(7)) 
             {
                 return RedirectTo();
             }
@@ -41,7 +33,7 @@ namespace NatalCare_System.Controllers
 
         public async Task<IActionResult> InvoiceList()
         {
-            if (!await CheckAccessAsync(7)) // Invoice List
+            if (!await CheckAccessAsync(7)) 
             {
                 return RedirectTo();
             }
@@ -52,6 +44,10 @@ namespace NatalCare_System.Controllers
 
         public async Task<IActionResult> PayInvoice(int? id, decimal? balance)
         {
+            if (!await CheckAccessAsync(7))
+            {
+                return RedirectTo();
+            }
 
             ViewBag.PaymentId = id;
 
@@ -68,6 +64,10 @@ namespace NatalCare_System.Controllers
 
         public async Task<IActionResult> EditInvoice(int? id)
         {
+            if (!await CheckAccessAsync(7))
+            {
+                return RedirectTo();
+            }
 
             ViewBag.PaymentId = id;
 
@@ -79,6 +79,10 @@ namespace NatalCare_System.Controllers
 
         public async Task<IActionResult> Payment(int? id, decimal? balance)
         {
+            if (!await CheckAccessAsync(7))
+            {
+                return RedirectTo();
+            }
             if (id != null)
             {
                 ViewBag.PaymentId = id;
@@ -100,6 +104,10 @@ namespace NatalCare_System.Controllers
 
         public async Task<IActionResult> PrintInvoice(int? id)
         {
+            if (!await CheckAccessAsync(7))
+            {
+                return RedirectTo();
+            }
             var model = await _billing.PaymentVM(id);
 
             return View(model);
@@ -108,6 +116,10 @@ namespace NatalCare_System.Controllers
 
         public async Task<IActionResult> GenerateInvoice(int? id)
         {
+            if (!await CheckAccessAsync(7))
+            {
+                return RedirectTo();
+            }
             ViewData["staffList"] = await selectListServices.GetAllStaffSelectListAsync();
 
             var model = await _billing.generateInvoiceModel(id);
@@ -124,6 +136,10 @@ namespace NatalCare_System.Controllers
         [HttpPost]
         public async Task<IActionResult> editPatientPayment(PatientPayments patientPayments)
         {
+            if (!await CheckAccessAsync(7))
+            {
+                return RedirectTo();
+            }
             if (patientPayments != null)
             {
 

@@ -9,18 +9,21 @@ namespace NatalCare.Models.Entities
     {   
         [Key]
         public int ID { get; set; }
-        public DateOnly? BabyDateDelivered{ get; set; }
-        public TimeOnly? BabyTimeDelivered{ get; set; }
-        public string? Apgar { get; set; }
+        public DateOnly? BabyDateDelivered { get; set; }
+        public TimeOnly? BabyTimeDelivered { get; set; }
+        public int? Apgar { get; set; }
         public string? BabySex { get; set; }
         public string? BabyWeight { get; set; }
-        public TimeOnly? PlacentaTimeDelevered { get; set; }
+        public DateOnly? PlacentaDateDelivered { get; set; }
+        public TimeOnly? PlacentaTimeDelivered { get; set; }
         public string? PlacentaStatus { get; set; }
-        public string? ServiceProviderName { get; set; }
-        public string? Notes { get; set; }
-
 
         // Foreign Key
+        public int? ServiceProviderID { get; set; }
+        [ForeignKey("ServiceProviderID")]
+        [ValidateNever]
+        public Staff? ServiceProvider { get; set; }
+
         [Required]
         public string? CaseNo { get; set; }
         [ForeignKey("CaseNo")]

@@ -117,12 +117,12 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="LMP" class="control-label">LMP</label>
-                            <input type="date" id="LMP-Add" name="LMP" class="form-control" required />
+                            <input type="date" id="LMP-Add" name="LMP" class="form-control" required onchange="calculateAddEDC()" />
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="EDC" class="control-label">EDC</label>
-                            <input type="date" id="EDC-Add" name="EDC" class="form-control" required />
+                            <input type="date" id="EDC-Add" name="EDC" class="form-control" readonly />
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -190,12 +190,12 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="LMP" class="control-label">LMP</label>
-                            <input type="date" id="LMP-Edit" name="LMP" class="form-control" required />
+                            <input type="date" id="LMP-Edit" name="LMP" class="form-control" required onchange="calculateEditEDC()" />
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="EDC" class="control-label">EDC</label>
-                            <input type="date" id="EDC-Edit" name="EDC" class="form-control" required />
+                            <input type="date" id="EDC-Edit" name="EDC" class="form-control" readonly />
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -410,5 +410,49 @@
                 toastr.error("Failed to reload the Prenatal records.");
             }
         });
+    }
+
+    function calculateAddEDC() {
+        const lmpInput = document.getElementById("LMP-Add");
+        const edcInput = document.getElementById("EDC-Add");
+
+        // Get the LMP date value
+        const lmpDate = new Date(lmpInput.value);
+        if (isNaN(lmpDate)) {
+            edcInput.value = ""; 
+            return;
+        }
+
+        // Calculate EDC using Naegele's Rule
+        const edcDate = new Date(lmpDate);
+        edcDate.setDate(edcDate.getDate() + 280); // Add 280 days (40 weeks)
+
+        // Set the calculated EDC in the input field
+        const year = edcDate.getFullYear();
+        const month = String(edcDate.getMonth() + 1).padStart(2, "0"); 
+        const day = String(edcDate.getDate()).padStart(2, "0"); 
+        edcInput.value = `${year}-${month}-${day}`;
+    }
+
+    function calculateEditEDC() {
+        const lmpInput = document.getElementById("LMP-Edit");
+        const edcInput = document.getElementById("EDC-Edit");
+
+        // Get the LMP date value
+        const lmpDate = new Date(lmpInput.value);
+        if (isNaN(lmpDate)) {
+            edcInput.value = "";
+            return;
+        }
+
+        // Calculate EDC using Naegele's Rule
+        const edcDate = new Date(lmpDate);
+        edcDate.setDate(edcDate.getDate() + 280); // Add 280 days (40 weeks)
+
+        // Set the calculated EDC in the input field
+        const year = edcDate.getFullYear();
+        const month = String(edcDate.getMonth() + 1).padStart(2, "0");
+        const day = String(edcDate.getDate()).padStart(2, "0");
+        edcInput.value = `${year}-${month}-${day}`;
     }
 </script>

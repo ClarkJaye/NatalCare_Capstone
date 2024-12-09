@@ -99,7 +99,7 @@ namespace NatalCare.DataAccess.Services
         }
         public async Task<Prenatal> GetPrenatalInformation(string id)
         {
-            var prenatal = await unitOfWork.Repository<Prenatal>().GetFirstOrDefaultAsync(p => p.CaseNo == id);
+            var prenatal = await unitOfWork.Repository<Prenatal>().GetFirstOrDefaultAsync(p => p.CaseNo == id, includeProperties: "Patient");
 
             if (prenatal == null)
                 return new Prenatal();
@@ -550,6 +550,14 @@ namespace NatalCare.DataAccess.Services
 
             return new GeneralResponse(true, new { result, newborn }, "Record fetched successfully!.");
         }
+        public async Task<GeneralResponse> GetHRFormPrint(string caseNo)
+        {
+            var item = await unitOfWork.Repository<NewbornHearing>().GetFirstOrDefaultAsync(x => x.HearingNo == caseNo, includeProperties: "Newborn");
+            if (item == null)
+                return new GeneralResponse(false, item, "Record not existing.");
+
+            return new GeneralResponse(true, item, "Record fetched successfully!.");
+        }
         public async Task<CommonResponse> UpdateHRRecordAsync(NewbornHearing item, string userId)
         {
             var existingRecord = await unitOfWork.Repository<NewbornHearing>().GetFirstOrDefaultAsync(p => p.HearingNo == item.HearingNo);
@@ -687,6 +695,14 @@ namespace NatalCare.DataAccess.Services
             };
 
             return new GeneralResponse(true, new { result, staff, newborn }, "Record fetched successfully!.");
+        }
+        public async Task<GeneralResponse> GetScreeningFormPrint(string caseNo)
+        {
+            var item = await unitOfWork.Repository<NewbornScreening>().GetFirstOrDefaultAsync(x => x.ScreeningNo == caseNo, includeProperties: "Newborn");
+            if (item == null)
+                return new GeneralResponse(false, item, "Record not existing.");
+
+            return new GeneralResponse(true, item, "Record fetched successfully!.");
         }
         public async Task<CommonResponse> DeleteScreeningRecordAsync(string caseNo, string userId)
         {
@@ -911,7 +927,7 @@ namespace NatalCare.DataAccess.Services
         }
         public async Task<Delivery> GetAdmittedDeliveryRecord(string caseno)
         {
-            var record = await unitOfWork.Repository<Delivery>().GetFirstOrDefaultAsync(p => p.CaseNo == caseno);
+            var record = await unitOfWork.Repository<Delivery>().GetFirstOrDefaultAsync(p => p.CaseNo == caseno, includeProperties: "DeliveryStatus");
             if (record == null)
             {
                 return new Delivery();
@@ -1087,7 +1103,7 @@ namespace NatalCare.DataAccess.Services
         }
         public async Task<GeneralResponse> GetPhysicalExaminationRecord(int id)
         {
-            var data = await unitOfWork.Repository<PhysicalExamination>().GetFirstOrDefaultAsync(x => x.Id == id);
+            var data = await unitOfWork.Repository<PhysicalExamination>().GetFirstOrDefaultAsync(x => x.Id == id, includeProperties: "Patient");
             if (data == null)
                 return new GeneralResponse(false, data, "Physical examination record not existing.");
 
@@ -1164,8 +1180,153 @@ namespace NatalCare.DataAccess.Services
             }
             return record;
         }
+        public async Task<CommonResponse> AddMDRecordAsync(MaternalMonitoring item, string patientId, string userId)
+        {
+            // Validation checks: Ensure CaseNo is unique if needed.
+            if (await unitOfWork.Repository<MaternalMonitoring>().AnyAsync(x => x.CaseNo == item.CaseNo))
+                return new CommonResponse(false, "Maternal delivery monitoring record already exists.");
+
+            item.PatientID = patientId;
+            item.Created_At = DateTime.Now;
+            item.MDCreatedBy = userId;
+            item.StatusCode = "AC";
+
+            unitOfWork.Repository<MaternalMonitoring>().Add(item);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Maternal delivery monitoring added successfully");
+        }
+        public async Task<GeneralResponse> GetMDRecord(int id)
+        {
+            var data = await unitOfWork.Repository<MaternalMonitoring>().GetFirstOrDefaultAsync(x => x.ID == id);
+            if (data == null)
+                return new GeneralResponse(false, data, "Maternal delivery monitoring record not existing.");
+
+            var staff = await unitOfWork.Repository<Staff>()
+                                          .AsQueryable()
+                                          .Select(a => new
+                                          {
+                                              id = a.Id,
+                                              firstname = a.FirstName,
+                                              middlename = a.MiddleName,
+                                              lastname = a.LastName,
+                                          })
+                                          .ToListAsync();
+
+            return new GeneralResponse(true, new { data, staff }, "Maternal delivery monitoring record retreived successfully!.");
+        }
+        public async Task<MaternalMonitoring> GetMDPrintForm(string caseno)
+        {
+            var record = await unitOfWork.Repository<MaternalMonitoring>().GetFirstOrDefaultAsync(p => p.CaseNo == caseno, includeProperties: "Patient,ServiceProvider");
+
+            if (record == null)
+                return new MaternalMonitoring();
+
+            return record;
+        }
+        public async Task<CommonResponse> UpdateMDRecordAsync(MaternalMonitoring item, string userId)
+        {
+            var existingRecord = await unitOfWork.Repository<MaternalMonitoring>().GetFirstOrDefaultAsync(p => p.ID == item.ID);
+
+            if (existingRecord == null)
+                return new CommonResponse(false, "Maternal delivery monitoring record not found.");
+
+            // Update the existing record fields
+            existingRecord.BabyDateDelivered = item.BabyDateDelivered;
+            existingRecord.BabyTimeDelivered = item.BabyTimeDelivered;
+            existingRecord.Apgar = item.Apgar;
+            existingRecord.BabySex = item.BabySex;
+            existingRecord.BabyWeight = item.BabyWeight;
+            existingRecord.PlacentaTimeDelivered = item.PlacentaTimeDelivered;
+            existingRecord.PlacentaStatus = item.PlacentaStatus;
+            existingRecord.ServiceProviderID = item.ServiceProviderID;
+            existingRecord.Updated_At = DateTime.UtcNow;
+            existingRecord.MDUpdatedBy = userId;
+
+            unitOfWork.Repository<MaternalMonitoring>().Update(existingRecord);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Maternal delivery monitoring record updated successfully.");
+        }
 
 
+        //Progress Labor Records
+        public async Task<List<ProgressLabor>> GetProgressLaborRecords(string deliveryId)
+        {
+            var record = await unitOfWork.Repository<ProgressLabor>().GetAllAsync(p => p.DeliveryID == deliveryId);
+            if (record == null)
+            {
+                return new List<ProgressLabor>();
+            }
+            return record.ToList();
+        }
+        public async Task<CommonResponse> AddPLRecordAsync(ProgressLabor item)
+        {
+            unitOfWork.Repository<ProgressLabor>().Add(item);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Progress labor added successfully");
+        }
+        public async Task<GeneralResponse> GetPLRecord(int id)
+        {
+            var data = await unitOfWork.Repository<ProgressLabor>().GetFirstOrDefaultAsync(x => x.ID == id);
+            if (data == null)
+                return new GeneralResponse(false, data, "Progress labor record not existing.");
+
+            var staff = await unitOfWork.Repository<Staff>()
+                                          .AsQueryable()
+                                          .Select(a => new
+                                          {
+                                              id = a.Id,
+                                              firstname = a.FirstName,
+                                              middlename = a.MiddleName,
+                                              lastname = a.LastName,
+                                          })
+                                          .ToListAsync();
+
+            return new GeneralResponse(true, new { data, staff }, "Progress labor monitoring record retreived successfully!.");
+        }
+        public async Task<List<ProgressLabor>> GetPLPrintForm(string caseno)
+        {
+            var record = await unitOfWork.Repository<ProgressLabor>().GetAllAsync(p => p.DeliveryID == caseno);
+
+            if (record == null)
+                return new List<ProgressLabor>();
+
+            return record.ToList();
+        }
+        public async Task<CommonResponse> UpdatePLRecordAsync(ProgressLabor item)
+        {
+            var existingRecord = await unitOfWork.Repository<ProgressLabor>().GetFirstOrDefaultAsync(p => p.ID == item.ID);
+
+            if (existingRecord == null)
+                return new CommonResponse(false, "Progress labor record not found.");
+
+            // Update the existing record fields
+            existingRecord.Date = item.Date;
+            existingRecord.Time = item.Time;
+            existingRecord.Temperature = item.Temperature;
+            existingRecord.BP = item.BP;
+            existingRecord.PulseRate = item.PulseRate;
+            existingRecord.RespiratoryRate = item.RespiratoryRate;
+            existingRecord.UterineContractionInterval = item.UterineContractionInterval;
+            existingRecord.Cervicaldilation = item.Cervicaldilation;
+            existingRecord.BowStatus = item.BowStatus;
+            existingRecord.FetalHeartTones = item.FetalHeartTones;
+            existingRecord.FetalHeartToneChar = item.FetalHeartToneChar;
+            existingRecord.PresentingPart = item.PresentingPart;
+
+            unitOfWork.Repository<ProgressLabor>().Update(existingRecord);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Progress labor record updated successfully.");
+        }
+        public async Task<CommonResponse> DeletePLRecordAsync(int id)
+        {
+            var recordToBeDeleted = await unitOfWork.Repository<ProgressLabor>().GetFirstOrDefaultAsync(p => p.ID == id);
+            if (recordToBeDeleted == null)
+                return new CommonResponse(false, "Progress labor record not found.");
+
+            unitOfWork.Repository<ProgressLabor>().Remove(recordToBeDeleted);
+            await unitOfWork.SaveAsync();
+            return new CommonResponse(true, "Progress labor record removed successfully.");
+        }
 
         //Obstetrical Records
         public async Task<Obstetrical> GetObstetricalRecords(string patientId, string deliveryId)
@@ -1249,7 +1410,7 @@ namespace NatalCare.DataAccess.Services
         //Clinical Sheets Records
         public async Task<ClinicalFaceSheet> GetClinicalSheetRecords(string patientId, string deliveryId)
         {
-            var record = await unitOfWork.Repository<ClinicalFaceSheet>().GetFirstOrDefaultAsync(p => p.PatientID == patientId && p.CaseNo == deliveryId && p.StatusCode == "AC");
+            var record = await unitOfWork.Repository<ClinicalFaceSheet>().GetFirstOrDefaultAsync(p => p.PatientID == patientId && p.CaseNo == deliveryId && p.StatusCode == "AC", includeProperties: "Patient,Delivery,Delivery.PrenatalCase,Delivery.Wards,Delivery.Beds");
             if (record == null)
             {
                 return new ClinicalFaceSheet();
@@ -1278,7 +1439,28 @@ namespace NatalCare.DataAccess.Services
             if (data == null)
                 return new GeneralResponse(false, data, "Clinical face sheet record not existing.");
 
-            return new GeneralResponse(true, data, "Clinical face sheet record retreived successfully!.");
+            var midwife = await unitOfWork.Repository<Staff>()
+                                          .AsQueryable()
+                                          .Where(a => a.RoleId == 2)
+                                          .Select(a => new
+                                          {
+                                              id = a.Id,
+                                              firstname = a.FirstName,
+                                              middlename = a.MiddleName,
+                                              lastname = a.LastName,
+                                          })
+                                          .ToListAsync();
+
+            return new GeneralResponse(true, new { data, midwife }, "Clinical face sheet record retreived successfully!.");
+        }
+        public async Task<ClinicalFaceSheet> GetCFPrintForm(int id)
+        {
+            var record = await unitOfWork.Repository<ClinicalFaceSheet>().GetFirstOrDefaultAsync(p => p.ID == id, includeProperties: "Patient");
+
+            if (record == null)
+                return new ClinicalFaceSheet();
+
+            return record;
         }
         public async Task<CommonResponse> UpdateCFRecordAsync(ClinicalFaceSheet item, string userId)
         {
@@ -1286,11 +1468,48 @@ namespace NatalCare.DataAccess.Services
 
             if (existingRecord == null)
                 return new CommonResponse(false, "Clinical face sheet record not found.");
-            
+
+            // Update the existing record fields
+            existingRecord.TermBirths = item.TermBirths;
+            existingRecord.Premature = item.Premature;
+            existingRecord.Abortion = item.Abortion;
+            existingRecord.LivingChildren = item.LivingChildren;
+            existingRecord.Gravida = item.Gravida;
+            existingRecord.Para = item.Para;
+            existingRecord.HistoryOfPatientPresentCondition = item.HistoryOfPatientPresentCondition;
+            existingRecord.Admitting = item.Admitting;
+            existingRecord.ICDCodes = item.ICDCodes;
+            existingRecord.FinalDiagnosis = item.FinalDiagnosis;
+            existingRecord.InformantName = item.InformantName;
+            existingRecord.RelationToPatient = item.RelationToPatient;
+            existingRecord.InformantAddress = item.InformantAddress;
+            existingRecord.InformantContactNo = item.InformantContactNo;
+            existingRecord.Recoverred = item.Recoverred;
+            existingRecord.Improved = item.Improved;
+            existingRecord.UnImproved = item.UnImproved;
+            existingRecord.Discarged = item.Discarged;
+            existingRecord.Transferred = item.Transferred;
+            existingRecord.Hama = item.Hama;
+            existingRecord.Abssconded = item.Abssconded;
+            existingRecord.MidwifeID = item.MidwifeID;
+            existingRecord.Updated_At = DateTime.UtcNow;
+            existingRecord.ClinicalUpdatedBy = userId;
 
             unitOfWork.Repository<ClinicalFaceSheet>().Update(existingRecord);
             await unitOfWork.SaveAsync();
             return new CommonResponse(true, "Clinical face sheet record updated successfully.");
+        }
+        public async Task<GeneralResponse> GetAOGLast(string caseNo)
+        {
+            // Validation checks: Ensure CaseNo is unique if needed.
+            var item = await unitOfWork.Repository<PrenatalVisit>()
+                .AsQueryable()
+                .OrderByDescending(x=> x.PrenatalVisitID)
+                .FirstOrDefaultAsync(x => x.CaseNo == caseNo);
+            if (item == null)
+                return new GeneralResponse(false, null, "Prenatal Visit record not existing.");
+
+            return new GeneralResponse(true, item.AOGWeek, "Prenatal Visit record fetched successfully!.");
         }
 
 
@@ -1319,6 +1538,15 @@ namespace NatalCare.DataAccess.Services
             unitOfWork.Repository<DischargementForm>().Add(item);
             await unitOfWork.SaveAsync();
             return new CommonResponse(true, "Dischargement added successfully");
+        }
+        public async Task<DischargementForm> GetDFPrintForm(int id)
+        {
+            var record = await unitOfWork.Repository<DischargementForm>().GetFirstOrDefaultAsync(p => p.Id == id, includeProperties: "Patient");
+
+            if (record == null)
+                return new DischargementForm();
+
+            return record;
         }
         public async Task<GeneralResponse> GetDFRecord(int id)
         {

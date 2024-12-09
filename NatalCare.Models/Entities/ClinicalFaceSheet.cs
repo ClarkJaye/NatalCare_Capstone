@@ -9,9 +9,6 @@ namespace NatalCare.Models.Entities
     {   
         [Key]
         public int ID { get; set; }
-        public string? LMP { get; set; }
-        public string? EDC { get; set; }
-        public string? AOG { get; set; }
         public int? TermBirths { get; set; }
         public int? Premature { get; set; }
         public int? Abortion { get; set; }
@@ -64,7 +61,7 @@ namespace NatalCare.Models.Entities
         public DateTime? Updated_At { get; set; }
         [Column("Updated_By")]
         public string? ClinicalUpdatedBy { get; set; }
-        [ForeignKey("Clinical")]
+        [ForeignKey("ClinicalUpdatedBy")]
         [ValidateNever]
         public User? UpdatedBy { get; set; }
 

@@ -113,8 +113,9 @@
                                 <td id="pre_lmp"></td>
                                 <td id="pre_edc"></td>
                                 <td id="pre_hrcode"></td>
-                                <td id="pre_detailBtn">
-                                    <a class="btn btn-outline-secondary">
+                                <td>
+                                    <input type="hidden" id="pre_Id" />
+                                    <a class="btn btn-outline-secondary plDeleteBtn">
                                         <i class="fa-solid fa-list"></i>
                                     </a>
                                 </td>
@@ -146,8 +147,8 @@
                 </div>
 
                 <div class="form-group col-md-4 mb-4">
-                    <label asp-for="DeliveryStatusID" class="control-label"></label>
-                    <input asp-for="Time_Admitted" class="form-control" readonly />
+                    <label for="DeliveryStatusID" class="control-label">Status</label>
+                    <input id="DeliveryStatusID" value="@Model.DeliveryStatus?.StatusName" class="form-control" readonly />
                 </div>
 
                 <div class="form-group col-md-4 mb-4">
@@ -242,6 +243,100 @@
 </div>
 
 
+<!-- Prenatal Records Form Modal -->
+<div class="modal fade" id="prenatalFormModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <style>
+            @@media (min-width: 1200px) {
+                .modal-xl {
+                    max-width: 1400px;
+                }
+            }
+        </style>
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Prenatal Record Form</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <h5 class="card-title my-2 mb-3">Present Pregnancy</h5>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="Gravida-Form" class="control-label">GRAVIDA</label>
+                            <input id="Gravida-Form" name="Gravida" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="Para-Form" class="control-label">PARA</label>
+                            <input id="Para-Form" name="Para" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="Abortion-Form" class="control-label">ABORTION</label>
+                            <input id="Abortion-Form" name="Abortion" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="StillBirth-Form" class="control-label">STILL BIRTH</label>
+                            <input id="StillBirth-Form" name="StillBirth" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="LMP-Form" class="control-label">Last Menstrual Period (LMP)</label>
+                            <input type="text" id="LMP-Form" name="LMP" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="EDC-Form" class="control-label">Estimated Date of Confinement (EDC)</label>
+                            <input type="text" id="EDC-Form" name="EDC" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="HRCODE-Form" class="control-label">H.R. Code</label>
+                            <input id="HRCODE-Form" name="HRCODE" class="form-control bg-white" readonly />
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="DateVisit-Form" class="control-label">DateVisit</label>
+                            <input type="datetime-local" id="DateVisit-Form" name="DateVisit" class="form-control bg-white" readonly />
+                        </div>
+
+                        <hr class="my-2 " />
+
+                        <h5 class="card-title my-2 mb-3">Prenatal Visit</h5>
+
+                        <!-- Prenatal Visit Records Table -->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>AOG Week</th>
+                                        <th>Weight</th>
+                                        <th>BP</th>
+                                        <th>Fundal Height</th>
+                                        <th>Fetal Heart Rate</th>
+                                        <th>Temperature</th>
+                                        <th>CR</th>
+                                        <th>RR</th>
+                                        <th>Date of Visit</th>
+                                        <th>Physical Assessment</th>
+                                        <th>Notes</th>
+                                        <th>RX</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="prenatalVisitTableBody">
+                                    <!-- Rows will be dynamically inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -256,10 +351,15 @@
                 LoadPatientDetails(id);
             }
 
-             if ($("#PrenatalID").val()) {
+            if ($("#PrenatalID").val()) {
                 var id = $("#PrenatalID").val();
                 LoadPrenatalDetails(id);
             }
+
+            $(".plDeleteBtn").on("click", function (e) {
+                var preId = $("#pre_Id").val();
+                  PrenatalFormModal(preId);
+            });
         });
 
         //Patient
@@ -270,7 +370,6 @@
                 data: { patientId: value },
                 success: function (data) {
                     if (data && data.isSuccess) {
-                        console.log(data)
                         var item = data.item;
                         $("#PatientID").val(item.id);   
                         $("#Patient_FirstName").val(item.firstname);
@@ -322,6 +421,8 @@
                         $("#pre_lmp").text(item.lmp);
                         $("#pre_edc").text(item.edc);
                         $("#pre_hrcode").text(item.hrCode);
+                        $("#pre_Id").val(item.caseNo);
+
 
                         prenatalSection.style.display = "block";
                         messageSection.style.display = "none";
@@ -344,6 +445,65 @@
                 }
             });
         }
+        //Prenatal Form Detail
+        function PrenatalFormModal(preId) {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("PrenatalFormRecords", "Prenatal")',
+                data: { prenatalId: preId },
+                success: function (result) {
+                    var prenatal = result.item.prenatalRecord;
+                    if (result && result.isSuccess == true) {
+                        $("#caseNo-Form").val(prenatal.caseNo);
+                        $("#Gravida-Form").val(prenatal.gravida);
+                        $("#Para-Form").val(prenatal.para);
+                        $("#Abortion-Form").val(prenatal.abortion);
+                        $("#StillBirth-Form").val(prenatal.stillBirth);
+                       // Format and display LMP
+                        var lmp = prenatal.lmp ? new Date(prenatal.lmp).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+                        $("#LMP-Form").val(lmp);
+                        // Format and display EDC
+                        var edc = prenatal.edc ? new Date(prenatal.edc).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+                        $("#EDC-Form").val(edc);
+                        $("#DateVisit-Form").val(prenatal.dateVisit);
+                        $("#HRCODE-Form").val(prenatal.hrcode);
+                        $("#Notes-Form").val(prenatal.notes);
+
+                        var prenatalVisits = result.item.prenatalVisit;
+                        // Clear existing table rows
+                        $("#prenatalVisitTableBody").empty();
+                        // Populate the table with prenatal visit records
+                        prenatalVisits.forEach(function (visit) {
+                            var row = `<tr>
+                                <td>${visit.aogWeek}</td>
+                                <td>${visit.weight}</td>
+                                <td>${visit.bp}</td>
+                                <td>${visit.fh}</td>
+                                <td>${visit.fht}</td>
+                                <td>${visit.temp}</td>
+                                <td>${visit.cr}</td>
+                                <td>${visit.rr}</td>
+                                <td>${visit.dateVisit ? new Date(visit.dateVisit).toLocaleDateString() : ''}</td>
+                                <td>${visit.physicalAssessment || ''}</td>
+                                <td>${visit.notes || ''}</td>
+                                <td>${visit.rx || ''}</td>
+                            </tr>`;
+                            $("#prenatalVisitTableBody").append(row);
+                        });
+
+                        //Show Modal
+                        $('#prenatalFormModal').modal('show');
+                    } else {
+                        toastr.error(result.message || 'Unable to load prenatal record.');
+                    }
+                },
+                error: function () {
+                    toastr.error('An error occurred while loading the prenatal record.');
+                    console.log('Unable to get the data.');
+                }
+            })
+        }
+
     </script>
 }
 

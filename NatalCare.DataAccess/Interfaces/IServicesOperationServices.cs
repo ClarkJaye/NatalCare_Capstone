@@ -43,6 +43,7 @@ namespace NatalCare.DataAccess.Interfaces
         Task<GeneralResponse> Get_Newborn(string motherId);
         Task<CommonResponse> AddHRRecordAsync(NewbornHearing item, string patientId, string userId);
         Task<GeneralResponse> GetHRRecordAsync(string caseNo);
+        Task<GeneralResponse> GetHRFormPrint(string caseNo);
         Task<CommonResponse> UpdateHRRecordAsync(NewbornHearing item, string userId);
         Task<CommonResponse> DeleteHRRecordAsync(string caseNo, string userId);
 
@@ -50,6 +51,7 @@ namespace NatalCare.DataAccess.Interfaces
         Task<List<NewbornScreening>> GetDeletedSNRecords(string patientId);
         Task<CommonResponse> RetrievedSNAync(string caseno, string userId);
         Task<List<NewbornScreening>> GetScreeningRecords(string patientId);
+        Task<GeneralResponse> GetScreeningFormPrint(string caseNo);
         Task<CommonResponse> AddSNRecorddAsync(NewbornScreening item, string patientId, string userId);
         Task<GeneralResponse> GetScreeningRecordAsync(string caseNo);
         Task<CommonResponse> DeleteScreeningRecordAsync(string caseNo, string userId);
@@ -85,19 +87,33 @@ namespace NatalCare.DataAccess.Interfaces
 
         //MATERNAL MONITORING
         Task<MaternalMonitoring> GetMaternalMonitoringRecords(string patientId, string deliveryId);
+        Task<CommonResponse> AddMDRecordAsync(MaternalMonitoring item, string patientId, string userId);
+        Task<GeneralResponse> GetMDRecord(int id);
+        Task<MaternalMonitoring> GetMDPrintForm(string caseno);
+        Task<CommonResponse> UpdateMDRecordAsync(MaternalMonitoring item, string userId);
+
+        //PROGRESS LABOR
+        Task<List<ProgressLabor>> GetProgressLaborRecords(string deliveryId);
+        Task<CommonResponse> AddPLRecordAsync(ProgressLabor item);
+        Task<GeneralResponse> GetPLRecord(int id);
+        Task<List<ProgressLabor>> GetPLPrintForm(string caseno);
+        Task<CommonResponse> UpdatePLRecordAsync(ProgressLabor item);
+        Task<CommonResponse> DeletePLRecordAsync(int id);
 
         //CLINICAL SHEET
         Task<ClinicalFaceSheet> GetClinicalSheetRecords(string patientId, string deliveryId);
         Task<CommonResponse> AddCFRecordAsync(ClinicalFaceSheet item, string patientId, string userId, string deliveryId);
         Task<GeneralResponse> GetCFRecord(int id);
+        Task<ClinicalFaceSheet> GetCFPrintForm(int id);
         Task<CommonResponse> UpdateCFRecordAsync(ClinicalFaceSheet item, string userId);
 
         //DISCHARGEMENT FORM
         Task<DischargementForm> GetDischargementRecords(string patientId, string deliveryId);
         Task<CommonResponse> AddDFRecordAsync(DischargementForm item, string patientId, string userId, string deliveryId);
         Task<GeneralResponse> GetDFRecord(int id);
+        Task<DischargementForm> GetDFPrintForm(int id);
         Task<CommonResponse> UpdateDFRecordAsync(DischargementForm item, string userId);
-
+        Task<GeneralResponse> GetAOGLast(string caseNo);
 
 
 

@@ -35,6 +35,10 @@ namespace NatalCare_System.Controllers
         //------ Newborn Records View Component ------//
         public async Task<IActionResult> GetAllNewborns()
         {
+            if (!await CheckAccessAsync(3))
+            {
+                return RedirectTo();
+            }
             try
             {
                 var NewbornRecords = await newbornServices.GetNewborns();
@@ -49,6 +53,10 @@ namespace NatalCare_System.Controllers
 
         public async Task<IActionResult> Create()
         {
+            if (!await CheckAccessAsync(3))
+            {
+                return RedirectTo();
+            }
             ViewData["midwifeList"] = await selectListServices.GetMidwifeSelectListAsync();
             ViewData["staffList"] = await selectListServices.GetStaffSelectListAsync();
             ViewData["physicianList"] = await selectListServices.GetPhysicianSelectListAsync();
@@ -78,6 +86,10 @@ namespace NatalCare_System.Controllers
         }
         public async Task<IActionResult> Edit(string id)
         {
+            if (!await CheckAccessAsync(3))
+            {
+                return RedirectTo();
+            }
             ViewData["midwifeList"] = await selectListServices.GetMidwifeSelectListAsync();
             ViewData["staffList"] = await selectListServices.GetStaffSelectListAsync();
             ViewData["physicianList"] = await selectListServices.GetPhysicianSelectListAsync();
@@ -144,11 +156,20 @@ namespace NatalCare_System.Controllers
         //INFORMATION
         public async Task<IActionResult> MedicalRecords(string id)
         {
+            if (!await CheckAccessAsync(3))
+            {
+                return RedirectTo();
+            }
             var newborn = await newbornServices.GetGeneralInformation(id);
             return View(newborn);
         }
         public async Task<IActionResult> Information(string id)
         {
+            if (!await CheckAccessAsync(3))
+            {
+                return RedirectTo();
+            }
+
             try
             {
                 var response = await newbornServices.GetInformation(id);
@@ -176,6 +197,11 @@ namespace NatalCare_System.Controllers
         //Retrieved Record
         public async Task<IActionResult> RetrieveRecord(string nbid)
         {
+            if (!await CheckAccessAsync(3))
+            {
+                return RedirectTo();
+            }
+
             var userId = GetCurrentUserId();
             var result = await newbornServices.RetrievedAync(nbid, userId);
             return Json(result);

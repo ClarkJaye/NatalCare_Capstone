@@ -19,11 +19,6 @@ namespace NatalCare_System.Controllers
             this.serviceServices = serviceServices;
         }
 
-        public IActionResult Index()
-        {
-                return View();
-        }
-
         //------ PRENATAL ------//
 
         //Get All Prenatal for Patient In Modal

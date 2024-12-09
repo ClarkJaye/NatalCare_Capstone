@@ -18,6 +18,10 @@ namespace NatalCare_System.Controllers
 
         public async Task<IActionResult> Index(string id)
         {
+            if (!await CheckAccessAsync(11))
+            {
+                return RedirectTo();
+            }
             if (string.IsNullOrEmpty(id))
             {
                 TempData["error"] = "Role not found!";
@@ -42,6 +46,10 @@ namespace NatalCare_System.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateAccess(List<Role_Access> profileAccessList)
         {
+            if (!await CheckAccessAsync(11))
+            {
+                return RedirectTo();
+            }
             if (profileAccessList == null || !profileAccessList.Any())
             {
                 TempData["error"] = "Access record can not update!";

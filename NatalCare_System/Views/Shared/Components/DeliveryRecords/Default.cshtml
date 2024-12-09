@@ -4,7 +4,7 @@
     var patientId = ViewBag.patientId;
 }
 
-<h6 class="px-2">Delivery Records</h6>
+<h6 class="px-2">Admission Records</h6>
 <div class="d-flex justify-content-end my-3 gap-3">
     <a class="btn btn-pink" asp-controller="Admission" asp-action="Create" asp-route-id="@patientId">
         <i class="fas fa-plus"></i>
@@ -33,7 +33,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Case No#</th>
+                <th>Admission No#</th>
                 <th>Date & Time Admitted</th>
                 <th>Date & Time Discharge</th>
                 <th>Ward No#</th>

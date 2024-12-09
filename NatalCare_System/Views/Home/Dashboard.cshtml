@@ -151,10 +151,10 @@
 
 <script>    
     var LineChart;
-    // var BarChart;
+    var BarChart;
     document.addEventListener("DOMContentLoaded", function () {
         LoadLineChart();
-        // LoadBarChart();
+        LoadBarChart();
 
         // Make rows clickable
         $('.patient-row').on('click', function (e) {
@@ -163,11 +163,125 @@
                 window.location.href = $(this).data('url');
             }
         });
-
-     
     });
 
-     function LoadLineChart() {
+    //Bar Chart
+    function LoadBarChart() {
+        const ctx = document.getElementById("barGraph").getContext("2d");
+        BarChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: [], // Months
+                datasets: [
+                    {
+                        label: "Prenatal",
+                        data: [],
+                        backgroundColor: "#36a2eb"
+                    },
+                    {
+                        label: "Delivery",
+                        data: [],
+                        backgroundColor: "#ffcd56"
+                    },
+                    {
+                        label: "Screening",
+                        data: [],
+                        backgroundColor: "#4bc0c0"
+                    },
+                    {
+                        label: "Hearing",
+                        data: [],
+                        backgroundColor: "#9966ff"
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: "top" },
+                    tooltip: { enabled: true }
+                },
+                scales: {
+                    // x: {
+                    //     title: { display: true, text: "Month" }
+                    // },
+                    y: {
+                        title: { display: true, text: "Number of Services" },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        LoadBarData(new Date().getFullYear(), ""); 
+    }
+    function LoadBarData(year, month) {
+        $.ajax({
+            type: "GET",
+            url: "/Home/GetBarDataByYearAndMonth",
+            data: { year: year, month: month },
+            dataType: "json",
+            success: function (response) {
+                // Parse the data for each service
+                const { prenatalData, deliveryData, screeningData, hearingData } = response;
+
+                let months, prenatalCounts, deliveryCounts, screeningCounts, hearingCounts;
+
+                if (month) {
+                    // When a specific month is selected
+                    const monthIndex = parseInt(month, 10) - 1; // Adjust month index (0-based)
+                    months = [new Date(0, monthIndex).toLocaleString("default", { month: "long" })];
+
+                    prenatalCounts = [0];
+                    deliveryCounts = [0];
+                    screeningCounts = [0];
+                    hearingCounts = [0];
+
+                    // Populate data for the selected month
+                    prenatalData.forEach(item => {
+                        if (item.month - 1 === monthIndex) prenatalCounts[0] = item.data;
+                    });
+                    deliveryData.forEach(item => {
+                        if (item.month - 1 === monthIndex) deliveryCounts[0] = item.data;
+                    });
+                    screeningData.forEach(item => {
+                        if (item.month - 1 === monthIndex) screeningCounts[0] = item.data;
+                    });
+                    hearingData.forEach(item => {
+                        if (item.month - 1 === monthIndex) hearingCounts[0] = item.data;
+                    });
+                } else {
+                    // When no specific month is selected (All months)
+                    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+                    prenatalCounts = Array(12).fill(0);
+                    deliveryCounts = Array(12).fill(0);
+                    screeningCounts = Array(12).fill(0);
+                    hearingCounts = Array(12).fill(0);
+
+                    prenatalData.forEach(item => prenatalCounts[item.month - 1] = item.data);
+                    deliveryData.forEach(item => deliveryCounts[item.month - 1] = item.data);
+                    screeningData.forEach(item => screeningCounts[item.month - 1] = item.data);
+                    hearingData.forEach(item => hearingCounts[item.month - 1] = item.data);
+                }
+
+                // Update the chart
+                BarChart.data.labels = months;
+                BarChart.data.datasets[0].data = prenatalCounts;
+                BarChart.data.datasets[1].data = deliveryCounts;
+                BarChart.data.datasets[2].data = screeningCounts;
+                BarChart.data.datasets[3].data = hearingCounts;
+                BarChart.update();
+            },
+            error: function (error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    }
+
+
+    //Line Chart
+    function LoadLineChart() {
         const ctx = document.getElementById("lineGraph").getContext("2d");
         LineChart = new Chart(ctx, {
             type: "line",
@@ -182,15 +296,13 @@
                     tooltip: { enabled: true }
                 },
                scales: {
-                    x: {
-                        title: { display: true, text: "Month" }
-                    },
+                    // x: {
+                    //     title: { display: true, text: "Month" }
+                    // },
                     y: {
                         title: { display: true, text: "Number of Patients" },
                         ticks: {
                             autoSkip: true,
-                            // maxRotation: 40,
-                            // minRotation: 40
                         },
                     }
                }
@@ -199,7 +311,6 @@
 
         LoadData(new Date().getFullYear(), ""); // Load with current year
     }
-
     function LoadData(yearData, monthData) {
         $.ajax({
             type: "GET",
@@ -215,17 +326,17 @@
                 ];
 
                 // Update chart labels and datasets
-                LineChart.data.labels = data.map(item => monthNames[item.month - 1]); 
+                LineChart.data.labels = data.map(item => monthNames[item.month - 1]);
                 LineChart.data.datasets = [{
                     label: "Patients",
-                    data: data.map(item => item.data), 
+                    data: data.map(item => item.data),
                     borderColor: '#ff6384',
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     pointRadius: 5,
                     fill: true,
                     tension: 0.1
                 }];
-                    
+
                 // Update the chart
                 LineChart.update();
             },
@@ -238,158 +349,61 @@
 
 
 
-
-
-    // function LoadBarChart() {
-    //         const ctx = document.getElementById("barGraph").getContext("2d");
-    //         BarChart = new Chart(ctx, {
-    //             type: "bar",
-    //             data: {
-    //                 labels: [], // Months
-    //                 datasets: [
-    //                     {
-    //                         label: "Prenatal",
-    //                         data: [],
-    //                         backgroundColor: "#ffcd56"
-    //                     },
-    //                     {
-    //                         label: "Delivery",
-    //                         data: [],
-    //                         backgroundColor: "#36a2eb"
-    //                     },
-    //                     {
-    //                         label: "Screening",
-    //                         data: [],
-    //                         backgroundColor: "#ff9f40"
-    //                     },
-    //                     {
-    //                         label: "Hearing",
-    //                         data: [],
-    //                         backgroundColor: "#9966ff"
-    //                     }
-    //                 ]
-    //             },
-    //             options: {
-    //                 responsive: true,
-    //                 plugins: {
-    //                     legend: { position: "top" },
-    //                     tooltip: { enabled: true }
+    // // Bar Graph for Services Statistics
+    // const barCtx = document.getElementById('barGraph').getContext('2d');
+    // const barChart = new Chart(barCtx, {
+    //         type: 'bar',
+    //         data: {
+    //             labels: ['Delivery', 'Prenatal', 'Newborn Screening', 'Newborn Hearing'], // Sample services
+    //             // labels: ['Delivery', 'Prenatal', 'Family Planning', 'Newborn Screening', 'Newborn Hearing'], // Sample services
+    //             datasets: [{
+    //                 label: 'Number of Services',
+    //                 data: [300, 200, 150, 100, 50], // Sample data
+    //                 backgroundColor: [
+    //                     '#36a2eb',
+    //                     '#ffcd56',
+    //                     '#4bc0c0',
+    //                     '#9966ff'
+    //                     //  '#36a2eb',
+    //                     // '#ffcd56',
+    //                     // '#4bc0c0',
+    //                     // '#ff9f40',
+    //                     // '#9966ff'
+    //                 ],
+    //                 borderColor: [
+    //                     '#36a2eb',
+    //                     '#ffcd56',
+    //                     '#4bc0c0',
+    //                     '#9966ff'
+    //                 ],
+    //                 borderWidth: 1
+    //             }]
+    //         },
+    //         options: {
+    //             responsive: true,
+    //             plugins: {
+    //                 legend: {
+    //                     display: false
     //                 },
-    //                 scales: {
-    //                     x: {
-    //                         title: { display: true, text: "Month" }
-    //                     },
-    //                     y: {
-    //                         title: { display: true, text: "Number of Services" },
-    //                         beginAtZero: true
+    //                 tooltip: {
+    //                     enabled: true,
+    //                 }
+    //             },
+    //             scales: {
+    //                 x: {
+    //                     title: {
+    //                         display: true,
+    //                         text: 'Services'
     //                     }
+    //                 },
+    //                 y: {
+    //                     title: {
+    //                         display: true,
+    //                         text: 'Number of Services'
+    //                     },
+    //                     beginAtZero: true
     //                 }
     //             }
-    //         });
-
-    //         LoadBarData(new Date().getFullYear(), new Date().getMonth());
-    //     }
-
-    // function LoadBarData(year, month) {
-    //      $.ajax({
-    //          type: "GET",
-    //          url: "/Home/GetBarDataByYearAndMonth",
-    //          data: { year: year, month: month },
-    //          dataType: "json",
-    //          success: function (response) {
-    //              console.log(response)
-    //              const monthNames = [
-    //                  "January", "February", "March", "April", "May",
-    //                  "June", "July", "August", "September", "October",
-    //                  "November", "December"
-    //              ];
-
-    //              // Parse the data for each service
-    //              const { prenatalData, deliveryData, screeningData, hearingData } = response;
-
-    //              // Extract data for each service by month
-    //              const prenatalCounts = Array(12).fill(0);
-    //              const deliveryCounts = Array(12).fill(0);
-    //              const screeningCounts = Array(12).fill(0);
-    //              const hearingCounts = Array(12).fill(0);
-
-    //              prenatalData.forEach(item => prenatalCounts[item.month - 1] = item.data);
-    //              deliveryData.forEach(item => deliveryCounts[item.month - 1] = item.data);
-    //              screeningData.forEach(item => screeningCounts[item.month - 1] = item.data);
-    //              hearingData.forEach(item => hearingCounts[item.month - 1] = item.data);
-
-    //              // Update the chart labels and datasets
-    //              BarChart.data.labels = monthNames;
-    //              BarChart.data.datasets[0].data = prenatalCounts;
-    //              BarChart.data.datasets[1].data = deliveryCounts;
-    //              BarChart.data.datasets[2].data = screeningCounts;
-    //              BarChart.data.datasets[3].data = hearingCounts;
-
-    //              BarChart.update();
-    //          },
-    //          error: function (error) {
-    //              console.error("Error fetching data:", error);
-    //          }
-    //      });
-    //  }
-
-
-
-    // Bar Graph for Services Statistics
-    const barCtx = document.getElementById('barGraph').getContext('2d');
-    const barChart = new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Delivery', 'Prenatal', 'Newborn Screening', 'Newborn Hearing'], // Sample services
-                // labels: ['Delivery', 'Prenatal', 'Family Planning', 'Newborn Screening', 'Newborn Hearing'], // Sample services
-                datasets: [{
-                    label: 'Number of Services',
-                    data: [300, 200, 150, 100, 50], // Sample data
-                    backgroundColor: [
-                        '#36a2eb',
-                        '#ffcd56',
-                        '#4bc0c0',
-                        '#9966ff'
-                        //  '#36a2eb',
-                        // '#ffcd56',
-                        // '#4bc0c0',
-                        // '#ff9f40',
-                        // '#9966ff'
-                    ],
-                    borderColor: [
-                        '#36a2eb',
-                        '#ffcd56',
-                        '#4bc0c0',
-                        '#9966ff'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        enabled: true,
-                    }
-                },
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Services'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Number of Services'
-                        },
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+    //         }
+    //     });
 </script>

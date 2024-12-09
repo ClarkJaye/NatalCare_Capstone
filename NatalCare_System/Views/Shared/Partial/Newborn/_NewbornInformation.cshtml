@@ -112,7 +112,7 @@
 
             <div class="m-4 d-flex align-items-center justify-content-end">
                 <div class="d-flex align-items-center gap-3">
-                    <button class="btn btn-pink" data-patientid="@Model.NewbornID">
+                    <button class="btn btn-pink" id="printBtn" data-newbornid="@Model.NewbornID">
                         <i class="fas fa-save"></i>
                         <span>Print</span>
                     </button>
@@ -372,39 +372,31 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        $('#printBtn').on("click", function (){
-            var patentId = $(this).data('patientid');
-            PrintQueueForm(patentId);
+        $('#printBtn').on("click", function () {
+            var newbornId = $(this).data('newbornid');
+            PrintForm(newbornId);
         });
     });
 
 
 
-    function PrintQueueForm(patentId) {
+    function PrintForm(newbornId) {
         $.ajax({
             type: 'GET',
-            url: "/Clerk/Print_QueueNumber",
-            data: { patentID: patentId },
+            url: '@Url.Action("PrintNewbornForm", "Print")',
+            data: { id: newbornId },
             success: function (response) {
                 if (response && response.isSuccess === false) {
                     alert(response.message);
                 } else if (response && response.isSuccess === true) {
-                    window.location.href = "/Clerk/Print_Form?date=" + date + "&categoryId=" + categoryId + "&queueNumber=" + queueNumber;
+                    window.location.href = "/Print/Newborn_Form?id=" + response.newborn.newbornID;
                 }
             },
             error: function (xhr, status, error) {
                 // Handle error
-                alert("An error occurred while generating the queue number.");
+                alert("An error occurred, Please ask the It support.");
             }
         });
     }
-
-
-    // function PrintQueueForm() {
-    //     window.onafterprint = function () {
-    //         window.location.href = "/Patient/Information";
-    //     };
-    //     window.print();
-    // }
-
+    
 </script>

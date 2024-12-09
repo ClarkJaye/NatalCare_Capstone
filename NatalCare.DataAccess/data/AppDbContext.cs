@@ -28,6 +28,8 @@ namespace NatalCare.DataAccess.data
         //Services
         public DbSet<Delivery> Delivery { get; set; }
         public DbSet<PhysicalExamination> PhysicalExamination { get; set; }
+        public DbSet<MaternalMonitoring> MaternalMonitoring { get; set; }
+        public DbSet<ProgressLabor> ProgressLabor { get; set; }
         public DbSet<Obstetrical> Obstetrical { get; set; }
         public DbSet<ClinicalFaceSheet> ClinicalFaceSheet { get; set; }
         public DbSet<DischargementForm> DischargementForm { get; set; }
@@ -247,6 +249,7 @@ namespace NatalCare.DataAccess.data
                 typeof(NewbornHearing),
                 typeof(Payments),
                 typeof(PhysicalExamination),
+                typeof(MaternalMonitoring),
                 typeof(Obstetrical),
                 typeof(ClinicalFaceSheet),
                 typeof(DischargementForm),

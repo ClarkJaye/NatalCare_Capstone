@@ -5,6 +5,7 @@
     <div class="d-flex align-items-center">
         <h6 class="me-2 mb-0 fw-bold">CASE NO#:</h6>
         <input type="hidden" id="delID" name="CaseNo" value="@ViewBag.DeliveryId" />
+        <input id="preID" type="hidden" value="@Model.Delivery?.PrenatalID" />
 
         <div class="border-bottom flex-grow-1">
             <span class="px-2 h6">
@@ -24,11 +25,11 @@
     }
     else
     {
-        <button id="printDFBtn" class="btn btn-sm btn-success">
+        <button id="printCFBtn" class="btn btn-sm btn-success" data-cfid="@Model.ID">
             <i class="fas fa-save"></i>
             <span>Print</span>
         </button>
-        <button id="editDFBtn" class="btn btn-sm btn-primary" data-cfid="@Model.ID">
+        <button id="editCFBtn" class="btn btn-sm btn-primary" data-cfid="@Model.ID">
             <i class="fas fa-pencil-alt"></i>
             <span>Edit</span>
         </button>
@@ -57,12 +58,22 @@ else{
                 </div>
             </div>
 
-            <div class="col-md-6 border py-3 d-flex align-items-center">
+            <div class="col-md-3 border py-3 d-flex align-items-center">
                 <div class="d-flex align-items-center">
                     <h6 class="me-2 mb-0 fw-bold">Ward:</h6>
                     <div class="flex-grow-1">
                         <span class="px-2">
-                            @(Model.Delivery?.WardNumber != null ? Model.Delivery?.WardNumber : "N/A")
+                            @(Model.Delivery?.WardNumber != null ? Model.Delivery?.Wards?.WardNo : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Bed:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Delivery?.BedNumber != null ? Model.Delivery?.Beds?.BedNo : "N/A")
                         </span>
                     </div>
                 </div>
@@ -128,7 +139,19 @@ else{
                     <h6 class="me-2 mb-0 fw-bold">Age:</h6>
                     <div class="flex-grow-1">
                         <span class="px-2">
-                            23
+                            @{
+                                if (Model.Patient?.Birthdate != null)
+                                {
+                                    var birthYear = Model.Patient.Birthdate.Value.Year;
+                                    var currentYear = DateTime.Now.Year;
+                                    var age = currentYear - birthYear;
+                                    <text>@age years old</text>
+                                }
+                                else
+                                {
+                                    @:N/A
+                                }
+                            }
                         </span>
                     </div>
                 </div>
@@ -182,7 +205,7 @@ else{
                             <h6 class="me-2 mb-0 fw-bold">Date:</h6>
                             <div class="border-bottom flex-grow-1">
                                 <span class="px-4">
-                                    @(Model.Delivery?.Date_Admitted != null ? Model.Delivery?.Date_Admitted : "N/A")
+                                    @(Model.Delivery?.Date_Admitted != null ? Model.Delivery?.Date_Admitted.ToString("MMMM dd yyyy") : "N/A")
                                 </span>
                             </div>
                         </div>
@@ -203,7 +226,7 @@ else{
                             <h6 class="me-2 mb-0 fw-bold">Date:</h6>
                             <div class="border-bottom flex-grow-1">
                                 <span class="px-4">
-                                    @(Model.Delivery?.Date_Discharged != null ? Model.Delivery?.Date_Discharged : "N/A")
+                                    @(Model.Delivery?.Date_Discharged != null ? Model.Delivery?.Date_Discharged?.ToString("MMMM dd yyyy") : "N/A")
                                 </span>
                             </div>
                         </div>
@@ -238,8 +261,8 @@ else{
                         </div>
                     </div>
                 </div>
-
             </div>
+
             @*PRENATAL DETAILS*@
             <div class="col-md-3 border py-3 d-flex align-items-center">
                 <div class="d-flex align-items-center">
@@ -267,8 +290,7 @@ else{
                 <div class="d-flex align-items-center">
                     <h6 class="me-2 mb-0 fw-bold">AOG:</h6>
                     <div class="flex-grow-1">
-                        <span class="px-2">
-                            @(Model.Delivery?.PrenatalCase?.EDC != null ? Model.Delivery?.PrenatalCase?.EDC : "N/A")
+                        <span class="px-2" id="aogData">
                         </span>
                     </div>
                 </div>
@@ -358,7 +380,7 @@ else{
                     <h6 class="me-2 mb-0 fw-bold">ICD-10 CODE/S:</h6>
                     <div class="flex-grow-1">
                         <span class="px-2">
-                            @(Model.Admitting != null ? Model.Admitting : "N/A")
+                            @(Model.ICDCodes != null ? Model.ICDCodes : "N/A")
                         </span>
                     </div>
                 </div>
@@ -427,11 +449,11 @@ else{
                     <label for="dRecovered" class="form-check-label">RECOVERED</label>
                 </div>
                 <div class="form-check d-flex align-items-center mb-2 gap-2">
-                    <input type="checkbox" id="dImprov" class="update-checkbox custom-checkbox" @(Model.Recoverred == true ? "checked" : "") disabled>
+                    <input type="checkbox" id="dImprov" class="update-checkbox custom-checkbox" @(Model.Improved == true ? "checked" : "") disabled>
                     <label for="dImprov" class="form-check-label">IMPROVED</label>
                 </div>
                 <div class="form-check d-flex align-items-center mb-2 gap-2">
-                    <input type="checkbox" id="dUnimprov" class="update-checkbox custom-checkbox" @(Model.Recoverred == true ? "checked" : "") disabled >
+                    <input type="checkbox" id="dUnimprov" class="update-checkbox custom-checkbox" @(Model.UnImproved == true ? "checked" : "") disabled >
                     <label for="dUnimprov" class="form-check-label">UNIMPROVED</label>
                 </div>
             </div>
@@ -439,19 +461,19 @@ else{
             <div class="col-md-6 border py-3">
                 <label class="fw-bold mb-2">Disposition:</label>
                 <div class="form-check d-flex align-items-center mb-2 gap-2">
-                    <input type="checkbox" id="dDischarge" class="update-checkbox custom-checkbox" @(Model.Recoverred == true ? "checked" : "") disabled >
+                    <input type="checkbox" id="dDischarge" class="update-checkbox custom-checkbox" @(Model.Discarged == true ? "checked" : "") disabled >
                     <label for="dDischarge" class="form-check-label">DISCHARGE</label>
                 </div>
                 <div class="form-check d-flex align-items-center mb-2 gap-2">
-                    <input type="checkbox" id="dTransfered" class="update-checkbox custom-checkbox" @(Model.Recoverred == true ? "checked" : "") disabled >
-                    <label for="dTransfered" class="form-check-label">TRASNFERRED</label>
+                    <input type="checkbox" id="dTransfered" class="update-checkbox custom-checkbox" @(Model.Transferred == true ? "checked" : "") disabled >
+                    <label for="dTransfered" class="form-check-label">TRANSFERRED</label>
                 </div>
                 <div class="form-check d-flex align-items-center mb-2 gap-2">
-                    <input type="checkbox" id="dHama" class="update-checkbox custom-checkbox" @(Model.Recoverred == true ? "checked" : "") disabled >
+                    <input type="checkbox" id="dHama" class="update-checkbox custom-checkbox" @(Model.Hama == true ? "checked" : "") disabled >
                     <label for="dHama" class="form-check-label">HAMA(Home Against Medical Advice)</label>
                 </div>
                 <div class="form-check d-flex align-items-center mb-2 gap-2">
-                    <input type="checkbox" id="dAbssconded" class="update-checkbox custom-checkbox" @(Model.Recoverred == true ? "checked" : "") disabled >
+                    <input type="checkbox" id="dAbssconded" class="update-checkbox custom-checkbox" @(Model.Abssconded == true ? "checked" : "") disabled >
                     <label for="dAbssconded" class="form-check-label">ABSSCONDED</label>
                 </div>
             </div>
@@ -487,24 +509,6 @@ else{
                     @Html.AntiForgeryToken()
 
                     <div class="row">
-                        @* LMP  *@
-                        <div class="col-md-4 mb-3">
-                            <label for="LMP-Add" class="control-label">LMP</label>
-                            <input type="date" id="LMP-Add" name="LMP" class="form-control" placeholder="Enter LMP" />
-                        </div>
-
-                        @* EDC  *@
-                        <div class="col-md-4 mb-3">
-                            <label for="EDC-Add" class="control-label">EDC</label>
-                            <input type="date" id="EDC-Add" name="EDC" class="form-control" placeholder="Enter EDC" />
-                        </div>
-
-                        @* AOG  *@
-                        <div class="col-md-4 mb-3">
-                            <label for="AOG-Add" class="control-label">AOG</label>
-                            <input type="text" id="AOG-Add" name="AOG" class="form-control" placeholder="Enter AOG" />
-                        </div>
-                        
                         <div class="col-md-4 mb-4">
                             <label for="TermBirths-Add" class="control-label">Term Births (T)</label>
                             <input type="number" id="TermBirths-Add" name="TermBirths" class="form-control" placeholder="Enter term births" />
@@ -530,10 +534,11 @@ else{
                             <input type="number" id="Para-Add" name="Para" class="form-control" placeholder="Enter para" />
                         </div>
 
-                        <div class="col-md-4 mb-4">
+                        <div class="col-md-8 mb-3">
                             <label for="Admitting-Add" class="control-label">Admitting</label>
                             <input type="text" id="Admitting-Add" name="Admitting" class="form-control" placeholder="Enter admitting" />
                         </div>
+
 
                         <div class="col-md-4 mb-4">
                             <label for="ICDCodes-Add" class="control-label">ICD Codes</label>
@@ -543,11 +548,6 @@ else{
                         <div class="col-md-12 mb-3">
                             <label for="HistoryOfPatientPresentCondition-Add" class="control-label">History of Patient Present Condition</label>
                             <textarea id="HistoryOfPatientPresentCondition-Add" name="HistoryOfPatientPresentCondition" class="form-control" placeholder="Enter history of patient present condition" rows="3"></textarea>
-                        </div>
-
-                        <div class="col-md-12 mb-3">
-                            <label for="Admitting-Add" class="control-label">Admitting</label>
-                            <textarea id="Admitting-Add" name="Admitting" class="form-control" placeholder="Enter admitting" rows="3"></textarea>
                         </div>
 
                         <div class="col-md-12 mb-4">
@@ -572,7 +572,7 @@ else{
 
                         <div class="col-md-4 mb-4">
                             <label for="InformantContactNo-Add" class="control-label">Informant Contact No#</label>
-                            <input type="text" id="InformantContactNo-Add" name="InformantContactNo" class="form-control" placeholder="Enter informant contact number" />
+                            <input type="number" id="InformantContactNo-Add" name="InformantContactNo" class="form-control" placeholder="Enter informant contact number" />
                         </div>
                         <div class="col-md-4 mb-4"></div>
                         <div class="col-md-4 mb-4"></div>
@@ -581,16 +581,16 @@ else{
                         <div class="col-md-6 mb-3">
                             <label class="control-label fw-bold">CONDITION ON DISCHARGED:</label>
                             <div class="form-check d-flex align-items-center mb-2 gap-2 mt-2">
-                                <input type="checkbox" id="Recovered-Edit" name="Recovered" class="custom-checkbox" value="true" />
-                                <label for="Recovered-Edit" class="form-check-label">Recovered</label>
+                                <input type="checkbox" id="RecoveredCF-Add" name="Recoverred" class="custom-checkbox" value="true" />
+                                <label for="RecoveredCF-Add" class="form-check-label">Recovered</label>
                             </div>
                             <div class="form-check d-flex align-items-center mb-2 gap-2 mt-2">
-                                <input type="checkbox" id="Improved-Add" name="Improved" class="custom-checkbox" value="true" />
-                                <label for="Improved-Edit" class="form-check-label">Improved</label>
+                                <input type="checkbox" id="ImprovedCF-Add" name="Improved" class="custom-checkbox" value="true" />
+                                <label for="ImprovedCF-Add" class="form-check-label">Improved</label>
                             </div>
                             <div class="form-check d-flex align-items-center mb-2 gap-2 mt-2">
-                                <input type="checkbox" id="UnImproved-Add" name="UnImproved" class="custom-checkbox" value="true" />
-                                <label for="UnImproved-Add" class="form-check-label">UnImproved</label>
+                                <input type="checkbox" id="UnImprovedCF-Add" name="UnImproved" class="custom-checkbox" value="true" />
+                                <label for="UnImprovedCF-Add" class="form-check-label">UnImproved</label>
                             </div>
                         </div>
 
@@ -599,20 +599,20 @@ else{
                         <div class="col-md-6 mb-3">
                             <label class="control-label fw-bold">DISPOSITION:</label>
                             <div class="form-check d-flex align-items-center mb-2 gap-2 mt-2">
-                                <input type="checkbox" id="Discharged-Add" name="Discharged" class="custom-checkbox" value="true" />
-                                <label for="Discharged-Add" class="form-check-label">Discharged</label>
+                                <input type="checkbox" id="DischargedCF-Add" name="Discarged" class="custom-checkbox" value="true" />
+                                <label for="DischargedCF-Add" class="form-check-label">Discharged</label>
                             </div>
                             <div class="form-check d-flex align-items-center mb-2 gap-2 mt-2">
-                                <input type="checkbox" id="Transferred-Add" name="Transferred" class="custom-checkbox" value="true" />
-                                <label for="Transferred-Edit" class="form-check-label">Transferred</label>
+                                <input type="checkbox" id="TransferredCF-Add" name="Transferred" class="custom-checkbox" value="true" />
+                                <label for="TransferredCF-Add" class="form-check-label">Transferred</label>
                             </div>
                             <div class="form-check d-flex align-items-center mb-2 gap-2 mt-2">
-                                <input type="checkbox" id="Hama-Add" name="Hama" class="custom-checkbox" value="true" />
-                                <label for="Hama-Add" class="form-check-label">Hama</label>
+                                <input type="checkbox" id="HamaCF-Add" name="Hama" class="custom-checkbox" value="true" />
+                                <label for="HamaCF-Add" class="form-check-label">Hama</label>
                             </div>
                             <div class="form-check d-flex align-items-center mb-2 gap-2 mt-2">
-                                <input type="checkbox" id="Abssconded-Add" name="Abssconded" class="custom-checkbox" value="true" />
-                                <label for="Abssconded-Add" class="form-check-label">Abssconded</label>
+                                <input type="checkbox" id="AbsscondedCF-Add" name="Abssconded" class="custom-checkbox" value="true" />
+                                <label for="AbsscondedCF-Add" class="form-check-label">Abssconded</label>
                             </div>
                         </div>
                      
@@ -638,24 +638,174 @@ else{
     </div>
 </div>
 
+@* Edit Modal  *@
+<div class="modal fade" id="CFEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Edit Clinical Face Sheet Form</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="UpdateCFForm" method="POST">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <input type="hidden" id="cfId-Edit" name="Id" />
+                        <input type="hidden" id="caseNoCF-Edit" name="CaseNo" />
+                        <input type="hidden" id="patientIDCF-Edit" name="PatientID" />
+
+                        <div class="col-md-4 mb-4">
+                            <label for="TermBirths-Edit" class="control-label">Term Births (T)</label>
+                            <input type="number" id="TermBirths-Edit" name="TermBirths" class="form-control" placeholder="Enter term births" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="Premature-Edit" class="control-label">Premature Births (P)</label>
+                            <input type="number" id="Premature-Edit" name="Premature" class="form-control" placeholder="Enter premature births" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="Abortion-Edit" class="control-label">Abortion Births (A)</label>
+                            <input type="number" id="Abortion-Edit" name="Abortion" class="form-control" placeholder="Enter abortion" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="LivingChildren-Edit" class="control-label">Living children (L)</label>
+                            <input type="number" id="LivingChildren-Edit" name="LivingChildren" class="form-control" placeholder="Enter living children" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="Gravida-Edit" class="control-label">Gravida (G)</label>
+                            <input type="number" id="Gravida-Edit" name="Gravida" class="form-control" placeholder="Enter gravida" />
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label for="Para-Edit" class="control-label">Para (P)</label>
+                            <input type="number" id="Para-Edit" name="Para" class="form-control" placeholder="Enter para" />
+                        </div>
+
+                        <div class="col-md-8 mb-3">
+                            <label for="Admitting-Edit" class="control-label">Admitting</label>
+                            <input type="text" id="Admitting-Edit" name="Admitting" class="form-control" placeholder="Enter admitting" />
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <label for="ICDCodes-Edit" class="control-label">ICD Codes</label>
+                            <input type="text" id="ICDCodes-Edit" name="ICDCodes" class="form-control" value="080,9,Z39.0,Z39.2" placeholder="Enter ICD Codes" />
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="HistoryOfPatientPresentCondition-Edit" class="control-label">History of Patient Present Condition</label>
+                            <textarea id="HistoryOfPatientPresentCondition-Edit" name="HistoryOfPatientPresentCondition" class="form-control" placeholder="Enter history of patient present condition" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-4">
+                            <label for="FinalDiagnosis-Edit" class="control-label">Final Diagnosis</label>
+                            <textarea id="FinalDiagnosis-Edit" name="FinalDiagnosis" class="form-control" placeholder="Enter final diagnosis" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <label for="InformantName-Edit" class="control-label">Informant Name</label>
+                            <input type="text" id="InformantName-Edit" name="InformantName" class="form-control" placeholder="Enter informant name" />
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <label for="RelationToPatient-Edit" class="control-label">Informant relation to patient</label>
+                            <input type="text" id="RelationToPatient-Edit" name="RelationToPatient" class="form-control" placeholder="Enter relation" />
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <label for="InformantAddress-Edit" class="control-label">Informant Address</label>
+                            <input type="text" id="InformantAddress-Edit" name="InformantAddress" class="form-control" placeholder="Enter informant address" />
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <label for="InformantContactNo-Edit" class="control-label">Informant Contact No#</label>
+                            <input type="number" id="InformantContactNo-Edit" name="InformantContactNo" class="form-control" placeholder="Enter informant contact number" />
+                        </div>
+                        <div class="col-md-4 mb-4"></div>
+                        <div class="col-md-4 mb-4"></div>
+
+                        @* CONDITION ON DISCHARGED *@
+                        <div class="col-md-6 mb-3">
+                            <label class="control-label fw-bold">CONDITION ON DISCHARGED:</label>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2 mt-2">
+                                <input type="checkbox" id="RecoveredCF-Edit" name="Recoverred" class="custom-checkbox" value="true" />
+                                <label for="RecoveredCF-Edit" class="form-check-label">Recovered</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2 mt-2">
+                                <input type="checkbox" id="ImprovedCF-Edit" name="Improved" class="custom-checkbox" value="true" />
+                                <label for="ImprovedCF-Edit" class="form-check-label">Improved</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2 mt-2">
+                                <input type="checkbox" id="UnImprovedCF-Edit" name="UnImproved" class="custom-checkbox" value="true" />
+                                <label for="UnImprovedCF-Edit" class="form-check-label">UnImproved</label>
+                            </div>
+                        </div>
+
+
+                        @* DISPOSITION *@
+                        <div class="col-md-6 mb-3">
+                            <label class="control-label fw-bold">DISPOSITION:</label>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2 mt-2">
+                                <input type="checkbox" id="DischargedCF-Edit" name="Discarged" class="custom-checkbox" value="true" />
+                                <label for="DischargedCF-Edit" class="form-check-label">Discharged</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2 mt-2">
+                                <input type="checkbox" id="TransferredCF-Edit" name="Transferred" class="custom-checkbox" value="true" />
+                                <label for="TransferredCF-Edit" class="form-check-label">Transferred</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2 mt-2">
+                                <input type="checkbox" id="HamaCF-Edit" name="Hama" class="custom-checkbox" value="true" />
+                                <label for="HamaCF-Edit" class="form-check-label">Hama</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2 mt-2">
+                                <input type="checkbox" id="AbsscondedCF-Edit" name="Abssconded" class="custom-checkbox" value="true" />
+                                <label for="AbsscondedCF-Edit" class="form-check-label">Abssconded</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6 mb-5">
+                            <label for="MidwifeIDCF-Edit" class="control-label">Midwife</label>
+                            <select id="MidwifeIDCF-Edit" class="form-select" name="MidwifeID" asp-items="ViewBag.midwifeList">
+                                <option value="" class="text-muted" selected>select midwife</option>
+                            </select>
+                        </div>
+
+                        @* Submit and Close Buttons *@
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-pink">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <script>
     var patID = document.getElementById('patID').value;
     var delID = document.getElementById('delID').value;
 
-    $("#UpdateCFForm").on("submit", function (e) {
-        e.preventDefault();
-        UpdatePE();
+     $('#printCFBtn').on("click", function () {
+        var caseNo = $(this).data('cfid');
+        PrintForm(caseNo);
     });
 
-    $("#editCFBtn").on("click", function (e) {
+    $("#UpdateCFForm").on("submit", function (e) {
+        e.preventDefault();
+        UpdateCF();
+    });
+
+    $("#editCFBtn").on("click", function () {
         var id = $(this).data('cfid');
         EditClinical(id);
     });
 
     // Update
-    function UpdatePE() {
+    function UpdateCF() {
         var formData = $("#UpdateCFForm").serialize();
         $.ajax({
             url: '@Url.Action("UpdateCFRecord", "Delivery")',
@@ -665,7 +815,7 @@ else{
                 if (result.isSuccess) {
                     $('#CFEditModal').modal('hide');
                     toastr.success(result.message)
-                    LoadDFComponent();
+                    LoadCFComponent();
                 } else {
                     toastr.error(result.message);
                 }
@@ -677,52 +827,48 @@ else{
         });
     }
     // Edit
-    function EditClinical(dfId) {
+    function EditClinical(cfId) {
         $.ajax({
             type: 'GET',
             url: '@Url.Action("GetCFRecord", "Delivery")',
-            data: { id: dfId },
+            data: { id: cfId },
             success: function (response) {
                 if (response && response.isSuccess) {
                     var item = response.item.data;
                     console.log(item)
                     // Populate modal fields
-                    $('#dfId-Edit').val(item.id);
-                    $('#caseNoDF-Edit').val(item.caseNo);
-                    $('#patientIDDF-Edit').val(item.patientID);
+                    $('#cfId-Edit').val(item.id);
+                    $('#caseNoCF-Edit').val(item.caseNo);
+                    $('#patientIDCF-Edit').val(item.patientID);
 
-                    $('#Hosp_No-Edit').val(item.hosp_No);
-                    $('#CompleteDiagnosis-Edit').val(item.completeDiagnosis);
-                    $('#Medications-Edit').val(item.medications);
-                    // Mother
-                    $('#PostpartumCareAndHygiene-Edit').prop('checked', item.postpartumCareAndHygiene);
-                    $('#Nutrition-Edit').prop('checked', item.nutrition);
-                    $('#IronFolate-Edit').prop('checked', item.ironFolate);
-                    $('#BirthSpacingFamilyPlanning-Edit').prop('checked', item.birthSpacingFamilyPlanning);
-                    $('#DangerSignsMother-Edit').prop('checked', item.dangerSignsMother);
-                    $('#FollowUpVisitsMother-Edit').prop('checked', item.followUpVisitsMother);
-                    // Baby
-                    $('#ExclusiveBreastFeeding-Edit').prop('checked', item.exclusiveBreastFeeding);
-                    $('#HygieneCordCareWarmth-Edit').prop('checked', item.hygieneCordCareWarmth);
-                    $('#SpecialAdviceLowBirthWeight-Edit').prop('checked', item.specialAdviceLowBirthWeight);
-                    $('#DangerSignsBaby-Edit').prop('checked', item.dangerSignsBaby);
-                    $('#FollowUpVisitsBaby-Edit').prop('checked', item.followUpVisitsBaby);
+                    $('#TermBirths-Edit').val(item.termBirths);
+                    $('#Premature-Edit').val(item.premature);
+                    $('#Abortion-Edit').val(item.abortion);
+                    $('#LivingChildren-Edit').val(item.livingChildren);
+                    $('#Gravida-Edit').val(item.gravida);
+                    $('#Para-Edit').val(item.para);
+                    $('#HistoryOfPatientPresentCondition-Edit').val(item.historyOfPatientPresentCondition);
+                    $('#Admitting-Edit').val(item.admitting);
+                    $('#ICDCodes-Edit').val(item.icdCodes);
+                    $('#FinalDiagnosis-Edit').val(item.finalDiagnosis);
+                    $('#InformantName-Edit').val(item.informantName);
+                    $('#RelationToPatient-Edit').val(item.relationToPatient);
+                    $('#InformantAddress-Edit').val(item.informantAddress);
+                    $('#InformantContactNo-Edit').val(item.informantContactNo);
+                    // Condition
+                    $('#RecoveredCF-Edit').prop('checked', item.recoverred);
+                    $('#ImprovedCF-Edit').prop('checked', item.improved);
+                    $('#UnImprovedCF-Edit').prop('checked', item.unImproved);
+                    // Disposition
+                    $('#DischargedCF-Edit').prop('checked', item.discarged);
+                    $('#TransferredCF-Edit').prop('checked', item.transferred);
+                    $('#HamaCF-Edit').prop('checked', item.hama);
+                    $('#AbsscondedCF-Edit').prop('checked', item.abssconded);
 
-                    var prepared = response.item.prepared;
-                    $('#PreparedDF-Edit').empty().append('<option disabled selected>select prepared by</option>');
-                    prepared.forEach(function (data) {
-                        $('#PreparedDF-Edit').append(
-                            $('<option>', {
-                                value: data.id,
-                                text: data.firstname + " " + data.middlename + " " + data.lastname,
-                                selected: item.preparedBy === data.id
-                            })
-                        );
-                    });
                     var midwife = response.item.midwife;
-                    $('#MidwifeDF-Edit').empty().append('<option disabled selected>select midwife</option>');
+                    $('#MidwifeIDCF-Edit').empty().append('<option selected>select midwife</option>');
                     midwife.forEach(function (data) {
-                        $('#MidwifeDF-Edit').append(
+                        $('#MidwifeIDCF-Edit').append(
                             $('<option>', {
                                 value: data.id,
                                 text: data.firstname + " " + data.middlename + " " + data.lastname,
@@ -731,18 +877,14 @@ else{
                         );
                     });
 
-
-                    $('#FollowUpManagement-Edit').val(item.followUpManagement);
-                    $('#NotesDF-Edit').val(item.notes);
-
                     // Show Edit Modal
-                    $('#DFEditModal').modal('show');
+                    $('#CFEditModal').modal('show');
                 } else {
-                    toastr.error(response.message || 'Unable to load dishchargement record.');
+                    toastr.error(response.message || 'Unable to load clinical sheet record.');
                 }
             },
             error: function () {
-                toastr.error('An error occurred while loading the dishchargement  record.');
+                toastr.error('An error occurred while loading the clinical sheet   record.');
             }
         });
     }
@@ -757,7 +899,7 @@ else{
     function AddCF() {
         var formData = $('#AddCFForm').serializeArray();
         formData.push({ name: 'patientID', value: patID });
-        formData.push({ name: 'deliveryID', value: delID});
+        formData.push({ name: 'caseno', value: delID});
 
         $.ajax({
             url: '@Url.Action("AddCFForm", "Delivery")',
@@ -783,12 +925,55 @@ else{
     function LoadCFComponent() {
         $.ajax({
             url: '@Url.Action("ClinicalRecords", "Delivery")',
-            data: { patientId: patID, deliveryId: delID },
+            data: { patientId: patID, caseno: delID },
             success: function (result) {
                 $('#clinicalSheet').html(result);
             },
             error: function () {
                 toastr.error("Failed to reload the clinical sheet records.");
+            }
+        });
+    }
+
+     LoadAOGData();
+    //Load All Records
+    function LoadAOGData() {
+        var id = document.getElementById('preID').value;
+        if(id != null){
+            $.ajax({
+                url: '@Url.Action("GetAOGDataLast", "Delivery")',
+                data: { caseno: id },
+                success: function (result) {
+                    if(result && result.isSuccess){
+                        $('#aogData').text(result.item + " Weeks");
+                    }else{
+                        $('#aogData').text("N/A");
+                    }
+                },
+                error: function () {
+                    toastr.error("Failed to reload the clinical sheet records.");
+                }
+            });
+        }
+
+    }
+
+    //PRINT
+    function PrintForm(caseNo) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("PrintCFForm", "Print")',
+            data: { id: caseNo },
+            success: function (response) {
+                if (response && response.isSuccess === false) {
+                    alert(response.message);
+                } else if (response && response.isSuccess === true) {
+                    window.location.href = "/Print/Clinical_Form?id=" + response.data;
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle error
+                alert("An error occurred, Please ask the It support.");
             }
         });
     }

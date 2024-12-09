@@ -23,7 +23,7 @@
         </button>
     }
     else{
-        <button id="printDFBtn" class="btn btn-sm btn-success">
+        <button id="printDFBtn" class="btn btn-sm btn-success" data-dfid="@Model.Id">
             <i class="fas fa-save"></i>
             <span>Print</span>
         </button>
@@ -467,6 +467,12 @@ else{
     var patID = document.getElementById('patID').value;
     var delID = document.getElementById('delID').value;
 
+    $('#printDFBtn').on("click", function () {
+        var caseNo = $(this).data('dfid');
+        PrintForm(caseNo);
+    });
+
+
     $("#UpdateDFForm").on("submit", function (e) {
         e.preventDefault();
         UpdatePE();
@@ -606,12 +612,32 @@ else{
     function LoadDFComponent() {
         $.ajax({
             url: '@Url.Action("DischargmentRecord", "Delivery")',
-            data: { patientId: patID, deliveryId: delID },
+            data: { patientId: patID, caseno: delID },
             success: function (result) {
                 $('#dischargementForm').html(result);
             },
             error: function () {
                 toastr.error("Failed to reload the dischagement records.");
+            }
+        });
+    }
+
+
+    function PrintForm(caseNo) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("PrintDichargementForm", "Print")',
+            data: { id: caseNo },
+            success: function (response) {
+                if (response && response.isSuccess === false) {
+                    alert(response.message);
+                } else if (response && response.isSuccess === true) {
+                    window.location.href = "/Print/Dischargement_Form?id=" + response.dichargementId;
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle error
+                alert("An error occurred, Please ask the It support.");
             }
         });
     }

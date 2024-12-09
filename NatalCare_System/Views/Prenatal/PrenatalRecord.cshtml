@@ -12,11 +12,11 @@
 
 <div class="mx-4">
     <div class="d-flex align-items-center justify-content-start gap-3 mb-3">
-        <a asp-controller="Patient" asp-action="MedicalRecords" asp-route-id="@Model.Patient.PatientID" class="btn btn-sm btn-outline-pink">
+        <a asp-controller="Patient" asp-action="MedicalRecords" asp-route-id="@Model.Patient?.PatientID" class="btn btn-sm btn-outline-pink">
             <i class="fas fa-arrow-left"></i>
             <span>Back</span>
         </a>
-        <h5 class="fw-bold m-0 text-capitalize">@Model.Patient.FirstName @Model.Patient.MiddleName @Model.Patient.LastName</h5>
+        <h5 class="fw-bold m-0 text-capitalize">@Model.Patient?.FirstName @Model.Patient?.MiddleName @Model.Patient?.LastName</h5>
     </div>
     <div class="card shadow-sm card-selected">
         <div class="card-body">
@@ -27,7 +27,7 @@
                         <i class="fas fa-plus"></i>
                         <span>Add New Visit</span>
                     </a>
-                    <a id="preFormBtn" class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1" data-preid="@Model.PrenatalRecord.CaseNo">
+                    <a id="preFormBtn" class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1" data-preid="@Model?.PrenatalRecord?.CaseNo">
                         <i class="fas fa-eye"></i>
                         <span>See All Detailed</span>
                     </a>
@@ -37,13 +37,13 @@
             <div class="px-2">
                 <div class="d-flex align-items-center gap-2" style="cursor:pointer;">
                     <span class="h6">Patient No#:</span>
-                    <h3 class="btn btn-sm btn-outline-pink fw-bold border-0" style="font-size: 14px;">@Model.Patient.PatientID</h3>
-                    <input type="hidden" id="patID" name="patientID" value="@Model.Patient.PatientID" />
+                    <h3 class="btn btn-sm btn-outline-pink fw-bold border-0" style="font-size: 14px;">@Model?.Patient?.PatientID</h3>
+                    <input type="hidden" id="patID" name="patientID" value="@Model?.Patient?.PatientID" />
                 </div>
                 <div class="d-flex align-items-center gap-2" style="cursor:pointer;">
                     <span class="h6">Case No#:</span>
-                    <h3 class="btn btn-sm btn-outline-pink fw-bold border-0" style="font-size: 14px;">@Model.PrenatalRecord.CaseNo</h3>
-                    <input type="hidden" id="caseID" name="caseNo" value="@Model.PrenatalRecord.CaseNo" />
+                    <h3 class="btn btn-sm btn-outline-pink fw-bold border-0" style="font-size: 14px;">@Model?.PrenatalRecord?.CaseNo</h3>
+                    <input type="hidden" id="caseID" name="caseNo" value="@Model?.PrenatalRecord?.CaseNo" />
                 </div>
             </div>
 
@@ -71,7 +71,7 @@
                     </thead>
                     <tbody>
                         <!-- Sample Data -->
-                        @if (Model.PrenatalVisitRecords != null && Model.PrenatalVisitRecords.Any())
+                        @if (Model?.PrenatalVisitRecords != null && Model.PrenatalVisitRecords.Any())
                         {
                             @foreach (var item in Model.PrenatalVisitRecords)
                             {
@@ -185,13 +185,13 @@
                         </div>
 
                         <div class="col-md-3 mb-3">
-                            <label for="LMP-Form" class="control-label">LMP</label>
-                            <input type="date" id="LMP-Form" name="LMP" class="form-control bg-white" readonly />
+                            <label for="LMP-Form" class="control-label">Last Menstrual Period (LMP)</label>
+                            <input type="text" id="LMP-Form" name="LMP" class="form-control bg-white" readonly />
                         </div>
 
                         <div class="col-md-3 mb-3">
-                            <label for="EDC-Form" class="control-label">EDC</label>
-                            <input type="date" id="EDC-Form" name="EDC" class="form-control bg-white" readonly />
+                            <label for="EDC-Form" class="control-label">Estimated Date of Confinement (EDC)</label>
+                            <input type="text" id="EDC-Form" name="EDC" class="form-control bg-white" readonly />
                         </div>
 
                         <div class="col-md-3 mb-3">
@@ -235,7 +235,7 @@
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
                             <div class="d-flex align-items-center gap-2">
-                                <button class="btn btn-success" type="button">
+                                <button class="btn btn-success printBtn" type="button">
                                     <i class="fas fa-save"></i>
                                     <span>Print</span>
                                 </button>
@@ -510,6 +510,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            $('.printBtn').on("click", function () {
+                var caseNo = $("#caseID").val();
+                PrintForm(caseNo);
+            });
+
             $('.filterInput').on('keyup', function () {
                 var value = $(this).val().toLowerCase();
                 var rows = $('tbody tr:not(.no-record-found)');
@@ -710,8 +715,12 @@
                         $("#Para-Form").val(prenatal.para);
                         $("#Abortion-Form").val(prenatal.abortion);
                         $("#StillBirth-Form").val(prenatal.stillBirth);
-                        $("#LMP-Form").val(prenatal.lmp ? prenatal.lmp.split('T')[0] : '');
-                        $("#EDC-Form").val(prenatal.edc ? prenatal.edc.split('T')[0] : '');
+                       // Format and display LMP
+                        var lmp = prenatal.lmp ? new Date(prenatal.lmp).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+                        $("#LMP-Form").val(lmp);
+                        // Format and display EDC
+                        var edc = prenatal.edc ? new Date(prenatal.edc).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+                        $("#EDC-Form").val(edc);
                         $("#DateVisit-Form").val(prenatal.dateVisit);
                         $("#HRCODE-Form").val(prenatal.hrcode);
                         $("#Notes-Form").val(prenatal.notes);
@@ -772,6 +781,25 @@
                 },
                 error: function (err) {
                     console.error('Error:', err);
+                }
+            });
+        }
+
+        function PrintForm(caseNo) {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("PrintPrenatalForm", "Print")',
+                data: { id: caseNo },
+                success: function (response) {
+                    if (response && response.isSuccess === false) {
+                        alert(response.message);
+                    } else if (response && response.isSuccess === true) {
+                        window.location.href = "/Print/Prenatal_Form?id=" + response.caseNo + '&patientId=' + response.patientId;
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Handle error
+                    alert("An error occurred, Please ask the It support.");
                 }
             });
         }

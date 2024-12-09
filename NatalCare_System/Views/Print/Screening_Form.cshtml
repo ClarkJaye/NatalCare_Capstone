@@ -1,0 +1,87 @@
+﻿@model NatalCare.Models.Entities.NewbornScreening
+
+@{
+    ViewData["Title"] = "Print Screening Form";
+}
+<style>
+    label, input {
+        font-size: 14px;
+    }
+
+</style>
+
+<div class="m-3">
+    <div class="text-center mb-4" style="cursor: pointer;">
+        <img class="img-fluid" src="/img/logo.png" width="160" />
+    </div>
+
+    <h5 class="text-center mb-3">NEWBORN SCREENING</h5>
+
+    <div class="container mt-4">
+        @* Patient Basic Info  *@
+        <div class="row mb-5">
+            <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Name of Patient:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.Patient?.FirstName @Model.Patient?.MiddleName  @Model.Patient?.LastName
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Age:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @{
+                                if (Model.Patient?.Birthdate != null)
+                                {
+                                    var birthYear = Model.Patient.Birthdate.Value.Year;
+                                    var currentYear = DateTime.Now.Year;
+                                    var age = currentYear - birthYear;
+                                    <text>@age years old</text>
+                                }
+                                else
+                                {
+                                    @:N/A
+                                }
+                            }
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.Patient?.Address
+                        </span>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // PrintForm();
+    });
+
+    function PrintForm() {
+        var patId = $("#patId").val();
+        window.onafterprint = function () {
+            window.location.href = "/Patient/Information?id=" + patId;
+        };
+
+        window.print();
+    }
+</script>

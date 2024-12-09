@@ -44,6 +44,10 @@ namespace NatalCare_System.Controllers
         {
             try
             {
+                if (!await CheckAccessAsync(2))
+                {
+                    return RedirectTo();
+                }
                 var response = await patientServices.GetInformation(id);
                 return View(response);
             }
@@ -66,6 +70,10 @@ namespace NatalCare_System.Controllers
         {
             try
             {
+                if (!await CheckAccessAsync(2))
+                {
+                    return RedirectTo();
+                }
                 var response = await patientServices.GetInformation(id);
                 return View(response);
             }
@@ -93,6 +101,10 @@ namespace NatalCare_System.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Patients patient)
         {
+            if (!await CheckAccessAsync(2))
+            {
+                return RedirectTo();
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -121,6 +133,10 @@ namespace NatalCare_System.Controllers
         //Edit Patient
         public async Task<IActionResult> Edit(string id)
         {
+            if (!await CheckAccessAsync(2))
+            {
+                return RedirectTo();
+            }
             var userId = GetCurrentUserId();
             var result = await patientServices.Edit(id, userId);
 
@@ -136,6 +152,10 @@ namespace NatalCare_System.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Patients patient)
         {
+            if (!await CheckAccessAsync(2))
+            {
+                return RedirectTo();
+            }
             if (ModelState.IsValid)
             {
                 try

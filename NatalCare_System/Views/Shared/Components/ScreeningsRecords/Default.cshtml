@@ -453,7 +453,7 @@
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
                             <div class="d-flex align-items-center gap-2">
-                                <button class="btn btn-success" type="button">
+                                <button class="btn btn-success printBtn" type="button">
                                     <i class="fas fa-save"></i>
                                     <span>Print</span>
                                 </button>
@@ -484,6 +484,11 @@
 
 <script>
     var patID = document.getElementById('patID').value;
+    $('#printBtn').on("click", function () {
+        var caseNo = $("#caseNoSN-Detail").val();
+        PrintForm(caseNo);
+    });
+
     // Reset the form when the modal is hidden
     $('#ScreeningAddModal').on('hidden.bs.modal', function () {
         var modal = $(this);
@@ -573,7 +578,6 @@
                 if (response && response.isSuccess) {
                     var item = response.item.result;
                     var newborn = response.item.newborn;
-                    console.log(response)
                     // Set values for editable fields
                     $("#caseNoSN-Edit").val(item.screeningNo);
                     $("#patientIDSN-Edit").val(item.patientId);
@@ -761,6 +765,27 @@
         });
     }
 
+
+    function PrintForm(id) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("PrintScreeningForm", "Print")',
+            data: { id: id },
+            success: function (response) {
+                if (response && response.isSuccess === false) {
+                    alert(response.message);
+                } else if (response && response.isSuccess === true) {
+                    window.location.href = "/Print/Screening_Form?id=" + response.data.result.screeningNo;
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle error
+                alert("An error occurred, Please ask the It support.");
+            }
+        });
+    }
+
+
     //Load All Records
     function LoadScreeningComponent() {
         var patientId = $("#patID").val();
@@ -777,3 +802,5 @@
     }
 
 </script>
+
+

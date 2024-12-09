@@ -53,11 +53,6 @@ namespace NatalCare_System.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Delivery model)
         {
-            if (!await CheckAccessAsync(4))
-            {
-                return RedirectTo();
-            }
-
             if (ModelState.IsValid)
             {
                 var userId = GetCurrentUserId();

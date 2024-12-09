@@ -27,6 +27,7 @@ namespace NatalCare_System.Controllers
         {
             var patient = await patientServices.GetInformation(patientId);
             var deliveryRecord = await serviceServices.GetDeliveryRecord(patientId, caseno);
+           
             if (deliveryRecord.CaseNo == null)
             {
                 TempData["error"] = "No record found!";
@@ -201,12 +202,149 @@ namespace NatalCare_System.Controllers
 
 
         //////////////MATERNAL DELIVERY MONITORING
-        public IActionResult MaternalMonitoringRecords(string patientId, string caseno)
+        public async Task<IActionResult> MaternalMonitoringRecords(string patientId, string caseno)
         {
-            ViewData["DeliveryId"] = caseno;
-            return ViewComponent("MaternalMonitoringRecordsViewComponent", new { patientId = patientId, deliveryId = caseno });
-        }
+            ViewData["allStaffList"] = await selectListServices.GetAllStaffSelectListAsync();
 
+            ViewData["DeliveryId"] = caseno;
+            return ViewComponent("MaternalMonitoringRecords", new { patientId = patientId, deliveryId = caseno });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddMDForm(MaternalMonitoring model, string patientID)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var userId = GetCurrentUserId();
+                    var result = await serviceServices.AddMDRecordAsync(model, patientID, userId);
+                    return Json(result);
+                }
+                return Json(new { IsSuccess = false, Message = "Invalid Record!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while adding clinical sheet record for Patient ID: {model.PatientID}");
+                return Json(new { IsSuccess = false, Message = "An error occurred in AddCFForm." });
+            }
+        }
+        public async Task<JsonResult> AddPLForm(ProgressLabor model, string patientID)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var userId = GetCurrentUserId();
+                    var result = await serviceServices.AddPLRecordAsync(model);
+                    return Json(result);
+                }
+                return Json(new { IsSuccess = false, Message = "Invalid Record!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while adding proress labor for Patient ID: {patientID}");
+                return Json(new { IsSuccess = false, Message = "An error occurred in AddPLForm." });
+            }
+        }
+        // GET/EDIT 
+        [HttpGet]
+        public async Task<JsonResult> GetMDRecord(int id)
+        {
+            try
+            {
+                if (id > 0)
+                {
+                    var userId = GetCurrentUserId();
+                    var result = await serviceServices.GetMDRecord(id);
+                    return Json(result);
+                }
+                return Json(new { IsSuccess = false, Message = "Fetching Record failed!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while get the maternal record for Patient");
+                return Json(new { IsSuccess = false, Message = "An error occurred in GetMDRecord." });
+            }
+        }
+        [HttpGet]
+        public async Task<JsonResult> GetPLRecord(int id)
+        {
+            try
+            {
+                if (id > 0)
+                {
+                    var userId = GetCurrentUserId();
+                    var result = await serviceServices.GetPLRecord(id);
+                    return Json(result);
+                }
+                return Json(new { IsSuccess = false, Message = "Fetching Record failed!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while get the progress labor for Patient");
+                return Json(new { IsSuccess = false, Message = "An error occurred in GetPLRecord." });
+            }
+        }
+        // UPDATE
+        [HttpPost]
+        public async Task<JsonResult> UpdateMDRecord(MaternalMonitoring model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var userId = GetCurrentUserId();
+                    var result = await serviceServices.UpdateMDRecordAsync(model, userId);
+                    return Json(result);
+                }
+                return Json(new { IsSuccess = false, Message = "Update Record failed!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while updating the maternal record record for Patient ID: {model.PatientID}");
+                return Json(new { IsSuccess = false, Message = "An error occurred in UpdateCFRecord." });
+            }
+        }
+        [HttpPost]
+        public async Task<JsonResult> UpdatePLRecord(ProgressLabor model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var userId = GetCurrentUserId();
+                    var result = await serviceServices.UpdatePLRecordAsync(model);
+                    return Json(result);
+                }
+                return Json(new { IsSuccess = false, Message = "Update Record failed!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while updating the progress labor record for Patient");
+                return Json(new { IsSuccess = false, Message = "An error occurred in UpdatePLRecord." });
+            }
+        }
+        //Delete Progress Labor
+        [HttpDelete]
+        public async Task<JsonResult> DeletePLRecord(int deleteId)
+        {
+            try
+            {
+                if (deleteId > 0)
+                {
+                    var userId = GetCurrentUserId();
+                    var result = await serviceServices.DeletePLRecordAsync(deleteId);
+                    return Json(result);
+                }
+                return Json(new { IsSuccess = false, Message = "Fetching Record failed!" });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error occurred while get the progress labor for Patient");
+                return Json(new { IsSuccess = false, Message = "An error occurred in DeletePLRecord." });
+            }
+        }
 
         ///////////////CLINICAL SHEETS 
         public async Task<IActionResult> ClinicalRecords(string patientId, string caseno)
@@ -216,10 +354,12 @@ namespace NatalCare_System.Controllers
             ViewData["DeliveryId"] = caseno;
             return ViewComponent("ClinicalSheetRecords", new { patientId = patientId, deliveryId = caseno });
         }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddCFForm(ClinicalFaceSheet model, string patientID, string deliveryID)
-        {
+        public async Task<JsonResult> AddCFForm(ClinicalFaceSheet model, string patientID, string caseno)
+            {
             try
             {
                 // Exclude CaseNo from validation
@@ -228,7 +368,7 @@ namespace NatalCare_System.Controllers
                 if (ModelState.IsValid)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await serviceServices.AddCFRecordAsync(model, patientID, userId, deliveryID);
+                    var result = await serviceServices.AddCFRecordAsync(model, patientID, userId, caseno);
                     return Json(result);
                 }
                 return Json(new { IsSuccess = false, Message = "Invalid Record!" });
@@ -261,7 +401,7 @@ namespace NatalCare_System.Controllers
         }
         // UPDATE
         [HttpPost]
-        public async Task<JsonResult> UpdateCFRecord(ClinicalFaceSheet model)
+        public async Task<JsonResult> UpdateRecord(ClinicalFaceSheet model)
         {
             try
             {
@@ -279,6 +419,18 @@ namespace NatalCare_System.Controllers
                 return Json(new { IsSuccess = false, Message = "An error occurred in UpdateCFRecord." });
             }
         }
+        // GET AOG last Data 
+        public async Task<JsonResult> GetAOGDataLast(string caseno)
+        {
+            if (caseno != null)
+            {
+                var result = await serviceServices.GetAOGLast(caseno);
+                return Json(result);
+            }
+            return Json(new { IsSuccess = false, Message = "Fetching Record failed!" });
+        }
+
+
 
 
         ///////////////DISCHARGEMENT FORM
@@ -293,7 +445,7 @@ namespace NatalCare_System.Controllers
         //ADD 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddDFForm(DischargementForm model, string patientID, string deliveryID)
+        public async Task<JsonResult> AddDFForm(DischargementForm model, string patientID, string caseno)
         {
             try
             {
@@ -303,7 +455,7 @@ namespace NatalCare_System.Controllers
                 if (ModelState.IsValid)
                 {
                     var userId = GetCurrentUserId();
-                    var result = await serviceServices.AddDFRecordAsync(model, patientID, userId, deliveryID);
+                    var result = await serviceServices.AddDFRecordAsync(model, patientID, userId, caseno);
                     return Json(result);
                 }
                 return Json(new { IsSuccess = false, Message = "Invalid Record!" });

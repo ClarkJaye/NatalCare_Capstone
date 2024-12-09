@@ -33,8 +33,12 @@ namespace NatalCare_System.Controllers
         }
 
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            if (!await CheckAccessAsync(11))
+            {
+                return RedirectTo();
+            }
             return View();
         }
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NatalCare.DataAccess.Interfaces;
-using NatalCare.Models.Entities;
+using NatalCare.Models.ViewModel.Patient;
 
 namespace NatalCare_System.ViewComponents
 {
@@ -15,8 +15,20 @@ namespace NatalCare_System.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(string patientId, string deliveryId)
         {
-            var records = await serviceServices.GetClinicalSheetRecords(patientId, deliveryId);
-            return View(records);
+            // Fetch records
+            var maternalRecord = await serviceServices.GetMaternalMonitoringRecords(patientId, deliveryId);
+            var progressLaborRecord = await serviceServices.GetProgressLaborRecords(deliveryId);
+
+
+            // Combine into a view model
+            var viewModel = new MaternalMonitoringVM
+            {
+                MaternalMonitoring = maternalRecord,
+                ProgressLabor = progressLaborRecord
+            };
+
+            // Pass the view model to the view
+            return View(viewModel);
         }
     }
 }

@@ -38,6 +38,10 @@ namespace NatalCare_System.Controllers
 
         public async Task<IActionResult> Create()
         {
+            if (!await CheckAccessAsync(13))
+            {
+                return RedirectTo();
+            }
             ViewData["roleStaff"] = await selectListServices.GetRoleStaffSelectListAsync();
             return View();
         }
@@ -100,7 +104,11 @@ namespace NatalCare_System.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
+            if (!await CheckAccessAsync(13))
+            {
+                return RedirectTo();
+            }
+            if (id < 0)
             {
                 TempData["error"] = "Staff not found!";
                 return RedirectToAction(nameof(Index));

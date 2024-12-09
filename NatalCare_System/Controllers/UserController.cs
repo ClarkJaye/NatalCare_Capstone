@@ -54,8 +54,12 @@ namespace NatalCare_System.Controllers
         }
 
 
-        public IActionResult Create()
+        public async  Task<IActionResult> Create()
         {
+            if (!await CheckAccessAsync(12))
+            {
+                return RedirectTo();
+            }
             // Create the role list for the ViewModel
             var roleList = _roleManager.Roles.Select(x => new SelectListItem
             {
@@ -127,6 +131,10 @@ namespace NatalCare_System.Controllers
         // GET: /User/Edit/{id}
         public async Task<IActionResult> Edit(string id)
         {
+            if (!await CheckAccessAsync(12))
+            {
+                return RedirectTo();
+            }
             var userDTO = await GetUserDtoById(id);
             if (userDTO == null)
             {
@@ -138,6 +146,10 @@ namespace NatalCare_System.Controllers
         // GET: /User/Details/{id}
         public async Task<IActionResult> Details(string id)
         {
+            if (!await CheckAccessAsync(12))
+            {
+                return RedirectTo();
+            }
             var userDTO = await GetUserDtoById(id);
             if (userDTO == null)
             {
@@ -235,6 +247,11 @@ namespace NatalCare_System.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
+            if (!await CheckAccessAsync(12))
+            {
+                return RedirectTo();
+            }
+
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {

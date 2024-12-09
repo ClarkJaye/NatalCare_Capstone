@@ -1,0 +1,56 @@
+﻿@model NatalCare.Models.Entities.Patients
+
+<div class="col-md-9">
+    <div class="card card-selected mb-5">
+        <div class="card-body">
+            <h5 class="card-title mb-4">Medical Records</h5>
+            <!-- Tabs for Services -->
+            <ul class="nav nav-tabs" id="patientTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="prenatal-tab" data-bs-toggle="tab" href="#prenatal" role="tab">Prenatal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="delivery-tab" data-bs-toggle="tab" href="#delivery" role="tab">Delivery</a>
+                </li>
+               @*  <li class="nav-item">
+                    <a class="nav-link" id="family-planning-tab" data-bs-toggle="tab" href="#family-planning" role="tab">Family Planning</a>
+                </li> *@
+                <li class="nav-item">
+                    <a class="nav-link" id="screening-tab" data-bs-toggle="tab" href="#screening" role="tab">Newborn Screening</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="hearing-tab" data-bs-toggle="tab" href="#hearing" role="tab">Newborn Hearing</a>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content mt-4">
+                <!-- Prenatal Tab -->
+                <div class="tab-pane fade show active" id="prenatal" role="tabpanel">
+                    @await Component.InvokeAsync("PrenatalRecords", new { patientId = Model.PatientID })
+                </div>
+
+                <!-- Delivery Tab -->
+                <div class="tab-pane fade" id="delivery" role="tabpanel">
+                    @await Component.InvokeAsync("DeliveryRecords", new { patientId = Model.PatientID })
+                </div>
+
+              @*   <!-- Family Planning Tab -->
+                <div class="tab-pane fade" id="family-planning" role="tabpanel">
+                    @await Component.InvokeAsync("FamilyPlanningRecords", new { patientId = Model.PatientID })
+                </div> *@
+
+                <!-- Screening Tab -->
+                <div class="tab-pane fade" id="screening" role="tabpanel">
+                    @await Component.InvokeAsync("ScreeningsRecords", new { patientId = Model.PatientID })
+                </div>
+
+                <!-- Hearing Tab -->
+                <div class="tab-pane fade" id="hearing" role="tabpanel">
+                    @await Component.InvokeAsync("HearingRecords", new { patientId = Model.PatientID })   
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

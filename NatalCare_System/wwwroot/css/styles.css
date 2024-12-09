@@ -67,10 +67,29 @@ body {
     padding: 0 !important;
 }
 
+.card-selected {
+    border-radius: 12px !important;
+    background: var(--light) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header-selected {
+    font-weight: 500;
+    border-bottom: 2px solid #e0e0e0;
+    background: var(--light) !important;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+}
+
 .modal, .modal-open {
     padding: 0 !important;
 }
 
+
+.bg-pink {
+    color: #fff!important;
+    background-color: #FC7995 !important;
+}
 
 .text-pink{
     color: var(--pink);
@@ -350,8 +369,11 @@ ul#patientManagementMenu {
     color: var(--dark) !important;
     font-size: 14px;
 }
-.table tbody td {
+
+.table tbody td,
+.table tbody th {
     font-size: 14px;
+    vertical-align: middle;
 }
 .dt-search {
     margin-bottom: 1rem;
@@ -425,4 +447,27 @@ input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+/* Tab Panel */
+.nav-tabs .nav-link {
+    color: var(--dark);
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--pink);
+    font-weight: bold;
+}
+
+label.form-check-label {
+    cursor: pointer;
+}
+
+#selectedYear, #servicesYear{
+    padding: .2rem .7rem .2rem .7rem !important;
+}
+
+
+#selectedMonth, #servicesMonth {
+    padding: .2rem 1.5rem .2rem .7rem !important;
 }

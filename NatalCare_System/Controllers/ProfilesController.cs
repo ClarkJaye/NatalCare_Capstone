@@ -11,13 +11,19 @@ namespace NatalCare_System.Controllers
     {
         private readonly IProfileServices profileServices;
 
-        public ProfilesController(IProfileServices profileServices)
+        public ProfilesController(IProfileServices profileServices, IModuleAccessServices moduleAccessServices)
+            : base(moduleAccessServices)
         {
             this.profileServices = profileServices;
         }
 
         public async Task<IActionResult> Index()
         {
+            if (!await CheckAccessAsync(11))
+            {
+                return RedirectTo();
+            }
+
             var response = await profileServices.GetProfiles();
             if (response.Count > 0)
             {
@@ -27,8 +33,12 @@ namespace NatalCare_System.Controllers
         }
 
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            if (!await CheckAccessAsync(11))
+            {
+                return RedirectTo();
+            }
             return View();
         }
 

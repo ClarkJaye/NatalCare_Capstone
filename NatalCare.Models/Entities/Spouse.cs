@@ -19,6 +19,7 @@ namespace NatalCare.Models.Entities
         [StringLength(200)]
         public string? Address { get; set; }
         public string? Occupation { get; set; }
+        public string? Nationality { get; set; }
         public DateOnly? Birthdate { get; set; }
 
     }

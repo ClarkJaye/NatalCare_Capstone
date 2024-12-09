@@ -1,0 +1,141 @@
+﻿@model NatalCare.Models.Entities.OpdVisit
+
+@{
+    ViewData["Title"] = "Out-Patient (OPD) Records";
+    ViewData["NavTitle"] = "Out-Patient (OPD) Records / Details";
+    Layout = "_UserLayout";
+}
+
+<!-- NAVBAR -->
+<partial name="Partial/_Navbar" />
+
+<div class="mx-4">
+    <div class="d-flex align-items-center justify-content-start gap-3 mb-4">
+        <a asp-controller="OPD" asp-action="Index" asp-route-id="" class="btn btn-sm btn-outline-pink">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to List</span>
+        </a>
+    </div>
+
+    <div class="card w-75 mx-auto shadow-sm card-selected mt-2">
+        <div class="card-body">
+            <div class="row mb-5">
+                <h5 class="px-2 mb-3 text-center fw-bold">OPD DETAILS</h5>
+                <div class="col-md-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">Name of Patient:</h6>
+                        <div class="border-bottom flex-grow-1">
+                            <span class="px-2">
+                                Jay Clark Jimenez Anore
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">Age:</h6>
+                        <div class="border-bottom flex-grow-1">
+                            <span class="px-2">
+
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                        <div class="border-bottom flex-grow-1">
+                            <span class="px-2">
+                                Tipolo, Mandaue City Cebu
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <h6 class="me-2 mb-0 fw-bold">OB History:</h6>
+                        <div class="border-bottom flex-grow-1">
+                            <span class="px-2">
+                                Sample Data Test
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="divider bg-pink" />
+
+            <!-- Physical Examination -->
+            <div class="mb-3">
+                <h5 class="fw-bold" style="font-size:1.2rem;">Service Details</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <h6 class="me-2 mb-0 fw-bold">Name of Patient:</h6>
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-2">
+                                    Jay Clark Jimenez Anore
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <h6 class="me-2 mb-0 fw-bold">Age:</h6>
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-2">
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-2">
+                                    Tipolo, Mandaue City Cebu
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <h6 class="me-2 mb-0 fw-bold">OB History:</h6>
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-2">
+                                    Sample Data Test
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+    });
+
+</script>
+
+
+
+
+
+
+
+
+

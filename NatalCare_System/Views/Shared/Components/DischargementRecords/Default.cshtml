@@ -1,0 +1,644 @@
+﻿@model NatalCare.Models.Entities.DischargementForm
+
+
+<div class="d-flex justify-content-center align-items-center flex-column ">
+    <h5 class="px-2 mb-3 text-center fw-bold">DISCHARGEMENT FORM</h5>
+    <div class="d-flex align-items-center">
+        <h6 class="me-2 mb-0 fw-bold">CASE NO#:</h6>
+        <input type="hidden" id="delID" name="CaseNo" value="@ViewBag.DeliveryId" />
+
+        <div class="border-bottom flex-grow-1">
+            <span class="px-2 h6">
+                @ViewBag.DeliveryId
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-end my-3 gap-3 px-2">
+    @if (Model == null || Model.CaseNo == null){
+        <button class="btn btn-sm btn-pink" data-bs-toggle="modal" data-bs-target="#DFAddModal">
+            <i class="fas fa-plus"></i>
+            <span>Add New</span>
+        </button>
+    }
+    else{
+        <button id="printDFBtn" class="btn btn-sm btn-success" data-dfid="@Model.Id">
+            <i class="fas fa-save"></i>
+            <span>Print</span>
+        </button>
+        <button id="editDFBtn" class="btn btn-sm btn-primary" data-dfid="@Model.Id">
+            <i class="fas fa-pencil-alt"></i>
+            <span>Edit</span>
+        </button>
+    }
+</div>
+
+@if (Model == null || Model.CaseNo == null)
+{
+    <div class="alert alert-primary" role="alert">
+        No Dischargement Data Added Yet!
+    </div>
+}
+else{
+    <div class="container mt-4">
+        @* Patient Basic Info *@
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">NAME OF PATIENT:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.Patient?.FirstName @Model.Patient?.MiddleName  @Model.Patient?.LastName
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">HOSP. NO#:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.Hosp_No
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Date & Time Admitted:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.Delivery?.Date_Admitted @Model.Delivery?.Time_Admitted
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Date & Time Discharged:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.Delivery?.Date_Discharged @Model.Delivery?.Time_Discharged
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="divider bg-pink" />
+
+        <div class="row mb-4">
+            <div class="col-md-12 mb-4">
+                <label class="fw-bold">COMPLETE DIAGNOSIS:</label>
+                <div class="border-bottom py-3">
+                    <span class="px-3">
+                       @Model.CompleteDiagnosis
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-12 mb-4">
+                <label class="fw-bold">MEDICATIONS:</label>
+                <div class="border-bottom py-3">
+                    <span class="px-3">
+                        @Model.Medications
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <hr class="divider bg-pink" />
+
+        @* Discharge & Instructions *@
+        <fieldset class="mb-3">
+            <legend class="fw-bold" style="font-size:1.2rem;">DISCHARGED INSTRUCTIONS:</legend>
+            <H6 class="fw-bold">Advice & Counsel</H6>
+            <div class="row mt-2">
+                @* MOTHER *@
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold mb-2">MOTHER:</label>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="mPostpartum" class="update-checkbox custom-checkbox" @(Model.PostpartumCareAndHygiene == true ? "checked" : "") disabled />
+                        <label for="mPostpartum" class="form-check-label">Post-Partum care & hygiene</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="mNutrition" class="update-checkbox custom-checkbox" @(Model.Nutrition == true ? "checked" : "") disabled />
+                        <label for="mNutrition" class="form-check-label">Nutrition</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="mIron_Folate" class="update-checkbox custom-checkbox" @(Model.IronFolate == true ? "checked" : "") disabled />
+                        <label for="mIron_Folate" class="form-check-label">Iron/Folate</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="mbSpacing" class="update-checkbox custom-checkbox" @(Model.BirthSpacingFamilyPlanning == true ? "checked" : "") disabled />
+                        <label for="mbSpacing" class="form-check-label">Birth spacing & Family Planning</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="mDangersigns" class="update-checkbox custom-checkbox" @(Model.DangerSignsMother == true ? "checked" : "") disabled  />
+                        <label for="mDangersigns" class="form-check-label">Danger Signs</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="mfollowVisit" class="update-checkbox custom-checkbox" @(Model.FollowUpVisitsMother == true ? "checked" : "") disabled />
+                        <label for="mfollowVisit" class="form-check-label">Follow-up visits</label>
+                    </div>
+                </div>
+                @* BABY *@
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold mb-2">BABY:</label>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="bbExclusive" class="update-checkbox custom-checkbox" @(Model.ExclusiveBreastFeeding == true ? "checked" : "") disabled />
+                        <label for="bbExclusive" class="form-check-label">Exclusive Breastfeeding</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="bbHygiene" class="update-checkbox custom-checkbox" @(Model.HygieneCordCareWarmth == true ? "checked" : "") disabled />
+                        <label for="bbHygiene" class="form-check-label">Hygiene, Cord care and Warmth</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="bbSpecialAdvice" class="update-checkbox custom-checkbox" @(Model.SpecialAdviceLowBirthWeight == true ? "checked" : "") disabled />
+                        <label for="bbSpecialAdvice" class="form-check-label">Special advice if low birth weight</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="bbDangersigns" class="update-checkbox custom-checkbox" @(Model.DangerSignsBaby == true ? "checked" : "") disabled />
+                        <label for="bbDangersigns" class="form-check-label">Danger Signs</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-2 gap-2">
+                        <input type="checkbox" id="bbfollowVisit" class="update-checkbox custom-checkbox" @(Model.FollowUpVisitsBaby == true ? "checked" : "") disabled />
+                        <label for="bbfollowVisit" class="form-check-label">Follow-up visits</label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <hr class="divider bg-pink" />
+
+        @* Follow-Up and Prepared By *@
+        <div class="row mb-4">
+            <div class="col-md-12 mb-5">
+                <label class="fw-bold">FOLLOW-UP MANAGEMENT:</label>
+                <div class="border-bottom py-3">
+                    @* Patient is in good condition, advised to maintain proper diet and hydration. *@
+                    @Model.FollowUpManagement
+                </div>
+            </div>
+            <div class="col-md-6 mt-4 text-center">
+                <div class="border-bottom px-3 mx-5">@Model.Prepared?.FirstName @Model.Prepared?.MiddleName @Model.Prepared?.LastName</div>
+                <label class="fw-bold mt-2 d-block">Prepared By</label>
+            </div>
+            <div class="col-md-6 mt-4 text-center">
+                <div class="border-bottom px-3 mx-5">@Model.Midwife?.FirstName @Model.Midwife?.MiddleName @Model.Midwife?.LastName</div>
+                <label class="fw-bold mt-2 d-block">Attending Midwife</label>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+@* Add Modal  *@
+<div class="modal fade" id="DFAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Add Dischargement Form</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="AddDFForm" method="POST">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        @* Hosp No  *@
+                        <div class="col-md-6 mb-3">
+                            <label for="Hosp_No-Add" class="control-label">HOSP. NO#</label>
+                            <input type="text" id="Hosp_No-Add" name="Hosp_No" class="form-control" placeholder="Enter Hosp No" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                        </div>
+
+                        @* Complete Diagnosis  *@
+                        <div class="col-md-6 mb-4">
+                            <label for="CompleteDiagnosis-Add" class="control-label">Complete Diagnosis</label>
+                            <textarea id="CompleteDiagnosis-Add" name="CompleteDiagnosis" class="form-control" placeholder="Enter Complete Diagnosis" rows="3"></textarea>
+                        </div>
+
+                        @* Medications  *@
+                        <div class="col-md-6 mb-4">
+                            <label for="Medications-Add" class="control-label">Medications</label>
+                            <textarea id="Medications-Add" name="Medications" class="form-control" placeholder="Enter Medications" rows="3"></textarea>
+                        </div>
+
+                        @* Mother  *@
+                        <h6 class="fw-bold mb-2">ADVICE AND COUNSEL:</h6>
+                        <div class="col-md-6 mb-3">
+                            <label class="control-label fw-bold">Mother</label>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="PostpartumCareAndHygiene-Add" name="PostpartumCareAndHygiene" class="custom-checkbox" value="true" />
+                                <label for="PostpartumCareAndHygiene-Add" class="form-check-label">Post-Partum Care and Hygiene</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="Nutrition-Add" name="Nutrition" class="custom-checkbox" value="true" />
+                                <label for="Nutrition-Add" class="form-check-label">Nutrition</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="IronFolate-Add" name="IronFolate" class="custom-checkbox" value="true" />
+                                <label for="IronFolate-Add" class="form-check-label">Iron / Folate</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="BirthSpacingFamilyPlanning-Add" name="BirthSpacingFamilyPlanning" class="custom-checkbox" value="true" />
+                                <label for="BirthSpacingFamilyPlanning-Add" class="form-check-label">Birth Spacing and Family Planning</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="DangerSignsMother-Add" name="DangerSignsMother" class="custom-checkbox" value="true" />
+                                <label for="DangerSignsMother-Add" class="form-check-label">Danger Signs</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="FollowUpVisitsMother-Add" name="FollowUpVisitsMother" class="custom-checkbox" value="true" />
+                                <label for="FollowUpVisitsMother-Add" class="form-check-label">Follow-up Visits</label>
+                            </div>
+                        </div>
+
+                        @* BABY  *@
+                        <div class="col-md-6 mb-3">
+                            <label class="control-label fw-bold">Baby</label>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="ExclusiveBreastFeeding-Add" name="ExclusiveBreastFeeding" class="custom-checkbox" value="true" />
+                                <label for="ExclusiveBreastFeeding-Add" class="form-check-label">Exclusive BreastFeeding</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="HygieneCordCareWarmth-Add" name="HygieneCordCareWarmth" class="custom-checkbox" value="true" />
+                                <label for="HygieneCordCareWarmth-Add" class="form-check-label">Hygiene, Cord care and Warmth</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="SpecialAdviceLowBirthWeight-Add" name="SpecialAdviceLowBirthWeight" class="custom-checkbox" value="true" />
+                                <label for="SpecialAdviceLowBirthWeight-Add" class="form-check-label">Special advice if low birth weight</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="DangerSignsBaby-Add" name="DangerSignsBaby" class="custom-checkbox" value="true" />
+                                <label for="DangerSignsBaby-Add" class="form-check-label">Danger Signs</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="FollowUpVisitsBaby-Add" name="FollowUpVisitsBaby" class="custom-checkbox" value="true" />
+                                <label for="FollowUpVisitsBaby-Add" class="form-check-label">Follow-up Visits</label>
+                            </div>
+                        </div>
+
+                        @* Follow-Up Management  *@
+                        <div class="col-md-12 mb-3">
+                            <label for="FollowUpManagement-Add" class="control-label">Follow-up Management</label>
+                            <textarea id="FollowUpManagement-Add" name="FollowUpManagement" class="form-control" placeholder="Enter follow up management" rows="3"></textarea>
+                        </div>
+
+                        @* Notes *@
+                        <div class="col-md-12 mb-3">
+                            <label for="Notes-Add" class="control-label">Notes (Optional)</label>
+                            <textarea id="Notes-Add" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-group col-md-6 mb-5">
+                            <label for="PreparedByDF-Add" class="control-label">Prepared By</label>
+                            <select id="PreparedByDF-Add" class="form-select" name="PreparedBy" asp-items="ViewBag.allStaffList">
+                                <option value="" class="text-muted" selected>select staff</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-6 mb-5">
+                            <label for="MidwifeIDDF-Add" class="control-label">Midwife</label>
+                            <select id="MidwifeIDDF-Add" class="form-select" name="MidwifeID" asp-items="ViewBag.midwifeList">
+                                <option value="" class="text-muted" selected>select midwife</option>
+                            </select>
+                        </div>
+
+                        @* Submit and Close Buttons *@
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-pink">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Edit Modal  *@
+<div class="modal fade" id="DFEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Edit Dischargement Form</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="UpdateDFForm" method="POST">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <input type="hidden" id="dfId-Edit" name="Id" />
+                        <input type="hidden" id="caseNoDF-Edit" name="CaseNo" />
+                        <input type="hidden" id="patientIDDF-Edit" name="PatientID" />
+
+                        @* Hosp No  *@
+                        <div class="col-md-6 mb-3">
+                            <label for="Hosp_No-Edit" class="control-label">HOSP. NO#</label>
+                            <input type="text" id="Hosp_No-Edit" name="Hosp_No" class="form-control" placeholder="Enter Hosp No" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                        </div>
+
+                        @* Complete Diagnosis  *@
+                        <div class="col-md-12 mb-4">
+                            <label for="CompleteDiagnosis-Edit" class="control-label">Complete Diagnosis</label>
+                            <textarea id="CompleteDiagnosis-Edit" name="CompleteDiagnosis" class="form-control" placeholder="Enter Complete Diagnosis" rows="5"></textarea>
+                        </div>
+
+                        @* Medications  *@
+                        <div class="col-md-12 mb-4">
+                            <label for="Medications-Edit" class="control-label">Medications</label>
+                            <textarea id="Medications-Edit" name="Medications" class="form-control" placeholder="Enter Medications" rows="5"></textarea>
+                        </div>
+
+                        @* Mother  *@
+                        <h6 class="fw-bold mb-2">ADVICE AND COUNSEL:</h6>
+                        <div class="col-md-6 mb-3">
+                            <label class="control-label fw-bold">Mother</label>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="PostpartumCareAndHygiene-Edit" name="PostpartumCareAndHygiene" class="custom-checkbox" value="true" />
+                                <label for="PostpartumCareAndHygiene-Edit" class="form-check-label">Post-Partum Care and Hygiene</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="Nutrition-Edit" name="Nutrition" class="custom-checkbox" value="true" />
+                                <label for="Nutrition-Edit" class="form-check-label">Nutrition</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="IronFolate-Edit" name="IronFolate" class="custom-checkbox" value="true" />
+                                <label for="IronFolate-Edit" class="form-check-label">Iron / Folate</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="BirthSpacingFamilyPlanning-Edit" name="BirthSpacingFamilyPlanning" class="custom-checkbox" value="true" />
+                                <label for="BirthSpacingFamilyPlanning-Edit" class="form-check-label">Birth Spacing and Family Planning</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="DangerSignsMother-Edit" name="DangerSignsMother" class="custom-checkbox" value="true" />
+                                <label for="DangerSignsMother-Edit" class="form-check-label">Danger Signs</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="FollowUpVisitsMother-Edit" name="FollowUpVisitsMother" class="custom-checkbox" value="true" />
+                                <label for="FollowUpVisitsMother-Edit" class="form-check-label">Follow-up Visits</label>
+                            </div>
+                        </div>
+
+                        @* BABY  *@
+                        <div class="col-md-6 mb-3">
+                            <label class="control-label fw-bold">Baby</label>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="ExclusiveBreastFeeding-Edit" name="ExclusiveBreastFeeding" class="custom-checkbox" value="true" />
+                                <label for="ExclusiveBreastFeeding-Edit" class="form-check-label">Exclusive BreastFeeding</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="HygieneCordCareWarmth-Edit" name="HygieneCordCareWarmth" class="custom-checkbox" value="true" />
+                                <label for="HygieneCordCareWarmth-Edit" class="form-check-label">Hygiene, Cord care and Warmth</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="SpecialAdviceLowBirthWeight-Edit" name="SpecialAdviceLowBirthWeight" class="custom-checkbox" value="true" />
+                                <label for="SpecialAdviceLowBirthWeight-Edit" class="form-check-label">Special advice if low birth weight</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="DangerSignsBaby-Edit" name="DangerSignsBaby" class="custom-checkbox" value="true" />
+                                <label for="DangerSignsBaby-Edit" class="form-check-label">Danger Signs</label>
+                            </div>
+                            <div class="form-check d-flex align-items-center mb-2 gap-2" style="cursor:pointer;">
+                                <input type="checkbox" id="FollowUpVisitsBaby-Edit" name="FollowUpVisitsBaby" class="custom-checkbox" value="true" />
+                                <label for="FollowUpVisitsBaby-Edit" class="form-check-label">Follow-up Visits</label>
+                            </div>
+                        </div>
+
+                        @* Follow-Up Management  *@
+                        <div class="col-md-12 mb-3">
+                            <label for="FollowUpManagement-Edit" class="control-label">Follow-up Management</label>
+                            <textarea id="FollowUpManagement-Edit" name="FollowUpManagement" class="form-control" placeholder="Enter follow up management" rows="3"></textarea>
+                        </div>
+
+                        @* Notes *@
+                        <div class="col-md-12 mb-3">
+                            <label for="NotesDF-Edit" class="control-label">Notes (Optional)</label>
+                            <textarea id="NotesDF-Edit" name="Notes" class="form-control" placeholder="Enter any relevant notes" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-group col-md-6 mb-5">
+                            <label for="PreparedDF-Edit" class="control-label">Prepared By</label>
+                            <select id="PreparedDF-Edit" class="form-select" name="PreparedBy" asp-items="ViewBag.allStaffList">
+                                <option value="" class="text-muted" selected>select staff</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-6 mb-5">
+                            <label for="MidwifeDF-Edit" class="control-label">Midwife</label>
+                            <select id="MidwifeDF-Edit" class="form-select" name="MidwifeID" asp-items="ViewBag.midwifeList">
+                                <option value="" class="text-muted" selected>select midwife</option>
+                            </select>
+                        </div>
+
+                        @* Submit and Close Buttons *@
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-pink">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var patID = document.getElementById('patID').value;
+    var delID = document.getElementById('delID').value;
+
+    $('#printDFBtn').on("click", function () {
+        var caseNo = $(this).data('dfid');
+        PrintForm(caseNo);
+    });
+
+
+    $("#UpdateDFForm").on("submit", function (e) {
+        e.preventDefault();
+        UpdatePE();
+    });
+
+    $("#editDFBtn").on("click", function (e) {
+        var id = $(this).data('dfid');
+        EditDischargement(id);
+    });
+
+    // Update 
+    function UpdatePE() {
+        var formData = $("#UpdateDFForm").serialize();
+        $.ajax({
+            url: '@Url.Action("UpdateDFRecord", "Delivery")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                if (result.isSuccess) {
+                    $('#DFEditModal').modal('hide');
+                    toastr.success(result.message)
+                    LoadDFComponent();
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                toastr.error('An error occurred while updating the  record.');
+                console.error('Error:', err);
+            }
+        });
+    }
+    // Edit 
+    function EditDischargement(dfId) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetDFRecord", "Delivery")',
+            data: { id: dfId },
+            success: function (response) {
+                if (response && response.isSuccess) {
+                    var item = response.item.data;
+                    console.log(item)
+                    // Populate modal fields
+                    $('#dfId-Edit').val(item.id);
+                    $('#caseNoDF-Edit').val(item.caseNo);
+                    $('#patientIDDF-Edit').val(item.patientID);
+
+                    $('#Hosp_No-Edit').val(item.hosp_No);
+                    $('#CompleteDiagnosis-Edit').val(item.completeDiagnosis);
+                    $('#Medications-Edit').val(item.medications);
+                    // Mother
+                    $('#PostpartumCareAndHygiene-Edit').prop('checked', item.postpartumCareAndHygiene);
+                    $('#Nutrition-Edit').prop('checked', item.nutrition);
+                    $('#IronFolate-Edit').prop('checked', item.ironFolate);
+                    $('#BirthSpacingFamilyPlanning-Edit').prop('checked', item.birthSpacingFamilyPlanning);
+                    $('#DangerSignsMother-Edit').prop('checked', item.dangerSignsMother);
+                    $('#FollowUpVisitsMother-Edit').prop('checked', item.followUpVisitsMother);
+                    // Baby
+                    $('#ExclusiveBreastFeeding-Edit').prop('checked', item.exclusiveBreastFeeding);
+                    $('#HygieneCordCareWarmth-Edit').prop('checked', item.hygieneCordCareWarmth);
+                    $('#SpecialAdviceLowBirthWeight-Edit').prop('checked', item.specialAdviceLowBirthWeight);
+                    $('#DangerSignsBaby-Edit').prop('checked', item.dangerSignsBaby);
+                    $('#FollowUpVisitsBaby-Edit').prop('checked', item.followUpVisitsBaby);
+                   
+                    var prepared = response.item.prepared;
+                    $('#PreparedDF-Edit').empty().append('<option disabled selected>select prepared by</option>');
+                    prepared.forEach(function (data) {
+                        $('#PreparedDF-Edit').append(
+                            $('<option>', {
+                                value: data.id,
+                                text: data.firstname + " " + data.middlename + " " + data.lastname,
+                                selected: item.preparedBy === data.id
+                            })
+                        );
+                    }); 
+                    var midwife = response.item.midwife;
+                    $('#MidwifeDF-Edit').empty().append('<option disabled selected>select midwife</option>');
+                    midwife.forEach(function (data) {
+                        $('#MidwifeDF-Edit').append(
+                            $('<option>', {
+                                value: data.id,
+                                text: data.firstname + " " + data.middlename + " " + data.lastname,
+                                selected: item.midwifeID === data.id
+                            })
+                        );
+                    });
+
+
+                    $('#FollowUpManagement-Edit').val(item.followUpManagement);
+                    $('#NotesDF-Edit').val(item.notes);
+
+                    // Show Edit Modal
+                    $('#DFEditModal').modal('show');
+                } else {
+                    toastr.error(response.message || 'Unable to load dishchargement record.');
+                }
+            },
+            error: function () {
+                toastr.error('An error occurred while loading the dishchargement  record.');
+            }
+        });
+    }
+
+
+    $("#AddDFForm").on("submit", function (e) {
+         e.preventDefault();
+         AddDF();
+     });
+
+    //Add
+    function AddDF() {
+        var formData = $('#AddDFForm').serializeArray();
+        formData.push({ name: 'patientID', value: patID });
+        formData.push({ name: 'deliveryID', value: delID});
+
+        $.ajax({
+            url: '@Url.Action("AddDFForm", "Delivery")',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                if (result.isSuccess) {
+                    toastr.success(result.message)
+                    LoadDFComponent();
+                    $('#DFAddModal').modal('hide');
+                } else {
+                    toastr.error(result.message);
+                }
+            },
+            error: function (err) {
+                console.error('Error:', err);
+            }
+        });
+    }
+
+
+    //Load All Records
+    function LoadDFComponent() {
+        $.ajax({
+            url: '@Url.Action("DischargmentRecord", "Delivery")',
+            data: { patientId: patID, caseno: delID },
+            success: function (result) {
+                $('#dischargementForm').html(result);
+            },
+            error: function () {
+                toastr.error("Failed to reload the dischagement records.");
+            }
+        });
+    }
+
+
+    function PrintForm(caseNo) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("PrintDichargementForm", "Print")',
+            data: { id: caseNo },
+            success: function (response) {
+                if (response && response.isSuccess === false) {
+                    alert(response.message);
+                } else if (response && response.isSuccess === true) {
+                    window.location.href = "/Print/Dischargement_Form?id=" + response.dichargementId;
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle error
+                alert("An error occurred, Please ask the It support.");
+            }
+        });
+    }
+</script>

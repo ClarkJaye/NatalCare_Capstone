@@ -1,0 +1,79 @@
+﻿@model List<NatalCare.Models.Entities.Prenatal>
+
+@{
+    Layout = null;
+}
+
+
+<div class="table-responsive" style="max-height:600px;">
+    <table id="DisplayPrenatalTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Case No#</th>
+                <th>Date Visit</th>
+                <th>Gravida</th>
+                <th>Para</th>
+                <th>Abortion</th>
+                <th>Still Birth</th>
+                <th>LMP</th>
+                <th>EDC</th>
+                <th>H.R Code</th>
+                <th>Notes</th>
+                <th class="text-center">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CaseNo</td>
+                    <td>@item.DateVisit?.ToString("MMM dd yyyy h:mm tt")</td>
+                    <td>@item.Gravida</td>
+                    <td>@item.Para</td>
+                    <td>@item.Abortion</td>
+                    <td>@item.StillBirth</td>
+                    <td>@item.LMP?.ToString("MMM dd yyyy")</td>
+                    <td>@item.EDC?.ToString("MMM dd yyyy")</td>
+                    <td>@item.HRCODE</td>
+                    <td style="max-width: 200px; word-wrap: break-word;">@item.Notes</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-pink" id="prenatalSelectBtn" data-caseid="@item.CaseNo">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Select</span>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    // Initialize DataTables
+    $('#prenatalListContainer #DisplayPrenatalTable').DataTable({
+        paging: true,
+        lengthChange: true,
+        searching: true,
+        ordering: true,
+        lengthMenu: [10, 20, 50, 100],
+        language: {
+            search: "_INPUT_",
+            searchPlaceholder: "Search prenatal..."
+        },
+        language: {
+            paginate: {
+                previous: "Previous",
+                next: "Next"
+            }
+        },
+        info: true,
+        autoWidth: false,
+        responsive: true,
+        columnDefs: [
+            { orderable: false, targets: -1 }
+        ]
+    });
+</script>
+
+

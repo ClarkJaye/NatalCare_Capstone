@@ -1,0 +1,64 @@
+﻿@model NatalCare.Models.Entities.Newborn
+
+<div class="col-md-9">
+    <div id="medicalCard" class="card card-selected mb-5" data-patient-id="@Model.MotherID">
+        <div class="card-body">
+            <h5 class="card-title mb-4">Medical Records</h5>
+            <!-- Tabs for Services -->
+            <ul class="nav nav-tabs" id="patientTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="screening-tab" data-bs-toggle="tab" href="#screening" role="tab">Newborn Screening</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="hearing-tab" data-bs-toggle="tab" href="#hearing" role="tab">Newborn Hearing</a>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content mt-4">
+                <!--  Screening Tab  -->
+                <div class="tab-pane fade show active" id="screening" role="tabpanel">
+                    @await Component.InvokeAsync("ScreeningsRecords", new { patientId = Model.MotherID })
+                </div>
+
+                <!-- Hearing Tab --> 
+                <div class="tab-pane fade" id="hearing" role="tabpanel">
+                    @await Component.InvokeAsync("HearingRecords", new { patientId = Model.MotherID })
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@* <script>
+    $(document).ready(function () {
+        // Retrieve patientId from the card's data attribute
+        var patientId = $('#medicalCard').data('patient-id');
+        console.log(patientId)
+        // Listen for tab changes
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var tabId = $(e.target).attr('href'); // Get the tab pane ID
+            var url = ''; 
+
+            switch (tabId) {
+                case '#screening':
+                    url = '/NewbornScreening/ScreeningRecords?patientId=' + patientId;
+                    break;
+                case '#hearing':
+                    url = '/NewbornHearing/HearingRecords?patientId=' + patientId;
+                    break;
+            }
+
+            // Load content dynamically
+            if (url) {
+                $.get(url, function (data) {
+                    $(tabId).html(data); // Inject the retrieved content into the tab pane
+                });
+            }
+        });
+
+        $('a[data-bs-toggle="tab"].active').trigger('shown.bs.tab');
+    });
+
+</script> *@

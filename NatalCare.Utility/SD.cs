@@ -1,5 +1,5 @@
 ﻿
-namespace PrinceQ.Utility
+namespace NatalCare.Utility
 {
     public static class SD
     {

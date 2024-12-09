@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Edit Patient";
+    ViewData["NavTitle"] = "Edit Patient";
     Layout = "_UserLayout";
 }
 
@@ -10,33 +11,34 @@
 <partial name="Partial/_Navbar" />
 
 
-
-<div class="mx-5">
-    <div class="card card-selected w-75 mx-auto mt-5">
-        <div class="card-header d-flex justify-content-between align-items-center">
+<div class="card w-75 mx-auto mt-5 shadow">
+        <div class="card-header bg-pink text-white d-flex justify-content-between align-items-center">
             <h5 class="card-title my-2">Edit Patient</h5>
         </div>
         <div class="card-body m-4 pt-0">
-            <form asp-action="Edit" method="post">
+            <form asp-controller="Patient" asp-action="Edit" method="post">
+                <input asp-for="PatientID" class="form-control" hidden />
+                <input asp-for="SpouseId" class="form-control" hidden />
 
-                <h5 class="card-title mb-3"> Basic Information</h5>
-                <div class="row form-group">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input asp-for="PatientID" class="form-control" hidden />
+                <div class="row">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <!-- Basic Information Section -->
+                    <h5 class="mb-3">Basic Information</h5>
 
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="FirstName" class="control-label">First Name</label>
-                        <input asp-for="FirstName" class="form-control" placeholder="Enter Firstname" required />
+                        <input asp-for="FirstName" class="form-control" placeholder="e.g, Maria" required />
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="MiddleName" class="control-label">Middle Name</label>
-                        <input asp-for="MiddleName" class="form-control" placeholder="Enter Middlename" />
+                        <input asp-for="MiddleName" class="form-control" placeholder="e.g, asuncion" />
                         <span asp-validation-for="MiddleName" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="LastName" class="control-label">Last Name</label>
-                        <input asp-for="LastName" class="form-control" placeholder="Enter Lastname" required />
+                        <input asp-for="LastName" class="form-control" placeholder="e.g, Cruz" required />
                         <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
@@ -46,12 +48,12 @@
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="PlaceOfBirth" class="control-label">Place of Birth</label>
-                        <input asp-for="PlaceOfBirth" class="form-control" placeholder="Enter place of birth" required />
+                        <input asp-for="PlaceOfBirth" class="form-control" placeholder="e.g., Street, City, Province" required />
                         <span asp-validation-for="PlaceOfBirth" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
-                        <label asp-for="Address" class="control-label"></label>
-                        <input asp-for="Address" class="form-control" placeholder="Enter address" required />
+                        <label asp-for="Address" class="control-label">Address</label>
+                        <input asp-for="Address" class="form-control" placeholder="Enter full address (e.g., Street, Barangay, City, Province)" required />
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
@@ -60,27 +62,37 @@
                             <option disabled selected>select gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
+                            <option value="Others">Others</option>
                         </select>
                         <span asp-validation-for="Gender" class="text-danger"></span>
-                    </div>        
+                    </div>
+
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Occupation" class="control-label"></label>
-                        <input asp-for="Occupation" class="form-control" placeholder="Enter occupation" required />
+                        <input asp-for="Occupation" class="form-control" placeholder="e.g, Civil Enginneer, Teacher" required />
                         <span asp-validation-for="Occupation" class="text-danger"></span>
                     </div>
-                    <div class="form-group col-md-4 mb-4">
+
+                    <div class="form-group col-md-4 mb-3">
                         <label asp-for="CivilStatus" class="control-label">Civil Status</label>
-                        <input asp-for="CivilStatus" class="form-control" placeholder="Enter civil status" required />
+                        <select asp-for="CivilStatus" class="form-select" required>
+                            <option disabled selected>select status</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Separated">Separated</option>
+                            <option value="Others">Others</option>
+                        </select>
                         <span asp-validation-for="CivilStatus" class="text-danger"></span>
                     </div>
+
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="MobileNumber" class="control-label">Mobile Number</label>
-                        <input asp-for="MobileNumber" class="form-control" placeholder="Enter mobile number" required />
+                        <input asp-for="MobileNumber" class="form-control" placeholder="e.g, 092134657899" />
                         <span asp-validation-for="MobileNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="TeleNumber" class="control-label">Telephone Number</label>
-                        <input asp-for="TeleNumber" class="form-control" placeholder="Enter telephone number" />
+                        <input asp-for="TeleNumber" class="form-control" placeholder="Enter tel number" />
                         <span asp-validation-for="TeleNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
@@ -89,86 +101,105 @@
                         <span asp-validation-for="Religion" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
-                        <label asp-for="BloodType" class="control-label">Blood Type</label>
-                        <input asp-for="BloodType" class="form-control" placeholder="Enter blood type" />
-                        <span asp-validation-for="BloodType" class="text-danger"></span>
+                        <label asp-for="Nationality" class="control-label">Nationality</label>
+                        <input asp-for="Nationality" class="form-control" placeholder="Enter nationality" />
+                        <span asp-validation-for="Nationality" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
+                        <label asp-for="BloodType" class="control-label">Blood Type</label>
+                        <input asp-for="BloodType" class="form-control text-uppercase" placeholder="O+, AB" />
+                        <span asp-validation-for="BloodType" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-md-4 mb-3" hidden>
+                        <label asp-for="StatusCode" class="control-label"></label>
+                        <input asp-for="StatusCode" class="form-control" />
+                        <span asp-validation-for="StatusCode" class="text-danger"></span>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <!--Insurance Side-->
+                    <h5 class="card-title my-2 mb-3">Insurance Details</h5>
+
+                    <div class="form-group col-md-4 mb-3">
                         <label asp-for="HasPhilHealth" class="control-label">Has PhilHealth?</label>
-                        <select asp-for="HasPhilHealth" class="form-select" required>
+                        <select asp-for="HasPhilHealth" class="form-select text-muted" required>
                             <option disabled selected>Yes / No</option>
                             <option value="true">Yes</option>
                             <option value="false">No</option>
-                        </select>   
+                        </select>
                         <span asp-validation-for="HasPhilHealth" class="text-danger"></span>
                     </div>
 
                     <div class="form-group col-md-4 mb-3" id="philHealthSection" style="display:none;">
                         <label asp-for="PHIC_NO" class="control-label">PhilHealth Number</label>
-                        <input asp-for="PHIC_NO" class="form-control" placeholder="Enter PhilHealth Number" required/>
+                        <input asp-for="PHIC_NO" class="form-control" placeholder="Enter PhilHealth Number" required />
                         <span asp-validation-for="PHIC_NO" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group col-md-4 mb-3">
-                        <label asp-for="StatusCode" class="control-label">Status</label>
-                        <select asp-for="StatusCode" class="form-select" required>
-                            <option disabled selected>select status</option>
-                            <option value="AC">Alive</option>
-                            <option value="IN">Dead</option>
-                        </select>
-                        <span asp-validation-for="StatusCode" class="text-danger"></span>
-                    </div>
+                    <hr class="my-4" />
+
                     <!--Emergency Side-->
                     <h5 class="card-title my-2 mb-3">Emergency Contact Information</h5>
 
                     <div class="form-group col-md-4 mb-3">
-                        <label asp-for="Emergency_Name" class="control-label"> Emergency Name</label>
-                        <input asp-for="Emergency_Name" class="form-control" placeholder="Enter Emergency name" />
+                        <label asp-for="Emergency_Name" class="control-label"> Full Name</label>
+                        <input asp-for="Emergency_Name" class="form-control" placeholder="Enter Fullname" />
                         <span asp-validation-for="Emergency_Name" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group col-md-4 mb-5">
-                        <label asp-for="Emergency_MobileNumber" class="control-label">Emergency Contact</label>
-                        <input asp-for="Emergency_MobileNumber" class="form-control" type="number" placeholder="Enter Emergency contact" />
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="Emergency_MobileNumber" class="control-label">Mobile Number</label>
+                        <input asp-for="Emergency_MobileNumber" class="form-control" type="number" placeholder="e.g, 092134657899" />
                         <span asp-validation-for="Emergency_MobileNumber" class="text-danger"></span>
                     </div>
 
+                    <hr class="my-4" />
+
                     <!--Spouse Side-->
-                    <h5 class="card-title my-2 mb-3">Spouse / Partner's Information</h5>
-                    <input asp-for="SpouseId" class="form-control" hidden />
+
+                <div class="d-flex align-items-center justify-content-between">
+                    <h5 class="card-title">Spouse / Partner's Information</h5>
+
+                    <button type="button" id="clearBtn" class="btn btn-sm btn-outline-danger">
+                        <i class="fas fa-cancel"></i>
+                        <span>Clear</span>
+                    </button>
+                </div>
 
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Spouse.FirstName" class="control-label"> First Name</label>
-                        <input asp-for="Spouse.FirstName" class="form-control" p placeholder="Enter Firstname" required />
+                        <input asp-for="Spouse.FirstName" class="form-control" placeholder="e.g, Juan" />
                         <span asp-validation-for="Spouse.FirstName" class="text-danger"></span>
                     </div>
 
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Spouse.MiddleName" class="control-label"> Middle Name</label>
-                        <input asp-for="Spouse.MiddleName" class="form-control" p placeholder="Enter Middlename" required />
+                        <input asp-for="Spouse.MiddleName" class="form-control" p placeholder="e.g, Dela" />
                         <span asp-validation-for="Spouse.MiddleName" class="text-danger"></span>
                     </div>
 
                     <div class="form-group col-md-4 mb-3">
-                        <label asp-for="Spouse.LastName" class="control-label"> LastName Name</label>
-                        <input asp-for="Spouse.LastName" class="form-control" p placeholder="Enter Lastname" required />
+                        <label asp-for="Spouse.LastName" class="control-label"> Last Name</label>
+                        <input asp-for="Spouse.LastName" class="form-control" p placeholder="e.g, Cruz" />
                         <span asp-validation-for="Spouse.LastName" class="text-danger"></span>
                     </div>
 
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Spouse.Birthdate" class="control-label"></label>
-                        <input asp-for="Spouse.Birthdate" class="form-control" type="date" required />
+                        <input asp-for="Spouse.Birthdate" class="form-control" type="date" />
                         <span asp-validation-for="Spouse.Birthdate" class="text-danger"></span>
                     </div>
 
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Spouse.Address" class="control-label">Address</label>
-                        <input asp-for="Spouse.Address" class="form-control" placeholder="Enter full address (e.g., Street, Barangay, City)" required />
+                        <input asp-for="Spouse.Address" class="form-control" placeholder="Enter full address (e.g., Street, Barangay, City, Province)" />
                         <span asp-validation-for="Spouse.Address" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Spouse.Gender" class="control-label"></label>
-                        <select asp-for="Spouse.Gender" class="form-select" required>
+                        <select asp-for="Spouse.Gender" class="form-select">
                             <option disabled selected>select gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
@@ -179,11 +210,15 @@
 
                     <div class="form-group col-md-4 mb-3">
                         <label asp-for="Spouse.Occupation" class="control-label"></label>
-                        <input asp-for="Spouse.Occupation" class="form-control" placeholder="Enter occupation" required />
+                        <input asp-for="Spouse.Occupation" class="form-control" placeholder="e.g, civil enginneer, teacher" />
                         <span asp-validation-for="Spouse.Occupation" class="text-danger"></span>
                     </div>
 
-
+                    <div class="form-group col-md-4 mb-3">
+                        <label asp-for="Spouse.Nationality" class="control-label"></label>
+                        <input asp-for="Spouse.Nationality" class="form-control" placeholder="Enter Nationality" />
+                        <span asp-validation-for="Spouse.Nationality" class="text-danger"></span>
+                    </div>
 
                     <div class="form-group col-12 mt-3 mb-3">
                         <div class="d-flex align-items-center justify-content-end gap-3">
@@ -192,7 +227,7 @@
                                 <span>Update Patient</span>
                             </button>
                             <a class="btn btn-outline-secondary" asp-controller="Patient" asp-action="Information" asp-route-id="@Model.PatientID">
-                                <i class="fas fa-undo"></i>
+                                <i class="fas fa-arrow-left me-1"></i>
                                 <span>Back</span>
                             </a>
                         </div>
@@ -201,7 +236,6 @@
             </form>
         </div>
     </div>
-</div>
 
 
 @section Scripts {
@@ -209,17 +243,57 @@
 
     <script>
         $(document).ready(function () {
-            function togglePhilHealthSection() {
-                if ($('#HasPhilHealth').val() === 'true') {
-                    $('#philHealthSection').show();
-                } else {
-                    $('#philHealthSection').hide();
-                    $('#philHealthSection').prop("disabled", true);
-
-                }
-            }
             togglePhilHealthSection();
             $('#HasPhilHealth').on('change', togglePhilHealthSection);
+
+            $("#clearBtn").on('click', function(){
+                ClearSpouse();
+            })
+
         });
+
+        function ClearSpouse(){
+            var spouseId = $("#SpouseId").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ClearSpouse", "Patient")',
+                data: { spouseId: spouseId },
+                success: function (result) {
+                    if (result.isSuccess) {
+                        toastr.success(result.message);
+                        clearSpouseFields();
+                    } else {
+                        toastr.error(result.message);
+                    }
+                },
+                error: function () {
+                    console.log('Unable to delete the patient.');
+                }
+            });
+
+        }
+
+        function clearSpouseFields() {
+            $("#Spouse_FirstName").val("").attr("placeholder", "Enter First Name");
+            $("#Spouse_MiddleName").val("").attr("placeholder", "Enter Middle Name");
+            $("#Spouse_LastName").val("").attr("placeholder", "Enter Last Name");
+            $("#Spouse_Birthdate").val("");
+            $("#Spouse_Address").val("").attr("placeholder", "Enter Address");
+            $("#Spouse_Gender").empty();
+            $("#Spouse_Gender").append("<option disabled selected>select gender</option><option value='male'>Male</option><option value='female'>Female</option><option value='others'>Others</option>")
+            $("#Spouse_Occupation").val("").attr("placeholder", "Enter Occupation");
+        }
+
+        function togglePhilHealthSection() {
+            if ($('#HasPhilHealth').val() === 'true') {
+                $('#philHealthSection').show();
+            } else {
+                $('#philHealthSection').hide();
+                $('#philHealthSection').prop("disabled", true);
+
+            }
+        }
+
     </script>
 }

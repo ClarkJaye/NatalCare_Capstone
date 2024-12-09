@@ -1,7 +1,7 @@
 ﻿@model NatalCare.Models.Entities.Patients
 
 <div class="col-md-9">
-    <div class="card card-selected mb-5">
+    <div id="medicalCard" class="card card-selected mb-5" data-patient-id="@Model.PatientID">
         <div class="card-body">
             <h5 class="card-title mb-4">Medical Records</h5>
             <!-- Tabs for Services -->
@@ -12,9 +12,7 @@
                 <li class="nav-item">
                     <a class="nav-link" id="delivery-tab" data-bs-toggle="tab" href="#delivery" role="tab">Delivery</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="family-planning-tab" data-bs-toggle="tab" href="#family-planning" role="tab">Family Planning</a>
-                </li>
+              
                 <li class="nav-item">
                     <a class="nav-link" id="screening-tab" data-bs-toggle="tab" href="#screening" role="tab">Newborn Screening</a>
                 </li>
@@ -27,185 +25,73 @@
             <div class="tab-content mt-4">
                 <!-- Prenatal Tab -->
                 <div class="tab-pane fade show active" id="prenatal" role="tabpanel">
-                    @await Component.InvokeAsync("PrenatalRecords", new { patientId = Model.PatientID })
                 </div>
 
                 <!-- Delivery Tab -->
                 <div class="tab-pane fade" id="delivery" role="tabpanel">
-                    <h6 class="px-2">Delivery Records</h6>
-                    <div class="d-flex justify-content-end my-3 gap-3">
-                        <a asp-controller="" asp-action="" class="btn btn-sm btn-pink">
-                            <i class="fas fa-plus"></i>
-                            <span>Add New Delivery Record</span>
-                        </a>
-                        <a asp-controller="" asp-action="" class="btn btn-sm btn-outline-secondary">
-                            <i class="fas fa-trash"></i>
-                            <span>Deleted History Record</span>
-                        </a>
-                    </div>
-
-                    <div class="d-flex align-items-center gap-2">
-                        <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Case No#</th>
-                                    <th>Date Admitted</th>
-                                    <th>Date Discharged</th>
-                                    <th>Ward No#</th>
-                                    <th>Status</th>
-                                    <th>Notes</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Data -->
-                                <tr>
-                                    <td>01</td>
-                                    <td>Aug 20 2024 10 AM</td>
-                                    <td>Aug 21 2024 11 AM</td>
-                                    <td>Ward 1</td>
-                                    <td>
-                                        <span class="badge bg-success">In-Labor</span>
-                                    </td>
-                                    <td>Normal delivery</td>
-                                    <td>
-                                        <div class="d-flex align-items-center justify-content-center gap-2">
-                                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1">
-                                                <i class="fa-solid fa-list"></i>
-                                                <span>Details</span>
-                                            </a>
-                                            <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                                <span>Edit</span>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
+            
 
-                <!-- Family Planning Tab -->
-                <div class="tab-pane fade" id="family-planning" role="tabpanel">
-                    @await Component.InvokeAsync("FamilyPlanningRecords", new { patientId = Model.PatientID })
-                </div>
-
-                <!-- Screening Tab -->
+                <!--  Screening Tab  -->
                 <div class="tab-pane fade" id="screening" role="tabpanel">
-                    <h6 class="px-2">Screening Records</h6>
-                    <div class="d-flex justify-content-end my-3">
-                        <a asp-controller="" asp-action="" class="btn btn-sm btn-pink">
-                            <i class="fas fa-plus"></i>
-                            <span>Add New</span>
-                        </a>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Screening No#</th>
-                                    <th>Date</th>
-                                    <th>Baby Name</th>
-                                    <th>Test Typee</th>
-                                    <th>Results</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Data -->
-                                <tr>
-                                    <td>01</td>
-                                    <td>Aug 23 2024</td>
-                                    <td>Baby A</td>
-                                    <td>Blood Test</td>
-                                    <td>Normal</td>
-                                    <td>
-                                        <div class="d-flex align-items-center justify-content-center gap-2">
-                                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1">
-                                                <i class="fa-solid fa-list"></i>
-                                                <span>Details</span>
-                                            </a>
-                                            <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                                <span>Edit</span>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr> 
-                                <!-- "No record found" message row -->
-                                <tr class="no-record-found" style="display: none;">
-                                    <td colspan="6" class="text-center">No record found</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Form/Table -->
                 </div>
 
                 <!-- Hearing Tab -->
                 <div class="tab-pane fade" id="hearing" role="tabpanel">
-                    <h6 class="px-2">Hearing Test Records</h6>
-                    <div class="d-flex justify-content-end my-3">
-                        <a asp-controller="" asp-action="" class="btn btn-sm btn-pink">
-                            <i class="fas fa-plus"></i>
-                            <span>Add New</span>
-                        </a>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <input type="text" placeholder="Search record..." class="form-control filterInput" style="width: 350px;">
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Hearing Test No##</th>
-                                    <th>Date</th>
-                                    <th>Baby Name</th>
-                                    <th>Test Result</th>
-                                    <th>Notes</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Data -->
-                                <tr>
-                                    <td>01</td>
-                                    <td>Aug 23 2024</td>
-                                    <td>Baby A</td>
-                                    <td>Passed</td>
-                                    <td>Left ear clear</td>
-                                    <td>
-                                        <div class="d-flex align-items-center justify-content-center gap-2">
-                                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1">
-                                                <i class="fa-solid fa-list"></i>
-                                                <span>Details</span>
-                                            </a>
-                                            <a class="btn btn-sm btn-outline-pink d-flex align-items-center justify-content-center gap-1">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                                <span>Edit</span>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!-- "No record found" message row -->
-                                <tr class="no-record-found" style="display: none;">
-                                    <td colspan="6" class="text-center">No record found</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Form/Table -->
                 </div>
+
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        // Retrieve patientId from the card's data attribute
+        var patientId = $('#medicalCard').data('patient-id');
+        // Listen for tab changes
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var tabId = $(e.target).attr('href'); // Get the tab pane ID
+            var url = ''; 
+
+            switch (tabId) {
+                case '#prenatal':
+                    url = '/Prenatal/PrenatalRecords?patientId=' + patientId;
+                    break;
+                case '#delivery':
+                    url = '/Delivery/DeliveryRecords?patientId=' + patientId;
+                    break;
+                case '#screening':
+                    url = '/NewbornScreening/ScreeningRecords?patientId=' + patientId;
+                    break;
+                case '#hearing':
+                    url = '/NewbornHearing/HearingRecords?patientId=' + patientId;
+                    break;
+            }
+
+            // Load content dynamically
+            if (url) {
+                $.get(url, function (data) {
+                    $(tabId).html(data); // Inject the retrieved content into the tab pane
+                });
+            }
+        });
+
+        $('a[data-bs-toggle="tab"].active').trigger('shown.bs.tab');
+    });
+
+</script>
+
+
+
+
+
+
+
+@*  <li class="nav-item">
+        <a class="nav-link" id="family-planning-tab" data-bs-toggle="tab" href="#family-planning" role="tab">Family Planning</a>
+    </li> *@
+@*   <!-- Family Planning Tab -->
+    <div class="tab-pane fade" id="family-planning" role="tabpanel">
+        @await Component.InvokeAsync("FamilyPlanningRecords", new { patientId = Model.PatientID })
+    </div> *@

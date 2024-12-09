@@ -32,6 +32,7 @@ namespace NatalCare.Models.Entities
         public DateOnly? Birthdate { get; set; }
         public string? BloodType { get; set; }
         public string? Religion { get; set; }
+        public string? Nationality { get; set; }
 
 
         // Foreign Key to Status table

@@ -12,7 +12,8 @@ namespace NatalCare_System.Controllers
     {
         private readonly IServicesOperationServices serviceServices;
 
-        public ServicessController(IServicesOperationServices serviceServices)
+        public ServicessController(IServicesOperationServices serviceServices, IModuleAccessServices moduleAccessServices)
+            : base(moduleAccessServices)
         {
             this.serviceServices = serviceServices;
         }

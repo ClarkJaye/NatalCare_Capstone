@@ -16,13 +16,15 @@
                 <th>Gender</th>
                 <th>Address</th>
                 <th>Date of Birth</th>
+                <th>Status</th>
                 <th class="text-center">Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var patient in Model)
             {
-                <tr data-patid="@patient.PatientID" class="align-middle" id="patientSelectTR" style="cursor: pointer;">
+                @* <tr data-patid="@patient.PatientID" id="patientSelectTR" style="cursor: pointer;"> *@
+                <tr style="cursor: pointer;">
                     <td>@patient.PatientID</td>
                     <td>@patient.FirstName</td>
                     <td>@patient.MiddleName</td>
@@ -46,10 +48,28 @@
                     <td>@patient.Address</td>
                     <td>@patient.Birthdate?.ToString("MMM dd yyyy")</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-pink d-flex align-items-center gap-2" id="patientSelectBtn" data-patientid="@patient.PatientID">
-                            <i class="fa-solid fa-check"></i>
-                            <span>Select</span>
-                        </button>
+                        @if (patient.StatusCode.ToUpper() == "AC")
+                        {   
+                            <span class="badge bg-success">@patient.Status?.StatusName</span>
+                        }
+                        else
+                        {  
+                            <span class="badge bg-secondary">@patient.Status?.StatusName</span>
+                        }
+                        
+                    </td>
+                    <td>
+                        @if(patient.StatusCode == "AC"){
+                            <button class="btn btn-sm btn-outline-pink" id="patientSelectBtn" data-patientid="@patient.PatientID">
+                                <i class="fa-solid fa-check"></i>
+                                <span>Select</span>
+                            </button>
+                        }else{
+                            <button class="btn btn-sm btn-outline-pink" disabled>
+                                <i class="fa-solid fa-check"></i>
+                                <span>Select</span>
+                            </button>
+                        }
                     </td>
                 </tr>
             }

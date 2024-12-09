@@ -1,0 +1,78 @@
+﻿@model NatalCare.Models.Entities.Newborn
+
+@{
+    ViewData["Title"] = "Newborn Information";
+    ViewData["NavTitle"] = "Newborn / Newborn Information";
+    Layout = "_UserLayout";
+}
+
+
+<!-- NAVBAR -->
+<partial name="Partial/_Navbar" />
+
+
+<div class="mx-4">
+    <div class="row">
+        <div class="d-flex align-items-center justify-content-start gap-3 mb-3">
+            <a asp-action="Index" class="btn btn-outline-pink">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back</span>
+            </a>
+            <h5 class="fw-bold m-0 text-capitalize">@Model.FirstName @Model.MiddleName @Model.LastName</h5>
+        </div>
+
+        <!-- Left Sidebar: Patient Information -->
+        <div class="col-md-3 mb-4">
+            <div class="card card-selected">
+                <div class="card-body c-details">
+                    <div class="d-flex justify-content-center align-items-center flex-column mb-3 mx-lg-5">
+                        <!-- Patient Profile Info -->
+                        <div class="d-flex flex-column align-items-center justify-content-center gap-2 text-center mt-3">
+                            @if (Model.Gender?.ToLower() == "female")
+                            {
+                                <img src="~/profile/bgirl.png" alt="Profile" class="img-fluid rounded-circle mb-3 p-2" style="border: 4px solid var(--pink);" />
+                            }
+                            else
+                            {
+                                <img src="~/profile/bboy.png" alt="Profile" class="img-fluid rounded-circle mb-3 p-2" style="border: 4px solid var(--pink);" />
+                            }
+
+                            <div class="mb-2">
+                                <h4 class="fw-bold text-pink mb-0">@Model.NewbornID</h4>
+                                <span style="font-size: 14px;">Newborn ID</span>
+                            </div>
+
+                            <div class="mb-2">
+                                <h5 class="fw-bold m-0 text-capitalize">@Model.FirstName @Model.MiddleName @Model.LastName</h5>
+                                <span style="font-size: 14px;">Newborn Full Name</span>
+                            </div>
+
+                            <div class="mb-2">
+                                <input type="hidden" id="patID" name="patientID" value="@Model.Patient?.PatientID" />
+                                <h5 class="m-0 text-capitalize">@Model.Patient?.FirstName @Model.Patient?.MiddleName @Model.Patient?.LastName</h5>
+                                <span style="font-size: 14px;">Mother Full Name</span>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar Links -->
+                        <div class="d-flex flex-column gap-4 mt-5 w-100">
+                            <a asp-controller="Newborn" asp-action="Information" asp-route-id="@Model.NewbornID" class="btn btn-outline-pink py-2 @(ViewContext.RouteData.Values["action"]?.ToString() == "Information" ? "active" : "")">
+                                <i class="fas fa-user"></i>
+                                <span style="font-weight: 600;">Patient Information</span>
+                            </a>
+
+                            <a asp-controller="Newborn" asp-action="MedicalRecords" asp-route-id="@Model.NewbornID" class="btn btn-outline-pink py-2 @(ViewContext.RouteData.Values["action"]?.ToString() == "MedicalRecords" ? "active" : "")">
+                                <i class="fas fa-file-medical"></i>
+                                <span style="font-weight: 600;">Medical Records</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Content: Patient Information Partial -->
+        <partial name="Partial/Newborn/_MedicalRecords" />
+    </div>
+</div>
+

@@ -10,11 +10,24 @@ namespace NatalCare.Models.Entities
         [Key]
         [Required]
         public string? ScreeningNo { get; set; }
+        public DateTime? DateVisit { get; set; }
         public DateOnly? DateRegistration { get; set; }
         public string? TypeOfSample { get; set; }
         public string? FilterCardNo { get; set; }
-        public string? BabyWeight { get; set; }
-        public string? AOGWeek { get; set; }
+        public DateOnly? DateOfCollection { get; set; }
+        public TimeOnly? TimeOfCollection { get; set; }
+        public string? PlaceOfCollection { get; set; }
+        public string? Feeding { get; set; }
+        public string? Specimen { get; set; }
+        public string? BabyStatus { get; set; }
+        public string? ScreeningResults { get; set; }
+        public string? DataSampleSent { get; set; }
+        public string? Courier { get; set; }
+        public string? TrackingNubmer { get; set; }
+        public string? AttendingPractitioner { get; set; }
+        public string? Remarks { get; set; }
+        public string? Notes { get; set; }
+
 
         // Foreign Key
         [Required]
@@ -31,15 +44,15 @@ namespace NatalCare.Models.Entities
 
         public DateTime? Created_At { get; set; }
         [Column("Created_By")]
-        public string? PrenatalCreatedBy { get; set; }
-        [ForeignKey("PrenatalCreatedBy")]
+        public string? ScreeningCreatedBy { get; set; }
+        [ForeignKey("ScreeningCreatedBy ")]
         [ValidateNever]
         public User? CreatedBy { get; set; }
 
         public DateTime? Updated_At { get; set; }
         [Column("Updated_By")]
-        public string? PrenatalUpdatedBy { get; set; }
-        [ForeignKey("PrenatalUpdatedBy")]
+        public string? ScreeningUpdatedBy { get; set; }
+        [ForeignKey("ScreeningUpdatedBy ")]
         [ValidateNever]
         public User? UpdatedBy { get; set; }
 

@@ -1,12 +1,11 @@
 ﻿@model List<NatalCare.Models.Entities.Patients>
 
-
 <div class="table-responsive">
     <table id="patientsTable" class="table table-hover table-striped">
         <thead class="border-bottom-2">
             <tr>
                 <th>Profile</th>
-                <th>Patient No</th>
+                <th>Patient No#</th>
                 <th>Firstname</th>
                 <th>Middlename</th>
                 <th>Lastname</th>
@@ -16,22 +15,17 @@
                 <th>Date of Birth</th>
                 <th>Date Added</th>
                 <th>Added By</th>
-                <th class="text-center">Action</th>
+                <th class="text-center">ACTION</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var patient in Model)
             {
-                <tr class="align-middle">
+                @* <tr class="align-middle patient-row" data-url="@Url.Action("Information", "Patient", new { id = patient.PatientID })" style="cursor: pointer;"> *@
+                <tr>
                     <td>
-                        @if (patient.Gender?.ToLower() == "female")
-                        {
-                            <img src="~/profile/woman.png" width="50" height="50" alt="Profile" class="img-fluid rounded-circle" />
-                        }
-                        else
-                        {
-                            <img src="~/profile/man.png" width="50" height="50" alt="Profile" class="img-fluid rounded-circle" />
-                        }
+                        <img src="~/profile/@(patient.Gender?.ToLower() == "female" ? "woman.png" : "man.png")"
+                             width="50" height="50" alt="Profile" class="img-fluid rounded-circle" />
                     </td>
                     <th>@patient.PatientID</th>
                     <td>@patient.FirstName</td>
@@ -44,7 +38,7 @@
                                 var birthYear = patient.Birthdate.Value.Year;
                                 var currentYear = DateTime.Now.Year;
                                 var age = currentYear - birthYear;
-                                <text>@age</text>
+                                <text>@age years old</text>
                             }
                             else
                             {
@@ -54,20 +48,23 @@
                     </td>
                     <td>@patient.Gender</td>
                     <td>@patient.Address</td>
-                    <td>@patient.Birthdate?.ToString("MMM dd yyyy")</td>
-                    <td>@patient.Created_At?.ToString("MMM dd yyyy h:mm tt")</td>
-                    <td>@patient.CreatedBy?.FirstName @patient.CreatedBy?.LastName</td>
+                    <td>@patient.Birthdate?.ToString("MMM dd, yyyy")</td>
+                    <td>@patient.Created_At?.ToString("MMM dd, yyyy hh:mm tt")</td>
+                    <td>@(patient.CreatedBy?.FirstName ?? "N/A") @(patient.CreatedBy?.LastName ?? "")</td>
                     <td class="text-center">
                         <div class="d-flex align-items-center justify-content-center gap-2">
-                            <a class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center gap-1" asp-controller="Patient" asp-action="Information" asp-route-id="@patient.PatientID">
-                                <i class="fa-solid fa-list"></i>
-                                <span>Record</span>
+                            <a class="btn btn-sm btn-outline-secondary"
+                               asp-controller="Patient" asp-action="Information" asp-route-id="@patient.PatientID"
+                               title="View Records">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <span>Records</span>
                             </a>
-                            |
-                            <button class="btn btn-sm btn-outline-danger dlt-Btn" data-patientid="@patient.PatientID">
-                                <i class="fa-solid fa-trash"></i>
-                                <span>Delete</span>
-                            </button>
+                            @* Uncomment this section if Delete functionality is required *@
+                            @* <button class="btn btn-sm btn-outline-danger dlt-Btn" 
+                                        data-patientid="@patient.PatientID" title="Delete Patient">
+                                 <i class="fa-solid fa-trash"></i>
+                                 <span>Delete</span>
+                               </button> *@
                         </div>
                     </td>
                 </tr>
@@ -84,22 +81,21 @@
             lengthChange: true,
             searching: true,
             ordering: true,
+            pageLength: 10,
             lengthMenu: [10, 20, 50, 100],
             language: {
                 search: "_INPUT_",
-                searchPlaceholder: "Search patients..."
-            },
-            language: {
+                searchPlaceholder: "Search patients...",
                 paginate: {
                     previous: "Previous",
                     next: "Next"
-                }
+                },
+                info: "Showing _START_ to _END_ of _TOTAL_ patients"
             },
-            info: true,
             autoWidth: false,
             responsive: true,
             columnDefs: [
-                { orderable: false, targets: -1 }
+                { orderable: false, targets: -1 } 
             ]
         });
 
@@ -139,5 +135,14 @@
                 }
             });
         }
+
+        // Make rows clickable
+        $('.patient-row').on('click', function (e) {
+            // Prevent navigation when clicking inside buttons or links
+            if (!$(e.target).closest('a, button').length) {
+                window.location.href = $(this).data('url');
+            }
+        });
+
     });
 </script>

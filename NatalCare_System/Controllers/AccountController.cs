@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NatalCare.DataAccess.Extensions;
+using NatalCare.DataAccess.Interfaces;
 using NatalCare.Models.DTOs;
 using NatalCare.Models.Entities;
 using NatalCare.Models.ViewModel;
-using PrinceQ.Utility;
+using NatalCare.Utility;
 using System.Security.Claims;
 
 namespace NatalCare_System.Controllers
@@ -16,7 +18,7 @@ namespace NatalCare_System.Controllers
         private readonly RoleManager<Role> _roleManager;
         private readonly UserManager<User> _userManager;
 
-        public AccountController(SignInManager<User> signInManager, UserManager<User> userManager, RoleManager<Role> roleManager)
+        public  AccountController(SignInManager<User> signInManager, UserManager<User> userManager, RoleManager<Role> roleManager, IModuleAccessServices moduleAccessServices) : base(moduleAccessServices)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -27,7 +29,7 @@ namespace NatalCare_System.Controllers
 			return View();
 		}
 
-		public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login()
         {
             if (User.Identity!.IsAuthenticated)
             {
@@ -63,6 +65,8 @@ namespace NatalCare_System.Controllers
                 ModelState.AddModelError("", "User is locked out. Try again after 5 minutes.");
                 return View(model);
             }
+            //var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, isPersistent: false, lockoutOnFailure: true);
+
             var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: true);
             if (result.Succeeded)
             {

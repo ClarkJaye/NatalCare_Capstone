@@ -43,10 +43,13 @@ builder.Services.Configure<SecurityStampValidatorOptions>(options =>
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
     options.AccessDeniedPath = "/Account/AccessDenied";
-    //options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     options.SlidingExpiration = true;
+    options.Cookie.HttpOnly = true;
 });
+
 
 builder.Services.AddSignalR();
 
@@ -65,6 +68,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
+// Custom middleware
+//app.UseMiddleware<PatientRetentionService>();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(

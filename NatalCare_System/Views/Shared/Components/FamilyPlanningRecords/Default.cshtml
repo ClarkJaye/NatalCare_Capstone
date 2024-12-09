@@ -54,7 +54,7 @@
                         <td>@item.AverageMonthlyIncome</td>
                         <td>@item.SpouseName</td>
                         <td>@item.SpouseOccupation</td>
-                        <td>@item.Notes</td>
+                        <td style="max-width: 200px; word-wrap: break-word;">@item.Notes</td>
                         <td>
                             <div class="d-flex align-items-center justify-content-center gap-2">
                                 <a asp-action="FamilyPlanningRecord" asp-route-id="@item.PatientID" class="btn btn-sm btn-outline-secondary">

@@ -1,0 +1,138 @@
+﻿@using NatalCare.Models.ViewModel.Patient
+@model DeliveryRecordVM
+
+@{
+    ViewData["Title"] = "Delivery Records";
+    ViewData["NavTitle"] = "Patients / Delivery Records";
+    Layout = "_UserLayout";
+}
+
+<!-- NAVBAR -->
+<partial name="Partial/_Navbar" />
+
+<div class="mx-4">
+    <div class="d-flex align-items-center justify-content-start gap-3 mb-3">
+        <a asp-controller="Patient" asp-action="MedicalRecords" asp-route-id="@Model.Patient?.PatientID" class="btn btn-sm btn-outline-pink">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back</span>
+        </a>
+        <input type="hidden" id="patID" name="patientID" value="@Model.Patient?.PatientID" />
+        <h5 class="fw-bold m-0 text-capitalize">@Model.Patient?.FirstName @Model.Patient?.MiddleName @Model.Patient?.LastName</h5>
+    </div>
+
+    <div class="card card-selected mb-5" id="clinicalCard" data-patient-id="@Model.Patient?.PatientID" data-caseno="@Model.Delivery?.CaseNo">
+        <div class="card-body mb-5">
+            <h5 class="card-title mb-4">Delivery Details</h5>
+            <!-- Tabs for Services -->
+            <ul class="nav nav-tabs" id="patientTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="physicalExamination-tab" data-bs-toggle="tab" href="#physicalExamination" role="tab">Physical Examination</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="maternalMonitoring-tab" data-bs-toggle="tab" href="#maternalDeliveryMonitoring" role="tab">Delivery Monitoring</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="clinicalSheet-tab" data-bs-toggle="tab" href="#clinicalSheet" role="tab">Clinical Face Sheet</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="obstetrical-tab" data-bs-toggle="tab" href="#obstetrical" role="tab">Obstetrical History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="dischargement-tab" data-bs-toggle="tab" href="#dischargementForm" role="tab">Dischargement Form</a>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content mt-4">
+                <!-- Physical Examination Tab -->
+                <div class="tab-pane fade show active" id="physicalExamination" role="tabpanel"></div>
+
+                <!-- Maternal Delivery Monitoring Tab -->
+                <div class="tab-pane fade position-relative" id="maternalDeliveryMonitoring" role="tabpanel"></div>
+
+                <!-- Clinical Face Sheet Tab -->
+                <div class="tab-pane fade" id="clinicalSheet" role="tabpanel"></div>
+
+                <!-- Obstetrical Tab -->
+                <div class="tab-pane fade" id="obstetrical" role="tabpanel"></div>
+
+                <!-- Dischargement Tab -->
+                <div class="tab-pane fade" id="dischargementForm" role="tabpanel"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Retrieve patientId from the card's data attribute
+        var patientId = $('#clinicalCard').data('patient-id');
+        var caseno = $('#clinicalCard').data('caseno');
+
+        // Get the current patient ID
+        var currentPatientID = patientId;
+        // Get the stored from localStorage
+        var storedPatientID = localStorage.getItem('deliveryCurrentPatientID');
+        var activeTab = localStorage.getItem('activeTabDelivery');
+
+        // Check if the patient has changed
+        if (currentPatientID !== storedPatientID) {
+            // Reset the tab to Prenatal if the patient is different
+            localStorage.removeItem('activeTabDelivery');
+            localStorage.setItem('deliveryCurrentPatientID', currentPatientID);
+            activeTab = '#physicalExamination';
+        }
+        // Show the active tab
+        if (activeTab) {
+            var tab = new bootstrap.Tab(document.querySelector(`a[href="${activeTab}"]`));
+            tab.show();
+        }
+        var tabLinks = document.querySelectorAll('.nav-tabs .nav-link');
+        tabLinks.forEach(function (tabLink) {
+            tabLink.addEventListener('shown.bs.tab', function (event) {
+                var activeTab = event.target.getAttribute('href');
+                localStorage.setItem('activeTabDelivery', activeTab);
+                localStorage.setItem('deliveryCurrentPatientID', currentPatientID);
+            });
+        });
+
+
+        // Listen for tab changes
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var tabId = $(e.target).attr('href');
+            var url = '';
+
+            switch (tabId) {
+                case '#clinicalSheet':
+                    url = '/Delivery/ClinicalRecords?patientId=' + patientId + '&caseno=' + caseno;
+                    break;
+                case '#obstetrical':
+                    url = '/Delivery/ObstetricalRecords?patientId=' + patientId + '&caseno=' + caseno;
+                    break;
+                case '#maternalDeliveryMonitoring':
+                    url = '/Delivery/MaternalMonitoringRecords?patientId=' + patientId + '&caseno=' + caseno;
+                    break;
+                case '#physicalExamination':
+                    url = '/Delivery/PERecords?patientId=' + patientId  + '&caseno=' + caseno;
+                    break;
+                case '#dischargementForm':  
+                    url = '/Delivery/DischargmentRecord?patientId=' + patientId + '&caseno=' + caseno;
+                    break;
+            }
+
+            // Load content dynamically
+            if (url) {
+                $.get(url, function (data) {
+                    $(tabId).html(data);
+                });
+            }
+        });
+
+        $('a[data-bs-toggle="tab"].active').trigger('shown.bs.tab');
+    });
+
+</script>
+

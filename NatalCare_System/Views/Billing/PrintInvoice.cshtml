@@ -1,0 +1,241 @@
+﻿@model NatalCare.Models.DTOs.VM.PrintDTO
+@{
+
+    decimal? balance = Model.Payments.Final_Amount;
+
+    List<decimal?> paidAmount = new List<decimal?>();
+
+    ViewData["Title"] = "Print Invoice";
+}
+
+@if (Model.Patients != null && Model.Patients.Count > 0)
+{
+    decimal totalPaid = 0;
+
+    foreach (var patientPayment in Model.Patients)
+    {
+        paidAmount.Add(patientPayment.Amount);
+        totalPaid = paidAmount.Sum(x => x ?? 0);
+    }
+    balance -= totalPaid;
+}
+
+<link rel="stylesheet" href="~/css/billing.css" asp-append-version="true" />
+<link href="https://fonts.googleapis.com/css2?family=Garet:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="out">
+    <div class="printDiv1">
+
+        <div class="printDiv1In1">
+
+            <div class="printDiv1In1Div1">
+                <img src="/img/a.png" style="height:auto; width:70px;" />
+                <img src="/img/paanakantopLogo.png" style="height:auto; width:250px;" />
+            </div>
+
+            <div class="printDiv1In1Div2">
+                <div class="printDiv1In1Div2Div1">
+
+                    <div class="printDiv1In1Div2Div1Div1">
+                        <p style="margin:0;">Invoice No :</p>
+
+                    </div>
+                    <div class="printDiv1In1Div2Div1Div2">
+                        <p style="margin:0;">@Model.Payments.PaymentID</p>
+                    </div>
+
+
+                </div>
+                <div class="printDiv1In1Div2Div2">
+                    <div class="printDiv1In1Div2Div1Div1">
+                        <p style="margin:0;">Invoice Date :</p>
+
+                    </div>
+                    <div class="printDiv1In1Div2Div1Div2">
+                        <p style="margin:0;">@(Model.Payments.BillDate.Value.ToString("MMMM d, yyyy") ?? "N/A")</p>
+                    </div>
+                </div>
+                <div class="printDiv1In1Div2Div3">
+                    <div class="printDiv1In1Div2Div1Div1">
+                        <p style="margin:0;">Due Date :</p>
+
+                    </div>
+                    <div class="printDiv1In1Div2Div1Div2">
+                        <p style="margin:0;">@(Model.Payments.DueDate.Value.ToString("MMMM d, yyyy") ?? "N/A")</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="printDiv1In2">
+            <div class="printDiv1In1Div1">
+                <h1 style="font-size:50px;">INVOICE</h1>
+            </div>
+
+            <div class="printDiv1In1Div2">
+                <div class="printDiv1In1Div2Div1" style="height: 100%;">
+
+                    <div class="printDiv1In1Div2Div1Div1">
+                        <p style="margin-bottom:0;">Invoice To :</p>
+
+                    </div>
+                    <div class="printDiv1In1Div2Div1Div2">
+                        <p style="margin:0; font-weight: bold;">@Model.Payments.Patient.FirstName @(Model.Payments.Patient.MiddleName ?? "") @Model.Payments.Patient.LastName</p>
+                        <p style="margin:0;">@(Model.Payments.Patient.MobileNumber ?? "N/A")</p>
+                        <p style="margin:0; text-align:center;">@(Model.Payments.Patient.Address?? "N/A")</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="printDiv2">
+        <div class="printDiv2Div1">
+            <table class="printTable">
+                <thead style="text-align:center;">
+                    <tr>
+                        <th>ITEMS/SERVICES</th>
+                        <th>QUANTITY</th>
+                        <th>PRICE</th>
+                        <th>PhilHealth Covered</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody class="printTbody">
+
+                    @if (Model.Services != null && Model.Services.Count > 0)
+                    {
+                        foreach (var service in Model.Services)
+                        {
+                            <tr>
+                                <td>@(service.Services?.ServiceName ?? "N/A")</td>
+                                <td>@(service.Quantity ?? 0)</td> 
+                                <td>₱ @(service.Services?.Price ?? 0)</td>
+                                <td>₱ @(service.PhilhealthCovered ?? 0)</td> 
+                                <td>₱ @(((service.Services?.Price ?? 0) * (service.Quantity ?? 0)) - (service.PhilhealthCovered ?? 0))</td>
+                            </tr>
+                        }
+                    }
+
+                    @if (Model.Items != null && Model.Items.Count > 0)
+                    {
+                        foreach (var items in Model.Items)
+                        {
+                            <tr>
+                                <td>@(items.Items?.ItemName ?? "N/A")</td>
+                                <td>@(items.Quantity ?? 0)</td>
+                                <td>₱ @(items.Items?.Price ?? 0)</td>
+                                <td>₱ @(items.PhilHealthCovered ?? 0)</td>
+                                <td>₱ @(((items.Items?.Price ?? 0) * (items.Quantity ?? 0)) - (items.PhilHealthCovered ?? 0))</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="printDiv3">
+        <div class="printDiv3In1">
+            <div class="printDiv3In1Div1">
+                <div class="printDiv3In2Div1Div1" style="background-color: white; color: black; align-items:flex-start;">
+                    <p style="margin:0;">Current Balance:</p>
+                    <p style="margin:0;">Notarial Fee:</p>
+                    <p style="margin:0;">Notes:</p>
+                </div>
+                <div class="printDiv3In2Div1Div2" style="border: none;">
+                    <p style="margin:0; border: none">
+                        @if(balance == 0){
+                            <span>Paid</span>
+                        }
+                        else{
+                            <span>₱ @balance</span>
+                        }
+                    </p>
+                    <p style="margin:0; border: none">₱ @(Model.Payments.Notorial_Fee ?? 0)</p>
+                    <p style="margin:0; border: none; line-height:1rem; text-align:center;" id="printNotes">@(Model.Payments.Notes ?? "None")</p>
+                </div>
+            </div>
+            <div class="printDiv3In1Div2">
+                <p style="margin: 0;"></p>
+                <div class="printDiv3In2Div1Div1" style="background-color: white; color: black; align-items:flex-start;">
+                    <p style="margin:0;">PATIENT'S SIGNATURE :</p>
+                </div>
+                <div class="printDiv3In2Div1Div2" style="border: none;">
+                    <p style="margin:0; border: none; text-decoration:underline;">________________________</p>
+                </div>
+            </div>
+            <div class="printDiv3In1Div3">
+
+                <img src="/img/logo_footerSide.png" style="height:auto; width:70px;" />
+                <h2 style="line-height:80%; margin:0; font-weight:bolder; margin-right:3rem;">Paanakan Sa <br /> Mandaue</h2>
+
+            </div>
+        </div>
+        <div class="printDiv3In2">
+            <div class="printDiv3In2Div1">
+                <div class="printDiv3In2Div1Div1">
+                    <p style="margin:0; ">Sub Total:</p>
+                    <p style="margin:0;">PhilHealth Total:</p>
+                    <p style="margin:0;">Discount:</p>
+                    <p style="margin:0;">Total Payment:</p>
+                </div>
+                <div class="printDiv3In2Div1Div2">
+                    <p style="margin:0;">₱ @Model.Payments.Total_Amount</p>
+                    <p style="margin:0;">₱ @(Model.Payments.PhilHealth_Deduction)</p>
+                    <p style="margin:0;">₱ @(Model.Payments.Discount ?? 0) %</p>
+                    <p style="margin:0; font-weight:bold;">₱ @Model.Payments.Final_Amount</p>
+                </div>
+            </div>
+            <div class="printDiv3In2Div2">
+                <div class="printDiv3In2Div2Div1">
+                    <div class="printDiv3In2Div2Div1Div1" style="align-items: flex-end;">
+                        <div class="phoneIcon"><i class="fa fa-phone phoneIcon1" aria-hidden="true"></i></div><p style="margin:0; margin-bottom:.5rem; margin-left:.5rem;">0920-675-2019</p>
+                    </div>
+                    <div class="printDiv3In2Div2Div1Div2" style="align-items:center;">
+                        <div class="phoneIcon"><i class="fa fa-user phoneIcon2" aria-hidden="true"></i></div><p style="margin:0; margin-left:.5rem;">lisa@gmail.com</p>
+                    </div>
+                </div>
+                <div class="printDiv3In2Div2Div2">
+                    <div class="printDiv3In2Div2Div1Div1" style="align-items: flex-end;">
+                        <div class="phoneIcon"><i class="fa fa-commenting phoneIcon3" aria-hidden="true"></i></div><p style="margin:0; margin-bottom:.5rem; margin-left:.5rem;">Paanakan sa Mandaue</p>
+                    </div>
+                    <div class="printDiv3In2Div2Div1Div2" style="align-items: center">
+                        <div class="phoneIcon"><i class="fa fa-map-marker phoneIcon4" aria-hidden="true"></i></div> <p style="font-size: 10px; margin:0; margin-left:.5rem; text-align:center;">Lopez Jaena St, Mandaue City, 6014 Cebu</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.print();
+
+    function beforePrint() {
+        console.log('Preparing to print...');
+    }
+
+    function afterPrint() {
+        window.location.href = '@Url.Action("InvoiceList", "Billing")';
+    }
+
+
+    // Monitor print events
+    if (window.matchMedia) {
+        window.matchMedia('print').addListener(function (mql) {
+            if (mql.matches) {
+                beforePrint();
+            } else {
+                afterPrint(); // This will run when the print dialog is closed
+            }
+        });
+    }
+
+    // For IE, does not attach in browsers that do not support these events
+    window.addEventListener('beforeprint', beforePrint, false);
+    window.addEventListener('afterprint', afterPrint, false);
+
+</script>

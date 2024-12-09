@@ -10,7 +10,7 @@ using static NatalCare.DataAccess.Response.ServiceResponses;
 
 namespace NatalCare.DataAccess.Services
 {
-    internal class PatientServices : IPatientServices
+    public class PatientServices : IPatientServices
     {
         private readonly IAppUnitOfWork unitOfWork;
         private readonly IHubContext<NatalCareHub> hubContext;

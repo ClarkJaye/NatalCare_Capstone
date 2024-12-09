@@ -1,0 +1,121 @@
+﻿@model NatalCare.Models.Entities.PatientPayments
+
+@{
+    ViewData["Title"] = "Add Payment";
+    Layout = "_UserLayout";
+
+    decimal? balance = ViewBag.Balance as decimal?;
+}
+
+<partial name="Partial/_Navbar" />
+
+<div class="mx-5">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center bg-pink">
+            <h5 class="card-title my-2" id="invoiceHeader">ADD PAYMENT</h5>
+            <h5>Bill # <span>@ViewBag.PaymentId</span></h5>
+        </div>
+        <div class="card-body m-4">
+            <form method="post" asp-action="AddPatientPayment">
+                <div class="row form-group" style="position:relative;">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="hidden" class="form-control" id="paymentId" asp-for="PaymentID"  autocomplete="off" value="@ViewBag.PaymentId" />
+
+                    <input type="hidden" class="form-control" id="patientId" asp-for="PatientID" autocomplete="off" value="@ViewBag.PatientId" />
+
+
+                    <div class="form-group col-md-4 mb-3">
+                        <label for="FirstName" class="control-label">Patient's Money: ₱</label>
+                        <input class="form-control" placeholder="₱" id="patientsMoney" autocomplete="off" step="0.01" type="number" asp-for="PatientsMoney" />
+                        <span asp-validation-for="PatientsMoney" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group col-md-4 mb-3">
+                        <label for="FirstName" class="control-label">Amount to Pay: ₱</label>
+                        <input class="form-control" placeholder="Balance: ₱ @balance" id="patientPaymentAmount" autocomplete="off" step="0.01" type="number" asp-for="Amount" min="0" max="@balance" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-md-4 mb-3">
+                        <label for="FirstName" class="control-label">Payment Method: </label>
+                        <select class="form-select" asp-for="Payment_Method">
+                            <option value="CASH">CASH</option>
+                            <option value="CARD">CARD</option>
+                        </select>
+                        <span asp-validation-for="Payment_Method" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group row-md-12 d-flex justify-content-end align-items-center mt-5">
+                            <button class="btn btn-primary mx-2 addPayment" type="submit">
+                                <i class="fas fa-plus"></i>
+                                <span>ADD</span>
+                            </button>
+                            <a class="btn btn-dark mx-2" asp-action="Payment" asp-controller="Billing" asp-route-id="@ViewBag.PaymentId">
+                                <i class="fas fa-close"></i>
+                                <span>Cancel</span>
+                            </a>             
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        var patientsMoney = $("#patientsMoney");
+
+        var quantityInput = $("#patientPaymentAmount");
+
+        $("form[method='post']").on("submit", function (event) {
+            
+            const max = parseFloat(quantityInput.attr("max"));
+
+            const value = parseFloat(quantityInput.val());
+
+            const money = parseFloat(patientsMoney.val());
+
+            if (value <= max) {
+
+                Swal.fire({
+                    title: "Change: ₱" + parseFloat(money - value),
+                    icon: "success",
+                    showCancelButton: true,
+                    confirmButtonColor: "green",
+                    cancelButtonColor: "black",
+                    confirmButtonText: "OK!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+          
+                        $(this).off("submit").submit();
+                    }
+                });
+
+            }
+            else if(isNaN(value)) {
+
+            }
+            else if (max == 0 || max == 0.00) {
+                alert("You dont have any balance to Pay!");      
+                 event.preventDefault();
+            }
+            else{
+                alert("The amount must not exceed the balance.");
+                event.preventDefault();      
+                quantityInput.val(0);
+            }
+
+        });
+    });
+</script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+    }
+
+}

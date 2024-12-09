@@ -1,0 +1,178 @@
+﻿@model List<NatalCare.Models.Entities.PatientPayments>
+@{
+    string? patientId = ViewBag.PatientId as String;
+
+    int? billNo = ViewBag.PaymentId as int?;
+    decimal? balance = ViewBag.Balance as decimal?;
+
+    string? name = string.Empty;
+
+    List<decimal?> allAmount= new List<decimal?>();
+
+    decimal? totalAmount = 0;
+
+}
+
+<div class="table-responsive">
+    <table id="patientPaymenTable" class="table table-hover table-striped">
+        <thead class="border-bottom-2">
+            <tr>
+                <th>Patient's Money</th>
+                <th>Patient's Amount To Pay</th>
+                <th>Payment Method</th>
+                <th>Date Paid</th>
+                <th class="text-center">Action</th>
+            </tr>
+        </thead>
+        <tbody style="text-align:center;">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var payments in Model)
+                {       
+                    name = payments.Patients.FirstName
+                    + (payments.Patients.MiddleName != null ? " " + payments.Patients.MiddleName + " " : " ")
+                    + payments.Patients.LastName;
+
+                    allAmount.Add(payments.Amount);
+        
+
+                    <tr class="align-middle">
+
+                        <td>₱ @payments.PatientsMoney</td>
+                        <td>₱ @payments.Amount</td>
+                        
+                        <td>@payments.Payment_Method</td>
+                        <td>@(payments.DatePaid?.ToString("MMMM d, yyyy") ?? "N/A")</td>
+                        <td class="text-center">
+                            <div class="d-flex align-items-center justify-content-center gap-2">
+
+                                <a class="btn btn-sm btn-outline-secondary editPatientPaymentForModal" data-amount="@payments.Amount" data-paymethod="@payments.Payment_Method" data-id="@payments.PatientPaymentID" onclick="preventFormSubmit(event)" data-bs-toggle="modal" data-bs-target="#addSection">
+                                    <i class="fa fa-pen"></i> EDIT
+                                </a>
+                                |
+                                <button class="btn btn-sm btn-outline-danger dlt-pay" data-paymentid="@payments.PatientPaymentID">
+                                    <i class="fa-solid fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                totalAmount = allAmount.Sum(x => x ?? 0);
+            }
+            else
+            {
+
+                <script>
+                    $(document).ready(function () {
+                        $("#billTag").hide();
+                        $("#nameTag").hide();
+                    });
+                </script>
+ 
+            }
+        </tbody>
+    </table>
+</div>
+@if (Model == null ){
+    <script>
+        $(document).ready(function () {
+            $("#billTag").hide();
+            $("#nameTag").hide();
+        });
+    </script>
+}
+<script>
+    $(document).ready(function () {
+
+        $('.editPatientPaymentForModal').on("click", function (e) {
+
+            var id = $(this).data('id');
+
+            var paymentAmount = $(this).data('amount');
+            var paymentMethod = $(this).data('paymethod');
+
+            
+               
+            $("#patientPaymentId").val(id);
+
+            $("#payAmount").val(paymentAmount);
+            $("#patpaymeth").val(paymentMethod);
+
+        });
+
+
+        var patientName = @Html.Raw(Json.Serialize(name));
+
+        var billNumber = @Html.Raw(Json.Serialize(billNo));
+        var balance = @Html.Raw(Json.Serialize(balance.HasValue ? balance.Value.ToString("F2") : "0.00"));
+
+
+        $("#patientNameHeader").text(patientName);
+        $("#patientBillNumberHeader").text(billNumber);
+
+        $("#payInvoiceBtn").attr("href", "/Billing/PayInvoice?id=" + billNumber + "&balance=" + balance);
+
+
+
+        // Initialize DataTables
+        $('#patientPaymenTable').DataTable({
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            lengthMenu: [10, 20, 50, 100],
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search Invoice...",
+                paginate: {
+                    previous: "Previous",
+                    next: "Next"
+                },
+                emptyTable: "There are no Payment History"
+            },
+            info: true,
+            autoWidth: false,
+            responsive: true,
+            columnDefs: [{
+                "defaultContent": "-",
+                "targets": "_all"
+            }]
+        });
+
+        $('#patientPaymenTable').on("click", ".dlt-pay", function (e) {
+            var paymentid = $(this).data('paymentid');
+            DeletePatientPayment(paymentid);
+        });
+
+        // Delete Payment
+        function DeletePatientPayment(paymentid) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this Payment!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '@Url.Action("DeletePatientPayment", "Billing")',
+                        data: { paymentId: paymentid },
+                        success: function (result) {
+                            
+                            toastr.success(result);
+                            setTimeout(function () {
+                                window.location.href = '@Url.Action("InvoiceList", "Billing")';
+                            }, 3000);
+                        },
+                        error: function () {
+                            console.log('Unable to delete the patient.');
+                        }
+                    });
+                }
+            });
+        }
+    });
+</script>

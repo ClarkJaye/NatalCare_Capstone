@@ -18,12 +18,15 @@
 
     DateOnly? dueDate = null;
 
+    bool? notarialFee = null;
+
     if (Model.PrintDTO != null)
     {
-        staffId = Model.PrintDTO.Payments.Staff?.Id;
 
         billDate = Model.PrintDTO.Payments.BillDate;
         dueDate = Model.PrintDTO.Payments.DueDate;
+
+
     }
 
 }
@@ -55,9 +58,8 @@
         </div>
         <div class="card-body m-4">
             <form asp-controller="Billing" asp-action="CreateInvoice" method="POST">
+
                 <div class="row form-group" style="position:relative;">
-
-
 
                     <div validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -92,23 +94,7 @@
 <ul class="searchResultsDiv" >
     @* AJAX *@
 </ul>
-                    <div class="form-group col-md-4 mb-3">
-                        <label for="MiddleName" class="control-label">Staff Name</label>
-                        <select asp-for="BillingDTO.StaffName" class="form-select" asp-items="ViewBag.staffList" name="BillingDTO.StaffName" id="staffName">
-                        </select>
 
-                        @if (staffId != 0)
-                        {
-                            <script>
-                                $(document).ready(function () {
-                                    $("#staffName").val('@staffId');
-                                    $("#staffName").prop("disabled", true);
-                                });
-                            </script>
-                        }
-
-                        <span asp-validation-for="BillingDTO.StaffName" class="text-danger"></span>
-                    </div>
 
 
                     <div class="form-group col-md-4 mb-3">
@@ -148,6 +134,35 @@
                             </script>
                         }
                         <span asp-validation-for="BillingDTO.DueDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-md-4 mb-3">
+
+                        <label class="control-label" style="font-weight:bold">Notarial Fee ₱:</label>
+                        <div class="row form-group">
+                            <div class="form-group col-md-8 mb-3">
+                                <input class="form-control" type="number" value="300" id="patientNotarialFee" autocomplete="off" asp-for="BillingDTO.NotarialFee" step="0.01" max="300" disabled/>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input class="form-check-input discounted mt-2 fw-bold" type="checkbox" id="isNotarialFee" style="width: 25px;">
+                            </div>
+
+                       </div>
+
+ @*                     <select asp-for="BillingDTO.StaffName" class="form-select" asp-items="ViewBag.staffList" name="BillingDTO.StaffName" id="staffName">
+                        </select>
+
+                        @if (staffId != 0)
+                        {
+                            <script>
+                                $(document).ready(function () {
+                                    $("#staffName").val('@staffId');
+                                    $("#staffName").prop("disabled", true);
+                                });
+                            </script>
+                        } *@
+
+                        <span asp-validation-for="BillingDTO.NotarialFee" class="text-danger"></span>
                     </div>
 
                     <div class="form-group col-12 ">
@@ -205,6 +220,24 @@
                                 @* AJAX *@
                                 @if (Model.PrintDTO != null)
                                 {
+                                    if (Model.PrintDTO?.Payments?.Notorial_Fee != null)
+                                    {
+                                        <script>
+                                            $(document).ready(function () {
+
+                                                $("#isNotarialFee").prop("disabled", true);
+
+
+                                            });
+                                        </script>
+                                        notarialFee = true;
+
+                                    }
+                                    else
+                                    {
+                                        notarialFee = false;
+                                    }
+
                                     <script>
                                         $(document).ready(function () {
 
@@ -259,14 +292,7 @@
                                                     <datalist id="numberList">
                                                         <option value="1">
                                                         </option>
-                                                        <option value="2">
-                                                        </option>
-                                                        <option value="3">
-                                                        </option>
-                                                        <option value="4">
-                                                        </option>
-                                                        <option value="5">
-                                                        </option>
+   
                                                     </datalist>
                                                 </td>
                                                 <td>₱<span id="price">@service?.Services?.Price</span>
@@ -281,7 +307,7 @@
                                                     <input id="philCovered" class="w-100 text-center form-control" type="number" name="BillingDTO.Services[@ServiceCount].PhilHealthCovered" value="@(service.PhilhealthCovered ?? 0)">
                                                 </td>
                                                 <td style="">
-                                                    <i class="fas fa-trash "></i>
+                                                    <i class="fas fa-trash serviceDelBtn" style="display:none"></i>
                                                 </td>
                                             </tr>
                                             ServiceCount++;
@@ -340,12 +366,8 @@
                                                     <input id="philCovered" class="w-100 text-center form-control" type="number" name="BillingDTO.Items[@ItemCount].PhilHealthCovered" value="@(items.PhilHealthCovered?? 0)">
                                                 </td>
                                                 <td style="">
-                                                    <i class="fas fa-trash "></i>
-                                                </td>
-
-
-
-               
+                                                    <i class="fas fa-trash itemDelBtn" style="display:none"></i>
+                                                </td>           
 
                                             </tr>
 
@@ -384,14 +406,7 @@
                                                     <datalist id="numberList">
                                                         <option value="1">
                                                         </option>
-                                                        <option value="2">
-                                                        </option>
-                                                        <option value="3">
-                                                        </option>
-                                                        <option value="4">
-                                                        </option>
-                                                        <option value="5">
-                                                        </option>
+
                                                     </datalist>
                                                 </td>
                                                 <td>₱<span id="price">200.00</span><input type="hidden" id="pricehidden" name="BillingDTO.Services[@ServiceCount].Price" value="200.00"></td>
@@ -400,7 +415,7 @@
                                                     <input id="philCovered" class="w-100 text-center form-control" type="number" name="BillingDTO.Services[@ServiceCount].PhilHealthCovered">
                                                 </td>
                                                 <td style="">
-                                                    <i class="fas fa-trash "></i>
+                                                    <i class="fas fa-trash serviceDelBtn"></i>
                                                 </td>
                                             </tr>
                                             ServiceCount++;
@@ -506,12 +521,12 @@
                         }
                         else
                         {
-                            <button class="btn btn-success mx-2" type="submit" name="action" value="MakePayment">
+                            <button class="btn btn-success mx-2 makePaymentBtn" type="submit" name="action" value="MakePayment" disabled>
                                 <i class="fas fa-plus"></i>
                                 <span>Make Payment</span>
                             </button>
 
-                            <button class="btn btn-primary mx-2" type="submit" name="action" value="SaveAndPayLater">
+                            <button class="btn btn-primary mx-2 savePaymentBtn" type="submit" name="action" value="SaveAndPayLater" disabled>
                                 <i class="fas fa-check"></i>
                                 <span>Save & Pay Later</span>
                             </button>
@@ -828,7 +843,9 @@
 <script>
     $(document).ready(function () {
         
-
+        $('#isNotarialFee').on('change', function () {
+            $('#patientNotarialFee').prop('disabled', !this.checked); // Enable input if checkbox is checked
+        });
 
 
         $("#editItemName, #editItemPrice").on("input", function (event) {
@@ -868,7 +885,7 @@
                     toastr.success(result);
                     setTimeout(function () {
                         window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
-                    }, 3000);
+                    }, 1000);
                 },
                 error: function (req, status, error) {
                     console.log(status);
@@ -940,41 +957,41 @@
 
 
                         $(".deleteItemBtn").on("click", function (event) {
-                            alert("wadwadwad")
+                
                             var idd = $(this).data("id");
                             var id = parseInt(idd);
                             DeleteItem(id);
                         });
 
-                            function DeleteItem(itemid) {
-                                Swal.fire({
-                                    title: "Are you sure?",
-                                    text: "You won't be able to revert this Item!",
-                                    icon: "warning",
-                                    showCancelButton: true,
-                                    confirmButtonColor: "#3085d6",
-                                    cancelButtonColor: "#d33",
-                                    confirmButtonText: "Yes, delete it!"
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        $.ajax({
-                                            type: 'DELETE',
-                                            url: '@Url.Action("DeleteItem", "Billing")',
-                                            data: { itemId: itemid },
-                                            success: function (result) {
+                        function DeleteItem(itemid) {
+                            Swal.fire({
+                                title: "Are you sure?",
+                                text: "You won't be able to revert this Item!",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Yes, delete it!"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({
+                                        type: 'DELETE',
+                                        url: '@Url.Action("DeleteItem", "Billing")',
+                                        data: { itemId: itemid },
+                                        success: function (result) {
                 
-                                                toastr.success(result);
-                                                setTimeout(function () {
-                                                    window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
-                                                }, 3000);
-                                            },
-                                            error: function () {
-                                                console.log('Unable to delete the patient.');
-                                            }
-                                        });
-                                    }
-                                });
-                            }
+                                            toastr.success(result);
+                                            setTimeout(function () {
+                                                window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
+                                            }, 1000);
+                                        },
+                                        error: function () {
+                                            console.log('Unable to delete the Item.');
+                                        }
+                                    });
+                                }
+                            });
+                        }
                 }
                 else{
                             var option = `
@@ -1052,7 +1069,7 @@
                     toastr.success(result);
                     setTimeout(function () {
                         window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
-                    }, 3000);
+                    }, 1000);
                 },
                 error: function (req, status, error) {
                     console.log(status);
@@ -1123,8 +1140,63 @@
                         });
 
 
-                }
+                        $(".deleteServiceBtn").on("click", function (event) {
 
+                            var idd = $(this).data("id");
+                            var id = parseInt(idd);
+                            DeleteService(id);
+                        });
+
+                        function DeleteService(serviceid) {
+                            Swal.fire({
+                                title: "Are you sure?",
+                                text: "You won't be able to revert this Service!",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Yes, delete it!"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({
+                                        type: 'DELETE',
+                                        url: '@Url.Action("DeleteService", "Billing")',
+                                        data: { serviceId: serviceid },
+                                        success: function (result) {
+
+                                            toastr.success(result);
+                                            setTimeout(function () {
+                                                window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
+                                            }, 1000);
+                                        },
+                                        error: function () {
+                                            console.log('Unable to delete the Service.');
+                                        }
+                                    });
+                                }
+                            });
+
+                        }
+
+
+                }
+                else{
+                var option = `
+                        <div class="allServicesResult">
+
+                        <div class="allServicesResultName" style="border:none;">
+                            <h5 style="margin-left:100px;">No Services Yet</h5>
+                        </div>
+
+                        <div class="allServicesResultAction" style="border:none;">
+          
+                        </div>
+
+                    </div>
+                `;
+
+                $(".allServicesModalBodyDiv1").append(option);
+                }
 
             },
             error: function (req, status, error) {
@@ -1183,7 +1255,7 @@
                         <option value="2"/>
                         <option value="3"/>
                         <option value="4"/>
-                        <option value="5"/>
+
                     </datalist>
                 </td>
                 <td>₱<span id="price">0</span><input type="hidden" id="pricehidden"/></td>
@@ -1384,13 +1456,32 @@
 
             $("#isDiscounted").prop("disabled", false);
 
+            $("#isNotarialFee").prop("disabled", false);
+
             var discountCount = $("#discountInput").val();
+
+            var isNotarial = @Html.Raw(notarialFee.HasValue ? notarialFee.Value.ToString().ToLower() : "null");
+  
+                if (isNotarial) {
+
+                    $("#isNotarialFee").prop("checked", true);
+                    $('#patientNotarialFee').prop('disabled', false);
+
+                } else {
+                    $("#isNotarialFee").prop("checked", false);
+                    $('#patientNotarialFee').prop('disabled', true);
+
+                }
 
             if (!isNaN(discountCount) && discountCount > 0) {
                 $("#isDiscounted").prop("checked", true);
                 $('#discountInput').prop('disabled', false);
             }
           
+            $(".serviceDelBtn").css("display", "block");
+            $(".itemDelBtn").css("display", "block");
+
+
         });
 
         // Change event for service selection
@@ -1440,6 +1531,10 @@
             calculateTotal();
         });
 
+        $("#isNotarialFee").on("click", function () {
+            calculateTotal();
+        });
+
         function calculateTotal() {
             let total = 0;
             let philHealthCoveredTotal = 0;
@@ -1458,6 +1553,13 @@
 
             let finalTotal = total - discount;
 
+             var notarial = parseFloat($("#patientNotarialFee").val()) || 0;
+
+
+            if (notarial !== 0) {
+                finalTotal += notarial;
+            }
+        
 
             $("#totalAmountShow").text("Total Amount: ₱" + finalTotal.toFixed(2));
             $("#philHealthTotalShow").text("₱" + philHealthCoveredTotal.toFixed(2));
@@ -1528,10 +1630,14 @@
                 data: { itemName: itemName1, description: description1, price: price1 },
                 dataType: "json",
                 success: function (result) {
+
+                    if(result === "exist"){
+                        toastr.alert("This Item is already Created!");
+                    }
                     toastr.success(result);
                     setTimeout(function () {
                         window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
-                    }, 3000);
+                    }, 2000);
                 },
                 error: function (req, status, error) {
                     console.log(status);
@@ -1583,7 +1689,7 @@
                     toastr.success(result);
                     setTimeout(function () {
                         window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
-                    }, 3000);
+                    }, 2000);
                 },
                 error: function (req, status, error) {
                     console.log(status);
@@ -1624,7 +1730,7 @@
 
                             result.forEach(function (patient) {
 
-                                console.log(patient);
+                                // console.log(patient);
 
                                 var html = `
                                       <li class="selectedPatient" data-id="${patient.patientID}" data-name="${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}">${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}</li>
@@ -1644,16 +1750,19 @@
                                     searchResultContainer.hide();
 
 
+                                    $(".makePaymentBtn").prop("disabled", false);
+                                    $(".savePaymentBtn").prop("disabled", false);
+
                                 });
 
 
                             });
 
-
-
                         } else {
 
                             searchResultContainer.append('<li>No Results Found</li>');
+                            $(".makePaymentBtn").prop("disabled", true);
+                            $(".savePaymentBtn").prop("disabled", true);
                         }
 
                     },
@@ -1668,6 +1777,8 @@
             }
             else {
                 searchResultContainer.hide();
+                $(".makePaymentBtn").prop("disabled", true);
+                $(".savePaymentBtn").prop("disabled", true);
             }
 
         });

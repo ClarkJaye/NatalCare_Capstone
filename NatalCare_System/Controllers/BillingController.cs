@@ -164,7 +164,7 @@ namespace NatalCare_System.Controllers
                 return Json(message);
             }else
             {
-                return Json("Cant Add Item");
+                return Json(message);
             }
 
        
@@ -188,7 +188,25 @@ namespace NatalCare_System.Controllers
 
         }
 
-        
+        [HttpDelete]
+        public async Task<IActionResult> DeleteService(int serviceId)
+        {
+
+            var (result, message) = await _billing.deleteService(serviceId);
+
+            if (result)
+            {
+                return Json(message);
+            }
+            else
+            {
+                return Json("Cant Delete Item");
+            }
+
+
+        }
+
+
 
         [HttpPost]
         public async Task<IActionResult> EditItem(int id, string itemName, string description, decimal price)
@@ -331,7 +349,10 @@ namespace NatalCare_System.Controllers
                         return Json(message);
 
                     }
-
+                    else
+                    {
+                        return Json(message);
+                    }
                 }
                 return Json(new { IsSuccess = false, Message = "Delete Payment failed!" });
             }
@@ -400,6 +421,5 @@ namespace NatalCare_System.Controllers
             }
         }
 
-        
     }
 }

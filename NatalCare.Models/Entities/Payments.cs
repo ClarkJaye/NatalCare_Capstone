@@ -51,10 +51,5 @@ namespace NatalCare.Models.Entities
         [ValidateNever]
         public User? UpdatedBy { get; set; }
 
-
-        public int? StaffID { get; set; }
-        [ForeignKey("StaffID")]
-        [ValidateNever]
-        public Staff? Staff { get; set; }
     }
 }

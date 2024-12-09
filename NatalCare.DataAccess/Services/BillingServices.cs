@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using NatalCare.DataAccess.data;
 using NatalCare.DataAccess.Interfaces;
@@ -37,7 +38,7 @@ namespace NatalCare.DataAccess.Services
         public async Task<InvoiceListDTO> GetPayments()
         {
 
-            var payments = await _unitOfWork.Repository<Payments>().AsQueryable().Include(a => a.Patient).Include(a => a.Staff).Include(a => a.CreatedBy).OrderBy(a => a.Payment_Status).ToListAsync();
+            var payments = await _unitOfWork.Repository<Payments>().AsQueryable().Include(a => a.Patient).Include(a => a.CreatedBy).OrderBy(a => a.Payment_Status).ToListAsync();
 
             var patientPayments = await _unitOfWork.Repository<PatientPayments>().AsQueryable().Include(a => a.Patients).Include(a => a.Payments).ToListAsync();
 
@@ -93,9 +94,9 @@ namespace NatalCare.DataAccess.Services
             invoice.Notes = billingDTO.Notes;
             invoice.BillDate = billingDTO.BillDate;
             invoice.DueDate = billingDTO.DueDate;
+            invoice.Notorial_Fee = billingDTO.NotarialFee;
             invoice.Updated_At = DateTime.Now;
             invoice.PatientUpdatedBy = user.Id;
-            invoice.StaffID = int.Parse(billingDTO.StaffName);
 
             _unitOfWork.Repository<Payments>().Update(invoice);
 
@@ -232,8 +233,9 @@ namespace NatalCare.DataAccess.Services
                 PatientCreatedBy = user.Id,
                 Updated_At = null,
                 PatientUpdatedBy = null,
-                StaffID = int.Parse(billingDTO.StaffName)
-             };
+       
+                Notorial_Fee = billingDTO.NotarialFee
+            };
 
             _unitOfWork.Repository<Payments>().Add(payment);
             await _unitOfWork.Complete();
@@ -274,10 +276,7 @@ namespace NatalCare.DataAccess.Services
 
             }
             await _unitOfWork.Complete();
-
-
             return new PrintInvoiceResponse(true, payment.PaymentID);
-
         }
 
 
@@ -288,16 +287,27 @@ namespace NatalCare.DataAccess.Services
         public async Task<CommonResponse> createItems(string itemName, string description, decimal price)
         {
 
-            var item = new Items{
-                ItemName = itemName,
-                Description = description,
-                Price = price
-            };
+            var itemExist = await _unitOfWork.Repository<Items>().AsQueryable().FirstOrDefaultAsync(a => a.ItemName == itemName);
 
-            _unitOfWork.Repository<Items>().Add(item);
-            await _unitOfWork.Complete();
+            if (itemExist != null)
+            {
+                return new CommonResponse(false, "exist");
+            }
+            else
+            {
+                var item = new Items
+                {
+                    ItemName = itemName,
+                    Description = description,
+                    Price = price
+                };
 
-            return new CommonResponse(true, "Item Added Successfully");
+                _unitOfWork.Repository<Items>().Add(item);
+                await _unitOfWork.Complete();
+
+                return new CommonResponse(true, "Item Added Successfully");
+            }
+
         }
 
         public async Task<CommonResponse> editItems(int id,string itemName, string description, decimal price)
@@ -348,151 +358,19 @@ namespace NatalCare.DataAccess.Services
         public async Task<SearchResultResponse> searchPatient(string patientName)
         {
             var nameToLower = patientName.ToLower();
+            var nameParts = nameToLower.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             var matchingPatients = await _unitOfWork.Repository<Patients>()
                 .AsQueryable()
-                .Where(a => a.FirstName.ToLower().Contains(nameToLower) ||
-                            a.MiddleName.ToLower().Contains(nameToLower) ||
-                            a.LastName.ToLower().Contains(nameToLower))
-                .Take(10)
+                .Where(a => nameParts.All(part =>
+                    a.FirstName.ToLower().Contains(part) ||
+                    a.MiddleName.ToLower().Contains(part) ||
+                    a.LastName.ToLower().Contains(part)))
                 .ToListAsync();
 
             return new SearchResultResponse(true, matchingPatients);
         }
 
-        //public async Task<PrintVM> PaymentVM(int? invoiceNumber)
-        //{
-
-        //    try
-        //    {
-        //        //var payment =  _unitOfWork.Repository<Payments>().AsQueryable().FirstOrDefault(a => a.PaymentID == invoiceNumber);
-        //        var payment =  db.Payments.FirstOrDefault(a => a.PaymentID == invoiceNumber);
-
-
-
-
-        //        var patientPayment = db.PatientPayments.Where(a => a.PaymentID == invoiceNumber).ToList();
-
-
-        //        //var itemPayments =  _unitOfWork.Repository<ItemPayments>().AsQueryable().Where(a => a.PaymentID == payment.PaymentID).ToList();
-
-        //        //var servicePayments =  _unitOfWork.Repository<ServicesPayment>().AsQueryable().Where(a => a.PaymentID == payment.PaymentID).ToList();
-
-        //        //var patientPayment =  _unitOfWork.Repository<PatientPayments>().AsQueryable().Where(a => a.PaymentID == payment.PaymentID).ToList();
-
-        //        //var patient =  _unitOfWork.Repository<Patients>().AsQueryable().FirstOrDefault(a => a.PatientID == payment.PatientID);
-
-
-        //        var createdByUser = await _userManager.Users
-        //            .FirstOrDefaultAsync(a => a.Id == payment.PatientCreatedBy);
-
-
-        //        var paymentID = payment.PaymentID;
-
-        //        //PATIENT PAYMENT
-        //        decimal? balance = 0;
-
-        //        List<decimal?> amountPaid = new List<decimal?>();
-
-        //        if (patientPayment.Count > 0)
-        //        {
-        //            patientPayment.ForEach(paymentDetail =>
-        //            {
-        //                amountPaid.Add(paymentDetail.Amount);
-        //            });
-        //            decimal totalPaid = amountPaid.Sum(x => x ?? 0);
-        //            balance -= totalPaid;
-        //            paymentID = payment.PaymentID;
-        //        }
-        //        else
-        //        {
-        //            balance = payment.Final_Amount;
-        //            paymentID = payment.PaymentID;
-        //        }
-
-
-
-        //        // ITEMS
-        //        var itemPayments = db.ItemPayments.Where(a => a.PaymentID == invoiceNumber).ToList();
-
-        //        List<ItemsVM> itemsList = new List<ItemsVM>();
-
-        //        if (itemPayments.Count > 0)
-        //        {
-        //            foreach (var item in itemPayments)
-        //            {
-        //                var ogItem = db.Items.AsNoTracking().FirstOrDefault(a => a.ItemID == item.ItemID);
-
-        //                if (ogItem == null)
-        //                {
-        //                    throw new Exception($"Item with ID {item.ItemID} not found.");
-        //                }
-
-        //                itemsList.Add(new ItemsVM
-        //                {
-        //                    ItemName = ogItem.ItemName,
-        //                    Quantity = item.Quantity,
-        //                    Price = ogItem.Price,
-        //                    PhilHealthCovered = item.PhilHealthCovered,
-        //                    Total = (ogItem.Price * item.Quantity) - item.PhilHealthCovered
-        //                });
-
-        //            }
-        //        }
-        //        else
-        //        {
-
-        //        }
-
-        //        paymentID = payment.PaymentID;
-
-        //        //SERVICES
-
-        //        var servicePayments = db.ServicesPayments.Where(a => a.PaymentID == invoiceNumber).ToList();
-
-        //        if (servicePayments.Count > 0)
-        //        {
-        //            servicePayments.ForEach(service =>
-        //            {
-
-        //            });
-        //        }
-        //        else
-        //        {
-
-        //        }
-
-
-        //        //PATIENT
-        //        var patient = db.Patients.FirstOrDefault(a => a.PatientID == payment.PatientID);
-
-
-        //        PrintVM printVM = new PrintVM
-        //        {
-        //            InvoiceNumber = payment.PaymentID,
-        //            BillDate = payment.BillDate,
-        //            DueDate = payment.DueDate,
-        //            PatientName = $"{patient.FirstName} {patient.MiddleName} {patient.LastName}".Trim(),
-        //            MobileNumber = patient.MobileNumber,
-        //            Address = patient.Address,
-        //            Balance = balance,
-        //            InVoiceGeneratedBy = $"{createdByUser.FirstName} {createdByUser.FirstName} {createdByUser.FirstName}".Trim(),
-        //            Notes = payment.Notes,
-        //            SubTotal = payment.Total_Amount,
-        //            Discount = payment.Discount,
-        //            PhilHealthTotal = payment.PhilHealth_Deduction,
-        //            TotalPayment = payment.Final_Amount
-        //        };
-
-        //        return printVM;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Log the exception or handle it as needed
-        //        Console.WriteLine($"Error: {ex.Message}");
-        //        return null; // or throw the exception to be handled elsewhere
-        //    }
-        //}
 
         public async Task<PrintDTO> PaymentVM(int? invoiceNumber)
         {
@@ -505,7 +383,6 @@ namespace NatalCare.DataAccess.Services
                 .AsQueryable()
                 .Include(a => a.Patient)
                 .Include(a => a.CreatedBy)
-                .Include(a => a.Staff)
                 .FirstOrDefault(a => a.PaymentID == invoiceNumber);
 
             if (payment == null)
@@ -549,10 +426,35 @@ namespace NatalCare.DataAccess.Services
         {
             var payment = await _unitOfWork.Repository<Payments>().AsQueryable().FirstOrDefaultAsync(a => a.PaymentID == paymentId);
 
-            _unitOfWork.Repository<Payments>().Remove(payment);
-            await _unitOfWork.Complete();
+            try
+            {
 
-            return new CommonResponse(true, "Payment Sucessfully Deleted!");
+                if (payment != null)
+                {
+
+                    var patientPayments = await _unitOfWork.Repository<PatientPayments>().AsQueryable().Where(a => a.PaymentID == paymentId).ToListAsync();
+
+
+                    _unitOfWork.Repository<PatientPayments>().RemoveRange(patientPayments);
+                    await _unitOfWork.Complete();
+
+                    _unitOfWork.Repository<Payments>().Remove(payment);
+                    await _unitOfWork.Complete();
+
+                    return new CommonResponse(true, "Payment Sucessfully Deleted!");
+                }
+                else
+                {
+                    return new CommonResponse(false, "Payment Can't be Deleted");
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return new CommonResponse(false, ex.Message);
+
+            }
         }
 
         public async Task<CommonResponse> deletePatientPayment(int? paymentId)
@@ -630,7 +532,6 @@ namespace NatalCare.DataAccess.Services
                 .AsQueryable()
                 .Include(a => a.Patient)
                 .Include(a => a.CreatedBy)
-                .Include(a => a.Staff)
                 .FirstOrDefault(a => a.PaymentID == id);
 
                 if (payment == null)
@@ -702,6 +603,7 @@ namespace NatalCare.DataAccess.Services
                 PaymentID = patientPayments.PaymentID,
                 DatePaid = DateTime.Now,
                 PatientID = patientPayments.PatientID,
+                PatientsMoney = patientPayments.PatientsMoney
             };
 
             _unitOfWork.Repository<PatientPayments>().Add(newPatientPayment);
@@ -838,7 +740,7 @@ namespace NatalCare.DataAccess.Services
         public async Task<dynamic> GetPaymentStatusStatistics()
         {
             var payments = await _unitOfWork.Repository<Payments>().AsQueryable()
-                .Include(a => a.Patient).Include(a => a.Staff).Include(a => a.CreatedBy)
+                .Include(a => a.Patient).Include(a => a.CreatedBy)
                 .OrderBy(a => a.Payment_Status).ToListAsync();
 
             int paid = 0;
@@ -873,6 +775,8 @@ namespace NatalCare.DataAccess.Services
         }
 
 
+
+
         public async Task<CommonResponse> deleteItem(int itemId)
         {
             var item = await _unitOfWork.Repository<Items>().AsQueryable().FirstOrDefaultAsync(a => a.ItemID == itemId);
@@ -881,6 +785,16 @@ namespace NatalCare.DataAccess.Services
             await _unitOfWork.Complete();
 
             return new CommonResponse(true, "Item Successfully Deleted!");
+        }
+
+        public async Task<CommonResponse> deleteService(int serviceId)
+        {
+            var service = await _unitOfWork.Repository<Servicesss>().AsQueryable().FirstOrDefaultAsync(a => a.ServiceID == serviceId);
+
+            _unitOfWork.Repository<Servicesss>().Remove(service);
+            await _unitOfWork.Complete();
+
+            return new CommonResponse(true, "Service Successfully Deleted!");
         }
     }
 }

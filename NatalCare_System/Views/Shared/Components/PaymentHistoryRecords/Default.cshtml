@@ -6,12 +6,19 @@
     decimal? balance = ViewBag.Balance as decimal?;
 
     string? name = string.Empty;
+
+    List<decimal?> allAmount= new List<decimal?>();
+
+    decimal? totalAmount = 0;
+
 }
+
 <div class="table-responsive">
     <table id="patientPaymenTable" class="table table-hover table-striped">
         <thead class="border-bottom-2">
             <tr>
-                <th>Amount</th>
+                <th>Patient's Money</th>
+                <th>Patient's Amount To Pay</th>
                 <th>Payment Method</th>
                 <th>Date Paid</th>
                 <th class="text-center">Action</th>
@@ -26,8 +33,14 @@
                     + (payments.Patients.MiddleName != null ? " " + payments.Patients.MiddleName + " " : " ")
                     + payments.Patients.LastName;
 
+                    allAmount.Add(payments.Amount);
+        
+
                     <tr class="align-middle">
+
+                        <td>₱ @payments.PatientsMoney</td>
                         <td>₱ @payments.Amount</td>
+                        
                         <td>@payments.Payment_Method</td>
                         <td>@(payments.DatePaid?.ToString("MMMM d, yyyy") ?? "N/A")</td>
                         <td class="text-center">
@@ -44,14 +57,15 @@
                         </td>
                     </tr>
                 }
+                totalAmount = allAmount.Sum(x => x ?? 0);
             }
             else
             {
 
                 <script>
                     $(document).ready(function () {
-                        $("#billTag").css("display", "none");
-                        $("#nameTag").css("display", "none");
+                        $("#billTag").hide();
+                        $("#nameTag").hide();
                     });
                 </script>
  
@@ -59,7 +73,14 @@
         </tbody>
     </table>
 </div>
-
+@if (Model == null ){
+    <script>
+        $(document).ready(function () {
+            $("#billTag").hide();
+            $("#nameTag").hide();
+        });
+    </script>
+}
 <script>
     $(document).ready(function () {
 
@@ -70,6 +91,7 @@
             var paymentAmount = $(this).data('amount');
             var paymentMethod = $(this).data('paymethod');
 
+            
                
             $("#patientPaymentId").val(id);
 
@@ -139,7 +161,7 @@
                         url: '@Url.Action("DeletePatientPayment", "Billing")',
                         data: { paymentId: paymentid },
                         success: function (result) {
-                            debugger
+                            
                             toastr.success(result);
                             setTimeout(function () {
                                 window.location.href = '@Url.Action("InvoiceList", "Billing")';

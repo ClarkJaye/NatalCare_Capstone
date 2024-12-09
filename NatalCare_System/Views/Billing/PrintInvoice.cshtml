@@ -146,7 +146,14 @@
                     <p style="margin:0;">Notes:</p>
                 </div>
                 <div class="printDiv3In2Div1Div2" style="border: none;">
-                    <p style="margin:0; border: none">₱ @balance</p>
+                    <p style="margin:0; border: none">
+                        @if(balance == 0){
+                            <span>Paid</span>
+                        }
+                        else{
+                            <span>₱ @balance</span>
+                        }
+                    </p>
                     <p style="margin:0; border: none">₱ @(Model.Payments.Notorial_Fee ?? 0)</p>
                     <p style="margin:0; border: none; line-height:1rem; text-align:center;" id="printNotes">@(Model.Payments.Notes ?? "None")</p>
                 </div>

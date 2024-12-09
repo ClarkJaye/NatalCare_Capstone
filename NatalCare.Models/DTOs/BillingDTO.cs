@@ -16,15 +16,14 @@ namespace NatalCare.Models.DTOs
         [StringLength(20)]
         public string? PatientName { get; set; }
 
-        [Required]
-        [StringLength(20)]
-        public string? StaffName { get; set; }
 
         [Required]
         public DateOnly? BillDate { get; set; }
 
         [Required]
         public DateOnly? DueDate { get; set; }
+
+        public decimal? NotarialFee { get; set; }
 
         [Required]
         public List<ItemsDTO>? Items { get; set; } = new List<ItemsDTO>();

@@ -41,6 +41,8 @@ namespace NatalCare.DataAccess.Interfaces
 
         Task<CommonResponse> deleteItem(int itemId);
 
+        Task<CommonResponse> deleteService(int serviceId);
+
 
         Task<CommonResponse> deletePatientPayment(int? paymentId);
 

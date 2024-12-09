@@ -1,160 +1,1805 @@
-﻿@{
+﻿@model NatalCare.Models.DTOs.VM.BillingAndPrintVM
+
+@{
     ViewData["Title"] = "Generate Invoice";
     ViewData["NavTitle"] = "Generate Invoice";
     Layout = "_UserLayout";
+
+    int? staffId = 0;
+
+    int? rowCount = 0;
+
+    int? ItemCount = 0;
+    int? ServiceCount = 0;
+
+    int servicesCount = 0;
+    int itemsCount = 0;
+
+    DateOnly? billDate = null;
+
+    DateOnly? dueDate = null;
+
+    bool? notarialFee = null;
+
+    if (Model.PrintDTO != null)
+    {
+
+        billDate = Model.PrintDTO.Payments.BillDate;
+        dueDate = Model.PrintDTO.Payments.DueDate;
+
+
+    }
+
 }
-
-<!-- NAVBAR -->
-<partial name="Partial/_Navbar" />
-
-<div class="mx-5">
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title my-2">NEW INVOICE</h5>
-        </div>
-        <div class="card-body m-4">
-            <form controller="Newborn" action="Create">
-                <div class="row form-group">
-                    <div validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group col-md-4 mb-3">
-                        <label for="FirstName" class="control-label">Patient Name</label>
-                        <input for="FirstName" class="form-control" placeholder="Enter Patient Name" required />
-                        <span validation-for="FirstName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                        <label for="MiddleName" class="control-label">Staff Name</label>
-                        <input for="MiddleName" class="form-control" placeholder="Enter Staff Name" />
-                        <span validation-for="MiddleName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                        <label for="LastName" class="control-label">Bill Date</label>
-                        <input for="LastName" class="form-control" type="date" required />
-                        <span validation-for="LastName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-4 mb-3">
-                        <label for="Birthdate" class="control-label">Due Date</label>
-                        <input for="Birthdate" class="form-control" type="date" required />
-                        <span validation-for="Birthdate" class="text-danger"></span>
-                    </div>
-
-
-
-                    <div class="form-group col-12 ">
-                        <div class="d-flex align-items-center justify-content-end gap-3">
-                            <button class="btn btn-pink addRow">
-                                <i class="fas fa-plus"></i>
-                                <span>Add Row</span>
-                            </button>
-                            <button class="btn btn-pink addItem">
-                                <i class="fas fa-plus"></i>
-                                <span>Add Item</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>  
-    
-            <hr />
-            <div class="row d-flex" style="height:20vh; overflow:auto; scrollbar-width:thin;">
-                <div class="h-100 w-100">
-                    <table class="table text-center">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Item</th>
-                                <th>Description</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                                <th>Amount</th>
-                                <th>Philhealth Covered</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="createInvoiceTBody" >
-                            <tr>
-                                <td>1</td>
-                                <td>
-                                    <select class="w-100 text-center form-select">
-                                        <option>PRENATAL/POSTNATAL CARE</option>
-                                        <option>2</option>
-                                    </select>
-                                </td>
-                                <td>text</td>
-                                <td>2</td>
-                                <td>200</td>
-                                <td>400</td>
-                                 <td>
-                                    <input class="w-100 text-center form-control" type="number"/>
-    
-                                </td>
-                                <td>
-
-                                </td>
-                            </tr>
-   
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <hr />
-
-            <div class="row form-group">
-   
-                <div class="form-group col-md-5 mb-3">
-                    <label for="FirstName" class="control-label fw-bold">Notes:</label>
-                    <textarea for="FirstName" class="form-control" rows="4" cols="50"></textarea>
-                    <span validation-for="FirstName" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-7 row">
-                    <div class="form-group col-5  d-flex flex-column align-items-end">
-                        <label for="MiddleName" class="control-label my-2 fw-bold">Subtotal:</label>
-                        <label for="MiddleName" class="control-label my-2 fw-bold">Philhealth Total:</label>
-                        <label for="MiddleName" class="control-label my-2 fw-bold">Is Discounted:</label>
-                        <label for="MiddleName" class="control-label my-2 fw-bold">Dicount:</label>
-
-
-                    </div>
-                    <div class="form-group col-7 mb-3  d-flex flex-column align-items-start">
-
-                        <p class=" mt-1 fw-bold">₱0.00</p>
-                        <p class=" mt-1 fw-bold">₱0.00</p>
-
-                        <input class="form-check-input discounted mb-3 fw-bold" type="checkbox" style="width: 25px;">
-                        <input for="MiddleName" class="form-control mb-3 fw-bold" type="text" />
-                        <p class="align-self-center fw-bold">Total Amount: ₱0.00</p>
-
-                    </div>
-                </div>
-
-                <div class="form-group row-md-12 d-flex justify-content-end align-items-center">
-
-                    <button class="btn btn-success mx-2">
-                        <i class="fas fa-plus"></i>
-                        <span>Make Payment</span>
-                    </button>
-                    <button class="btn btn-primary mx-2">
-                        <i class="fas fa-check"></i>
-                        <span>Save & Pay Later</span>
-                    </button>
-                    <button class="btn btn-dark mx-2">
-                        <i class="fas fa-close"></i>
-                        <span>Cancel</span>
-                    </button>
-                </div>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
 <style>
-    .form-check-input:checked{
+    .form-check-input:checked {
         background-color: #FF8EA6;
         border-color: #FF8EA6;
     }
 
-    .discounted:hover{
-        cursor:pointer;
+    .discounted:hover {
+        cursor: pointer;
     }
 </style>
-<script>
+<!-- NAVBAR -->
 
+<partial name="Partial/_Navbar" />
+
+<div class="mx-5">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center bg-pink">
+            @if (Model.PrintDTO != null)
+            {
+                <h5 class="card-title my-2" id="invoiceHeader">INVOICE DETAILS</h5>
+            }
+            else
+            {
+                <h5 class="card-title my-2">NEW INVOICE</h5>
+            }
+        </div>
+        <div class="card-body m-4">
+            <form asp-controller="Billing" asp-action="CreateInvoice" method="POST">
+
+                <div class="row form-group" style="position:relative;">
+
+                    <div validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group col-md-4 mb-3">
+                        <label for="FirstName" class="control-label">Patient Name</label>
+
+
+                        @if (Model.PrintDTO != null)
+                        {
+                            <input type="hidden" asp-for="BillingDTO.PatientName" name="BillingDTO.PatientName" id="patientIdHidden" value="@Model.PrintDTO.Payments.Patient.PatientID" />
+
+                            <input type="hidden" asp-for="BillingDTO.paymentID" name="BillingDTO.paymentID"  value="@Model.PrintDTO.Payments.PaymentID" />
+                        }
+                        else
+                        {
+                            <input type="hidden" asp-for="BillingDTO.PatientName" name="BillingDTO.PatientName" id="patientIdHidden" />
+
+                        }
+                        
+                        <span asp-validation-for="BillingDTO.PatientName" class="text-danger"></span>
+                        @if(Model.PrintDTO != null)
+                        {
+                            <input class="form-control" placeholder="Enter Patient Name" id="patientNameInput" autocomplete="off" value="@(Model.PrintDTO.Payments.Patient.FirstName) @(Model.PrintDTO.Payments.Patient.MiddleName) @(Model.PrintDTO.Payments.Patient.LastName)" disabled/>
+                        }
+                        else
+                        {
+                            <input class="form-control" placeholder="Enter Patient Name" id="patientNameInput" autocomplete="off" />
+                        }
+
+                    </div>
+
+<ul class="searchResultsDiv" >
+    @* AJAX *@
+</ul>
+
+
+
+                    <div class="form-group col-md-4 mb-3">
+                        <label for="billDate" class="control-label">Bill Date</label>
+                        <input asp-for="BillingDTO.BillDate" class="form-control" type="date" name="BillingDTO.BillDate" id="billDate" />
+
+                        @if (billDate.HasValue) 
+                        {
+                            <script>
+                                $(document).ready(function () {
+                           
+                                    var dateValue = '@billDate.Value.ToString("yyyy-MM-dd")';
+                                    $("#billDate").val(dateValue);
+                                    $("#billDate").prop("disabled", true);
+
+                                });
+                            </script>
+                        }
+
+                        <span asp-validation-for="BillingDTO.BillDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-md-4 mb-3">
+                        <label for="Birthdate" class="control-label">Due Date</label>
+                        <input asp-for="BillingDTO.DueDate" class="form-control" type="date" name="BillingDTO.DueDate" id="dueDate" />
+
+                        @if (dueDate.HasValue) 
+                        {
+                            <script>
+                                $(document).ready(function () {
+                                   
+                                    var dateValue = '@dueDate.Value.ToString("yyyy-MM-dd")';
+                                    $("#dueDate").val(dateValue);
+                                    $("#dueDate").prop("disabled", true);
+
+                                });
+                            </script>
+                        }
+                        <span asp-validation-for="BillingDTO.DueDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-md-4 mb-3">
+
+                        <label class="control-label" style="font-weight:bold">Notarial Fee ₱:</label>
+                        <div class="row form-group">
+                            <div class="form-group col-md-8 mb-3">
+                                <input class="form-control" type="number" value="300" id="patientNotarialFee" autocomplete="off" asp-for="BillingDTO.NotarialFee" step="0.01" max="300" disabled/>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input class="form-check-input discounted mt-2 fw-bold" type="checkbox" id="isNotarialFee" style="width: 25px;">
+                            </div>
+
+                       </div>
+
+ @*                     <select asp-for="BillingDTO.StaffName" class="form-select" asp-items="ViewBag.staffList" name="BillingDTO.StaffName" id="staffName">
+                        </select>
+
+                        @if (staffId != 0)
+                        {
+                            <script>
+                                $(document).ready(function () {
+                                    $("#staffName").val('@staffId');
+                                    $("#staffName").prop("disabled", true);
+                                });
+                            </script>
+                        } *@
+
+                        <span asp-validation-for="BillingDTO.NotarialFee" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-12 ">
+                        <div class="d-flex align-items-center justify-content-end gap-3" style="position:relative;">
+
+                                            <div class="itemSettings">
+                                                <button class="btn btn-outline-dark allItemsBtn" data-bs-toggle="modal" data-bs-target="#allItemsModal" onclick="event.preventDefault()">
+                                                    <span>Items</span>
+                                                    <i class="fa fa-cogs" aria-hidden="true"> </i>
+
+                                                </button>
+                                            </div>
+
+                                            <div class="serviceSettings">
+                                                <button class="btn btn-outline-dark allServicesBtn" data-bs-toggle="modal" data-bs-target="#allSerivesModal" onclick="event.preventDefault()">
+                                                    <span>Service</span>
+                                                    <i class="fa fa-cogs" aria-hidden="true"> </i>
+
+                                                </button>
+                                            </div>
+                            
+                            <button class="btn btn-pink addRow" >
+                                <i class="fas fa-plus"></i>
+                                <span>Add Row</span>
+                            </button>
+                            <button class="btn btn-pink addItem" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Item</span>
+                            </button>
+                            <button class="btn btn-pink addServices" data-bs-toggle="modal" data-bs-target="#addServicesModal">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Services</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row d-flex scrollableTable" style="height:24vh; overflow:auto; scrollbar-width:thin;" id="scrollableTable">
+                    <div class="h-100 w-100">
+                        <table class="table text-center">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Item/Services</th>
+                                    <th>Description</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Amount</th>
+                                    <th>Philhealth Covered</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="createInvoiceTBody" id="tableBody">
+                                @* AJAX *@
+                                @if (Model.PrintDTO != null)
+                                {
+                                    if (Model.PrintDTO?.Payments?.Notorial_Fee != null)
+                                    {
+                                        <script>
+                                            $(document).ready(function () {
+
+                                                $("#isNotarialFee").prop("disabled", true);
+
+
+                                            });
+                                        </script>
+                                        notarialFee = true;
+
+                                    }
+                                    else
+                                    {
+                                        notarialFee = false;
+                                    }
+
+                                    <script>
+                                        $(document).ready(function () {
+
+                                            $("#isDiscounted").prop("disabled", true);
+
+
+                                            $(".addRow").prop("disabled", true);
+                                            $(".addItem").prop("disabled", true);
+                                            $(".addServices").prop("disabled", true);
+
+                                            $("tbody tr input").prop("disabled", true);
+                                            $("tbody tr select").prop("disabled", true);
+                                            $("tbody tr button").prop("disabled", true);
+
+                                        });
+                                    </script>
+
+                                    if (Model.PrintDTO.Items.Count > 0)
+                                    {
+
+
+                                        foreach (var service in Model.PrintDTO.Services)
+                                        {
+                                            rowCount++;
+                                            servicesCount++;
+                                            <tr>
+                                                <td class="row-number">@rowCount</td>
+
+                                                <td style="display:flex; flex-direction:row; justify-content:space-evenly; align-items:center;" class="button-container">
+
+                                                    <select class="form-control selectServices valid" style="width: 100%; text-align:center;" name="BillingDTO.Services[@ServiceCount].ServiceName" aria-invalid="false" id="serviceNameSelect_@rowCount">
+
+                                                        <option class="optionTag" value="">SELECT SERVICE</option> 
+                                                        @foreach (var serviceOption in Model.PrintDTO.Services.Distinct()) 
+                                                        {
+                                                            <option class="optionTag" value="@serviceOption.Services.ServiceName" data-price="@((int)serviceOption.Services.Price)" data-name="@serviceOption.Services.ServiceName" data-desc="@serviceOption.Services.Description">
+                                                                @serviceOption.Services.ServiceName
+                                                            </option>
+                                                        }
+
+                                                    </select>
+         
+              
+                                                </td>
+
+                                                <td>
+                                                    <button class="btn btn-outline-dark viewButton" data-bs-toggle="modal" data-bs-target="#descriptionModal" onclick="event.preventDefault();">VIEW</button>
+                                                </td>
+
+                                                <td>
+                                                    <input list="numberList" id="quantity" class="w-100 text-center form-control" type="number" name="BillingDTO.Services[@ServiceCount].Quantity" value="@service.Quantity">
+                                                    <datalist id="numberList">
+                                                        <option value="1">
+                                                        </option>
+   
+                                                    </datalist>
+                                                </td>
+                                                <td>₱<span id="price">@service?.Services?.Price</span>
+                                                    <input type="hidden" id="pricehidden" name="BillingDTO.Services[@ServiceCount].Price" value="@service?.Services?.Price">
+                                                </td>
+
+                                                <td>₱<span id="amount">@(((service.Services?.Price ?? 0) * (service.Quantity ?? 0)) - (service.PhilhealthCovered ?? 0))</span>
+                                                    <input type="hidden" id="amounthidden" name="BillingDTO.Services[@ServiceCount].Amount" value="0.00">
+                                                    <input type="hidden" id="amountSubTotal" value="">
+                                                </td>
+                                                <td>
+                                                    <input id="philCovered" class="w-100 text-center form-control" type="number" name="BillingDTO.Services[@ServiceCount].PhilHealthCovered" value="@(service.PhilhealthCovered ?? 0)">
+                                                </td>
+                                                <td style="">
+                                                    <i class="fas fa-trash serviceDelBtn" style="display:none"></i>
+                                                </td>
+                                            </tr>
+                                            ServiceCount++;
+
+                                        }
+
+                                        foreach (var items in Model.PrintDTO.Items)
+                                        {
+                                            rowCount++;
+
+                                            <tr>
+                                                <td class="row-number">@rowCount</td>
+
+                                                <td style="display:flex; flex-direction:row; justify-content:space-evenly; align-items:center;" class="button-container">
+                                                    <select class="form-control selectItems valid" style="width: 100%; text-align:center;" name="BillingDTO.Items[@ItemCount].ItemName" aria-invalid="false" id="itemsNameSelect_@rowCount">
+
+                                                        <option class="optionTag" value="">SELECT ITEMS</option>
+                                                        @foreach (var itemOption in Model.PrintDTO.Items.Distinct())
+                                                        {
+                                                            <option class="optionTag" value="@itemOption.Items.ItemName" data-price="@itemOption.Items.Price" data-name="@itemOption.Items.ItemName" data-desc="@itemOption.Items.Description">
+                                                                @itemOption.Items.ItemName
+                                                            </option>
+                                                        }
+
+                                                    </select>
+                                                </td>
+
+                                                <td>
+                                                    <button class="btn btn-outline-dark viewButton" data-bs-toggle="modal" data-bs-target="#descriptionModal" onclick="event.preventDefault();">VIEW</button>
+                                                </td>
+
+                                                <td>
+                                                    <input list="numberList" id="quantity" class="w-100 text-center form-control" type="number" name="BillingDTO.Items[@ItemCount].Quantity" value="@items.Quantity">
+                                                    <datalist id="numberList">
+                                                        <option value="1">
+                                                        </option>
+                                                        <option value="2">
+                                                        </option>
+                                                        <option value="3">
+                                                        </option>
+                                                        <option value="4">
+                                                        </option>
+                                                        <option value="5">
+                                                        </option>
+                                                    </datalist>
+                                                </td>
+                                                <td>
+                                                    ₱<span id="price">@items?.Items?.Price</span>
+                                                    <input type="hidden" id="pricehidden" name="BillingDTO.Items[@ItemCount].Price" value="@items?.Items?.Price">
+                                                </td>
+                                                <td>
+                                                    ₱<span id="amount">@(((items?.Items?.Price ?? 0) * (items?.Quantity ?? 0)) - (items.PhilHealthCovered ?? 0))</span>
+                                                    <input type="hidden" id="amounthidden" name="BillingDTO.Items[@ItemCount].Amount"><input type="hidden" id="amountSubTotal">
+                                                </td>
+                                                <td>
+                                                    <input id="philCovered" class="w-100 text-center form-control" type="number" name="BillingDTO.Items[@ItemCount].PhilHealthCovered" value="@(items.PhilHealthCovered?? 0)">
+                                                </td>
+                                                <td style="">
+                                                    <i class="fas fa-trash itemDelBtn" style="display:none"></i>
+                                                </td>           
+
+                                            </tr>
+
+                                            ItemCount++;
+                                        }
+
+                                    }
+                                    else
+                                    {
+
+                                        foreach (var service in Model.PrintDTO.Services)
+                                        {
+                                            rowCount++;
+
+                                            <tr>
+                                                <td class="row-number">@rowCount</td>
+
+                                                <td style="display:flex; flex-direction:row; justify-content:space-evenly; align-items:center;" class="button-container">
+                                                    <select class="form-control selectServices valid" style="width: 100%; text-align:center;" name="BillingDTO.Services[@ServiceCount].ServiceName" aria-invalid="false">
+                                                        <option class="optionTag" value="">SELECT SERVICE</option>
+                                                        @foreach (var serviceOption in Model.PrintDTO.Services.Distinct())
+                                                        {
+                                                            <option class="optionTag" value="@serviceOption.Services.ServiceName" data-price="@serviceOption.Services.Price" data-name="@serviceOption.Services.ServiceName" data-desc="@serviceOption.Services.Description">
+                                                                @serviceOption.Services.ServiceName
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </td>
+
+                                                <td>
+                                                    <button class="btn btn-outline-dark viewButton" data-bs-toggle="modal" data-bs-target="#descriptionModal" onclick="event.preventDefault();">VIEW</button>
+                                                </td>
+
+                                                <td>
+                                                    <input list="numberList" id="quantity" class="w-100 text-center form-control" type="number" name="BillingDTO.Services[@ServiceCount].Quantity">
+                                                    <datalist id="numberList">
+                                                        <option value="1">
+                                                        </option>
+
+                                                    </datalist>
+                                                </td>
+                                                <td>₱<span id="price">200.00</span><input type="hidden" id="pricehidden" name="BillingDTO.Services[@ServiceCount].Price" value="200.00"></td>
+                                                <td>₱<span id="amount">0.00</span><input type="hidden" id="amounthidden" name="BillingDTO.Services[@ServiceCount].Amount" value="0.00"><input type="hidden" id="amountSubTotal" value="0.00"></td>
+                                                <td>
+                                                    <input id="philCovered" class="w-100 text-center form-control" type="number" name="BillingDTO.Services[@ServiceCount].PhilHealthCovered">
+                                                </td>
+                                                <td style="">
+                                                    <i class="fas fa-trash serviceDelBtn"></i>
+                                                </td>
+                                            </tr>
+                                            ServiceCount++;
+                                        }
+
+
+                                    }
+
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr />
+                <div class="row form-group">
+
+                    <div class="form-group col-md-5 mb-3">
+                        <label for="Notes" class="control-label fw-bold">Notes:</label>
+                        <textarea asp-for="BillingDTO.Notes" class="form-control" rows="4" cols="50" name="BillingDTO.Notes" id="notes"></textarea>
+                        @if (!string.IsNullOrEmpty(Model?.PrintDTO?.Payments?.Notes))
+                        {
+                            <script>
+                                $(document).ready(function () {
+                                    $("#notes").val('@Html.Raw(Model.PrintDTO.Payments.Notes)');
+                                    $("#notes").prop("disabled", true);
+
+                                });
+                            </script>
+                        }
+                        <span asp-validation-for="BillingDTO.Notes" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-7 row">
+
+                        <div class="form-group col-5  d-flex flex-column align-items-end">
+                            <label for="MiddleName" class="control-label my-2 fw-bold">Subtotal:</label>
+                            <label for="MiddleName" class="control-label my-2 fw-bold">Philhealth Total:</label>
+                            <label for="MiddleName" class="control-label my-2 fw-bold">Is "%" Discount:</label>
+                            <label for="MiddleName" class="control-label my-2 fw-bold">Dicount %:</label>
+                        </div>
+
+                        <div class="form-group col-7 mb-3  d-flex flex-column align-items-start">
+
+            <p class=" mt-1 fw-bold" id="subTotalShow">₱0.00</p>
+            @if(Model.PrintDTO != null){
+                <script>
+                    $(document).ready(function () {
+
+
+                        $("#subTotalShow").text("₱" + parseFloat(@Model.PrintDTO.Payments.Total_Amount).toFixed(2));
+                        $("#philHealthTotalShow").text("₱" + parseFloat(@Model.PrintDTO.Payments.PhilHealth_Deduction).toFixed(2));
+
+                        $("#subTotalHidden").val(parseFloat(@Model.PrintDTO.Payments.Total_Amount).toFixed(2));
+                        $("#philHealthTotalHidden").val(parseFloat(@Model.PrintDTO.Payments.PhilHealth_Deduction).toFixed(2));
+
+                                        
+                          var discountCount = $("#discountInput").val(@Model.PrintDTO.Payments.Discount);
+
+                            if (!isNaN(discountCount) && discountCount > 0) {
+                                 $("#myCheck").prop("checked", true);
+                            }
+
+                                        $("#totalAmountShow").text("Total Amount: ₱" + parseFloat(@Model.PrintDTO.Payments.Final_Amount).toFixed(2));
+                        $("#totalAmountHidden").val(parseFloat(@Model.PrintDTO.Payments.Final_Amount).toFixed(2));
+
+                    });
+                </script>
+            }
+            <p class=" mt-1 fw-bold" id="philHealthTotalShow">₱0.00</p>
+
+            <input type="hidden" asp-for="BillingDTO.SubTotal" name="BillingDTO.SubTotal" id="subTotalHidden"/>
+            <input type="hidden" asp-for="BillingDTO.PhilHeathTotal" name="BillingDTO.PhilHeathTotal" id="philHealthTotalHidden"/>
+
+
+                            <input class="form-check-input discounted mb-3 fw-bold" type="checkbox" id="isDiscounted" style="width: 25px;">
+
+                            <input asp-for="BillingDTO.Discount" name="BillingDTO.Discount" class="form-control mb-3 fw-bold" type="number" id="discountInput" disabled />
+
+            <p class="align-self-center fw-bold" id="totalAmountShow">Total Amount: ₱0.00</p>
+            <input type="hidden" asp-for="BillingDTO.TotalAmount" name="BillingDTO.TotalAmount" id="totalAmountHidden"/>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row-md-12 d-flex justify-content-end align-items-center">
+
+                        @if (Model.PrintDTO != null)
+                        {
+                            <a class="btn btn-success mx-2 editInvoiceBtn">
+                                <i class="fas fa-pen"></i>
+                                <span>EDIT</span>
+                            </a>
+
+                            <button class="btn btn-success mx-2" id="saveInBtn" type="submit" name="action" value="Save" style="display:none;">
+                                <i class="fas fa-plus"></i>
+                                <span>Save</span>
+                            </button>
+
+                            <a class="btn btn-dark mx-2" asp-action="InvoiceList" asp-controller="Billing">
+                                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                                <span>Back</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-success mx-2 makePaymentBtn" type="submit" name="action" value="MakePayment" disabled>
+                                <i class="fas fa-plus"></i>
+                                <span>Make Payment</span>
+                            </button>
+
+                            <button class="btn btn-primary mx-2 savePaymentBtn" type="submit" name="action" value="SaveAndPayLater" disabled>
+                                <i class="fas fa-check"></i>
+                                <span>Save & Pay Later</span>
+                            </button>
+
+                            <a class="btn btn-dark mx-2" asp-action="InvoiceList" asp-controller="Billing">
+                                <i class="fas fa-close"></i>
+                                <span>Cancel</span>
+                            </a>
+                        }
+
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Set the selected value for each service select box
+    @if (Model.PrintDTO != null)
+    {
+        int serviceIndex = 0; // Initialize for services
+        foreach (var service in Model.PrintDTO.Services)
+        {
+            serviceIndex++;
+            var selectedServiceName = service.Services.ServiceName; // Adjust based on your property
+            <text>
+                    $("#serviceNameSelect_@serviceIndex").val('@selectedServiceName');
+            </text>
+        }
+    }
+
+            // Set the selected value for each item select box
+    @if (Model.PrintDTO != null)
+    {
+        int itemIndex = 0; // Initialize for items
+        foreach (var item in Model.PrintDTO.Items)
+        {
+            itemIndex++;
+            var selectedItemName = item.Items.ItemName; // Adjust based on your property
+            <text>
+                    $("#itemsNameSelect_@(rowCount - Model.PrintDTO.Items.Count + itemIndex)").val('@selectedItemName');
+            </text>
+        }
+    }
+    });
 </script>
+
+
+
+
+                                @* EDIT ITEMS *@
+<div class="modal fade" aria-labelledby="staticBackdropLabel"  id="editItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+
+    <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+        <div class="modal-content" style="height: 440px; color: #425833;  font-family: 'Montserrat', sans-serif; border-radius:.9rem;">
+
+            <div class="modal-header bg-pink" style="height:60px; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                <div class="modal-headerDiv1 " style="width:100%; display:flex;justify-content:center;align-items:center;">
+                    <h4 style="color:white;">EDIT ITEM</h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body addItemModalBody">
+                <input type="hidden" class="form-control"  id="editItemId" />
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Item Name : </label>
+                    <input type="text" class="form-control " autocomplete="off" id="editItemName" />
+
+                </div>
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Description : </label>
+                    <textarea class="form-control form-text " id="editItemDescription" placeholder="Optional..."></textarea>
+
+                </div>
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Price : ₱</label>
+                    <input type="number" class="form-control " id="editItemPrice" />
+
+                </div>
+
+                <button type="submit" id="editItemSubmitBtn" class="btn btn-success " style="margin-top:1rem" data-bs-dismiss="modal"><i class="fa fa-check" aria-hidden="true"></i> SAVE</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+                            @* EDIT SERVICES *@
+<div class="modal fade" aria-labelledby="staticBackdropLabel" id="editServicesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+
+    <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+        <div class="modal-content" style="height: 440px; color: #425833;  font-family: 'Montserrat', sans-serif; border-radius:.9rem;">
+
+            <div class="modal-header bg-pink" style="height:60px; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                <div class="modal-headerDiv1 " style="width:100%; display:flex;justify-content:center;align-items:center;">
+                    <h4 style="color:white;">EDIT SERVICES</h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body addItemModalBody">
+                <input type="hidden" class="form-control" id="editServiceId" />
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Item Name : </label>
+                    <input type="text" class="form-control " autocomplete="off" id="editServiceName" />
+
+                </div>
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Description : </label>
+                    <textarea class="form-control form-text " id="editServiceDescription" placeholder="Optional..."></textarea>
+
+                </div>
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Price : ₱</label>
+                    <input type="number" class="form-control " id="editServicePrice" />
+
+                </div>
+
+                <button type="submit" id="editServiceSubmitBtn" class="btn btn-success " style="margin-top:1rem" data-bs-dismiss="modal"><i class="fa fa-check" aria-hidden="true"></i> SAVE</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+                                @* ALL ITEMS *@
+<div class="modal fade" aria-labelledby="staticBackdropLabel" id="allItemsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+        <div class="modal-content" style="height: 440px; font-family: 'Montserrat', sans-serif; border-radius:.9rem;">
+
+            <div class="modal-header bg-pink" style="height:60px; display:flex; border-radius:.5rem .5rem 0 0 ;">
+                <div class="modal-headerDiv1 " style="width:100%; display:flex;justify-content:center;align-items:center;">
+                    <h4 style="color:white;">ALL ITEMS</h4>
+                </div>
+            </div>
+
+            <div class="modal-body allItemsModalBody">
+
+                <div class="allItemsModalBodyDiv1">
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+                                @* ALL SERVICES *@
+<div class="modal fade" aria-labelledby="staticBackdropLabel" id="allSerivesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+        <div class="modal-content" style="height: 440px; color: #425833;  font-family: 'Montserrat', sans-serif; border-radius:.9rem;">
+
+            <div class="modal-header bg-pink" style="height:60px; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                <div class="modal-headerDiv1 " style="width:100%; display:flex;justify-content:center;align-items:center;">
+                    <h4 style="color:white;">ALL SERVICES</h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body allServicesModalBody">
+
+                <div class="allServicesModalBodyDiv1">
+
+                    
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+                                @* ADD ITEM *@
+<div class="modal fade" aria-labelledby="staticBackdropLabel" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+        <div class="modal-content" style="height: 440px; color: #425833;  font-family: 'Montserrat', sans-serif; border-radius:.9rem;">
+
+            <div class="modal-header bg-pink" style="height:60px; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                <div class="modal-headerDiv1 " style="width:100%; display:flex;justify-content:center;align-items:center;">
+                    <h4 style="color:white;">ADD ITEM</h4>
+                </div>
+
+
+            </div>
+
+            <div class="modal-body addItemModalBody">
+                <div class="addItemModalBodyDiv1">
+                    <label>Item Name : </label>
+                    <input type="text" class="form-control " autocomplete="off" id="addItemName" />
+
+                </div>
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Description : </label>
+                    <textarea class="form-control form-text " id="addItemDescription" placeholder="Optional..."></textarea>
+
+                </div>
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Price : ₱</label>
+                    <input type="number" class="form-control " id="addItemPrice" />
+
+                </div>
+
+                <button type="submit" id="addItemSubmitBtn" class="btn btn-success " style="margin-top:1rem" disabled data-bs-dismiss="modal"><i class="fa fa-plus" aria-hidden="true"></i> ADD</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+                                @* ADD SERVICES *@
+<div class="modal fade" aria-labelledby="staticBackdropLabel" id="addServicesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+        <div class="modal-content" style="height: 440px; color: #425833;  font-family: 'Montserrat', sans-serif; border-radius:.9rem;">
+
+            <div class="modal-header bg-pink" style="height:60px; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                <div class="modal-headerDiv1 " style="width:100%; display:flex;justify-content:center;align-items:center;">
+                    <h4 style="color:white;">ADD SERVICES</h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body addItemModalBody">
+                <div class="addItemModalBodyDiv1">
+                    <label>Service Name : </label>
+                    <input type="text" class="form-control " id="addServiceName" />
+
+                </div>
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Description : </label>
+                    <textarea class="form-control" id="addServiceDescription" placeholder="Optional..."></textarea>
+
+                </div>
+
+                <div class="addItemModalBodyDiv1">
+                    <label>Price : ₱</label>
+                    <input type="number" class="form-control " id="addServicePrice" />
+
+                </div>
+
+                <button type="submit" id="addServicesSubmitBtn" class="btn btn-success " style="margin-top:1rem " disabled data-bs-dismiss="modal"><i class="fa fa-plus" aria-hidden="true"></i> ADD</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+                              @* DESCRIPTION *@
+<div class="modal fade" aria-labelledby="staticBackdropLabel" id="descriptionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+        <div class="modal-content" style="height: 440px; color: #FC7995;  font-family: 'Montserrat', sans-serif; border-radius:.9rem;">
+
+            <div class="modal-header bg-pink" style="height:60px; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                <div class="modal-headerDiv1 " style="width:100%; display:flex;justify-content:center;align-items:center;">
+                    <h4 style="color:white;">DESCRIPTION</h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body descriptionModalBody">
+
+                <div class="descriptionModalBodyDiv1">
+                    <h3 id="descName"></h3>
+                </div>
+                <div class="descriptionModalBodyDiv2">
+                    <h5 id="desc" ></h5>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        
+        $('#isNotarialFee').on('change', function () {
+            $('#patientNotarialFee').prop('disabled', !this.checked); // Enable input if checkbox is checked
+        });
+
+
+        $("#editItemName, #editItemPrice").on("input", function (event) {
+
+            var itemName = $("#editItemName").val();
+            var pri = $("#editItemPrice").val();
+            var price = parseFloat(pri);
+
+            if (itemName.length > 0 && !isNaN(price)) {
+                $("#editItemSubmitBtn").prop("disabled", false);
+            }
+            else {
+                $("#editItemSubmitBtn").prop("disabled", true);
+
+            }
+        });
+
+           //EDIT ITEM
+        $("#editItemSubmitBtn").on("click", function (event) {
+
+            var idd = $("#editItemId").val();
+            var id1 = parseInt(idd);
+
+            var itemName1 = $("#editItemName").val();
+
+            var pri = $("#editItemPrice").val();
+            var price1 = parseFloat(pri);
+
+            var description1 = $("#editItemDescription").val();
+
+            $.ajax({
+                type: 'POST',
+                url: "/Billing/EditItem",
+                data: { id: id1, itemName: itemName1, description: description1, price: price1 },
+                dataType: "json",
+                success: function (result) {
+                    toastr.success(result);
+                    setTimeout(function () {
+                        window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
+                    }, 1000);
+                },
+                error: function (req, status, error) {
+                    console.log(status);
+                }
+            });
+
+            $("#addItemName").val("");
+            $("#addItemPrice").val("");
+            $("#addItemDescription").val("");
+
+        });
+
+
+
+                //ALL ITEMS
+        $.ajax({
+            type: 'POST',
+            url: "/Billing/AllItems",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+
+
+                if (result.length > 0) {
+
+                        $(".allItemsModalBodyDiv1").empty();
+
+                            result.forEach(function (allItems) {
+                                var option = `
+                                     <div class="allItemsResult">
+
+                                        <div class="allItemsResultName">
+                                            <h5>${allItems.itemName}</h5>
+                                        </div>
+
+                                        <div class="allItemsResultAction">
+                                            <button class="btn btn-outline-dark editItemBtn" id="editItemBtn" data-bs-toggle="modal" data-bs-target="#editItemModal" data-id="${allItems.itemID}" data-name="${allItems.itemName}" data-price="${allItems.price}" data-desc="${allItems.description}">
+                                                <i class="fa fa-pen" aria-hidden="true"> </i>
+                                            </button> 
+
+                                            <button class="btn btn-outline-danger deleteItemBtn" data-id="${allItems.itemID}" onclick="event.preventDefault()">
+                                                <i class="fa fa-trash" aria-hidden="true"> </i>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                `;
+
+                               $(".allItemsModalBodyDiv1").append(option);
+                            });
+
+                        $(".editItemBtn").on("click", function () {
+    
+                            var idd = $(this).data("id");
+                            var price1 = $(this).data("price");
+
+                            var id = parseInt(idd);
+                            var name = $(this).data("name");
+                            var desc = $(this).data("desc");
+                            var price = parseFloat(price1);
+
+                            $("#editItemId").val(id);
+                            $("#editItemName").val(name);
+                            $("#editItemDescription").val(desc);
+                            $("#editItemPrice").val(price);
+
+                            $("#allItemsModal").fadeOut();
+                        });
+
+
+                        $(".deleteItemBtn").on("click", function (event) {
+                
+                            var idd = $(this).data("id");
+                            var id = parseInt(idd);
+                            DeleteItem(id);
+                        });
+
+                        function DeleteItem(itemid) {
+                            Swal.fire({
+                                title: "Are you sure?",
+                                text: "You won't be able to revert this Item!",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Yes, delete it!"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({
+                                        type: 'DELETE',
+                                        url: '@Url.Action("DeleteItem", "Billing")',
+                                        data: { itemId: itemid },
+                                        success: function (result) {
+                
+                                            toastr.success(result);
+                                            setTimeout(function () {
+                                                window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
+                                            }, 1000);
+                                        },
+                                        error: function () {
+                                            console.log('Unable to delete the Item.');
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                }
+                else{
+                            var option = `
+                                 <div class="allItemsResult">
+
+                                    <div class="allItemsResultName" style="border:none;">
+                                        <h5 style="margin-left:100px;">No Items Yet</h5>
+                                    </div>
+
+                                    <div class="allItemsResultAction" style="border:none;">
+          
+                                    </div>
+
+                                </div>
+                            `;
+
+                           $(".allItemsModalBodyDiv1").append(option);
+                }
+            },
+            error: function (req, status, error) {
+                console.log(status);
+            }
+        });
+
+        
+        $(window).on("click", function(event) {
+            if ($(event.target).is("#editItemModal")) {
+                $(".modal-backdrop").hide();
+            }
+        });
+
+         $(".allItemsBtn").on("click", function(event) {
+                $(".modal-backdrop").show();   
+        });
+        
+
+
+
+
+
+        $("#editServiceName, #editServicePrice").on("input", function (event) {
+
+            var itemName = $("#editServiceName").val();
+            var pri = $("#editServicePrice").val();
+            var price = parseFloat(pri);
+
+            if (itemName.length > 0 && !isNaN(price)) {
+                $("#editServiceSubmitBtn").prop("disabled", false);
+            }
+            else {
+                $("#editServiceSubmitBtn").prop("disabled", true);
+
+            }
+        });
+
+           //EDIT SERVICE
+        $("#editServiceSubmitBtn").on("click", function (event) {
+            alert("wadwadwad")
+            var idd = $("#editServiceId").val();
+            var id1 = parseInt(idd);
+
+            var itemName1 = $("#editServiceName").val();
+
+            var pri = $("#editServicePrice").val();
+            var price1 = parseFloat(pri);
+
+            var description1 = $("#editServiceDescription").val();
+
+            $.ajax({
+                type: 'POST',
+                url: "/Billing/EditService",
+                data: { id: id1, serviceName: itemName1, description: description1, price: price1 },
+                dataType: "json",
+                success: function (result) {
+                    toastr.success(result);
+                    setTimeout(function () {
+                        window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
+                    }, 1000);
+                },
+                error: function (req, status, error) {
+                    console.log(status);
+                }
+            });
+
+            $("#editServiceName").val("");
+            $("#editServicePrice").val("");
+            $("#editServiceDescription").val("");
+
+        });
+
+
+
+                //ALL SERVICES
+        $.ajax({
+            type: 'POST',
+            url: "/Billing/AllServices",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+
+                if (result.length > 0) {
+
+                    $(".allServicesModalBodyDiv1").empty();
+
+                    result.forEach(function (allServices) {
+                        var option = `
+                            <div class="allServicesResult">
+
+                                <div class="allServicesResultName">
+                                    <h5>${allServices.serviceName}</h5>
+                                </div>
+
+                                <div class="allServicesResultAction">
+
+                                    <button class="btn btn-outline-dark editServiceBtn" id="editServiceBtn" data-bs-toggle="modal" data-bs-target="#editServicesModal" onclick="event.preventDefault()" data-id="${allServices.serviceID}" data-name="${allServices.serviceName}" data-price="${allServices.price}" data-desc="${allServices.description}">
+                                        <i class="fa fa-pen" aria-hidden="true"> </i>
+                                    </button>
+
+                                    <button class="btn btn-outline-danger deleteServiceBtn" data-id="${allServices.serviceID}" onclick="event.preventDefault()">
+                                        <i class="fa fa-trash" aria-hidden="true"> </i>
+                                    </button>
+
+                                </div>
+                            </div>
+                        `;
+
+                      $(".allServicesModalBodyDiv1").append(option);
+                    });
+
+                        $(".editServiceBtn").on("click", function () {
+                            alert("wad")
+                            var idd = $(this).data("id");
+                            var price1 = $(this).data("price");
+
+                            var id = parseInt(idd);
+                            var name = $(this).data("name");
+                            var desc = $(this).data("desc");
+                            var price = parseFloat(price1);
+
+                            $("#editServiceId").val(id);
+                            $("#editServiceName").val(name);
+                            $("#editServiceDescription").val(desc);
+                            $("#editServicePrice").val(price);
+
+                            $("#allSerivesModal").fadeOut();
+                        });
+
+
+                        $(".deleteServiceBtn").on("click", function (event) {
+
+                            var idd = $(this).data("id");
+                            var id = parseInt(idd);
+                            DeleteService(id);
+                        });
+
+                        function DeleteService(serviceid) {
+                            Swal.fire({
+                                title: "Are you sure?",
+                                text: "You won't be able to revert this Service!",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Yes, delete it!"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({
+                                        type: 'DELETE',
+                                        url: '@Url.Action("DeleteService", "Billing")',
+                                        data: { serviceId: serviceid },
+                                        success: function (result) {
+
+                                            toastr.success(result);
+                                            setTimeout(function () {
+                                                window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
+                                            }, 1000);
+                                        },
+                                        error: function () {
+                                            console.log('Unable to delete the Service.');
+                                        }
+                                    });
+                                }
+                            });
+
+                        }
+
+
+                }
+                else{
+                var option = `
+                        <div class="allServicesResult">
+
+                        <div class="allServicesResultName" style="border:none;">
+                            <h5 style="margin-left:100px;">No Services Yet</h5>
+                        </div>
+
+                        <div class="allServicesResultAction" style="border:none;">
+          
+                        </div>
+
+                    </div>
+                `;
+
+                $(".allServicesModalBodyDiv1").append(option);
+                }
+
+            },
+            error: function (req, status, error) {
+                console.log(status);
+            }
+        });
+
+        $(window).on("click", function(event) {
+            if ($(event.target).is("#editServicesModal")) {
+                $(".modal-backdrop").hide();
+            }
+        });
+
+         $(".allServicesBtn").on("click", function(event) {
+                $(".modal-backdrop").show();
+        });
+
+
+
+
+        $('#isDiscounted').on('change', function () {
+            $('#discountInput').prop('disabled', !this.checked); // Enable input if checkbox is checked
+        });
+
+        // Initial row count
+        let rowCount = @rowCount;
+
+        let ItemCount = @ItemCount;
+        let ServiceCount = @ServiceCount;
+
+
+        // ADD ROW
+        $(".addRow").on("click", function (event) {
+            event.preventDefault();
+            rowCount++; // Increment row count
+
+            let html = `
+            <tr>
+                <td class="row-number">${rowCount}</td>
+
+                <td style="display:flex; flex-direction:row; justify-content:space-evenly; align-items:center;" class="button-container">
+                    <button class="btn btn-outline-pink itemorservice" style="margin-right:3rem;" onclick="event.preventDefault();">ITEM</button>
+                    <button class="btn btn-outline-pink itemorservice" onclick="event.preventDefault();">
+                        <span>SERVICES</span>
+                    </button>
+                </td>
+
+                <td>
+                    <button class="btn btn-outline-dark viewButton" data-bs-toggle="modal" data-bs-target="#descriptionModal" onclick="event.preventDefault();">VIEW</button>
+                </td>
+
+                <td>
+                    <input list="numberList" id="quantity" class="w-100 text-center form-control" type="number" />
+                    <datalist id="numberList">
+                        <option value="1"/>
+                        <option value="2"/>
+                        <option value="3"/>
+                        <option value="4"/>
+
+                    </datalist>
+                </td>
+                <td>₱<span id="price">0</span><input type="hidden" id="pricehidden"/></td>
+                <td>₱<span id="amount">0</span><input type="hidden" id="amounthidden"/><input type="hidden" id="amountSubTotal"/></td>
+                <td>
+                    <input id="philCovered" class="w-100 text-center form-control" type="number"/>
+                </td>
+                <td style="">
+                    <i class="fas fa-trash "></i>
+                </td>
+            </tr>
+        `;
+
+            $(".createInvoiceTBody").append(html);
+
+            scrollChatContainer();
+            toastr.success("Row Successfully Added!");
+        });
+
+        // DELETE ROW
+        $(".createInvoiceTBody").on("click", ".fa-trash", function () {
+            $(this).closest("tr").remove();
+            rowCount--; // Decrement row count
+            updateRowNumbers(); // Update row numbers after deletion
+            calculateTotal();
+        });
+
+        // Function to update row numbers
+        function updateRowNumbers() {
+            $(".createInvoiceTBody tr").each(function (index) {
+                $(this).find(".row-number").text(index + 1); // Update the row number
+            });
+        }
+
+
+
+
+        //ITEM OR SERVICES BUTTON
+        $(".createInvoiceTBody").on('click', '.itemorservice', function () {
+            var select;
+
+            var row = $(this).closest('tr'); // Move this line outside the condition
+
+            if ($(this).text().trim() === 'ITEM') {
+
+
+
+                select = $(`<select class="form-control selectItems" style="width: 100%; text-align:center;" name="BillingDTO.Items[${ItemCount}].ItemName">
+                    </select>`);
+
+                //ALL ITEMS
+                $.ajax({
+                    type: 'POST',
+                    url: "/Billing/AllItems",
+                    dataType: "json",
+                    success: function (result) {
+
+                        if (result.length > 0) {
+
+                            var option1 = `
+                                     <option >SELECT ITEMS</option>
+                                `;
+                            select.append(option1);
+
+                            result.forEach(function (allItems) {
+                                var option = `
+                                     <option class="optionTag" value="${allItems.itemName}" data-price="${allItems.price}" data-name="${allItems.itemName}" data-desc="${allItems.description}">${allItems.itemName}</option>
+                                `;
+
+                                select.append(option);
+
+
+
+                            });
+                        }
+                    },
+                    error: function (req, status, error) {
+                        console.log(status);
+                    }
+                });
+
+                // Set the name attributes for item inputs
+                setItemOrServiceNames(row, 'Items', ItemCount);
+
+                ItemCount++;
+
+
+            } else if ($(this).text().trim() === 'SERVICES') {
+
+
+
+                select = $(`<select class="form-control selectServices" style="width: 100%; text-align:center;" name="BillingDTO.Services[${ServiceCount}].ServiceName">
+                    </select>`);
+
+                //ALL SERVICES
+                $.ajax({
+                    type: 'POST',
+                    url: "/Billing/AllServices",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+
+                        if (result.length > 0) {
+
+                            var option1 = `
+                                     <option >SELECT SERVICES</option>
+                                `;
+                            select.append(option1);
+
+                            result.forEach(function (allServices) {
+                                var option = `
+                                     <option class="optionTag" value="${allServices.serviceName}" data-price="${allServices.price}" data-name="${allServices.serviceName}" data-desc="${allServices.description}">${allServices.serviceName}</option>
+                                `;
+
+                                select.append(option);
+                            });
+                        }
+
+
+                    },
+                    error: function (req, status, error) {
+                        console.log(status);
+                    }
+                });
+
+                // Set the name attributes for service inputs
+                setItemOrServiceNames(row, 'Services', ServiceCount);
+
+                ServiceCount++;
+
+            }
+
+            // Replace the button container in the current row only
+            $(this).closest('tr').find('.button-container').html(select);
+        });
+
+
+        function setItemOrServiceNames(row, type, count) {
+            row.find("#quantity").attr('name', `BillingDTO.${type}[${count}].Quantity`);
+            row.find("#pricehidden").attr('name', `BillingDTO.${type}[${count}].Price`);
+            row.find("#amounthidden").attr('name', `BillingDTO.${type}[${count}].Amount`);
+            row.find("#philCovered").attr('name', `BillingDTO.${type}[${count}].PhilHealthCovered`);
+        }
+
+
+        //VIEW BUTTON
+        $(".createInvoiceTBody").on("click", ".viewButton", function () {
+            var row = $(this).closest('tr');
+            var selectedItem = row.find('.selectItems option:selected');
+            var selectedService = row.find('.selectServices option:selected');
+
+            // Get the name and description from the selected option
+            var name = selectedItem.length > 0 ? selectedItem.data("name") : selectedService.data("name");
+            var description = selectedItem.length > 0 ? selectedItem.data("desc") : selectedService.data("desc");
+
+            // Display in modal
+            $("#descName").text(name || "No Name Selected");
+            $("#desc").text(description || "No Description Available");
+        });
+
+
+
+        // Change event for item selection
+        $(document).on("change", ".selectItems", function () {
+            var price = $(this).find("option:selected").data("price");
+            var row = $(this).closest('tr');
+            updateRowPrice(row, price);
+        });
+
+        
+        //EDIT INVOICE
+        $(".editInvoiceBtn").on("click", function (event) {
+
+
+            $("#patientNameInput").prop("disabled", false);
+            $("#staffName").prop("disabled", false);
+            $("#billDate").prop("disabled", false);
+            $("#dueDate").prop("disabled", false);
+            $("#notes").prop("disabled", false);
+
+            $(".selectItems").prop("disabled", false);
+            $(".selectServices").prop("disabled", false);
+    
+            $("#invoiceHeader").text("EDIT INVOICE DETAILS");
+
+            $(".addRow").prop("disabled", false);
+            $(".addItem").prop("disabled", false);
+            $(".addServices").prop("disabled", false);
+
+            $("tbody tr input").prop("disabled", false);
+            $("tbody tr select").prop("disabled", false);
+            $("tbody tr button").prop("disabled", false);
+
+  
+            $("#saveInBtn").css("display", "block");
+
+            $(".editInvoiceBtn").css("display", "none");
+
+            $("#isDiscounted").prop("disabled", false);
+
+            $("#isNotarialFee").prop("disabled", false);
+
+            var discountCount = $("#discountInput").val();
+
+            var isNotarial = @Html.Raw(notarialFee.HasValue ? notarialFee.Value.ToString().ToLower() : "null");
+  
+                if (isNotarial) {
+
+                    $("#isNotarialFee").prop("checked", true);
+                    $('#patientNotarialFee').prop('disabled', false);
+
+                } else {
+                    $("#isNotarialFee").prop("checked", false);
+                    $('#patientNotarialFee').prop('disabled', true);
+
+                }
+
+            if (!isNaN(discountCount) && discountCount > 0) {
+                $("#isDiscounted").prop("checked", true);
+                $('#discountInput').prop('disabled', false);
+            }
+          
+            $(".serviceDelBtn").css("display", "block");
+            $(".itemDelBtn").css("display", "block");
+
+
+        });
+
+        // Change event for service selection
+        $(document).on("change", ".selectServices", function () {
+            var price = $(this).find("option:selected").data("price");
+            var row = $(this).closest('tr');
+            updateRowPrice(row, price);
+        });
+
+
+        function updateRowPrice(row, price) {
+            row.find('#price').text(price.toFixed(2));
+            row.find('#pricehidden').val(price.toFixed(2));
+            calculateAmount(row);
+        }
+
+
+        // Calculate amount when quantity changes
+        $(".createInvoiceTBody").on("input", "#quantity", function () {
+            var row = $(this).closest('tr');
+            calculateAmount(row);
+        });
+
+        // Calculate amount when PHILHEALTH COVERED changes
+        $(".createInvoiceTBody").on("input", "#philCovered", function () {
+            var row = $(this).closest('tr');
+            calculateAmount(row);
+        });
+
+
+        function calculateAmount(row) {
+            var quantity = parseFloat(row.find("#quantity").val()) || 0;
+            var price = parseFloat(row.find("#price").text()) || 0;
+            var philCovered = parseFloat(row.find("#philCovered").val()) || 0;
+
+            var amount = (quantity * price) - philCovered;
+            amount = Math.max(amount, 0); // Ensure amount is not negative
+
+            row.find("#amount").text(amount.toFixed(2));
+            row.find("#amounthidden").val(amount.toFixed(2));
+            row.find("#amountSubTotal").val(amount.toFixed(2));
+
+            calculateTotal(); // Recalculate total after amount update
+        }
+
+        $("#discountInput").on("input", function () {
+            calculateTotal();
+        });
+
+        $("#isNotarialFee").on("click", function () {
+            calculateTotal();
+        });
+
+        function calculateTotal() {
+            let total = 0;
+            let philHealthCoveredTotal = 0;
+
+            $(".createInvoiceTBody tr").each(function () {
+                var amount = parseFloat($(this).find("#amount").text().replace('₱', '')) || 0;
+                total += amount;
+
+                var philCovered = parseFloat($(this).find("#philCovered").val()) || 0;
+                philHealthCoveredTotal += philCovered;
+            });
+
+            let discountPercentage = parseFloat($("#discountInput").val()) || 0;
+
+            let discount = total * (discountPercentage / 100);
+
+            let finalTotal = total - discount;
+
+             var notarial = parseFloat($("#patientNotarialFee").val()) || 0;
+
+
+            if (notarial !== 0) {
+                finalTotal += notarial;
+            }
+        
+
+            $("#totalAmountShow").text("Total Amount: ₱" + finalTotal.toFixed(2));
+            $("#philHealthTotalShow").text("₱" + philHealthCoveredTotal.toFixed(2));
+            $("#subTotalShow").text("₱" + (total + philHealthCoveredTotal).toFixed(2));
+
+            $("#totalAmountHidden").val(finalTotal.toFixed(2));
+            $("#philHealthTotalHidden").val(philHealthCoveredTotal.toFixed(2));
+            $("#subTotalHidden").val((total + philHealthCoveredTotal).toFixed(2));
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //AUTO BOTTOM SCROLLBAR
+        function scrollChatContainer() {
+            var chatContainer = $('.scrollableTable');
+            if (chatContainer.is(':visible')) {
+                chatContainer.scrollTop(chatContainer[0].scrollHeight);
+            }
+        }
+
+
+        //ADD ITEMS
+        $(".addItem").on("click", function (event) {
+
+            event.preventDefault();
+
+        });
+
+        $("#addItemName, #addItemPrice").on("input", function (event) {
+
+            var itemName = $("#addItemName").val();
+            var pri = $("#addItemPrice").val();
+            var price = parseFloat(pri);
+
+            if (itemName.length > 0 && !isNaN(price)) {
+                $("#addItemSubmitBtn").prop("disabled", false);
+            }
+            else {
+                $("#addItemSubmitBtn").prop("disabled", true);
+
+            }
+        });
+
+
+        $("#addItemSubmitBtn").on("click", function (event) {
+
+            var itemName1 = $("#addItemName").val();
+
+            var pri = $("#addItemPrice").val();
+            var price1 = parseFloat(pri);
+
+            var description1 = $("#addItemDescription").val();
+
+            $.ajax({
+                type: 'POST',
+                url: "/Billing/AddItem",
+                data: { itemName: itemName1, description: description1, price: price1 },
+                dataType: "json",
+                success: function (result) {
+
+                    if(result === "exist"){
+                        toastr.alert("This Item is already Created!");
+                    }
+                    toastr.success(result);
+                    setTimeout(function () {
+                        window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
+                    }, 2000);
+                },
+                error: function (req, status, error) {
+                    console.log(status);
+                }
+            });
+
+            $("#addItemName").val("");
+            $("#addItemPrice").val("");
+            $("#addItemDescription").val("");
+
+        });
+
+
+
+
+        //ADD SERVICES
+
+        $("#addServiceName, #addServicePrice").on("input", function (event) {
+
+            var serviceName = $("#addServiceName").val();
+            var pri = $("#addServicePrice").val();
+            var price = parseFloat(pri);
+
+            if (serviceName.length > 0 && !isNaN(price)) {
+                $("#addServicesSubmitBtn").prop("disabled", false);
+            }
+            else {
+                $("#addServicesSubmitBtn").prop("disabled", true);
+
+            }
+        });
+
+
+        $("#addServicesSubmitBtn").on("click", function (event) {
+
+            var serviceName1 = $("#addServiceName").val();
+
+            var pri = $("#addServicePrice").val();
+            var price1 = parseFloat(pri);
+
+            var description1 = $("#addServiceDescription").val();
+
+            $.ajax({
+                type: 'POST',
+                url: "/Billing/AddService",
+                data: { serviceName: serviceName1, description: description1, price: price1 },
+                dataType: "json",
+                success: function (result) {
+                    toastr.success(result);
+                    setTimeout(function () {
+                        window.location.href = '@Url.Action("GenerateInvoice", "Billing")';
+                    }, 2000);
+                },
+                error: function (req, status, error) {
+                    console.log(status);
+                }
+            });
+
+            $("#addServiceName").val("");
+            $("#addServicePrice").val("");
+            $("#addServiceDescription").val("");
+
+        });
+
+
+
+
+
+
+        //PATIENT NAME SEARCH
+        var searchResultContainer = $(".searchResultsDiv");
+        $("#patientNameInput").on("input", function (event) {
+
+
+            var name = $("#patientNameInput").val();
+
+            if (name.length > 0) {
+                searchResultContainer.show();
+                searchResultContainer.empty();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Billing/PatientSearchResult",
+                    data: { patientName: name },
+                    dataType: "json",
+                    success: function (result) {
+
+
+
+                        if (result.length > 0) {
+
+                            result.forEach(function (patient) {
+
+                                // console.log(patient);
+
+                                var html = `
+                                      <li class="selectedPatient" data-id="${patient.patientID}" data-name="${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}">${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}</li>
+                                `;
+
+                                searchResultContainer.append(html);
+
+                                $(".selectedPatient").on("click", function (event) {
+
+                                    var name = $(this).data("name");
+
+                                    var id = $(this).data("id");
+
+                                    $("#patientNameInput").val(name);
+                                    $("#patientIdHidden").val(id);
+
+                                    searchResultContainer.hide();
+
+
+                                    $(".makePaymentBtn").prop("disabled", false);
+                                    $(".savePaymentBtn").prop("disabled", false);
+
+                                });
+
+
+                            });
+
+                        } else {
+
+                            searchResultContainer.append('<li>No Results Found</li>');
+                            $(".makePaymentBtn").prop("disabled", true);
+                            $(".savePaymentBtn").prop("disabled", true);
+                        }
+
+                    },
+                    error: function (req, status, error) {
+                        console.log(status);
+                    }
+                });
+
+
+
+
+            }
+            else {
+                searchResultContainer.hide();
+                $(".makePaymentBtn").prop("disabled", true);
+                $(".savePaymentBtn").prop("disabled", true);
+            }
+
+        });
+
+        $(document).on("click", function (event) {
+            if (!$(event.target).closest("#patientNameInput").length && !$(event.target).closest(".searchResultsDiv").length) {
+                searchResultContainer.hide();
+            }
+        });
+
+
+
+    });
+</script>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+    }
+
+}

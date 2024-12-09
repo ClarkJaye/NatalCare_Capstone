@@ -8,7 +8,10 @@ namespace NatalCare.DataAccess.data
 {
     public class AppDbContext : IdentityDbContext<User>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) 
+            : base(options) { }
+
+
         public DbSet<User> User { get; set; }
         public DbSet<Role> Role { get; set; }
         public DbSet<Category> Category { get; set; }
@@ -178,6 +181,7 @@ namespace NatalCare.DataAccess.data
                     Birthdate = new DateOnly(1998, 01, 04),
                     BloodType = "O+",
                     Religion = "Catholic",
+                    Nationality = "Filipino",
                     Created_At = new DateTime(2024, 2, 28, 12, 0, 0),
                     PatientCreatedBy = "223e5845-f58c-493f-b6b4-46ff3b18a332",
                     StatusCode = "AC",

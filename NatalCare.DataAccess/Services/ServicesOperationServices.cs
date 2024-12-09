@@ -6,7 +6,7 @@ using static NatalCare.DataAccess.Response.ServiceResponses;
 
 namespace NatalCare.DataAccess.Services
 {
-    internal class ServicesOperationServices : IServicesOperationServices
+    public class ServicesOperationServices : IServicesOperationServices
     {
         private readonly IAppUnitOfWork unitOfWork;
 
@@ -784,6 +784,7 @@ namespace NatalCare.DataAccess.Services
             }
             return record.ToList();
         }
+
         public async Task<CommonResponse> AddDeliveryRecordAsync(Delivery delivery, string patientId, string userId)
         {
             if (delivery == null)

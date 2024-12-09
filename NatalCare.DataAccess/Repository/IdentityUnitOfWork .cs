@@ -4,7 +4,7 @@ using NatalCare.Models.Entities;
 
 namespace NatalCare.DataAccess.Repository
 {
-    internal class IdentityUnitOfWork : IIdentityUnitOfWork
+    public class IdentityUnitOfWork : IIdentityUnitOfWork
     {
         public UserManager<User> UserManager { get; }
         public RoleManager<Role> RoleManager { get; }

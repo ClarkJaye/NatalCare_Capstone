@@ -1,0 +1,624 @@
+﻿.addItemModalBody {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+}
+* {
+    scrollbar-width:thin;
+}
+.addItemModalBodyDiv1 {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+    .addItemModalBodyDiv1 label {
+        width: 33%;
+        color: #FF456E;
+    }
+
+    .addItemModalBodyDiv1 textarea {
+        max-height: 120px;
+
+    }
+
+.createInvoiceTBody .fa-trash:before {
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 1.5rem;
+    padding:.5rem;
+    margin-top:1rem;
+}
+
+
+
+.descriptionModalBody{
+    display:flex;
+    flex-direction:column;
+}
+
+.descriptionModalBodyDiv1 {
+    height: 20%;
+    display:flex;
+    justify-content:center;
+    align-items:center
+}
+.descriptionModalBodyDiv2 {
+    height: 300px;
+    border-top: 1px solid #FF3864;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: auto;
+    scrollbar-width:thin;
+    scrollbar-color:pink;
+}
+
+.descriptionModalBodyDiv2 h5{
+    margin-top:1rem;
+}
+
+.searchResultsDiv {
+    position: absolute;
+    max-height: 113px;
+    min-height: 39.6px;
+    width: 31%;
+    border: 1px solid #FC7995;
+    top: 35%;
+    left: 1.2%;
+    background-color: white;
+    padding: 0;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #FC7995 white;
+    border-radius: .2rem;
+    display: none;
+}
+    /* Custom scrollbar for WebKit browsers (Chrome, Safari) */
+
+
+.searchResultsDiv ::-webkit-scrollbar-thumb {
+    background-color: #FC7995; /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Rounded corners for the thumb */
+}
+
+.searchResultsDiv li{
+    width:100%;
+    padding:.4rem;
+    font-family:'Inter', sans-serif;
+}
+.searchResultsDiv li:nth-child(odd) {
+    background-color: #fff6f6;
+    width: 100%;
+    padding: .4rem;
+}
+
+.searchResultsDiv li:hover {
+    background-color: #FC7995;
+    color:white;
+    cursor:pointer;
+}
+
+
+
+@media print {
+    .printDiv1In1Div1 h1 {
+        color: #ff456e; /* Adjust this if needed */
+    }
+}
+
+
+/*PRINT*/
+.out{
+    width:100%;
+    height:100vh;
+
+    display:flex;
+    flex-direction:column;
+}
+
+
+.printDiv1 {
+    width: 100%;
+    height: 25%;
+    display: flex;
+    flex-direction: row;
+}
+
+.printDiv1In1 {
+    width: 45%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.printDiv1In1Div1 {
+    width: 100%;
+    height: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+    .printDiv1In1Div1 h1 {
+        font-family: 'Garet', sans-serif;
+        font-weight: 900;
+        color: #ff456e;
+        margin-right: 2%;
+    }
+
+.printDiv1In1Div2 {
+    width: 100%;
+    height: 60%;
+    border: 1px solid #7777;
+    display: flex;
+    flex-direction: column;
+}
+
+.printDiv1In1Div2Div1 {
+    height: 33%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.printDiv1In1Div2Div1Div1 {
+    height: 100%;
+    width: 40%;
+    border: 1px solid #7777;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.printDiv1In1Div2Div1Div2 {
+    height: 100%;
+    width: 60%;
+    border: 1px solid #7777;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    word-wrap: break-word;
+    justify-content: space-evenly;
+}
+
+
+
+.printDiv1In1Div2Div2 {
+    height: 33%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+
+
+
+.printDiv1In1Div2Div3 {
+    height: 33%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+
+
+
+
+.printDiv1In2 {
+    width: 55%;
+    height: 100%;
+    margin-left: 1%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.printDiv2 {
+    width: 100%;
+    height: 45%;
+    display: flex;
+    align-items: center;
+}
+
+.printDiv2Div1 {
+    width: 100%;
+    height: 90%;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #7777;
+}
+
+.printTable {
+    width: 100%;
+    height: 100%;
+}
+
+    .printTable thead {
+        width: 100%;
+        height: 10%;
+    }
+
+        .printTable thead th {
+            padding: 1rem;
+            background-color: #ff456e;
+            color: white;
+        }
+
+.printTbody td {
+    background-color: white;
+    color: black;
+}
+
+.printTbody {
+    text-align: center;
+    height: 90%;
+    width: 100%;
+}
+/* .printHeader{
+    width: 100%;
+    height: 10%;
+    background-color:  #ff456e;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.printBody{
+    width: 100%;
+    height: 90%;
+
+    display: flex;
+    flex-direction: column;
+}
+.printBodyDiv{
+    width: 100%;
+    height: 10%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color:  black;
+    padding: 1rem;
+
+}
+.printBodyDiv p{
+    border:1px solid saddlebrown
+} */
+
+.printDiv3 {
+    width: 100%;
+    height: 30%;
+    display: flex;
+    flex-direction: row;
+}
+
+.printDiv3In1 {
+    width: 45%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.printDiv3In1Div1 {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    flex-direction: row;
+}
+
+.printDiv3In1Div2 {
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    word-wrap: break-word;
+}
+
+.printDiv3In1Div2 {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: center;
+}
+
+
+.printDiv3In1Div3 {
+    width: 100%;
+    height: 30%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+    align-items:center
+}
+
+
+
+
+.printDiv3In2 {
+    width: 55%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+}
+
+.printDiv3In2Div1 {
+    width: 90%;
+    height: 65%;
+    display: flex;
+    flex-direction: row;
+}
+
+.printDiv3In2Div1Div1 {
+    width: 50%;
+    height: 100%;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+    background-color: #ff456e;
+    border: 1px solid transparent;
+}
+
+
+
+.printDiv3In2Div1Div2 {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    border: 1px solid #7777;
+}
+
+    .printDiv3In2Div1Div2 p {
+        width: 100%;
+        border-bottom: 1px solid #7777;
+        height: 25%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+.printDiv3In2Div2 {
+    width: 100%;
+    height: 35%;
+    display: flex;
+    flex-direction: row;
+}
+.printDiv3In2Div2Div1 {
+    width: 50%;
+    height: 100%;
+}
+
+.printDiv3In2Div2Div1Div1 {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.printDiv3In2Div2Div1Div2 {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+
+.printDiv3In2Div2Div2 {
+    width: 50%;
+    height: 100%;
+}
+
+
+.phoneIcon{
+    height:55%;
+    width:15%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:50%;
+    background-color:#FF456E;
+}
+
+
+.phoneIcon1:before{
+    font-size:20px;
+    color:white;
+}
+
+
+
+.phoneIcon2:before {
+    font-size: 18px;
+    color: white;
+}
+
+.phoneIcon3:before {
+    font-size: 16px;
+    color: white;
+}
+
+.phoneIcon4:before {
+    font-size: 18px;
+    color: white;
+}
+
+
+
+@media print {
+    .printTable thead th {
+        padding: 1rem;
+        background-color: #ff456e;
+        color: white;
+    }
+}
+
+
+
+
+.paymentPatientDiv1{
+    width:100%;
+    height:80px;
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
+}
+
+
+#invoiceContainer tbody tr td {
+    text-align: center;
+}
+
+
+#invoiceTable thead tr th {
+    text-align: center;
+}
+
+
+#patientPaymentContainer tbody tr td {
+    text-align: center;
+}
+
+
+#patientPaymentContainer thead tr th {
+    text-align: center;
+}
+
+
+
+
+.addItemModalBody {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+}
+    /*ITEMS/SERVICES SETTINGS*/
+.itemSettings{
+    position:absolute;
+    right:162px;
+    bottom:170%;
+}
+
+.serviceSettings {
+    position: absolute;
+    right: 20px;
+    bottom: 170%;
+}
+
+.allItemsModalBody {
+    width: 500px;
+    height: auto;
+    overflow-y: auto;
+    overflow-x:auto;
+}
+
+.allItemsModalBodyDiv1 {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.allItemsResult{
+    width:100%;
+    border-bottom: 1px solid #7777;
+    padding:.8rem;
+    display:flex;
+    flex-direction:row;
+}
+.allItemsResultName {
+    width: 75%;
+    border-right: 1px solid #7777;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.allItemsResultAction {
+    width: 25%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border-right: 1px solid #7777;
+}
+.allItemsResultName h5 {
+    margin-bottom: 0;
+    color: #FF3864;
+}
+
+
+
+
+
+.allServicesModalBody {
+    width: 500px;
+    height: auto;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+.allServicesModalBodyDiv1 {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.allServicesResult {
+    width: 100%;
+    border-bottom: 1px solid #7777;
+    padding: .8rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.allServicesResultName {
+    width: 75%;
+    border-right: 1px solid #7777;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.allServicesResultAction {
+    width: 25%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border-right: 1px solid #7777;
+}
+
+.allServicesResultName h5 {
+    margin-bottom: 0;
+    color: #FF3864;
+}

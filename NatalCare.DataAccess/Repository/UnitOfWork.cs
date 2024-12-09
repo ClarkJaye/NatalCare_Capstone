@@ -7,7 +7,7 @@ using System.Collections;
 
 namespace NatalCare.DataAccess.Repository
 {
-    internal class UnitOfWork<T> : IUnitOfWork where T : DbContext
+    public class UnitOfWork<T> : IUnitOfWork where T : DbContext
     {
         private readonly T _dbContext;
         private Hashtable _repositories;

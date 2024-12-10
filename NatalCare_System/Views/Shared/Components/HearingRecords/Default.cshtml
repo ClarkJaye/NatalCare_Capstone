@@ -420,7 +420,7 @@
                         $('#newbornBb-Edit').append(
                             $('<option>', {
                                 value: data.id,
-                                text: data.firstname + " " + data.middlename + " " + data.lastname + " - " + data.birthdate,
+                                text: data.firstname + " " + data.middlename + " " + data.lastname,
                                 selected: item.newbornID === data.id
                             })
                         );
@@ -462,7 +462,7 @@
                         $('#newbornBb-Detail').append(
                             $('<option>', {
                                 value: data.id,
-                                text: data.firstname + " " + data.middlename + " " + data.lastname + " - " + data.birthdate,
+                                text: data.firstname + " " + data.middlename + " " + data.lastname,
                                 selected: item.newbornID === data.id
                             })
                         );
@@ -528,7 +528,7 @@
                         $('#newbornBb-Add').append(
                             $('<option>', {
                                 value: item.id,
-                                text: item.firstname + " " + item.middlename + " " + item.lastname + " - " + item.birthdate
+                                text: item.firstname + " " + item.middlename + " " + item.lastname
                             })
                         );
                     });

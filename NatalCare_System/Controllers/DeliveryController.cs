@@ -508,30 +508,6 @@ namespace NatalCare_System.Controllers
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //ADD 
         [HttpPost]
         [ValidateAntiForgeryToken]

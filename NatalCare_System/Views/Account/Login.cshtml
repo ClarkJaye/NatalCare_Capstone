@@ -25,7 +25,7 @@
                             <label asp-for="Email" class="input-group-text" style="cursor:pointer">
                                 <i class="bi bi-person"></i>
                             </label>
-                            <input asp-for="Email" class="form-control form-control-lg fs-6" placeholder="Username" value="lisa@paanakan.com" />
+                            <input asp-for="Email" class="form-control form-control-lg fs-6" placeholder="Username" />
                         </div>
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
@@ -34,7 +34,7 @@
                         <label asp-for="Password" class="input-group-text" style="cursor:pointer" >
                             <i class="bi bi-lock"></i>
                         </label>
-                        <input asp-for="Password" class="form-control form-control-lg fs-6" placeholder="Password" value="sample"/>
+                        <input asp-for="Password" class="form-control form-control-lg fs-6" placeholder="Password"/>
                     </div>
                     <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
@@ -45,7 +45,7 @@
                             <label for="formCheck" class="form-check-label text-secondary"><small>Remember Me</small></label>
                         </div>       
                         <div>
-                            <small><a href="#">Forgot Password?</a></small>
+                            @* <small><a href="#">Forgot Password?</a></small> *@
                         </div>
                     </div>
 

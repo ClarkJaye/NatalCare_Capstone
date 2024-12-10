@@ -586,7 +586,7 @@ else{
     function AddDF() {
         var formData = $('#AddDFForm').serializeArray();
         formData.push({ name: 'patientID', value: patID });
-        formData.push({ name: 'deliveryID', value: delID});
+        formData.push({ name: 'caseno', value: delID});
 
         $.ajax({
             url: '@Url.Action("AddDFForm", "Delivery")',

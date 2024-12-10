@@ -615,7 +615,8 @@
                         $('#newbornBbSN-Edit').append(
                             $('<option>', {
                                 value: data.id,
-                                text: data.firstname + " " + data.middlename + " " + data.lastname + " - " + data.birthdate,
+                                text: data.firstname + " " + data.middlename + " " + data.lastname + " - ",
+                                // text: data.firstname + " " + data.middlename + " " + data.lastname + " - " + data.birthdate,
                                 selected: item.newbornID === data.id
                             })
                         );
@@ -720,7 +721,8 @@
                         $('#newbornBbSN-Add').append(
                             $('<option>', {
                                 value: item.id,
-                                text: item.firstname + " " + item.middlename + " " + item.lastname + " - " + item.birthdate
+                                text: item.firstname + " " + item.middlename + " " + item.lastname
+                                // text: item.firstname + " " + item.middlename + " " + item.lastname + " - " + item.birthdate
                             })
                         );
                     });

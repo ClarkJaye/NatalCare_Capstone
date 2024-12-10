@@ -72,15 +72,14 @@
         var quantityInput = $("#patientPaymentAmount");
 
         $("form[method='post']").on("submit", function (event) {
-            
+            event.preventDefault(); // Prevent the form from submitting immediately
+
             const max = parseFloat(quantityInput.attr("max"));
-
             const value = parseFloat(quantityInput.val());
-
             const money = parseFloat(patientsMoney.val());
 
             if (value <= max) {
-
+                // Show the SweetAlert dialog
                 Swal.fire({
                     title: "Change: ₱" + parseFloat(money - value),
                     icon: "success",
@@ -90,25 +89,24 @@
                     confirmButtonText: "OK!"
                 }).then((result) => {
                     if (result.isConfirmed) {
-          
-                        $(this).off("submit").submit();
+                        // Submit the form if the user clicked "OK"
+                        setTimeout(() => {
+                            $(this).off("submit").submit();
+                        }, 1000);
                     }
                 });
 
-            }
-            else if(isNaN(value)) {
-
-            }
-            else if (max == 0 || max == 0.00) {
-                alert("You dont have any balance to Pay!");      
-                 event.preventDefault();
-            }
-            else{
+            } else if (isNaN(value)) {
+                alert("Please enter a valid quantity.");
+                event.preventDefault();
+            } else if (max == 0 || max == 0.00) {
+                alert("You don't have any balance to pay!");
+                event.preventDefault();
+            } else {
                 alert("The amount must not exceed the balance.");
-                event.preventDefault();      
+                event.preventDefault();
                 quantityInput.val(0);
             }
-
         });
     });
 </script>

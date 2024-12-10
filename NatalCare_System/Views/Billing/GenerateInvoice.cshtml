@@ -907,8 +907,6 @@
             url: "/Billing/AllItems",
             dataType: "json",
             success: function (result) {
-                console.log(result);
-
 
                 if (result.length > 0) {
 
@@ -1091,7 +1089,7 @@
             url: "/Billing/AllServices",
             dataType: "json",
             success: function (result) {
-                console.log(result);
+     
 
                 if (result.length > 0) {
 
@@ -1717,7 +1715,6 @@
 
             if (name.length > 0) {
                 searchResultContainer.show();
-                searchResultContainer.empty();
 
                 $.ajax({
                     type: 'POST',
@@ -1726,15 +1723,16 @@
                     dataType: "json",
                     success: function (result) {
 
-
-
                         if (result.length > 0) {
 
                             var addedNames = new Set();
+                             searchResultContainer.empty();
 
                             result.forEach(function (patient) {
 
                                 var fullName = `${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}`;
+
+                                console.log(patient);
 
                                  if (!addedNames.has(fullName)) {
 

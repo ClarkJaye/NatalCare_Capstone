@@ -1,0 +1,132 @@
+﻿@using NatalCare.Models.ViewModel.Patient
+@model NatalityReportVM
+
+@{
+    ViewData["Title"] = "Natality Reports";
+    ViewData["NavTitle"] = "Natality Reports";
+    Layout = "_UserLayout";
+}
+
+<partial name="Partial/_Navbar" />
+
+<div class="mx-4">
+    <div class="d-flex align-items-center justify-content-start gap-3 mb-3">
+        <a asp-controller="Reports" asp-action="Natality" class="btn btn-sm btn-outline-pink">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back</span>
+        </a>
+    </div>
+    <div class="card shadow-sm card-selected">
+        <div class="card-body">
+            <h5 class="text-center fst-italic pt-2">Natality Reports</h5>
+            <div class="d-flex justify-content-end mb-3">
+                <button class="btn btn-success printBtn">
+                    <i class="fas fa-save"></i>
+                    <span>Print</span>
+                </button>
+            </div>
+
+            <div class="container-sm">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">INDICATORS</th>
+                                <th colspan="6">AGES</th>
+                                <th rowspan="2">Total Number</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2">10-14</th>
+                                <th colspan="2">15-19</th>
+                                <th colspan="2">20-49</th>
+                            </tr>
+                            <tr>
+                                <th>1. Number Of Deliveries</th>
+                                <th>M</th>
+                                <th>F</th>
+                                <th>M</th>
+                                <th>F</th>
+                                <th>M</th>
+                                <th>F</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>2. Total No. of Live Births</th>
+                                <td>@Model.Male_10_14</td>
+                                <td>@Model.Female_10_14</td>
+                                <td>@Model.Male_15_19</td>
+                                <td>@Model.Female_15_19</td>
+                                <td>@Model.Male_20_49</td>
+                                <td>@Model.Female_20_49</td>
+                                <td>@Model.TotalLiveBirths</td>
+                            </tr>
+                            <tr>
+                                <th colspan="8" class="text-start">3. Type of Delivery:</th>
+                            </tr>
+                            <tr>
+                                <td>a. Total No. Vaginal Deliveries</td>
+                                <td>@Model.VaginalMale_10_14</td>
+                                <td>@Model.VaginalFemale_10_14</td>
+                                <td>@Model.VaginalMale_15_19</td>
+                                <td>@Model.VaginalFemale_15_19</td>
+                                <td>@Model.VaginalMale_20_49</td>
+                                <td>@Model.VaginalFemale_20_49</td>
+                                <td>@Model.VaginalDeliveries</td>
+                            </tr>
+                            <tr>
+                                <td>b. Total No. CS Deliveries</td>
+                                <td>@Model.CSMale_10_14</td>
+                                <td>@Model.CSFemale_10_14</td>
+                                <td>@Model.CSMale_15_19</td>
+                                <td>@Model.CSFemale_15_19</td>
+                                <td>@Model.CSMale_20_49</td>
+                                <td>@Model.CSFemale_20_49</td>
+                                <td>@Model.CSDeliveries</td>
+                            </tr>
+                            <tr>
+                                <th colspan="8" class="text-start">4. Number of Deliveries Attended by Skilled Health Professionals:</th>
+                            </tr>
+                            <tr>
+                                <td>a. Physicians</td>
+                                <td>@Model.PSMale_10_14</td>
+                                <td>@Model.PSFemale_10_14</td>
+                                <td>@Model.PSMale_15_19</td>
+                                <td>@Model.PSFemale_15_19</td>
+                                <td>@Model.PSMale_20_49</td>
+                                <td>@Model.PSFemale_20_49</td>
+                                <td>@Model.AttendedByPhysicians</td>
+                            </tr>
+                            <tr>
+                                <td>b. Nurses</td>
+                                <td>@Model.NurseMale_10_14</td>
+                                <td>@Model.NurseFemale_10_14</td>
+                                <td>@Model.NurseMale_15_19</td>
+                                <td>@Model.NurseFemale_15_19</td>
+                                <td>@Model.NurseMale_20_49</td>
+                                <td>@Model.NurseFemale_20_49</td>
+                                <td>@Model.AttendedByNurses</td>
+                            </tr>
+                            <tr>
+                                <td>c. Midwives</td>
+                                <td>@Model.MWMale_10_14</td>
+                                <td>@Model.MWFemale_10_14</td>
+                                <td>@Model.MWMale_15_19</td>
+                                <td>@Model.MWFemale_15_19</td>
+                                <td>@Model.MWMale_20_49</td>
+                                <td>@Model.MWFemale_20_49</td>
+                                <td>@Model.AttendedByMidwives</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    });
+</script>

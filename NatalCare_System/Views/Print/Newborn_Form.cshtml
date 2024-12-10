@@ -17,18 +17,239 @@
 
     <h5 class="text-center mb-3">Newborn Service Record</h5>
 
+    <div class="card card-selected mb-2">
+        <div class="card-body c-details">
+            <div class="d-flex align-items-center justify-content-between">
+                <h6 class="card-title m-0">Basic Information</h6>
+                <h6 class="m-0">Newborn ID: <strong style="font-weight: 700;"> @Model.NewbornID </strong> </h6>
+            </div>
+            <input type="hidden" id="newBId" value="@Model.NewbornID" />
+            <div class="row mb-2">
+                <!-- Firstname -->
+                <div class="form-group col-sm-4 mb-2">
+                    <label class="form-label">Firstname</label>
+                    <input class="form-control text-capitalize bg-white" value="@Model.FirstName" readonly />
+                </div>
+
+                <!-- Middlename -->
+                <div class="form-group col-sm-4 mb-2">
+                    <label class="form-label">Middlename</label>
+                    <input class="form-control text-capitalize bg-white" value="@Model.MiddleName" readonly />
+                </div>
+
+                <!-- Lastname -->
+                <div class="form-group col-sm-4 mb-2">
+                    <label class="form-label">Lastname</label>
+                    <input class="form-control text-capitalize bg-white" value="@Model.LastName" readonly />
+                </div>
+
+                <!-- Gender -->
+                <div class="form-group col-sm-4 mb-2">
+                    <label class="form-label">Gender</label>
+                    <input class="form-control text-capitalize bg-white" value="@Model.Gender" readonly />
+                </div>
+
+                <!-- Birthdate -->
+                <div class="form-group col-sm-4 mb-2">
+                    <label class="form-label">Birthdate</label>
+                    <input class="form-control text-capitalize bg-white" value="@Model.DateofBirth?.ToString("MM/dd/yyyy")" readonly /> <!-- Adjusted to display formatted date -->
+                </div>
+
+                <!-- Birth Place -->
+                <div class="form-group col-sm-4 mb-2">
+                    <label class="form-label">Birth Place</label>
+                    <input class="form-control text-capitalize bg-white" value="@Model.PlaceOfBirth" readonly />
+                </div>
+
+                <!-- Address -->
+                <div class="form-group col-sm-4 mb-2">
+                    <label class="form-label">Address</label>
+                    <input class="form-control text-capitalize bg-white" value="@Model.Address" readonly />
+                </div>
+
+                <!-- Delivery Type -->
+                <div class="form-group col-sm-4 mb-2">
+                    <label class="form-label">Delivery Method</label>
+                    <input class="form-control text-capitalize bg-white" value="@Model.DeliveryType" readonly />
+                </div>
+            </div>
+            <!-- Measurement Section -->
+            <h6 class="card-title m-0">Measurements</h6>
+            <div class="row">
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Head Circumference</label>
+                    <input class="form-control bg-white" value="@Model.HeadCircumference cm" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Chest Circumference</label>
+                    <input class="form-control bg-white" value="@Model.ChestCircumference cm" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Mid-Arm Circumference</label>
+                    <input class="form-control bg-white" value="@Model.MidArmCircumference cm" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Length</label>
+                    <input class="form-control bg-white" value="@Model.Length cm" disabled />
+                </div>
+
+                <!-- Vital Information -->
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Temperature</label>
+                    <input class="form-control bg-white" value="@Model.Temp C" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Weight</label>
+                    <input class="form-control bg-white" value="@Model.Weight grams" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>APGAR Score</label>
+                    <input class="form-control bg-white" value="@Model.APGAR" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Medication</label>
+                    <input class="form-control bg-white" value="@Model.Medication" disabled />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Midwife</label>
+                    <input class="form-control bg-white" value="@Model.Midwife?.FirstName @Model.Midwife?.MiddleName @Model.Midwife?.LastName" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Physician</label>
+                    <input class="form-control bg-white" value="@Model.Physician?.FirstName @Model.Physician?.MiddleName @Model.Physician?.LastName" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Assisted By</label>
+                    <input class="form-control bg-white" value="@Model.AssisstedBy?.FirstName @Model.AssisstedBy?.MiddleName @Model.AssisstedBy?.LastName" disabled />
+                </div>
+            </div>
+         
+            <!-- Mother Section -->
+            <h6 class="card-title my-3">Mother Information: <span class="text-pink">@Model.Patient.PatientID</span></h6>
+            <div class="row">
+                <!-- Mother Name -->
+                <div class="form-group col-sm-4 mb-3">
+                    <label>First Name</label>
+                    <input class="form-control bg-white" value="@Model.Patient.FirstName" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Middle Name</label>
+                    <input class="form-control bg-white" value="@Model.Patient.MiddleName" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Last Name</label>
+                    <input class="form-control bg-white" value="@Model.Patient.LastName" disabled />
+                </div>
+
+                <!-- Birth and Address Details -->
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Date of Birth</label>
+                    <input class="form-control bg-white" value="@Model.Patient.Birthdate?.ToString("MM/dd/yyyy")" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Place of Birth</label>
+                    <input class="form-control bg-white" value="@Model.Patient.PlaceOfBirth" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Address</label>
+                    <input class="form-control bg-white" value="@Model.Patient.Address" disabled />
+                </div>
+
+                <!-- Contact and Personal Info -->
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Gender</label>
+                    <input class="form-control bg-white" value="@Model.Patient.Gender" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Occupation</label>
+                    <input class="form-control bg-white" value="@Model.Patient.Occupation" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Civil Status</label>
+                    <input class="form-control bg-white" value="@Model.Patient.CivilStatus" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Mobile Number</label>
+                    <input class="form-control bg-white" value="@Model.Patient.MobileNumber" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Telephone Number</label>
+                    <input class="form-control bg-white" value="@Model.Patient.TeleNumber" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Religion</label>
+                    <input class="form-control bg-white" value="@Model.Patient.Religion" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label>Blood Type</label>
+                    <input class="form-control text-uppercase bg-white" value="@Model.Patient.BloodType" disabled />
+                </div>
+                <div class="form-group col-sm-4 mb-2">
+                    <label>Nationality</label>
+                    <input class="form-control text-capitalize bg-white" value="@Model.Patient.Nationality" disabled />
+                </div>
+                @if (Model.Patient.HasPhilHealth == true)
+                {
+                    <div class="form-group col-md-4 mb-3">
+                        <label>PhilHealth Number</label>
+                        <input class="form-control bg-white" value="@Model.Patient.PHIC_NO" disabled />
+                    </div>
+                }
+
+                <!-- Father Information-->
+                <h6 class="card-title my-3">Father Information</h6>
+                <div class="form-group col-sm-3 mb-3">
+                    <label>First Name</label>
+                    <input class="form-control bg-white" value="@Model.Father?.FirstName" disabled />
+                </div>
+                <div class="form-group col-sm-3 mb-3">
+                    <label>Middle Name</label>
+                    <input class="form-control bg-white" value="@Model.Father?.MiddleName" disabled />
+                </div>
+                <div class="form-group col-sm-3 mb-3">
+                    <label>Last Name</label>
+                    <input class="form-control bg-white" value="@Model.Father?.LastName" disabled />
+                </div>
+
+                <div class="form-group col-sm-3 mb-3">
+                    <label>Address</label>
+                    <input class="form-control bg-white" value="@Model.Father?.Address" disabled />
+                </div>
+
+                <div class="form-group col-sm-3 mb-3">
+                    <label>Date of Birth</label>
+                    <input class="form-control bg-white" value="@Model.Father?.Birthdate?.ToString("MM/dd/yyyy")" disabled />
+                </div>
+
+                <div class="form-group col-sm-3 mb-3">
+                    <label>Gender</label>
+                    <input class="form-control bg-white" value="@Model.Father?.Gender" disabled />
+                </div>
+                <div class="form-group col-sm-3 mb-3">
+                    <label>Occupation</label>
+                    <input class="form-control bg-white" value="@Model.Father?.Occupation" disabled />
+                </div>
+                <div class="form-group col-sm-3 mb-2">
+                    <label>Nationality</label>
+                    <input class="form-control text-capitalize bg-white" value="@Model.Father?.Nationality" disabled />
+                </div>
+
+        </div>
+    </div>
 </div>
 
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // PrintForm();
+        PrintForm();
     });
 
     function PrintForm() {
-        var patId = $("#patId").val();
+        var bbId = $("#newBId").val();
         window.onafterprint = function () {
-            window.location.href = "/Patient/Information?id=" + patId;
+            window.location.href = "/Newborn/Information?id=" + bbId;
         };
 
         window.print();

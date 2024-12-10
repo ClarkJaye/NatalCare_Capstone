@@ -484,7 +484,7 @@
 
 <script>
     var patID = document.getElementById('patID').value;
-    $('#printBtn').on("click", function () {
+    $('.printBtn').on("click", function () {
         var caseNo = $("#caseNoSN-Detail").val();
         PrintForm(caseNo);
     });
@@ -775,7 +775,7 @@
                 if (response && response.isSuccess === false) {
                     alert(response.message);
                 } else if (response && response.isSuccess === true) {
-                    window.location.href = "/Print/Screening_Form?id=" + response.data.result.screeningNo;
+                    window.location.href = "/Print/Screening_Form?id=" + response.data.screeningNo;
                 }
             },
             error: function (xhr, status, error) {

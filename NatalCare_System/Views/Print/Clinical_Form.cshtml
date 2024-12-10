@@ -1,13 +1,15 @@
 ﻿@model NatalCare.Models.Entities.ClinicalFaceSheet
 
 @{
-    ViewData["Title"] = "Print Clinical Form";
+    ViewData["Title"] = "Print Clinical Face Sheet Form Form";
 }
 <style>
-    label, input {
+    label, input,h6 {
         font-size: 14px;
     }
-
+    .flex-grow-1{
+        font-size: 12px;
+    }
 </style>
 
 <div class="m-3">
@@ -17,24 +19,104 @@
 
     <h5 class="text-center mb-3">CLINICAL FACE SHEET FORM</h5>
 
-    <div class="container mt-4">
+    <div class="mt-4">
         @* Patient Basic Info  *@
-        <div class="row mb-5">
-            <div class="col-md-6 mb-3">
+        <div class="row mb-3">
+            @* Patient Details *@
+            <div class="col-sm-6 border py-3 d-flex align-items-center">
                 <div class="d-flex align-items-center">
                     <h6 class="me-2 mb-0 fw-bold">Name of Patient:</h6>
-                    <div class="border-bottom flex-grow-1">
+                    <div class="flex-grow-1">
                         <span class="px-2">
-                            @Model.Patient?.FirstName @Model.Patient?.MiddleName  @Model.Patient?.LastName
+                            <input type="hidden" id="patID" name="PatientID" value="@Model.PatientID" />
+                            <input type="hidden" id="delID" name="CaseNo" value="@Model.CaseNo" />
+                            <input id="preID" type="hidden" value="@Model.Delivery?.PrenatalID" />
+                            @(Model.Patient?.FirstName != null ? Model.Patient?.FirstName + " " + Model.Patient?.MiddleName + " " + Model.Patient?.LastName : "N/A")
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-sm-3 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Ward:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Delivery?.WardNumber != null ? Model.Delivery?.Wards?.WardNo : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Bed:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Delivery?.BedNumber != null ? Model.Delivery?.Beds?.BedNo : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Patient?.Address != null ? Model.Patient?.Address : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">CONTACT NO#:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Patient?.MobileNumber != null ? Model.Patient?.MobileNumber : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Religion:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Patient?.Religion != null ? Model.Patient?.Religion : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Occupation:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Patient?.Occupation != null ? Model.Patient?.Occupation : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Birthdate:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Patient?.Birthdate != null ? Model.Patient?.Birthdate : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 border py-3 d-flex align-items-center">
                 <div class="d-flex align-items-center">
                     <h6 class="me-2 mb-0 fw-bold">Age:</h6>
-                    <div class="border-bottom flex-grow-1">
+                    <div class="flex-grow-1">
                         <span class="px-2">
                             @{
                                 if (Model.Patient?.Birthdate != null)
@@ -54,34 +136,380 @@
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-sm-6 border py-3 d-flex align-items-center">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
-                    <div class="border-bottom flex-grow-1">
+                    <h6 class="me-2 mb-0 fw-bold">Birthplace:</h6>
+                    <div class="flex-grow-1">
                         <span class="px-2">
-                            @Model.Patient?.Address
+                            @(Model.Patient?.PlaceOfBirth != null ? Model.Patient?.PlaceOfBirth : "N/A")
                         </span>
                     </div>
                 </div>
             </div>
-           
+            <style>
+                @@media (min-width: 768px) {
+                    .mcol {
+                        flex: 0 0 auto;
+                        width: 12.5% !important;
+                    }
+                }
+            </style>
+            <div class="col-sm-3 border py-3 mcol d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Sex:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Patient?.Gender != null ? Model.Patient?.Gender : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 border py-3 mcol d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Status:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Patient?.CivilStatus != null ? Model.Patient?.CivilStatus : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+            @* Admission Details *@
+            <div class="col-sm-12 border py-3">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h6 class="me-2 mb-0 fw-bold">Admission:</h6>
+                        <div class="d-flex align-items-center mt-3 mx-5">
+                            <h6 class="me-2 mb-0 fw-bold">Date:</h6>
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-4">
+                                    @(Model.Delivery?.Date_Admitted != null ? Model.Delivery?.Date_Admitted.ToString("MMMM dd yyyy") : "N/A")
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center mt-3 mb-sm-3 mx-5">
+                            <h6 class="me-2 mb-0 fw-bold">Time:</h6>
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-4">
+                                    @(Model.Delivery?.Time_Admitted != null ? Model.Delivery?.Time_Admitted : "N/A")
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <h6 class="me-2 mb-0 fw-bold">Discharge:</h6>
+                        <div class="d-flex align-items-center mt-3 mx-5">
+                            <h6 class="me-2 mb-0 fw-bold">Date:</h6>
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-4">
+                                    @(Model.Delivery?.Date_Discharged != null ? Model.Delivery?.Date_Discharged?.ToString("MMMM dd yyyy") : "N/A")
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center mt-3 mb-sm-3 mx-5">
+                            <h6 class="me-2 mb-0 fw-bold">Time:</h6>
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-4">
+                                    @(Model.Delivery?.Time_Discharged != null ? Model.Delivery?.Time_Discharged : "N/A")
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <h6 class="me-2 mb-0 fw-bold">Total # of Days:</h6>
+                        <div class="d-flex align-items-center mt-3 mx-5">
+                            <div class="border-bottom flex-grow-1">
+                                <span class="px-4">
+                                    @if (Model.Delivery?.Date_Admitted != null && Model.Delivery?.Date_Discharged != null)
+                                    {
+                                        var totalDays = (Model.Delivery.Date_Discharged.Value.ToDateTime(TimeOnly.MinValue)
+                                        - Model.Delivery.Date_Admitted.ToDateTime(TimeOnly.MinValue)).Days;
+                                        <text>@totalDays Days</text>
+                                    }
+                                    else
+                                    {
+                                        <text>N/A</text>
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*PRENATAL DETAILS*@
+            <div class="col-sm-3 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">LMP:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Delivery?.PrenatalCase?.LMP != null ? Model.Delivery?.PrenatalCase?.LMP : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">EDC#:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Delivery?.PrenatalCase?.EDC != null ? Model.Delivery?.PrenatalCase?.EDC : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">AOG:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2" id="aogData">
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 border py-3">
+                <div class="d-flex align-items-center mt-3 mx-1">
+                    <h6 class="me-2 mb-0 fw-bold">T:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @(Model.TermBirths != null ? Model.TermBirths : "N/A")
+                        </span>
+                    </div>
+
+                    <h6 class="me-2 mb-0 fw-bold">P:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Para != null ? Model.Para : "N/A")
+                        </span>
+                    </div>
+
+                    <h6 class="me-2 mb-0 fw-bold">A:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Abortion != null ? Model.Abortion : "N/A")
+                        </span>
+                    </div>
+
+                    <h6 class="me-2 mb-0 fw-bold">L:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @(Model.LivingChildren != null ? Model.LivingChildren : "N/A")
+                        </span>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center mt-3 mx-1">
+                    <h6 class="me-2 mb-0 fw-bold">G:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Gravida != null ? Model.Gravida : "N/A")
+                        </span>
+                    </div>
+
+                    <h6 class="me-2 mb-0 fw-bold">P:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Para != null ? Model.Para : "N/A")
+                        </span>
+                    </div>
+
+                    <h6 class="me-2 mb-0 fw-bold">A:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Abortion != null ? Model.Abortion : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-6 border py-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">History of Patients Condition:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.HistoryOfPatientPresentCondition != null ? Model.HistoryOfPatientPresentCondition : "N/A")
+                            @* History of Patients Condition, History of Patients Condition, History of Patients Condition *@
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">ADMITTING:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.Admitting != null ? Model.Admitting : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">ICD-10 CODE/S:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.ICDCodes != null ? Model.ICDCodes : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 border py-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Final Diagnosis:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.FinalDiagnosis != null ? Model.FinalDiagnosis : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Name Of Informant:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.InformantName != null ? Model.InformantName : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Relation to Patient:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.RelationToPatient != null ? Model.RelationToPatient : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.InformantAddress != null ? Model.InformantAddress : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 border py-3 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Contact #:</h6>
+                    <div class="flex-grow-1">
+                        <span class="px-2">
+                            @(Model.InformantContactNo != null ? Model.InformantContactNo : "N/A")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 border py-3">
+                <label class="fw-bold mb-2">Condition on Discharge:</label>
+                <div class="form-check d-flex align-items-center mb-2 gap-2">
+                    <input type="checkbox" id="dRecovered" class="update-checkbox custom-checkbox" @(Model.Recoverred == true ? "checked" : "") disabled>
+                    <label for="dRecovered" class="form-check-label">RECOVERED</label>
+                </div>
+                <div class="form-check d-flex align-items-center mb-2 gap-2">
+                    <input type="checkbox" id="dImprov" class="update-checkbox custom-checkbox" @(Model.Improved == true ? "checked" : "") disabled>
+                    <label for="dImprov" class="form-check-label">IMPROVED</label>
+                </div>
+                <div class="form-check d-flex align-items-center mb-2 gap-2">
+                    <input type="checkbox" id="dUnimprov" class="update-checkbox custom-checkbox" @(Model.UnImproved == true ? "checked" : "") disabled>
+                    <label for="dUnimprov" class="form-check-label">UNIMPROVED</label>
+                </div>
+            </div>
+
+            <div class="col-sm-6 border py-3">
+                <label class="fw-bold mb-2">Disposition:</label>
+                <div class="form-check d-flex align-items-center mb-2 gap-2">
+                    <input type="checkbox" id="dDischarge" class="update-checkbox custom-checkbox" @(Model.Discarged == true ? "checked" : "") disabled>
+                    <label for="dDischarge" class="form-check-label">DISCHARGE</label>
+                </div>
+                <div class="form-check d-flex align-items-center mb-2 gap-2">
+                    <input type="checkbox" id="dTransfered" class="update-checkbox custom-checkbox" @(Model.Transferred == true ? "checked" : "") disabled>
+                    <label for="dTransfered" class="form-check-label">TRANSFERRED</label>
+                </div>
+                <div class="form-check d-flex align-items-center mb-2 gap-2">
+                    <input type="checkbox" id="dHama" class="update-checkbox custom-checkbox" @(Model.Hama == true ? "checked" : "") disabled>
+                    <label for="dHama" class="form-check-label">HAMA(Home Against Medical Advice)</label>
+                </div>
+                <div class="form-check d-flex align-items-center mb-2 gap-2">
+                    <input type="checkbox" id="dAbssconded" class="update-checkbox custom-checkbox" @(Model.Abssconded == true ? "checked" : "") disabled>
+                    <label for="dAbssconded" class="form-check-label">ABSSCONDED</label>
+                </div>
+            </div>
+
+
+            @* Midwife *@
+            <div class="row py-3 d-flex justify-content-center">
+                <div class="col-md-6 mt-5 text-center">
+                    <div class="border-bottom px-3 mx-5">@(Model.MidwifeID != null ? Model.Midwife?.FirstName + " " + Model.Midwife?.MiddleName + " " + Model.Midwife?.LastName : "N/A")</div>
+                    <label class="fw-bold mt-2 d-block">Admitting Midwife</label>
+                    <label class="fw-bold mt-2 d-block">Printed Name & Signature</label>
+                </div>
+            </div>
+
+
         </div>
 
+        <hr class="divider bg-pink" />
     </div>
 </div>
 
 
 <script>
+    var patID = document.getElementById('patID').value;
+    var delID = document.getElementById('delID').value;
+    
     document.addEventListener('DOMContentLoaded', function () {
-        // PrintForm();
+        PrintForm();
+        LoadAOGData();
     });
 
     function PrintForm() {
-        var patId = $("#patId").val();
         window.onafterprint = function () {
-            window.location.href = "/Patient/Information?id=" + patId;
+            window.location.href = "/Delivery/Index?patientid=" + patID  + '&caseno=' + delID;
         };
-
         window.print();
+    }
+    
+
+    //Load All Records
+    function LoadAOGData() {
+        var id = document.getElementById('preID').value;
+        if(id != null){
+            $.ajax({
+                url: '@Url.Action("GetAOGDataLast", "Delivery")',
+                data: { caseno: id },
+                success: function (result) {
+                    if(result && result.isSuccess){
+                        $('#aogData').text(result.item + " Weeks");
+                    }else{
+                        $('#aogData').text("N/A");
+                    }
+                },
+                error: function () {
+                    toastr.error("Failed to reload the clinical sheet records.");
+                }
+            });
+        }
+
     }
 </script>

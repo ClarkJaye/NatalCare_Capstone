@@ -15,71 +15,191 @@
         <img class="img-fluid" src="/img/logo.png" width="160" />
     </div>
 
-    <h5 class="text-center mb-3">NEWBORN SCREENING</h5>
+    <h5 class="text-center fw-bold mb-3">NEWBORN SCREENING</h5>
 
-    <div class="container mt-4">
-        @* Patient Basic Info  *@
-        <div class="row mb-5">
-            <div class="col-md-6 mb-3">
+    <div class="mt-4">
+        <div class="row">
+            <div class="col-sm-6 mb-3">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Name of Patient:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">Name of Newborn:</h6>
                     <div class="border-bottom flex-grow-1">
+                        <input type="hidden" id="patID" name="PatientID" value="@Model.PatientID" />
                         <span class="px-2">
-                            @Model.Patient?.FirstName @Model.Patient?.MiddleName  @Model.Patient?.LastName
+                            @Model.Newborn?.FirstName @Model.Newborn?.MiddleName  @Model.Newborn?.LastName
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-sm-6 mb-3">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Age:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">Gender:</h6>
                     <div class="border-bottom flex-grow-1">
                         <span class="px-2">
-                            @{
-                                if (Model.Patient?.Birthdate != null)
-                                {
-                                    var birthYear = Model.Patient.Birthdate.Value.Year;
-                                    var currentYear = DateTime.Now.Year;
-                                    var age = currentYear - birthYear;
-                                    <text>@age years old</text>
-                                }
-                                else
-                                {
-                                    @:N/A
-                                }
-                            }
+                            @Model.Newborn?.Gender
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-sm-6 mb-3">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">Date Delivered:</h6>
                     <div class="border-bottom flex-grow-1">
                         <span class="px-2">
-                            @Model.Patient?.Address
+                            @Model.Newborn?.DateofBirth
                         </span>
                     </div>
                 </div>
             </div>
-           
+
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Time Delivered:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.Newborn?.TimeofBirth
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="divider bg-pink" />
+
+        <fieldset class="mb-2">
+            <legend class="fw-bold" style="font-size:1.2rem;">Screening Details</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label class="fw-bold">Date Visit:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.DateVisit != null ? Model.DateVisit : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Date Registration:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.DateRegistration != null ? Model.DateRegistration : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Filter Card No#:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.FilterCardNo != null ? Model.FilterCardNo : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Type Of Sample:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.TypeOfSample != null ? Model.TypeOfSample : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Date of Collection:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.DateOfCollection != null ? Model.DateOfCollection : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Time of Collection:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.TimeOfCollection != null ? Model.TimeOfCollection : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Place of Collection:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.PlaceOfCollection != null ? Model.PlaceOfCollection : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Feeding:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.Feeding != null ? Model.Feeding : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Specimen:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.Specimen != null ? Model.Specimen : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Baby Status:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.BabyStatus != null ? Model.BabyStatus : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Data Sample Sent:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.DataSampleSent != null ? Model.DataSampleSent : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Courier:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.Courier != null ? Model.Courier : "N/A")</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="fw-bold">Tracking Nubmer:</label>
+                    <div class="d-flex">
+                        <div class="border-bottom flex-grow-1 pb-1 pt-2">@(Model.TrackingNubmer != null ? Model.TrackingNubmer : "N/A")</div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <hr class="divider bg-pink" />
+
+        <div class="col-sm-12 mb-4">
+            <label class="fw-bold">SCREENING RESULTS:</label>
+            <div class="border-bottom py-1">
+                <span class="px-3">
+                    @Model.ScreeningResults
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-12 mb-4">
+            <label class="fw-bold">Remarks:</label>
+            <div class="border-bottom py-1">
+                <span class="px-3">
+                    @Model.Remarks
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-12 mb-4">
+            <label class="fw-bold">Notes:</label>
+            <div class="border-bottom py-1">
+                <span class="px-3">
+                    @Model.Notes
+                </span>
+            </div>
+        </div>
+
+        <div class="row py-3 d-flex justify-content-center">
+            <div class="col-md-6 text-center">
+                <div class="border-bottom px-3 mx-5"> @Model.AttendingPractitioner </div>
+                <label class="fw-bold mt-2 d-block">Attending Practitioner</label>
+            </div>
         </div>
 
     </div>
 </div>
 
 
+
+
 <script>
+    var patID = document.getElementById('patID').value;
     document.addEventListener('DOMContentLoaded', function () {
-        // PrintForm();
+        PrintForm();
     });
 
     function PrintForm() {
-        var patId = $("#patId").val();
         window.onafterprint = function () {
-            window.location.href = "/Patient/Information?id=" + patId;
+            window.location.href = "/Patient/MedicalRecords?id=" + patID;
         };
 
         window.print();

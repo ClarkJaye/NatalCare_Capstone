@@ -19,6 +19,27 @@ namespace NatalCare.DataAccess.Services
             this.hubContext = hubContext;
         }
 
+
+        // Get newborn from start to end date
+        public async Task<GeneralResponse> GetAllNewborns(DateOnly startDate, DateOnly endDate)
+        {
+            if (startDate == null || endDate == null)
+            {
+                return new GeneralResponse(false, null, "Date range must not be null.");
+            }
+
+            var records = await unitOfWork.Repository<Newborn>()
+                .GetAllAsync(p => p.DateofBirth >= startDate &&
+                                  p.DateofBirth <= endDate &&
+                                  p.StatusCode == "AC", includeProperties: "Patient");
+
+            return records.Any()
+                ? new GeneralResponse(true, records, "Successfully fetched records.")
+                : new GeneralResponse(false, null, "No records found within the selected range.");
+        }
+
+
+
         public async Task<List<Newborn>> GetNewborns()
         { 
             var newborns = await unitOfWork.Repository<Newborn>()

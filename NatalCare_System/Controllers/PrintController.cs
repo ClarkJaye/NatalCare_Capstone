@@ -173,7 +173,7 @@ namespace NatalCare_System.Controllers
         }
 
         //Print Screening
-        public async Task<IActionResult> PrinScreeningForm(string id)
+        public async Task<IActionResult> PrintScreeningForm(string id)
         {
             try
             {
@@ -320,7 +320,7 @@ namespace NatalCare_System.Controllers
             }
         }
 
-        //Print Clinical Sheet
+        //Print Obstetrical 
         public async Task<IActionResult> PrintObstetricalForm(int id)
         {
             try
@@ -342,16 +342,16 @@ namespace NatalCare_System.Controllers
         {
             try
             {
-                var response = await serviceServices.GetCFPrintForm(id);
-                if (response.ID > 0)
+                var response = await serviceServices.GetOBRecord(id);
+                if (response.Item != null)
                 {
-                    return View(response);
+                    return View(response.Item);
                 }
                 return NotFound(response);
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Error in Clinical_Form action");
+                Logger.LogError(ex, "Error in Obstetrical_Form action");
                 return Json(new { IsSuccess = false, Message = "There is an error!" });
             }
         }

@@ -34,13 +34,114 @@
                     </button>
                 </div>
             </div>
+
+            <div class="card p-3 mb-4">
+                <h6 class="card-title">Generate Patient List Reports</h6>
+                <div class="d-flex align-items-center justify-content-end gap-3">
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#NatalReportModal">
+                        <i class="fas fa-file-pdf"></i>
+                        Generate
+                    </button>
+                </div>
+            </div>
+
+            <div class="card p-3 mb-4">
+                <h6 class="card-title">Generate Newborn List Reports</h6>
+                <div class="d-flex align-items-center justify-content-end gap-3">
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#NatalReportModal">
+                        <i class="fas fa-file-pdf"></i>
+                        Generate
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 
+<!-- Newborn Modal -->
+<div class="modal fade" id="NewbornReportModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Start Date and End Date</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Reports" asp-action="NewbornReport">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="startDate" class="control-label">Start Date</label>
+                            <input type="date" id="startDate" name="startDate" class="form-control" required />
+                        </div>
 
-<!-- Add Hearing Modal -->
+                        <div class="col-md-6 mb-3">
+                            <label for="endDate" class="control-label">End Date</label>
+                            <input type="date" id="endDate" name="endDate" class="form-control" required />
+                        </div>
+
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-3">
+                                @*  <button class="btn btn-danger generateNatalPdfBtn" disabled >
+                                    <i class="fas fa-file-pdf"></i>
+                                    PDF
+                                </button> *@
+                                <button type="submit" class="btn btn-success generateNatalBtn">
+                                    <i class="fas fa-file-excel"></i>
+                                    Generate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Patient Modal -->
+<div class="modal fade" id="PatientReportModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down">
+        <div class="modal-content">
+            <div class="modal-header bg-pink">
+                <h5 class="modal-title">Start Date and End Date</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Reports" asp-action="PatientReport">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="startDate" class="control-label">Start Date</label>
+                            <input type="date" id="startDate" name="startDate" class="form-control" required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="endDate" class="control-label">End Date</label>
+                            <input type="date" id="endDate" name="endDate" class="form-control" required />
+                        </div>
+
+                        <div class="col-12 mt-3 d-flex justify-content-end">
+                            <div class="d-flex align-items-center gap-3">
+                                @*  <button class="btn btn-danger generateNatalPdfBtn" disabled >
+                                    <i class="fas fa-file-pdf"></i>
+                                    PDF
+                                </button> *@
+                                <button type="submit" class="btn btn-success generateNatalBtn">
+                                    <i class="fas fa-file-excel"></i>
+                                    Excel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Natality Modal -->
 <div class="modal fade" id="NatalReportModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down">
         <div class="modal-content">
@@ -49,7 +150,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="NatalForm">
+                <form asp-controller="Reports" asp-action="NatalityReport">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="startDate" class="control-label">Start Date</label>
@@ -57,19 +158,19 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="DateVisitHR-Add" class="control-label">End Date</label>
-                            <input type="date" id="DateVisitHR-Add" name="DateVisit" class="form-control" required />
+                            <label for="endDate" class="control-label">End Date</label>
+                            <input type="date" id="endDate" name="endDate" class="form-control" required />
                         </div>
 
                         <div class="col-12 mt-3 d-flex justify-content-end">
                             <div class="d-flex align-items-center gap-3">
-                                <button class="btn btn-danger generateNatalPdfBtn" >
+                               @*  <button class="btn btn-danger generateNatalPdfBtn" disabled >
                                     <i class="fas fa-file-pdf"></i>
                                     PDF
-                                </button>
-                                <button class="btn btn-success generateNatalExcelBtn" >
+                                </button> *@
+                                <button type="submit" class="btn btn-success generateNatalBtn" >
                                     <i class="fas fa-file-excel"></i>
-                                    Excel
+                                    Generate
                                 </button>
                             </div>
                         </div>
@@ -149,11 +250,6 @@
             }
         };
         new Chart(document.getElementById('pieGraph'), skilledConfig);
-
-
-        $(".generateNatalExcelBtn").on("click", function (e) {
-            EditClinical(id);
-        });
 
     });
 

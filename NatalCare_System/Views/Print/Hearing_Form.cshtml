@@ -15,14 +15,62 @@
         <img class="img-fluid" src="/img/logo.png" width="160" />
     </div>
 
-    <h5 class="text-center mb-3">NEWBORN HEARING</h5>
+    <h5 class="text-center ffw-bold mb-3">NEWBORN HEARING</h5>
 
-    <div class="container mt-4">
-        @* Patient Basic Info  *@
-        <div class="row mb-5">
-            <div class="col-md-6 mb-3">
+    <div class="mt-4">
+        <div class="row mb-3">
+            <div class="col-sm-6 mb-3">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Name of Patient:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">Name of Newborn:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <input type="hidden" id="patID" name="PatientID" value="@Model.PatientID" />
+                        <span class="px-2">
+                            @Model.Newborn?.FirstName @Model.Newborn?.MiddleName  @Model.Newborn?.LastName
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center"> 
+                    <h6 class="me-2 mb-0 fw-bold">Gender:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.Newborn?.Gender
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Date Delivered:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.Newborn?.DateofBirth
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Time Delivered:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.Newborn?.TimeofBirth
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-3 divider bg-pink" />
+
+        <div class="row mb-3">
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Name of Mother:</h6>
                     <div class="border-bottom flex-grow-1">
                         <span class="px-2">
                             @Model.Patient?.FirstName @Model.Patient?.MiddleName  @Model.Patient?.LastName
@@ -31,55 +79,104 @@
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-sm-6 mb-3">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Age:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">BirthDate:</h6>
                     <div class="border-bottom flex-grow-1">
                         <span class="px-2">
-                            @{
-                                if (Model.Patient?.Birthdate != null)
-                                {
-                                    var birthYear = Model.Patient.Birthdate.Value.Year;
-                                    var currentYear = DateTime.Now.Year;
-                                    var age = currentYear - birthYear;
-                                    <text>@age years old</text>
-                                }
-                                else
-                                {
-                                    @:N/A
-                                }
-                            }
+                            @Model.Patient?.Birthdate
+                        </span>     
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Name of Father:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.Patient?.Spouse?.FirstName @Model.Patient?.Spouse?.MiddleName  @Model.Patient?.Spouse?.LastName
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-sm-6 mb-3">
                 <div class="d-flex align-items-center">
-                    <h6 class="me-2 mb-0 fw-bold">Address:</h6>
+                    <h6 class="me-2 mb-0 fw-bold">BirthDate:</h6>
                     <div class="border-bottom flex-grow-1">
                         <span class="px-2">
-                            @Model.Patient?.Address
+                            @Model.Patient?.Spouse?.Birthdate
                         </span>
                     </div>
                 </div>
             </div>
-           
         </div>
 
-    </div>
+        <hr class="my-3 divider bg-pink" />
+
+        <div class="row mb-3">
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Date Visit:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.DateVisit    
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <h6 class="me-2 mb-0 fw-bold">Hearing Test Date:</h6>
+                    <div class="border-bottom flex-grow-1">
+                        <span class="px-2">
+                            @Model.TestDate
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-12 mb-4">
+            <label class="fw-bold">HEARING RESULTS:</label>
+            <div class="border-bottom py-3">
+                <span class="px-3">
+                    @Model.HearingResults
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-12 mb-4">    
+            <label class="fw-bold">Notes:</label>
+            <div class="border-bottom py-3">
+                <span class="px-3">
+                    @Model.Notes
+                </span>
+            </div>
+        </div>
+
+        <div class="row py-3 d-flex justify-content-center">
+            <div class="col-md-6 mt-5 text-center">
+                <div class="border-bottom px-3 mx-5"> @Model.AttendingPractitioner </div>
+                <label class="fw-bold mt-2 d-block">Attending Practitioner</label>
+            </div>
+        </div>
+
+    </div>  
 </div>
 
 
 <script>
+    var patID = document.getElementById('patID').value;
     document.addEventListener('DOMContentLoaded', function () {
-        // PrintForm();
+        PrintForm();
     });
 
     function PrintForm() {
-        var patId = $("#patId").val();
         window.onafterprint = function () {
-            window.location.href = "/Patient/Information?id=" + patId;
+            window.location.href = "/Patient/MedicalRecords?id=" + patID;
         };
 
         window.print();

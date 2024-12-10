@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Shared\Partial\Delivery\**" />
+    <Content Remove="Views\Shared\Partial\Delivery\**" />
+    <EmbeddedResource Remove="Views\Shared\Partial\Delivery\**" />
+    <None Remove="Views\Shared\Partial\Delivery\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
@@ -21,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Shared\Partial\Delivery\" />
     <Folder Include="wwwroot\lib\microsoft\signalr\dist\browser\" />
   </ItemGroup>
 

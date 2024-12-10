@@ -49,16 +49,16 @@ namespace NatalCare_System.Controllers
             // Check if the service call was successful
             if (!response.IsSuccess)
             {
-                TempData["ErrorMessage"] = response.Message;
-                return RedirectToAction("Error", "Home");
+                TempData["Error"] = response.Message;
+                return RedirectToAction("Natality", "Reports");
             }
 
             // Cast the returned data to the expected type
             var newborns = response.Item as IEnumerable<Newborn>;
             if (newborns == null)
             {
-                TempData["ErrorMessage"] = "Failed to process the newborn data.";
-                return RedirectToAction("Error", "Home");
+                TempData["Error"] = "Failed to process the newborn data.";
+                return RedirectToAction("Natality", "Reports");
             }
 
             // Prepare the view model with necessary counts

@@ -985,7 +985,7 @@ namespace NatalCare.DataAccess.Services
 
             if (existingRecord.BedNumber != item.BedNumber)
             {
-                var prevbed = await unitOfWork.Repository<Bed>().GetFirstOrDefaultAsync(x => x.Id == existingRecord.BedNumber);
+                var prevbed = await unitOfWork.Repository<Bed>().GetFirstOrDefaultAsync(x => x.Id == existingRecord.BedNumber && x.WardID == item.WardNumber);
                 if (prevbed != null)
                 {
                     prevbed.IsUsed = false;
@@ -994,7 +994,7 @@ namespace NatalCare.DataAccess.Services
                     await unitOfWork.SaveAsync();
                 }
 
-                var bed = await unitOfWork.Repository<Bed>().GetFirstOrDefaultAsync(x => x.Id == item.BedNumber);
+                var bed = await unitOfWork.Repository<Bed>().GetFirstOrDefaultAsync(x => x.Id == item.BedNumber && x.WardID == item.WardNumber);
                 if (bed != null)
                 {
                     bed.IsUsed = true;
@@ -1002,6 +1002,15 @@ namespace NatalCare.DataAccess.Services
                     unitOfWork.Repository<Bed>().Update(bed);
                     await unitOfWork.SaveAsync();
                 }
+            }
+
+            if(item.DeliveryStatusID == 3)
+            {
+                var bed = await unitOfWork.Repository<Bed>().GetFirstOrDefaultAsync(x => x.Id == item.BedNumber && x.WardID == item.WardNumber);
+                bed.IsUsed = false;
+                bed.PatientID = null;
+                unitOfWork.Repository<Bed>().Update(bed);
+                await unitOfWork.SaveAsync();
             }
             // Update the existing record fields
             existingRecord.Date_Admitted = item.Date_Admitted;

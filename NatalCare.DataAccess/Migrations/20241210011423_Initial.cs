@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace NatalCare.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Iniital : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -1458,9 +1458,10 @@ namespace NatalCare.DataAccess.Migrations
                 columns: new[] { "StatusCode", "Created_At", "StatusName" },
                 values: new object[,]
                 {
-                    { "AC", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4362), "ACTIVE" },
-                    { "DL", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4368), "DELETE" },
-                    { "IN", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4367), "INACTTIVE" }
+                    { "AC", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(4780), "ACTIVE" },
+                    { "AD", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(4783), "ADMITTED" },
+                    { "DL", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(4785), "DELETE" },
+                    { "IN", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(4784), "INACTTIVE" }
                 });
 
             migrationBuilder.InsertData(
@@ -1499,11 +1500,11 @@ namespace NatalCare.DataAccess.Migrations
                 columns: new[] { "CategoryId", "CategoryName", "Created_At", "StatusCode" },
                 values: new object[,]
                 {
-                    { 1, "Masters", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4852), "AC" },
-                    { 2, "Patient Management", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4855), "AC" },
-                    { 3, "Billing & Payement", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4857), "AC" },
-                    { 4, "Reports", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4858), "AC" },
-                    { 5, "Maintenance", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4859), "AC" }
+                    { 1, "Masters", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(4951), "AC" },
+                    { 2, "Patient Management", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(4954), "AC" },
+                    { 3, "Billing & Payement", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(4956), "AC" },
+                    { 4, "Reports", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(4957), "AC" },
+                    { 5, "Maintenance", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(4958), "AC" }
                 });
 
             migrationBuilder.InsertData(
@@ -1519,32 +1520,32 @@ namespace NatalCare.DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Created_At", "Description", "Discriminator", "Name", "NormalizedName", "Created_By", "Updated_By", "Updated_At" },
-                values: new object[] { "18ab63db-22b1-4656-93e8-6240c08c988c", null, new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4192), "CRUD Anything", "Role", "Admin", "ADMIN", "223e5845-f58c-493f-b6b4-46ff3b18a332", null, null });
+                values: new object[] { "18ab63db-22b1-4656-93e8-6240c08c988c", null, new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(4658), "CRUD Anything", "Role", "Admin", "ADMIN", "223e5845-f58c-493f-b6b4-46ff3b18a332", null, null });
 
             migrationBuilder.InsertData(
                 table: "Module",
                 columns: new[] { "ModuleId", "CategoryId", "Created_At", "ModuleTitle", "StatusCode" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4927), "Dashboard", "AC" },
-                    { 2, 2, new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4930), "Patient Records", "AC" },
-                    { 3, 2, new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4932), "Newborn Records", "AC" },
-                    { 4, 2, new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4933), "Admission / In-Patient", "AC" },
-                    { 5, 2, new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4935), "Out-Patient (OPD)", "AC" },
-                    { 6, 2, new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4936), "Refferal Patient", "AC" },
-                    { 7, 3, new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4938), "Invoice List", "AC" },
-                    { 8, 3, new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4939), "Generate Invoice", "AC" },
-                    { 9, 4, new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4940), "Natality Reports", "AC" },
-                    { 10, 4, new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4945), "Invoice Reports", "AC" },
-                    { 11, 5, new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4947), "Profiles", "AC" },
-                    { 12, 5, new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4948), "Users", "AC" },
-                    { 13, 5, new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(4949), "Staff", "AC" }
+                    { 1, 1, new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(4996), "Dashboard", "AC" },
+                    { 2, 2, new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(4999), "Patient Records", "AC" },
+                    { 3, 2, new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5001), "Newborn Records", "AC" },
+                    { 4, 2, new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5002), "Admission / In-Patient", "AC" },
+                    { 5, 2, new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5003), "Out-Patient (OPD)", "AC" },
+                    { 6, 2, new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5005), "Refferal Patient", "AC" },
+                    { 7, 3, new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5006), "Invoice List", "AC" },
+                    { 8, 3, new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5008), "Generate Invoice", "AC" },
+                    { 9, 4, new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5009), "Natality Reports", "AC" },
+                    { 10, 4, new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5010), "Invoice Reports", "AC" },
+                    { 11, 5, new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5012), "Profiles", "AC" },
+                    { 12, 5, new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5014), "Users", "AC" },
+                    { 13, 5, new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5015), "Staff", "AC" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Patients",
                 columns: new[] { "PatientID", "Address", "Birthdate", "BloodType", "CivilStatus", "Created_At", "Emergency_MobileNumber", "Emergency_Name", "FirstName", "Gender", "HasPhilHealth", "LastName", "MiddleName", "MobileNumber", "Nationality", "Occupation", "PHIC_NO", "Created_By", "Updated_By", "PlaceOfBirth", "Religion", "SpouseId", "StatusCode", "TeleNumber", "Updated_At" },
-                values: new object[] { "PT0001", "Tipolo, Mandaue City Cebu ", new DateOnly(1998, 1, 4), "O+", "single", new DateTime(2024, 2, 28, 12, 0, 0, 0, DateTimeKind.Unspecified), "09912356894", "Mardelita Calma", "Erina", "Female", false, "Souma", "Nakiri", "09317860939", null, "Fashion Designer", null, "223e5845-f58c-493f-b6b4-46ff3b18a332", null, "Bantayan Cebu City", "Catholic", 1, "AC", null, null });
+                values: new object[] { "PT0001", "Tipolo, Mandaue City Cebu ", new DateOnly(1998, 1, 4), "O+", "single", new DateTime(2024, 2, 28, 12, 0, 0, 0, DateTimeKind.Unspecified), "09912356894", "Mardelita Calma", "Erina", "Female", false, "Souma", "Nakiri", "09317860939", "Filipino", "Fashion Designer", null, "223e5845-f58c-493f-b6b4-46ff3b18a332", null, "Bantayan Cebu City", "Catholic", 1, "AC", null, null });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -1556,19 +1557,19 @@ namespace NatalCare.DataAccess.Migrations
                 columns: new[] { "ModuleId", "RoleId", "Created_At", "OpenAccess" },
                 values: new object[,]
                 {
-                    { 1, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(5010), "Y" },
-                    { 2, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(5012), "Y" },
-                    { 3, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(5013), "Y" },
-                    { 4, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(5021), "Y" },
-                    { 5, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(5022), "Y" },
-                    { 6, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(5023), "Y" },
-                    { 7, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(5025), "Y" },
-                    { 8, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(5030), "Y" },
-                    { 9, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(5039), "Y" },
-                    { 10, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(5041), "Y" },
-                    { 11, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(5042), "Y" },
-                    { 12, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(5043), "Y" },
-                    { 13, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 9, 15, 30, 38, 265, DateTimeKind.Local).AddTicks(5044), "Y" }
+                    { 1, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5059), "Y" },
+                    { 2, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5063), "Y" },
+                    { 3, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5064), "Y" },
+                    { 4, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5065), "Y" },
+                    { 5, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5067), "Y" },
+                    { 6, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5068), "Y" },
+                    { 7, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5080), "Y" },
+                    { 8, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5098), "Y" },
+                    { 9, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5099), "Y" },
+                    { 10, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5100), "Y" },
+                    { 11, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5101), "Y" },
+                    { 12, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5102), "Y" },
+                    { 13, "18ab63db-22b1-4656-93e8-6240c08c988c", new DateTime(2024, 12, 10, 9, 14, 22, 120, DateTimeKind.Local).AddTicks(5104), "Y" }
                 });
 
             migrationBuilder.CreateIndex(

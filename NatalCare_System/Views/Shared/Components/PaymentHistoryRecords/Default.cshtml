@@ -9,9 +9,12 @@
 
     List<decimal?> allAmount= new List<decimal?>();
 
+
     decimal? totalAmount = 0;
 
+
 }
+
 
 <div class="table-responsive">
     <table id="patientPaymenTable" class="table table-hover table-striped">
@@ -28,12 +31,15 @@
             @if (Model != null && Model.Any())
             {
                 foreach (var payments in Model)
-                {       
+                {
                     name = payments.Patients.FirstName
                     + (payments.Patients.MiddleName != null ? " " + payments.Patients.MiddleName + " " : " ")
                     + payments.Patients.LastName;
 
-                    allAmount.Add(payments.Amount);
+                    if (balance == 0)
+                    {
+                        allAmount.Add(payments.Amount);
+                    }
         
 
                     <tr class="align-middle">
@@ -72,6 +78,10 @@
             }
         </tbody>
     </table>
+    @if(totalAmount != 0){
+        <input type="hidden" id="totalAmount" value="@totalAmount" />
+
+    }
 </div>
 @if (Model == null ){
     <script>

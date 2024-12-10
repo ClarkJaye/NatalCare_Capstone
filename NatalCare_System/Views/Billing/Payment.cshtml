@@ -61,7 +61,7 @@
                     <div class="form-group col-md-12 mb-3">
                         <label for="FirstName" class="control-label">Amount:</label>
 
-                        <input class="form-control" placeholder="Balance: ₱ @balance" id="payAmount" autocomplete="off" type="number" asp-for="Amount" step="0.01" max="@balance" />
+                          <input class="form-control"  id="payAmount" autocomplete="off" type="number" asp-for="Amount" step="0.01" />
 
 
                         <span asp-validation-for="Amount" class="text-danger"></span>
@@ -103,28 +103,42 @@
     $(document).ready(function () {
         var quantityInput = $("#payAmount");
 
+        var totalAmount = parseFloat($("#totalAmount").val()); // Fixed selector by adding '#' before totalAmount
+
+        // Serialize the balance value from the server-side
+        var balance = @Html.Raw(Json.Serialize(balance.HasValue ? balance.Value.ToString("F2") : "0.00"));
+
+        var floatBalance = parseFloat(balance);
+
+        // Check the balance and set attributes accordingly
+        if (floatBalance === 0) {
+       
+            $('#payAmount').attr('max', totalAmount);
+            $('#payAmount').attr('placeholder', "Total Amount: ₱ "  + totalAmount.toFixed(2));
+        } else {
+      
+            $('#payAmount').attr('max', floatBalance);
+            $('#payAmount').attr('placeholder', "Balance: ₱ " + floatBalance.toFixed(2));
+        }
+
+        
+
+        // Handle form submission
         $("form[method='post']").on("submit", function (event) {
-
             const max = parseFloat(quantityInput.attr("max"));
-
             const value = parseFloat(quantityInput.val());
 
-            if (value <= max) {
-
-            }
-            else if (isNaN(value)) {
-
-            }
-            else if (max == 0 || max == 0.00) {
-                alert("You dont have any balance to Pay!");
-
-            }
-            else {
-                alert("The amount must not exceed the balance.");
+            if (isNaN(value) || value < 0) {
+                alert("Please enter a valid amount.");
                 event.preventDefault();
-                quantityInput.val(0);
+            } else if (value > max) {
+                alert("The amount must not exceed the maximum allowed.");
+                event.preventDefault();
+                quantityInput.val(0); // Reset the input
+            } else if (max === 0) {
+                alert("You don't have any balance to pay!");
+                event.preventDefault();
             }
-
         });
     });
 </script>

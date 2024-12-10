@@ -1548,14 +1548,28 @@
 
              var notarial = parseFloat($("#patientNotarialFee").val()) || 0;
 
+             alert(notarial)
+
             if (notarial !== 0) {
                 total += notarial;
             }
+      
 
             let discountPercentage = parseFloat($("#discountInput").val()) || 0;
 
             let discount = total * (discountPercentage / 100);
 
+
+                let isCheckboxChecked = $("#isNotarialFee").is(":checked"); // Change 'yourCheckboxId' to the actual ID of your checkbox
+
+                // Optional additional amount or adjustment based on checkbox state
+                if (isCheckboxChecked) {
+
+                }
+                else{
+                    total -= parseInt(300); // Add the fee if checkbox is checked
+
+                }
 
 
             let finalTotal = total - discount;

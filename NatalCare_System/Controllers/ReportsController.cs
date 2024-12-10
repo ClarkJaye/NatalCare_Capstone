@@ -137,8 +137,54 @@ namespace NatalCare_System.Controllers
 
                 // Deliveries attended by professionals
                 AttendedByPhysicians = newborns.Count(n => n.PhysicianID.HasValue),
+                PSMale_10_14 = newborns.Count(n => n.PhysicianID.HasValue && n.Gender == "Male" && CalculateAge(n.Patient.Birthdate.Value) >= 10 &&
+                  CalculateAge(n.Patient.Birthdate.Value) <= 14),
+                PSFemale_10_14 = newborns.Count(n => n.PhysicianID.HasValue && n.Gender == "Female" && CalculateAge(n.Patient.Birthdate.Value) >= 10 &&
+                    CalculateAge(n.Patient.Birthdate.Value) <= 14),
+
+                PSMale_15_19 = newborns.Count(n => n.PhysicianID.HasValue && n.Gender == "Male" && CalculateAge(n.Patient.Birthdate.Value) >= 15 &&
+                    CalculateAge(n.Patient.Birthdate.Value) <= 19),
+                PSFemale_15_19 = newborns.Count(n => n.PhysicianID.HasValue && n.Gender == "Female" && CalculateAge(n.Patient.Birthdate.Value) >= 15 &&
+                    CalculateAge(n.Patient.Birthdate.Value) <= 19),
+
+                PSMale_20_49 = newborns.Count(n => n.PhysicianID.HasValue && n.Gender == "Male" && CalculateAge(n.Patient.Birthdate.Value) >= 20 &&
+                   CalculateAge(n.Patient.Birthdate.Value) <= 49),
+                PSFemale_20_49 = newborns.Count(n => n.PhysicianID.HasValue && n.Gender == "Female" && CalculateAge(n.Patient.Birthdate.Value) >= 20 &&
+                    CalculateAge(n.Patient.Birthdate.Value) <= 49),
+
+
+
                 AttendedByMidwives = newborns.Count(n => n.MidwifeID.HasValue),
+                MWMale_10_14 = newborns.Count(n => n.MidwifeID.HasValue && n.Gender == "Male" && CalculateAge(n.Patient.Birthdate.Value) >= 10 &&
+                  CalculateAge(n.Patient.Birthdate.Value) <= 14),
+                MWFemale_10_14 = newborns.Count(n => n.MidwifeID.HasValue && n.Gender == "Female" && CalculateAge(n.Patient.Birthdate.Value) >= 10 &&
+                    CalculateAge(n.Patient.Birthdate.Value) <= 14),
+
+                MWMale_15_19 = newborns.Count(n => n.MidwifeID.HasValue && n.Gender == "Male" && CalculateAge(n.Patient.Birthdate.Value) >= 15 &&
+                    CalculateAge(n.Patient.Birthdate.Value) <= 19),
+                MWFemale_15_19 = newborns.Count(n => n.MidwifeID.HasValue && n.Gender == "Female" && CalculateAge(n.Patient.Birthdate.Value) >= 15 &&
+                    CalculateAge(n.Patient.Birthdate.Value) <= 19),
+
+                MWMale_20_49 = newborns.Count(n => n.MidwifeID.HasValue && n.Gender == "Male" && CalculateAge(n.Patient.Birthdate.Value) >= 20 &&
+                   CalculateAge(n.Patient.Birthdate.Value) <= 49),
+                MWFemale_20_49 = newborns.Count(n => n.MidwifeID.HasValue && n.Gender == "Female" && CalculateAge(n.Patient.Birthdate.Value) >= 20 &&
+                    CalculateAge(n.Patient.Birthdate.Value) <= 49),
+
                 AttendedByNurses = newborns.Count(n => n.StaffID.HasValue), // Assuming Nurses are recorded in StaffID
+                NurseMale_10_14 = newborns.Count(n => n.StaffID.HasValue && n.Gender == "Male" && CalculateAge(n.Patient.Birthdate.Value) >= 10 &&
+               CalculateAge(n.Patient.Birthdate.Value) <= 14),
+                NurseFemale_10_14 = newborns.Count(n => n.StaffID.HasValue && n.Gender == "Female" && CalculateAge(n.Patient.Birthdate.Value) >= 10 &&
+                    CalculateAge(n.Patient.Birthdate.Value) <= 14),
+
+                NurseMale_15_19 = newborns.Count(n => n.StaffID.HasValue && n.Gender == "Male" && CalculateAge(n.Patient.Birthdate.Value) >= 15 &&
+                    CalculateAge(n.Patient.Birthdate.Value) <= 19),
+                NurseFemale_15_19 = newborns.Count(n => n.StaffID.HasValue && n.Gender == "Female" && CalculateAge(n.Patient.Birthdate.Value) >= 15 &&
+                    CalculateAge(n.Patient.Birthdate.Value) <= 19),
+
+                NurseMale_20_49 = newborns.Count(n => n.StaffID.HasValue && n.Gender == "Male" && CalculateAge(n.Patient.Birthdate.Value) >= 20 &&
+                   CalculateAge(n.Patient.Birthdate.Value) <= 49),
+                NurseFemale_20_49 = newborns.Count(n => n.StaffID.HasValue && n.Gender == "Female" && CalculateAge(n.Patient.Birthdate.Value) >= 20 &&
+                    CalculateAge(n.Patient.Birthdate.Value) <= 49),
 
                 // Age category of mothers for deliveries
                 FemaleMothersUnder20 = newborns.Count(n => n.Patient?.Gender == "Female" && n.Patient?.Birthdate.HasValue == true && CalculateAge(n.Patient.Birthdate.Value) < 20),

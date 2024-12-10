@@ -356,14 +356,13 @@ namespace NatalCare.DataAccess.Services
         }
 
         public async Task<SearchResultResponse> searchPatient(string patientName)
-        {
+       {
             var nameToLower = patientName.ToLower();
             var nameParts = nameToLower.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             var matchingPatients = await _unitOfWork.Repository<Patients>()
                 .AsQueryable()
-                .Where(a => nameParts.All(part =>
-                    a.FirstName.ToLower().Contains(part) ||
+                .Where(a => nameParts.All(part => a.FirstName.ToLower().Contains(part) ||
                     a.MiddleName.ToLower().Contains(part) ||
                     a.LastName.ToLower().Contains(part)))
                 .Distinct() 

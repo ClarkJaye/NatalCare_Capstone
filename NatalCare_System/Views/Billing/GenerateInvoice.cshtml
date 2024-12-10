@@ -189,11 +189,11 @@
                                 <i class="fas fa-plus"></i>
                                 <span>Add Row</span>
                             </button>
-                            <button class="btn btn-pink addItem" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                            <button class="btn btn-pink addItem" data-bs-toggle="modal" data-bs-target="#addItemModal" onclick="event.preventDefault()">
                                 <i class="fas fa-plus"></i>
                                 <span>Add Item</span>
                             </button>
-                            <button class="btn btn-pink addServices" data-bs-toggle="modal" data-bs-target="#addServicesModal">
+                            <button class="btn btn-pink addServices" data-bs-toggle="modal" data-bs-target="#addServicesModal" onclick="event.preventDefault()">
                                 <i class="fas fa-plus"></i>
                                 <span>Add Services</span>
                             </button>
@@ -907,8 +907,6 @@
             url: "/Billing/AllItems",
             dataType: "json",
             success: function (result) {
-                console.log(result);
-
 
                 if (result.length > 0) {
 
@@ -1091,7 +1089,7 @@
             url: "/Billing/AllServices",
             dataType: "json",
             success: function (result) {
-                console.log(result);
+     
 
                 if (result.length > 0) {
 
@@ -1123,7 +1121,7 @@
                     });
 
                         $(".editServiceBtn").on("click", function () {
-                            alert("wad")
+                    
                             var idd = $(this).data("id");
                             var price1 = $(this).data("price");
 
@@ -1548,18 +1546,21 @@
                 philHealthCoveredTotal += philCovered;
             });
 
+             var notarial = parseFloat($("#patientNotarialFee").val()) || 0;
+
+            if (notarial !== 0) {
+                total += notarial;
+            }
+
             let discountPercentage = parseFloat($("#discountInput").val()) || 0;
 
             let discount = total * (discountPercentage / 100);
 
+
+
             let finalTotal = total - discount;
 
-             var notarial = parseFloat($("#patientNotarialFee").val()) || 0;
 
-
-            if (notarial !== 0) {
-                finalTotal += notarial;
-            }
         
 
             $("#totalAmountShow").text("Total Amount: ₱" + finalTotal.toFixed(2));
@@ -1717,7 +1718,6 @@
 
             if (name.length > 0) {
                 searchResultContainer.show();
-                searchResultContainer.empty();
 
                 $.ajax({
                     type: 'POST',
@@ -1726,15 +1726,16 @@
                     dataType: "json",
                     success: function (result) {
 
-
-
                         if (result.length > 0) {
 
                             var addedNames = new Set();
+                             searchResultContainer.empty();
 
                             result.forEach(function (patient) {
 
                                 var fullName = `${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}`;
+
+                                console.log(patient);
 
                                  if (!addedNames.has(fullName)) {
 

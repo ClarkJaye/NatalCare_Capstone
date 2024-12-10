@@ -15,15 +15,15 @@
             <i class="fas fa-arrow-left"></i>
             <span>Back</span>
         </a>
-    </div>
+    </div>          
     <div class="card shadow-sm card-selected">
         <div class="card-body">
             <h5 class="text-center fst-italic pt-2">Natality Reports</h5>
             <div class="d-flex justify-content-end mb-3">
-                <button class="btn btn-success printBtn">
+                <a asp-controller="Print" asp-action="Natality_Form" asp-route-startDate="@ViewBag.startDate" asp-route-endDate="@ViewBag.endDate" class="btn btn-success">
                     <i class="fas fa-save"></i>
                     <span>Print</span>
-                </button>
+                </a>
             </div>
 
             <div class="container-sm">
@@ -126,7 +126,3 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    });
-</script>

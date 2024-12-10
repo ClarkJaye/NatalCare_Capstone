@@ -37,6 +37,8 @@ namespace NatalCare_System.Controllers
 
         public async Task<IActionResult> NatalityReport(DateOnly startDate, DateOnly endDate)
         {
+            ViewData["startDate"] = startDate;
+            ViewData["endDate"] = endDate;
             // Check access permissions
             if (!await CheckAccessAsync(9))
             {

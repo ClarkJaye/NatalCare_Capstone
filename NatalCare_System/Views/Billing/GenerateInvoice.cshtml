@@ -1050,7 +1050,7 @@
 
            //EDIT SERVICE
         $("#editServiceSubmitBtn").on("click", function (event) {
-            alert("wadwadwad")
+
             var idd = $("#editServiceId").val();
             var id1 = parseInt(idd);
 
@@ -1718,6 +1718,7 @@
             if (name.length > 0) {
                 searchResultContainer.show();
                 searchResultContainer.empty();
+
                 $.ajax({
                     type: 'POST',
                     url: "/Billing/PatientSearchResult",
@@ -1729,32 +1730,41 @@
 
                         if (result.length > 0) {
 
+                            var addedNames = new Set();
+
                             result.forEach(function (patient) {
 
-                                // console.log(patient);
+                                var fullName = `${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}`;
 
-                                var html = `
-                                      <li class="selectedPatient" data-id="${patient.patientID}" data-name="${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}">${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}</li>
-                                `;
+                                 if (!addedNames.has(fullName)) {
 
-                                searchResultContainer.append(html);
+                                    addedNames.add(fullName);
+                                    var html = `
+                                          <li class="selectedPatient" data-id="${patient.patientID}" data-name="${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}"> ${fullName} </li>
+                                    `;
 
-                                $(".selectedPatient").on("click", function (event) {
+                                    searchResultContainer.append(html);
 
-                                    var name = $(this).data("name");
+                                    $(".selectedPatient").on("click", function (event) {
 
-                                    var id = $(this).data("id");
+                                        var name = $(this).data("name");
 
-                                    $("#patientNameInput").val(name);
-                                    $("#patientIdHidden").val(id);
+                                        var id = $(this).data("id");
 
-                                    searchResultContainer.hide();
+                                        $("#patientNameInput").val(name);
+                                        $("#patientIdHidden").val(id);
+
+                                        searchResultContainer.hide();
 
 
-                                    $(".makePaymentBtn").prop("disabled", false);
-                                    $(".savePaymentBtn").prop("disabled", false);
+                                        $(".makePaymentBtn").prop("disabled", false);
+                                        $(".savePaymentBtn").prop("disabled", false);
 
-                                });
+                                    });
+                                 
+                                 }
+
+
 
 
                             });

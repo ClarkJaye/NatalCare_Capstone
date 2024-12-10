@@ -366,6 +366,7 @@ namespace NatalCare.DataAccess.Services
                     a.FirstName.ToLower().Contains(part) ||
                     a.MiddleName.ToLower().Contains(part) ||
                     a.LastName.ToLower().Contains(part)))
+                .Distinct() 
                 .ToListAsync();
 
             return new SearchResultResponse(true, matchingPatients);
